@@ -73,9 +73,3 @@ harness-kit core의 의미 있는 변경 이력을 남긴다.
   이유: Validation에서 문제를 발견해도 같은 Phase 안에서만 해결하려는 오해를 막고, 요구사항/계획 결함이 원인인 경우 Phase 1부터 다시 닫는 재검증 루프를 문서 수준에서 명확히 강제하기 위해.
   audit: changed-parts + whole-harness
   audit-summary: changed-parts와 whole-harness 모두 승인 가능이며, Phase 4 종료 게이트와 재수행 규칙의 정합성 충돌이 없음을 확인했다. 동일 규칙의 다중 문서 반복으로 인한 장기 드리프트 가능성은 경미 리스크로 유지했다.
-
-- 관련 파일: `docs/harness/common/process_policy.md`, `docs/harness_guide.md`, `harness.log`
-  변경: Phase 2 권장 순서를 특정 아키텍처 명칭에 고정하지 않고 `도메인 규칙 -> 유스케이스 조합 -> 외부 연동 어댑터 -> 진입 인터페이스 -> 실행 조립` 축으로 정의했다. 동시에 `domain -> application -> adapter -> entrypoint -> bootstrap`은 대표 매핑 예시로 연결하고, `adapter` 세분화(`outbound`, `persistence`, `external client`)는 필요 시 경계별로 적용하도록 정리했다.
-  이유: 기존의 `안쪽 책임 -> 바깥쪽 책임` 원칙만으로는 프로젝트마다 레이어 진행 순서 해석이 달라질 수 있고, 반대로 특정 아키텍처 용어를 core에 고정하면 도입 유연성이 떨어질 수 있어 중립 축과 매핑 예시를 함께 제공하기 위해.
-  audit: changed-parts + whole-harness
-  audit-summary: changed-parts와 whole-harness 모두 승인 가능이며, 기존 Phase 흐름과 충돌이 없음을 확인했다. 필수 재참조 문서 수는 증가하지 않았고 중복 규칙 증가는 Phase 2 안내 문맥의 최소 수준으로 제한됐으며 문서 길이 증가는 운영 리스크를 키우지 않는 범위로 판단했다. adapter 세분화 적용 기준은 정성 판단이라 프로젝트별 편차 가능성을 경미 리스크로 기록했다.
