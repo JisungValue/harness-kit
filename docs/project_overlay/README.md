@@ -6,6 +6,7 @@
 
 - `docs/harness_guide.md`
 - `docs/standard/architecture.md`
+- `docs/standard/implementation_order.md`
 - `docs/standard/coding_guidelines_project.md`
 - `docs/standard/testing_profile.md`
 
@@ -16,6 +17,9 @@
   - 공통 kit 문서와 프로젝트 전용 문서를 함께 연결하는 index 역할만 한다.
 - `docs/standard/architecture.md`
   - 실제 레이어 구조, 모듈 경계, 주요 의존성 방향을 정의한다.
+- `docs/standard/implementation_order.md`
+  - Phase 2에서 사용할 프로젝트별 레이어 진행 순서와 세분화 기준을 정의한다.
+  - `architecture.md`에서 반드시 참조한다.
 - `docs/standard/coding_guidelines_project.md`
   - 프레임워크 특화 규칙, DTO postfix, 프로젝트 전용 네이밍, 트랜잭션 관례처럼 core에 두기 어려운 내용을 둔다.
 - `docs/standard/testing_profile.md`
@@ -33,6 +37,7 @@
 ## 프로젝트 전용 규칙
 
 - `docs/standard/architecture.md`
+- `docs/standard/implementation_order.md`
 - `docs/standard/coding_guidelines_project.md`
 - `docs/standard/testing_profile.md`
 ```

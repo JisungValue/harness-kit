@@ -93,6 +93,8 @@
 
 - Phase 2는 기능 전체를 한 번에 구현하지 않고, 필요한 레이어만 선택해 진행한다.
 - 선택된 레이어들 사이의 작업 순서는 의존성 안쪽부터 바깥쪽으로 진행한다.
+- 프로젝트별 실제 구현 순서와 레이어 세분화 기준은 `docs/standard/implementation_order.md`에서 정의한다.
+- 프로젝트 `docs/standard/architecture.md`는 `docs/standard/implementation_order.md`를 참조해 구조와 구현 순서 해석이 분리되지 않게 유지한다.
 - 프로젝트 구조에 맞는 실제 레이어 명칭은 overlay 문서에서 정의한다.
 - 각 선택 레이어는 아래 순서를 따른다.
   1. 테스트 작성

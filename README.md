@@ -60,6 +60,7 @@
 
 - `docs/harness_guide.md`
 - `docs/standard/architecture.md`
+- `docs/standard/implementation_order.md`
 - `docs/standard/coding_guidelines_project.md`
 - `docs/standard/testing_profile.md`
 

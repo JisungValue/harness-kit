@@ -9,5 +9,6 @@
 ## 프로젝트 전용 규칙
 
 - `docs/standard/architecture.md`
+- `docs/standard/implementation_order.md`
 - `docs/standard/coding_guidelines_project.md`
 - `docs/standard/testing_profile.md`

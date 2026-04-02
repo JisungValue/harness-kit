@@ -73,3 +73,9 @@ harness-kit core의 의미 있는 변경 이력을 남긴다.
   이유: Validation에서 문제를 발견해도 같은 Phase 안에서만 해결하려는 오해를 막고, 요구사항/계획 결함이 원인인 경우 Phase 1부터 다시 닫는 재검증 루프를 문서 수준에서 명확히 강제하기 위해.
   audit: changed-parts + whole-harness
   audit-summary: changed-parts와 whole-harness 모두 승인 가능이며, Phase 4 종료 게이트와 재수행 규칙의 정합성 충돌이 없음을 확인했다. 동일 규칙의 다중 문서 반복으로 인한 장기 드리프트 가능성은 경미 리스크로 유지했다.
+
+- 관련 파일: `README.md`, `docs/harness/common/process_policy.md`, `docs/harness_guide.md`, `docs/phase_2_tdd_implementation/implementation.md`, `docs/phase_2_tdd_implementation/audit.md`, `docs/project_overlay/README.md`, `docs/project_overlay/architecture_template.md`, `docs/project_overlay/project_harness_guide_template.md`, `docs/project_overlay/implementation_order_template.md`, `harness.log`
+  변경: Phase 2 구현 순서를 core에서 특정 아키텍처 명칭으로 고정하지 않고 프로젝트 `implementation_order.md` 참조 구조로 전환했다. 공통 process/guideline과 Phase 2 implementation/audit 문서가 같은 참조 구조를 따르도록 정렬했고, project overlay에 `implementation_order_template.md`를 추가해 `architecture.md`가 구현 순서 문서를 참조하도록 템플릿을 보강했다.
+  이유: 프로젝트마다 레이어 명칭과 구현 순서가 다를 수 있으므로 core는 중립 원칙을 유지하고, 실제 순서 판단은 project overlay 문서에서 관리하도록 분리해 도입 유연성과 운영 일관성을 동시에 확보하기 위해.
+  audit: changed-parts + whole-harness
+  audit-summary: changed-parts 기준으로 새 참조 구조 정합성은 승인 가능이었고, whole-harness 관점에서는 `harness.log` 동시 기록 요건을 충족하면 승인 가능이다. 필수 재참조 문서 수는 실무적으로 1개(`implementation_order.md`) 늘었지만 architecture와 구현 순서 해석 분리 효과가 커 운영 리스크는 허용 범위로 판단했다.
