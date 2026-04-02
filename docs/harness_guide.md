@@ -11,7 +11,7 @@
 - 다음 Phase로 이동하려면 현재 Phase의 필요한 감사가 모두 승인 가능이고 사용자 승인이 있어야 한다.
 - 각 Phase 또는 레이어의 한 작업 단위가 끝날 때마다 `docs/task/{task-title}/implementation_notes.md`의 `진행 로그`를 갱신한다.
 - 공통 정책 해석과 충돌 판단은 `docs/harness/common/process_policy.md`의 우선순위 규칙을 따른다.
-- 테스트와 검증은 각각 `testing_policy.md`, `validation_policy.md`를 기준으로 수행한다.
+- 테스트, 테스트 더블 판단, 검증은 각각 `testing_policy.md`, `test_double_policy.md`, `validation_policy.md`를 기준으로 수행한다.
 - 현재 TASK와 직접 관련 없는 기존 중복 제거, 구조 정리, 선제 추상화는 별도 리팩터링 태스크로 분리한다.
 - 작은 태스크의 경량 운영 예외 가능 여부는 `docs/harness/common/lightweight_task_policy.md`를 따른다.
 - 감사는 구현 주체와 분리된 서브에이전트가 수행한다.
@@ -24,6 +24,7 @@
 - 산출물 규칙: `docs/harness/common/artifact_policy.md`
 - 감사 운영 규칙: `docs/harness/common/audit_policy.md`
 - 테스트 규칙: `docs/harness/common/testing_policy.md`
+- 테스트 더블 규칙: `docs/harness/common/test_double_policy.md`
 - 검증 규칙: `docs/harness/common/validation_policy.md`
 - 경량 태스크 예외 규칙: `docs/harness/common/lightweight_task_policy.md`
 - 공통 코드 규칙: `docs/standard/coding_guidelines_core.md`
@@ -58,13 +59,13 @@
 
 ### Phase 2. TDD Implementation
 
-- 구현 중 필수 재참조: `docs/harness/common/testing_policy.md`, `docs/standard/coding_guidelines_core.md`
+- 구현 중 필수 재참조: `docs/harness/common/testing_policy.md`, `docs/harness/common/test_double_policy.md`, `docs/standard/coding_guidelines_core.md`
 - 감사 직전 필수 재참조: `docs/harness/common/audit_policy.md`
 - 조건부 참조: `docs/harness/common/artifact_policy.md`, 프로젝트 overlay 문서
 
 ### Phase 3. Integration
 
-- 구현 중 필수 재참조: `docs/harness/common/testing_policy.md`, `docs/harness/common/validation_policy.md`
+- 구현 중 필수 재참조: `docs/harness/common/testing_policy.md`, `docs/harness/common/test_double_policy.md`, `docs/harness/common/validation_policy.md`
 - 감사 직전 필수 재참조: `docs/harness/common/audit_policy.md`
 - 조건부 참조: 프로젝트 `testing_profile.md`
 

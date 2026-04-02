@@ -36,3 +36,8 @@ harness-kit core의 의미 있는 변경 이력을 남긴다.
   변경: Phase 1의 requirements 감사, plan 감사, issue 대비 plan 누락 감사를 내부 감사로 명시하고, 사용자 승인 게이트는 이 내부 감사들이 끝난 뒤 Phase 1 종료 시점에 적용되도록 문구를 보강했다. 또한 정책 해석이 모호하거나 API spec, 응답값, 에러 형식, 데이터 접근 방식처럼 구현 필수 정보가 비어 있으면 추정하지 말고 사용자에게 질의하도록 규칙을 추가했다.
   이유: Phase 1 내부 감사와 Phase 전체 승인 게이트를 혼동하지 않게 하고, 구현적 모호함이 남은 상태에서 추정으로 requirements나 plan을 닫는 일을 방지하기 위해.
   audit: changed-parts + whole-harness
+
+- 관련 파일: `docs/harness/common/test_double_policy.md`, `docs/harness/common/testing_policy.md`, `docs/harness/common/process_policy.md`, `docs/harness_guide.md`, `docs/phase_2_tdd_implementation/implementation.md`, `docs/phase_2_tdd_implementation/audit.md`, `docs/phase_3_integration/implementation.md`, `docs/phase_3_integration/audit.md`, `harness.log`
+  변경: 공통 `test_double_policy.md`를 추가해 `mock`, `stub`, `fake`의 역할과 단위 테스트/통합 테스트에서의 선택 원칙을 분리했다. 동시에 `testing_policy.md`, 정책 우선순위, 가이드, Phase 2/3 구현 및 감사 문서에 새 정책 참조와 점검 항목을 연결했다.
+  이유: 여러 프로젝트에서 반복되는 테스트 더블 판단 기준을 core 문서로 승격하고, 단위 테스트와 통합 테스트에서 테스트 더블이 책임을 흐리거나 구현 세부사항에 과하게 결합되는 문제를 줄이기 위해.
+  audit: changed-parts + whole-harness

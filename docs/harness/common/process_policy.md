@@ -25,9 +25,10 @@
 4. `docs/harness/common/artifact_policy.md`
 5. `docs/harness/common/audit_policy.md`
 6. `docs/harness/common/testing_policy.md`
-7. `docs/harness/common/validation_policy.md`
-8. `docs/harness/common/lightweight_task_policy.md`
-9. `docs/standard/coding_guidelines_core.md`
+7. `docs/harness/common/test_double_policy.md`
+8. `docs/harness/common/validation_policy.md`
+9. `docs/harness/common/lightweight_task_policy.md`
+10. `docs/standard/coding_guidelines_core.md`
 
 우선순위 해석 원칙은 아래와 같다.
 
