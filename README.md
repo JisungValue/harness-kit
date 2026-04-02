@@ -71,6 +71,7 @@
 - 단순 오탈자, 링크 수정, 비의미적 포맷 정리만 예외로 둘 수 있다. 애매하면 기록한다.
 - 변경 후에는 구현 주체와 분리된 subagent audit를 반드시 수행한다.
 - audit는 `changed-parts`와 `whole-harness`를 구분한다. 전자는 바뀐 부분과 인접 영향을 보고, 후자는 전체 흐름과 core 일관성을 본다.
+- changed-parts / whole-harness audit에는 이번 변경이 필수 재참조 문서 수, 중복 규칙, 문서 길이를 불필요하게 늘려 하네스 수행 중 오동작이나 누락 위험을 키우지 않는지도 포함한다.
 - maintainer agent는 변경과 audit 요약을 같은 작업에서 `harness.log`에 기록한다.
 
 ## 운영 원칙
