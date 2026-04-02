@@ -6,8 +6,9 @@
 - 먼저 `docs/task/{task-title}/issue.md`를 기준으로 작업 범위를 확정한다.
 - Phase는 기본적으로 1 -> 2 -> 3 -> 4 -> 5 순서로 진행한다.
 - 각 Phase는 `implementation.md` 수행 후 `audit.md` 기준으로 감사를 수행한다.
-- 각 Phase는 `implementation -> audit -> 사용자 승인 -> 다음 Phase` 순서를 따른다.
-- 다음 Phase로 이동하려면 현재 Phase 감사 결과가 승인 가능이고 사용자 승인이 있어야 한다.
+- Phase 내부에 감사가 여러 단계로 나뉘어 있으면, 해당 내부 감사들을 모두 완료한 뒤 사용자 승인 게이트로 간다.
+- 각 Phase는 `implementation -> audit 또는 내부 감사 묶음 -> 사용자 승인 -> 다음 Phase` 순서를 따른다.
+- 다음 Phase로 이동하려면 현재 Phase의 필요한 감사가 모두 승인 가능이고 사용자 승인이 있어야 한다.
 - 각 Phase 또는 레이어의 한 작업 단위가 끝날 때마다 `docs/task/{task-title}/implementation_notes.md`의 `진행 로그`를 갱신한다.
 - 공통 정책 해석과 충돌 판단은 `docs/harness/common/process_policy.md`의 우선순위 규칙을 따른다.
 - 테스트와 검증은 각각 `testing_policy.md`, `validation_policy.md`를 기준으로 수행한다.
@@ -31,7 +32,8 @@
 
 ## 공통 운영 게이트
 
-- 각 Phase는 `implementation -> audit -> 사용자 승인 -> 다음 Phase` 순서를 따른다.
+- 각 Phase는 `implementation -> audit 또는 내부 감사 묶음 -> 사용자 승인 -> 다음 Phase` 순서를 따른다.
+- 감사가 여러 단계면 필요한 내부 감사가 모두 승인 가능이어야 사용자 승인 게이트로 이동할 수 있다.
 - 감사가 승인 가능이어도 사용자 승인 없이는 다음 Phase로 이동하지 않는다.
 - 재감사 시에는 이전 피드백 해소 여부를 먼저 확인한다.
 
@@ -84,7 +86,10 @@
 
 - `requirements.md`가 구현 가능한 수준으로 정리되었는가
 - `plan.md`에 테스트 계획, 문서 반영 계획, 비범위가 포함되었는가
+- `issue.md`의 요청사항, 제약사항, 비범위가 `plan.md`에 빠짐없이 반영되었는가
 - 현재 범위 밖 작업이 계획에 섞이지 않았는가
+- requirements 감사, plan 감사, issue 대비 plan 누락 감사가 모두 승인 가능 상태인가
+- 사용자 승인 게이트가 Phase 1 종료 시점에 적용되었는가
 
 ### Phase 2 종료 게이트
 
@@ -117,6 +122,9 @@
 - 입력: `issue.md`
 - 출력: `requirements.md`, `plan.md`
 - 목표: 구현 범위, 제약, 비범위, 작업 계획을 확정한다.
+- 권장 순서: `issue.md` 분석 -> `requirements.md` 작성 -> requirements 감사 -> `plan.md` 작성 -> plan 감사 -> issue 대비 plan 누락 감사
+- 내부 감사: requirements 감사, plan 감사, issue 대비 plan 누락 감사
+- 사용자 승인: 내부 감사가 모두 승인 가능 상태가 된 뒤 Phase 1 종료 시점에 받는다.
 
 ### Phase 2. TDD Implementation
 
