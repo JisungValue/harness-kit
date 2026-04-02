@@ -96,6 +96,8 @@
 ### Phase 2 종료 게이트
 
 - 선택한 레이어가 `테스트 작성 -> 구현 -> 감사` 순서를 지켰는가
+- 선택한 레이어 범위 안에서 진행 순서가 `도메인 규칙 -> 유스케이스 조합 -> 외부 연동 어댑터 -> 진입 인터페이스 -> 실행 조립` 방향과 일치하는가
+- `adapter`를 `outbound`, `persistence`, `external client` 단위로 세분화했다면 적용 순서 근거를 남겼는가
 - 테스트를 통과시키는 최소 구현만 반영했는가
 - 단위 테스트가 부적절한 책임을 `implementation_notes.md`에 남겼는가
 
@@ -140,6 +142,9 @@
 - 입력: `requirements.md`, `plan.md`
 - 출력: 테스트, 구현 코드, 필요한 경우 `implementation_notes.md`
 - 목표: 승인된 범위 안에서 필요한 레이어만 선택해 구현한다.
+- 권장 레이어 진행 축: `도메인 규칙 -> 유스케이스 조합 -> 외부 연동 어댑터 -> 진입 인터페이스 -> 실행 조립`
+- 대표 매핑 예시: `domain -> application -> adapter -> entrypoint -> bootstrap`
+- 레이어 세분화: 필요하면 `adapter`를 `outbound`, `persistence`, `external client` 같은 경계별 단위로 나눠 진행할 수 있다.
 
 ### Phase 3. Integration
 
