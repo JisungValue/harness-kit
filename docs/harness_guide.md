@@ -6,12 +6,16 @@
 - 먼저 `docs/task/{task-title}/issue.md`를 기준으로 작업 범위를 확정한다.
 - Phase는 기본적으로 1 -> 2 -> 3 -> 4 -> 5 순서로 진행한다.
 - 각 Phase는 `implementation.md` 수행 후 `audit.md` 기준으로 감사를 수행한다.
-- 다음 Phase로 이동하려면 현재 Phase 감사 결과가 승인 가능이어야 한다.
+- 각 Phase는 `implementation -> audit -> 사용자 승인 -> 다음 Phase` 순서를 따른다.
+- 다음 Phase로 이동하려면 현재 Phase 감사 결과가 승인 가능이고 사용자 승인이 있어야 한다.
 - 각 Phase 또는 레이어의 한 작업 단위가 끝날 때마다 `docs/task/{task-title}/implementation_notes.md`의 `진행 로그`를 갱신한다.
 - 공통 정책 해석과 충돌 판단은 `docs/harness/common/process_policy.md`의 우선순위 규칙을 따른다.
 - 테스트와 검증은 각각 `testing_policy.md`, `validation_policy.md`를 기준으로 수행한다.
 - 현재 TASK와 직접 관련 없는 기존 중복 제거, 구조 정리, 선제 추상화는 별도 리팩터링 태스크로 분리한다.
 - 작은 태스크의 경량 운영 예외 가능 여부는 `docs/harness/common/lightweight_task_policy.md`를 따른다.
+- 감사는 구현 주체와 분리된 서브에이전트가 수행한다.
+- 작업 식별자가 있으면 브랜치 이름은 `{task_id}_{task_name}` 형식을 권장한다.
+- 중요한 알고리즘, 구조, 복잡도 trade-off 결정은 사용자에게 고지하고 승인받은 뒤 진행한다.
 
 ## 공통 참조 문서
 
@@ -24,6 +28,12 @@
 - 공통 코드 규칙: `docs/standard/coding_guidelines_core.md`
 
 모든 Phase의 구현과 감사는 위 문서들을 함께 참조한다.
+
+## 공통 운영 게이트
+
+- 각 Phase는 `implementation -> audit -> 사용자 승인 -> 다음 Phase` 순서를 따른다.
+- 감사가 승인 가능이어도 사용자 승인 없이는 다음 Phase로 이동하지 않는다.
+- 재감사 시에는 이전 피드백 해소 여부를 먼저 확인한다.
 
 ## 항상 먼저 읽는 문서
 
@@ -40,27 +50,32 @@
 
 ### Phase 1. Requirement And Planning
 
-- 필수 재참조: `docs/harness/common/artifact_policy.md`
-- 조건부 참조: `docs/harness/common/audit_policy.md`, 프로젝트 overlay 문서
+- 구현 중 필수 재참조: `docs/harness/common/artifact_policy.md`
+- 감사 직전 필수 재참조: `docs/harness/common/audit_policy.md`
+- 조건부 참조: 프로젝트 overlay 문서
 
 ### Phase 2. TDD Implementation
 
-- 필수 재참조: `docs/harness/common/testing_policy.md`, `docs/standard/coding_guidelines_core.md`
-- 조건부 참조: `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`, 프로젝트 overlay 문서
+- 구현 중 필수 재참조: `docs/harness/common/testing_policy.md`, `docs/standard/coding_guidelines_core.md`
+- 감사 직전 필수 재참조: `docs/harness/common/audit_policy.md`
+- 조건부 참조: `docs/harness/common/artifact_policy.md`, 프로젝트 overlay 문서
 
 ### Phase 3. Integration
 
-- 필수 재참조: `docs/harness/common/testing_policy.md`, `docs/harness/common/validation_policy.md`
-- 조건부 참조: `docs/harness/common/audit_policy.md`, 프로젝트 `testing_profile.md`
+- 구현 중 필수 재참조: `docs/harness/common/testing_policy.md`, `docs/harness/common/validation_policy.md`
+- 감사 직전 필수 재참조: `docs/harness/common/audit_policy.md`
+- 조건부 참조: 프로젝트 `testing_profile.md`
 
 ### Phase 4. Validation
 
-- 필수 재참조: `docs/harness/common/validation_policy.md`
-- 조건부 참조: `docs/harness/common/audit_policy.md`
+- 구현 중 필수 재참조: `docs/harness/common/validation_policy.md`
+- 감사 직전 필수 재참조: `docs/harness/common/audit_policy.md`
+- 조건부 참조: 없음
 
 ### Phase 5. Documentation
 
-- 필수 재참조: `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`
+- 구현 중 필수 재참조: `docs/harness/common/artifact_policy.md`
+- 감사 직전 필수 재참조: `docs/harness/common/audit_policy.md`
 - 조건부 참조: 없음
 
 ## Phase별 종료 게이트

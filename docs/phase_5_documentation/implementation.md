@@ -9,7 +9,6 @@
 ### 필수 재참조
 
 - `docs/harness/common/artifact_policy.md`
-- `docs/harness/common/audit_policy.md`
 
 ### 조건부 참조
 

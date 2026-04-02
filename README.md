@@ -24,6 +24,8 @@
   - 기대 산출물 밀도를 보여 주는 예시 task를 둔다.
 - `docs/project_overlay/`
   - 프로젝트별로 추가 작성해야 하는 문서와 템플릿을 둔다.
+- `harness.log`
+  - harness-kit core의 의미 있는 변경과 감사 결과를 남긴다.
 
 ## 무엇이 Core 인가
 
@@ -60,6 +62,16 @@
 - `docs/standard/architecture.md`
 - `docs/standard/coding_guidelines_project.md`
 - `docs/standard/testing_profile.md`
+
+## Kit 유지보수 기록 규칙
+
+- `harness-kit` core에 의미 있는 변경이 있으면 같은 변경에서 루트 `harness.log`를 반드시 함께 갱신한다.
+- `harness.log` 항목마다 `변경`과 `이유`를 모두 적는다. 둘 중 하나라도 빠지면 기록으로 인정하지 않는다.
+- 기록 대상은 공통 규칙, phase 기준, audit 기준, 템플릿, 예시, core 문서 구조처럼 여러 프로젝트에 영향을 줄 수 있는 변경이다.
+- 단순 오탈자, 링크 수정, 비의미적 포맷 정리만 예외로 둘 수 있다. 애매하면 기록한다.
+- 변경 후에는 구현 주체와 분리된 subagent audit를 반드시 수행한다.
+- audit는 `changed-parts`와 `whole-harness`를 구분한다. 전자는 바뀐 부분과 인접 영향을 보고, 후자는 전체 흐름과 core 일관성을 본다.
+- maintainer agent는 변경과 audit 요약을 같은 작업에서 `harness.log`에 기록한다.
 
 ## 운영 원칙
 
