@@ -24,6 +24,8 @@
   - 기대 산출물 밀도를 보여 주는 예시 task를 둔다.
 - `docs/project_overlay/`
   - 프로젝트별로 추가 작성해야 하는 문서와 템플릿을 둔다.
+- `docs/kit_maintenance/audit_policy.md`
+  - harness-kit core 수정 시 maintainer가 따르는 전용 감사 기준이다.
 - `harness.log`
   - harness-kit core의 의미 있는 변경과 감사 결과를 남긴다.
 
@@ -67,12 +69,16 @@
 
 ## Kit 유지보수 기록 규칙
 
+- maintainer 감사 기준의 정본은 `docs/kit_maintenance/audit_policy.md`를 따른다.
+- maintainer 감사는 `docs/kit_maintenance/audit_policy.md`의 Strict Mode 체크포인트를 기준으로 수행한다.
 - `harness-kit` core에 의미 있는 변경이 있으면 같은 변경에서 루트 `harness.log`를 반드시 함께 갱신한다.
 - `harness.log` 항목마다 `변경`과 `이유`를 모두 적는다. 둘 중 하나라도 빠지면 기록으로 인정하지 않는다.
+- core 의미 변경 항목은 `변경`, `이유`, `audit`, `audit-summary`를 같은 항목에 함께 남긴다.
 - 기록 대상은 공통 규칙, phase 기준, audit 기준, 템플릿, 예시, core 문서 구조처럼 여러 프로젝트에 영향을 줄 수 있는 변경이다.
 - 단순 오탈자, 링크 수정, 비의미적 포맷 정리만 예외로 둘 수 있다. 애매하면 기록한다.
 - 변경 후에는 구현 주체와 분리된 subagent audit를 반드시 수행한다.
-- audit는 `changed-parts`와 `whole-harness`를 구분한다. 전자는 바뀐 부분과 인접 영향을 보고, 후자는 전체 흐름과 core 일관성을 본다.
+- audit는 `changed-parts`와 `whole-harness`를 모두 수행한다. 전자는 바뀐 부분과 인접 영향을 보고, 후자는 전체 흐름과 core 일관성을 본다.
+- `audit-summary` 필수 규칙은 2026-04-03 이후 신규 항목부터 적용한다.
 - changed-parts / whole-harness audit에는 이번 변경이 필수 재참조 문서 수, 중복 규칙, 문서 길이를 불필요하게 늘려 하네스 수행 중 오동작이나 누락 위험을 키우지 않는지도 포함한다.
 - maintainer agent는 변경과 audit 요약을 같은 작업에서 `harness.log`에 기록한다.
 
