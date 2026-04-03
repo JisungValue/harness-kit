@@ -79,3 +79,11 @@ harness-kit core의 의미 있는 변경 이력을 남긴다.
   이유: 프로젝트마다 레이어 명칭과 구현 순서가 다를 수 있으므로 core는 중립 원칙을 유지하고, 실제 순서 판단은 project overlay 문서에서 관리하도록 분리해 도입 유연성과 운영 일관성을 동시에 확보하기 위해.
   audit: changed-parts + whole-harness
   audit-summary: changed-parts 기준으로 새 참조 구조 정합성은 승인 가능이었고, whole-harness 관점에서는 `harness.log` 동시 기록 요건을 충족하면 승인 가능이다. 필수 재참조 문서 수는 실무적으로 1개(`implementation_order.md`) 늘었지만 architecture와 구현 순서 해석 분리 효과가 커 운영 리스크는 허용 범위로 판단했다.
+
+## 2026-04-03
+
+- 관련 파일: `docs/phase_2_tdd_implementation/implementation.md`, `docs/phase_2_tdd_implementation/audit.md`, `docs/harness_guide.md`, `harness.log`
+  변경: Phase 2 구현/감사 문서에 레이어 명칭·순서·세분화의 1차 책임이 프로젝트 `docs/standard/implementation_order.md`에 있음을 명시하고, 문서 부재 또는 모호 상태에서는 구현과 감사를 진행하지 않는 중단 게이트를 추가했다. 또한 `harness_guide.md`의 Phase 2 필수/조건부 재참조 목록을 phase-local 문서와 정렬해 참조 기준 불일치를 제거했다.
+  이유: core가 프로젝트별 상세 순서를 대체하지 않도록 책임 경계를 고정하고, Phase 2 진행 가능 조건과 감사 기준을 문서 간 동일하게 맞춰 수행 중 해석 분기와 누락 위험을 줄이기 위해.
+  audit: changed-parts + whole-harness
+  audit-summary: changed-parts와 whole-harness 모두 승인 가능이었다. 규칙 반복으로 인한 유지보수 오버헤드는 경미한 저위험으로 남지만, 게이트와 재참조 기준 충돌은 해소되어 운영 판단 일관성이 개선됐다.
