@@ -106,3 +106,9 @@ harness-kit core의 의미 있는 변경 이력을 남긴다.
   이유: kit 유지보수 감사가 단순 구분 원칙을 넘어 재현 가능한 판정 기준으로 동작하도록 하고, 문서 증가·중복·리드 타임 영향 같은 운영 리스크를 감사 단계에서 조기에 통제하기 위해.
   audit: changed-parts + whole-harness
   audit-summary: changed-parts는 최초 점검에서 `audit-summary` 계획형 문구로 인해 승인 불가였고, 완료형 판정 문구로 보강 후 재감사에서 승인 가능으로 전환됐다. whole-harness는 core/overlay 경계 및 phase 게이트 정합성 기준에서 승인 가능이었다. 리스크는 low로 판정했다.
+
+- 관련 파일: `scripts/check_harness_docs.py`, `.github/workflows/harness-doc-guard.yml`, `docs/project_overlay/harness_doc_guard_workflow_template.yml`, `docs/kit_maintenance/drift_response_guide.md`, `docs/project_overlay/README.md`, `docs/kit_maintenance/audit_policy.md`, `README.md`, `harness.log`
+  변경: Harness Doc Guard 자동검증 체계를 추가했다. `scripts/check_harness_docs.py`로 core/overlay 문서 경로 정합성과 `harness.log` 필드 규칙을 검사하고, `.github/workflows/harness-doc-guard.yml`에서 PR/push와 reusable workflow 호출을 지원하도록 구성했다. 또한 project overlay에 downstream용 workflow 템플릿을 추가하고, maintainer용 실패 대응 가이드를 `docs/kit_maintenance/drift_response_guide.md`로 분리했다.
+  이유: 문서 규칙 드리프트를 리뷰 의존으로만 운영하면 누락 위험이 높아지므로, 최소한의 결정적 검사를 CI로 강제해 core-overlay 일관성과 감사 기록 품질을 지속적으로 유지하기 위해.
+  audit: changed-parts + whole-harness
+  audit-summary: changed-parts는 초기 점검에서 `audit-summary` 계획형 문구로 승인 불가였고, 완료형 결론으로 보강 후 승인 가능으로 전환됐다. whole-harness는 core/overlay 경계 보존, phase 게이트 비충돌, 비LLM 결정적 검사 구조를 확인해 승인 가능이었다. overlay workflow 템플릿 ref는 `@<pin-tag-or-sha>` 치환 방식으로 보완해 재현성 리스크를 낮췄고 최종 리스크는 low로 판정했다.

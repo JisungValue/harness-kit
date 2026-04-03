@@ -1,0 +1,12 @@
+name: Harness Doc Guard
+
+on:
+  pull_request:
+  push:
+    branches:
+      - main
+
+jobs:
+  harness-doc-guard:
+    # 필수: 아래 ref를 안정 릴리스 태그 또는 고정 커밋 SHA로 치환한다.
+    uses: "JisungValue/harness-kit/.github/workflows/harness-doc-guard.yml@<pin-tag-or-sha>"

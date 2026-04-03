@@ -92,3 +92,13 @@ whole-harness는 전체 문서 흐름과 core 일관성을 본다.
 - maintainer는 같은 작업에서 `harness.log`를 갱신한다.
 - `harness.log` 항목에는 `변경`, `이유`, `audit`, `audit-summary`를 포함한다.
 - `audit-summary` 필수 규칙은 2026-04-03 이후 신규 항목부터 적용한다.
+
+## 자동검사 실패 대응
+
+- Harness Doc Guard CI가 실패하면 `docs/kit_maintenance/drift_response_guide.md` 순서로 보완한다.
+
+## 자동검사 실행 기준
+
+- 기본 검사 스크립트는 `scripts/check_harness_docs.py`를 사용한다.
+- 기본 워크플로우는 `.github/workflows/harness-doc-guard.yml`을 사용한다.
+- downsteam 프로젝트는 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 복사해 재사용 워크플로우를 호출한다.

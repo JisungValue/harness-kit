@@ -49,6 +49,12 @@
 - `docs/standard/commit_rule.md`
 ```
 
+## 권장 CI 템플릿
+
+- `docs/project_overlay/harness_doc_guard_workflow_template.yml`
+  - 프로젝트 `.github/workflows/`로 복사해 harness-kit 문서 정합성 검사를 자동 실행한다.
+  - 템플릿의 `@<pin-tag-or-sha>`를 릴리스 태그 또는 고정 커밋 SHA로 치환해 재현 가능성을 유지한다.
+
 ## 작성 원칙
 
 - project overlay는 core를 다시 설명하지 않는다.

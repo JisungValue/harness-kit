@@ -26,6 +26,12 @@
   - 프로젝트별로 추가 작성해야 하는 문서와 템플릿을 둔다.
 - `docs/kit_maintenance/audit_policy.md`
   - harness-kit core 수정 시 maintainer가 따르는 전용 감사 기준이다.
+- `docs/kit_maintenance/drift_response_guide.md`
+  - Harness Doc Guard CI 실패 시 maintainer 대응 순서를 정의한다.
+- `scripts/check_harness_docs.py`
+  - core/overlay 경로 정합성과 `harness.log` 기록 규칙을 자동 검사한다.
+- `.github/workflows/harness-doc-guard.yml`
+  - 문서 정합성 검사를 PR/merge 전에 자동 실행한다.
 - `harness.log`
   - harness-kit core의 의미 있는 변경과 감사 결과를 남긴다.
 
