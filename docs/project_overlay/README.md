@@ -9,6 +9,7 @@
 - `docs/standard/implementation_order.md`
 - `docs/standard/coding_guidelines_project.md`
 - `docs/standard/testing_profile.md`
+- `docs/standard/commit_rule.md`
 
 ## 역할 분리
 
@@ -24,6 +25,11 @@
   - 프레임워크 특화 규칙, DTO postfix, 프로젝트 전용 네이밍, 트랜잭션 관례처럼 core에 두기 어려운 내용을 둔다.
 - `docs/standard/testing_profile.md`
   - 테스트 실행 명령, 환경 준비, coverage 기준, 통합 테스트 의존성을 정의한다.
+- `docs/standard/commit_rule.md`
+  - 커밋 품질 최소 규칙과 원자성 운영 기준을 정의한다.
+  - 알려진 compile, type, build, test 실패 상태 커밋 금지와 깨지지 않는 상태 우선 원칙을 둔다.
+  - 기본 커밋 메시지 형식(`type(scope): subject`), 제목 50자 제한, 제목 동사 시작 규칙을 기본안으로 제공한다.
+  - 템플릿의 `[팀 결정 필요]` 항목을 프로젝트 정책으로 확정해 사용한다.
 
 ## 권장 로컬 `docs/harness_guide.md`
 
@@ -40,6 +46,7 @@
 - `docs/standard/implementation_order.md`
 - `docs/standard/coding_guidelines_project.md`
 - `docs/standard/testing_profile.md`
+- `docs/standard/commit_rule.md`
 ```
 
 ## 작성 원칙

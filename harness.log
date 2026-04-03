@@ -87,3 +87,9 @@ harness-kit core의 의미 있는 변경 이력을 남긴다.
   이유: core가 프로젝트별 상세 순서를 대체하지 않도록 책임 경계를 고정하고, Phase 2 진행 가능 조건과 감사 기준을 문서 간 동일하게 맞춰 수행 중 해석 분기와 누락 위험을 줄이기 위해.
   audit: changed-parts + whole-harness
   audit-summary: changed-parts와 whole-harness 모두 승인 가능이었다. 규칙 반복으로 인한 유지보수 오버헤드는 경미한 저위험으로 남지만, 게이트와 재참조 기준 충돌은 해소되어 운영 판단 일관성이 개선됐다.
+
+- 관련 파일: `README.md`, `docs/project_overlay/README.md`, `docs/project_overlay/commit_rule_template.md`, `docs/project_overlay/project_harness_guide_template.md`, `docs/harness_guide.md`, `harness.log`
+  변경: project overlay에 `commit_rule_template.md`를 추가해 커밋 품질 최소 규칙(compile/type/build/test 실패 상태 커밋 금지, 원자성 유지, 깨지지 않는 상태 우선)뿐 아니라 일반 금지 항목, 예외 처리, 기본 실행 프로파일 예시를 포함한 상세 기본안을 제공했다. 추가로 커밋 메시지 기본안(`type(scope): subject`), 권장 type(`feat`, `fix` 등), 제목 50자 제한, 제목 동사 시작, 이슈/`BREAKING CHANGE` footer 규칙을 넣었다. 템플릿에는 `[팀 결정 필요]` 표시를 넣어 메시지 형식, 제목 제한, 브랜치 전략, CI 차단 기준 같은 팀별 정책을 명시적으로 덮어쓰도록 했다. 또한 overlay README, 프로젝트 가이드 템플릿, 루트 README 최소 문서 세트를 `docs/standard/commit_rule.md` 기준으로 정렬하고, `harness_guide.md`의 Phase 3 조건부 참조 경로를 `docs/standard/testing_profile.md`로 통일했다.
+  이유: 커밋 규칙을 core 강제가 아닌 project overlay 템플릿으로 제공해 도입 비용을 낮추면서도, 최소 품질 기준과 메시지 작성 관례를 기본값으로 제공해 일관성을 높이고 문서 세트와 경로 체계 정렬로 운영 중 참조 누락과 해석 분기를 줄이기 위해.
+  audit: changed-parts + whole-harness
+  audit-summary: changed-parts는 승인 가능이었다. whole-harness는 초기 점검에서 문서 경로 불일치로 승인 불가였으나, `harness_guide.md` 경로 정렬 후 재감사에서 승인 가능으로 전환됐다. 최종 운영 리스크는 저위험으로 판단했다.

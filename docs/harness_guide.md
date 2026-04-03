@@ -68,7 +68,7 @@
 
 - 구현 중 필수 재참조: `docs/harness/common/testing_policy.md`, `docs/harness/common/test_double_policy.md`, `docs/harness/common/validation_policy.md`
 - 감사 직전 필수 재참조: `docs/harness/common/audit_policy.md`
-- 조건부 참조: 프로젝트 `testing_profile.md`
+- 조건부 참조: 프로젝트 `docs/standard/testing_profile.md`
 
 ### Phase 4. Validation
 

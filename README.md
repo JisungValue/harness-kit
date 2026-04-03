@@ -63,6 +63,7 @@
 - `docs/standard/implementation_order.md`
 - `docs/standard/coding_guidelines_project.md`
 - `docs/standard/testing_profile.md`
+- `docs/standard/commit_rule.md`
 
 ## Kit 유지보수 기록 규칙
 

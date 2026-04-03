@@ -12,3 +12,4 @@
 - `docs/standard/implementation_order.md`
 - `docs/standard/coding_guidelines_project.md`
 - `docs/standard/testing_profile.md`
+- `docs/standard/commit_rule.md`
