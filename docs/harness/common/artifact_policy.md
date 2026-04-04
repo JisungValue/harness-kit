@@ -12,16 +12,19 @@
 
 ## Task Workspace
 
-- 모든 실제 태스크는 `docs/task/{task-title}/`를 기준으로 진행한다.
+- 모든 실제 태스크는 `docs/task/{task_id}_{task_name}/`를 권장 기본 workspace로 사용한다.
+- stable한 작업 식별자가 없으면 `docs/task/{task_name}/`를 사용할 수 있다.
+- `task_id`는 GitHub issue 번호, 티켓 번호, 날짜 기반 식별자처럼 팀이 안정적으로 추적할 수 있는 값이면 충분하며 특정 이슈 트래커 형식을 강제하지 않는다.
 - 입력 문서: `issue.md`
 - 요구사항 산출물: `requirements.md`
 - 플랜 산출물: `plan.md`
 - 구현 메모 산출물: `implementation_notes.md`
 - 검증 결과 산출물: `validation_report.md`
 
-모든 Phase의 입력, 진행 메모, 감사 결과, 검증 결과는 기본적으로 `docs/task/{task-title}/` 아래에 기록한다.
+모든 Phase의 입력, 진행 메모, 감사 결과, 검증 결과는 기본적으로 해당 task workspace 아래에 기록한다.
 각 Phase 또는 레이어의 한 작업 단위가 끝날 때마다 현재 상태를 `implementation_notes.md`의 `진행 로그` 섹션에 즉시 갱신한다.
 진행 로그에는 최소한 완료한 단계, 핵심 결과, 다음 단계, 보류 또는 리스크를 남겨 세션 유실 후에도 재개 가능해야 한다.
+경량 운영 예외를 검토했다면 결과를 `implementation_notes.md`의 `경량 검토 기록` 섹션에 같은 작업에서 즉시 남긴다.
 
 ## 공통 산출물 최소 템플릿
 
@@ -56,6 +59,7 @@
 ### `implementation_notes.md`
 
 - 진행 로그
+- 경량 검토 기록
 - 구현 중 결정 사항
 - 위임된 책임
 - 사용자 승인 필요 항목
@@ -90,4 +94,5 @@
 - `requirements.md`는 구현 가능한 수준의 요구사항과 제약사항이 포함되어야 한다.
 - `plan.md`는 작업 순서, 검증 방식, 비범위가 드러나야 한다.
 - `implementation_notes.md`는 진행 로그, 구현 중 판단, 위임 또는 후속 이슈를 복원 가능하게 남겨야 한다.
+- 경량 운영 예외를 검토했다면 `implementation_notes.md`에 판정 근거, 축소 범위, 유지한 테스트/감사, 남은 리스크, 승격 조건이 복원 가능하게 남아야 한다.
 - `validation_report.md`는 실제 수행한 검증과 미실행 검증을 구분해 남겨야 한다.

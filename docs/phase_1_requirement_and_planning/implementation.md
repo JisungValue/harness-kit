@@ -25,7 +25,7 @@
 
 ## 입력
 
-- `docs/task/{task-title}/issue.md`
+- task workspace의 `issue.md`
 - 관련 공통 정책 문서
 - 필요한 경우 프로젝트 overlay 문서
 
