@@ -3,19 +3,20 @@
 ## 빠른 시작 요약
 
 - 구현성 작업은 이 문서를 시작점으로 사용한다.
-- 먼저 `docs/task/{task-title}/issue.md`를 기준으로 작업 범위를 확정한다.
+- 먼저 task workspace의 `issue.md`를 기준으로 작업 범위를 확정한다.
 - Phase는 기본적으로 1 -> 2 -> 3 -> 4 -> 5 순서로 진행한다.
 - 각 Phase는 `implementation.md` 수행 후 `audit.md` 기준으로 감사를 수행한다.
 - Phase 내부에 감사가 여러 단계로 나뉘어 있으면, 해당 내부 감사들을 모두 완료한 뒤 사용자 승인 게이트로 간다.
 - 각 Phase는 `implementation -> audit 또는 내부 감사 묶음 -> 사용자 승인 -> 다음 Phase` 순서를 따른다.
 - 다음 Phase로 이동하려면 현재 Phase의 필요한 감사가 모두 승인 가능이고 사용자 승인이 있어야 한다.
-- 각 Phase 또는 레이어의 한 작업 단위가 끝날 때마다 `docs/task/{task-title}/implementation_notes.md`의 `진행 로그`를 갱신한다.
+- 각 Phase 또는 레이어의 한 작업 단위가 끝날 때마다 task workspace의 `implementation_notes.md`의 `진행 로그`를 갱신한다.
 - 공통 정책 해석과 충돌 판단은 `docs/harness/common/process_policy.md`의 우선순위 규칙을 따른다.
 - 테스트, 테스트 더블 판단, 검증은 각각 `testing_policy.md`, `test_double_policy.md`, `validation_policy.md`를 기준으로 수행한다.
 - 현재 TASK와 직접 관련 없는 기존 중복 제거, 구조 정리, 선제 추상화는 별도 리팩터링 태스크로 분리한다.
 - 작은 태스크의 경량 운영 예외 가능 여부는 `docs/harness/common/lightweight_task_policy.md`를 따른다.
 - 감사는 구현 주체와 분리된 서브에이전트가 수행한다.
 - 작업 식별자가 있으면 브랜치 이름은 `{task_id}_{task_name}` 형식을 권장한다.
+- task workspace는 `docs/task/{task_id}_{task_name}/`를 권장하며, stable한 작업 식별자가 없으면 `docs/task/{task_name}/`를 사용할 수 있다.
 - 중요한 알고리즘, 구조, 복잡도 trade-off 결정은 사용자에게 고지하고 승인받은 뒤 진행한다.
 
 ## 공통 참조 문서

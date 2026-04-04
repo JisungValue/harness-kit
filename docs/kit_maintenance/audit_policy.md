@@ -14,10 +14,35 @@
 - 대상: `harness-kit` 저장소의 core 규칙, phase 기준, template, example, 문서 구조 변경
 - 비대상: `harness-kit`를 적용한 개별 서비스 프로젝트의 task/phase 감사
 
+## Downstream 프로젝트와의 경계
+
+이 문서는 `harness-kit`를 사용하는 개별 프로젝트의 일반 task 수행 규칙이 아니다.
+
+- 개별 프로젝트의 task/phase 운영은 프로젝트 로컬 `docs/harness_guide.md`와 project overlay 문서가 담당한다.
+- 본 문서는 `harness-kit` 저장소의 core 규칙, 공통 phase 기준, template, example, overlay template, 문서 구조를 수정할 때만 적용한다.
+- downstream 프로젝트에서 kit를 사용해 구현하거나 감사하는 일만으로는 본 maintainer 절차를 적용하지 않는다.
+- 단, downstream 프로젝트 요구를 반영하기 위해 `harness-kit` core 또는 overlay template 자체를 수정하는 순간부터 본 문서를 적용한다.
+
+## 프로젝트 문서 변경과 Kit 변경의 판별 기준
+
+- 비대상: downstream 프로젝트 로컬 `docs/harness_guide.md`, `docs/standard/*`, 프로젝트 저장소 안의 task 산출물 변경
+- 대상: 이 저장소의 `docs/harness_guide.md`, `docs/harness/common/*`, `docs/phase_*`, `docs/project_overlay/*` template, `README.md`, `scripts/check_harness_docs.py`, `harness.log` 변경
+- downstream 프로젝트에서 복사해 간 overlay 문서를 수정하는 일은 프로젝트 문서 변경이지 `harness-kit` 유지보수가 아니다.
+- 반대로 이 저장소의 overlay template를 수정해 모든 프로젝트의 기본값을 바꾸는 일은 `harness-kit` 유지보수다.
+
+## 문서 집합 경계
+
+- 프로젝트 영향 문서: `docs/harness_guide.md`, `docs/harness/common/*`, `docs/phase_*`, `docs/project_overlay/*`, `docs/standard/coding_guidelines_core.md`, `docs/templates/task/*`, `docs/examples/*`
+- maintainer 전용 문서: `docs/kit_maintenance/*`, `harness.log`, `scripts/check_harness_docs.py`, `.github/workflows/harness-doc-guard.yml`
+- maintainer 전용 지침을 수정하는 작업은 maintainer 전용 문서 집합 안에서만 끝나야 한다.
+- 예외: 모든 감사에 공통으로 적용할 audit 운영 규칙을 바꾸는 경우 `docs/harness/common/audit_policy.md`를 함께 수정할 수 있다. 이때도 maintainer 전용 경로, `harness.log` 규칙, drift 대응 절차는 프로젝트 영향 문서 본문으로 복제하지 않는다.
+- 프로젝트 영향 문서와 overlay template를 수정하는 작업은 프로젝트 영향 문서 집합 안에서만 끝나야 하며, maintainer 전용 문서는 `harness.log` 기록 외에는 함께 수정하지 않는다.
+
 ## 감사 실행 원칙
 
 - core 의미 변경이 있으면 구현 주체와 분리된 subagent audit를 수행한다.
 - audit는 반드시 `changed-parts`와 `whole-harness`로 분리해 수행한다.
+- `changed-parts`와 `whole-harness`는 각각 독립된 subagent 세션으로 수행하고 self-audit만으로 대체하지 않는다.
 - 최종 판정은 두 audit가 모두 승인 가능일 때만 승인 가능으로 본다.
 
 ## Changed-Parts 감사 기준
@@ -38,6 +63,8 @@ changed-parts는 바뀐 파일과 인접 영향만 본다.
 - "적절히", "충분히"처럼 해석 여지가 큰 표현은 가능한 한 조건문 또는 명시 기준으로 바꿨는가
 - 같은 규칙이 불필요하게 중복 추가되지 않았는가
 - 기존 규칙 의미를 우연히 뒤집거나 약화하지 않았는가
+- maintainer 전용 지침 변경인데 프로젝트 영향 문서 본문에 maintainer 전용 경로, `harness.log` 규칙, drift 대응 절차가 추가되지 않았는가
+- 프로젝트 영향 문서 변경인데 `harness.log` 외의 maintainer 전용 문서 수정이 불필요하게 섞이지 않았는가
 
 ## Whole-Harness 감사 기준
 
@@ -47,6 +74,9 @@ whole-harness는 전체 문서 흐름과 core 일관성을 본다.
 
 - `README.md`, `docs/harness_guide.md`, phase-local 문서 사이에 충돌이 없는가
 - core와 project overlay의 책임 경계가 흐려지지 않았는가
+- maintainer 전용 규칙이 프로젝트 영향 문서 본문으로 새어 들어가지 않았는가
+- 프로젝트 수행 규칙이 maintainer 전용 문서에 불필요하게 복제되지 않았는가
+- 현재 작업 범위와 무관한 실제 downstream 프로젝트 폴더 또는 로컬 문서 변경이 섞이지 않았는가
 - 특정 기술 스택 종속 규칙을 core로 끌어오지 않았는가(How보다 What/Criterion 중심)
 - 기존 프로젝트의 overlay를 대규모 재작성해야 하는 breaking 성격 변경인지 확인했는가
 - Phase 게이트(implementation -> audit -> 사용자 승인 -> 다음 phase)와 충돌하지 않는가
@@ -60,7 +90,7 @@ whole-harness는 전체 문서 흐름과 core 일관성을 본다.
 
 ### 3) 실무 정합성
 
-- 규칙 변경으로 sample task 기대 산출물 또는 수행 방식이 바뀌면 `docs/examples/sample-task/`를 함께 현행화했는가
+- 규칙 변경으로 sample task 기대 산출물 또는 수행 방식이 바뀌면 `docs/examples/` 아래 관련 예시를 함께 현행화했는가
 - subagent/제3자가 같은 규칙으로 유사한 감사 결론을 낼 수 있을 만큼 기준이 객관적인가
 - 경량 태스크 예외 원칙과 충돌하지 않는가
 - 필수/조건부 재참조 문서 목록이 상위-하위 문서 간에 모순되지 않는가
@@ -71,6 +101,8 @@ whole-harness는 전체 문서 흐름과 core 일관성을 본다.
 
 - 상위 문서와 하위 문서가 같은 규칙에 대해 상충 지시를 함
 - core/overlay 책임 경계가 바뀌었는데 의도와 근거가 없음
+- maintainer 전용 경로, `harness.log` 규칙, drift 대응 절차가 프로젝트 영향 문서 본문에 추가됨
+- 프로젝트 영향 문서 변경과 무관한 maintainer 전용 문서 수정이 `harness.log` 외에 섞임
 - Phase 게이트를 우회하거나 약화하는 문구가 추가됨
 - 필수 재참조 경로가 불일치하거나 깨짐
 - `harness.log`에 `변경`, `이유`, `audit`, `audit-summary` 중 하나라도 누락됨

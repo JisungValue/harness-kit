@@ -20,8 +20,8 @@
   - 여러 프로젝트에서 공통으로 재사용할 수 있는 코드 품질 규칙을 둔다.
 - `docs/templates/task/`
   - 새 task를 시작할 때 복사해서 쓸 기본 산출물 템플릿을 둔다.
-- `docs/examples/sample-task/`
-  - 기대 산출물 밀도를 보여 주는 예시 task를 둔다.
+- `docs/examples/`
+  - 기대 산출물 밀도를 보여 주는 예시 task들을 둔다.
 - `docs/project_overlay/`
   - 프로젝트별로 추가 작성해야 하는 문서와 템플릿을 둔다.
 - `docs/kit_maintenance/audit_policy.md`
@@ -55,6 +55,25 @@
 - 인프라 또는 클라우드 특화 규칙
 - DTO postfix, 네이밍 세부 규칙처럼 프로젝트 결정이 필요한 규칙
 - 테스트 실행 명령, 실제 coverage 기준, 로컬 개발 규칙
+
+## 문서 적용 경계
+
+이 저장소의 문서는 다음 두 범위로 나뉜다.
+
+- 사용 프로젝트용 문서
+  - 목적: `harness-kit`를 가져다 쓰는 프로젝트의 task 수행, phase 진행, project overlay 작성
+  - 주 문서: `docs/harness_guide.md`, `docs/harness/common/*`, `docs/phase_*`
+  - `docs/project_overlay/*`는 downstream 프로젝트 문서를 시작할 때 복사하거나 참조하는 template/guide다.
+- harness-kit maintainer용 문서
+  - 목적: `harness-kit` core 규칙, template, example, 문서 구조 자체를 수정할 때의 감사와 기록
+  - 주 문서: `docs/kit_maintenance/audit_policy.md`, `docs/kit_maintenance/drift_response_guide.md`, `harness.log`
+
+개별 서비스 프로젝트의 task 수행자는 maintainer 문서를 기본 운영 규칙으로 사용하지 않는다.
+`docs/kit_maintenance/*`는 downstream 프로젝트가 가져가야 하는 최소 프로젝트 문서 세트에 포함되지 않는다.
+maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한다.
+
+- 프로젝트 task를 수행하면 사용 프로젝트용 문서를 따른다.
+- `harness-kit` core를 수정하면 maintainer용 문서를 따른다.
 
 ## 권장 도입 순서
 
