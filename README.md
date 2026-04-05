@@ -7,6 +7,7 @@
 - 프로젝트마다 Harness 절차와 공통 규칙을 처음부터 다시 작성하지 않도록 한다.
 - 공통 Phase, 공통 정책, 공통 산출물 템플릿, 공통 예시를 한 곳에서 관리한다.
 - 프로젝트별 문서는 공통 규칙 위에 얇은 overlay만 추가하도록 한다.
+- 한 번 생성되는 코드의 품질을 높이고, 이후 변경에서도 유지보수성과 지속 가능성을 계속 유지할 수 있는 프로젝트 코드를 만들도록 돕는다.
 
 ## 디렉터리 구조
 
@@ -22,6 +23,8 @@
   - 새 task를 시작할 때 복사해서 쓸 기본 산출물 템플릿을 둔다.
 - `docs/examples/`
   - 기대 산출물 밀도를 보여 주는 예시 task들을 둔다.
+- `bootstrap/`
+  - 프로젝트 스캐폴딩 또는 수동 복사에 쓰는 bootstrap 자산을 둔다.
 - `docs/project_overlay/`
   - 프로젝트별로 추가 작성해야 하는 문서와 템플릿을 둔다.
 - `docs/kit_maintenance/audit_policy.md`
@@ -88,7 +91,7 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 - `docs/harness_guide.md`
 - `docs/standard/architecture.md`
 - `docs/standard/implementation_order.md`
-- `docs/standard/coding_guidelines_project.md`
+- `docs/standard/coding_conventions_project.md`
 - `docs/standard/testing_profile.md`
 - `docs/standard/commit_rule.md`
 

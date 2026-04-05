@@ -4,7 +4,7 @@
 
 - `docs/harness_guide.md`
 - `docs/standard/architecture.md`
-- `docs/standard/coding_guidelines_project.md`
+- `docs/standard/coding_conventions_project.md`
 - `docs/standard/testing_profile.md`
 
 ## 레이어별 작업 계획

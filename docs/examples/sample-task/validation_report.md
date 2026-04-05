@@ -9,7 +9,7 @@
   - 잔여 리스크: 없음
 
 - 검증 항목: overlay 최소 문서 세트 확인
-  - 실행 방법 또는 확인 방식: architecture, coding_guidelines_project, testing_profile 문서 존재 여부 확인
+  - 실행 방법 또는 확인 방식: architecture, coding_conventions_project, testing_profile 문서 존재 여부 확인
   - 결과: 최소 세트 정의 완료
   - 실패 또는 미실행 사유: 없음
   - 잔여 리스크: 프로젝트별 세부 내용은 별도 작성 필요

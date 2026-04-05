@@ -13,6 +13,7 @@
 - `docs/standard/coding_guidelines_core.md`
 - 프로젝트 `docs/standard/architecture.md`
 - 프로젝트 `docs/standard/implementation_order.md`
+- 프로젝트 `docs/standard/coding_conventions_project.md`
 
 ### 조건부 참조
 
@@ -50,6 +51,7 @@
 - 테스트 더블은 현재 단위 테스트 책임을 설명하는 최소 수준으로 선택한다.
 - 필요한 레이어만 선택해 안쪽 책임부터 바깥쪽 책임 순서로 진행한다.
 - 레이어 명칭, 선택 순서, 세분화 기준은 프로젝트 `docs/standard/implementation_order.md`를 단일 기준으로 따른다.
+- 프로젝트 전용 framework 또는 language convention이 있으면 프로젝트 `docs/standard/coding_conventions_project.md`를 함께 참조한다.
 - 프로젝트 문서가 없거나 현재 TASK 기준으로 모호하면 구현 전에 프로젝트 문서를 먼저 보강해 기준을 확정한다.
 - 현재 TASK 수행에 직접 필요하지 않은 리팩터링은 함께 진행하지 않는다.
 - 단위 테스트가 부적절한 책임은 `implementation_notes.md`에 기록하고 Phase 3로 위임한다.

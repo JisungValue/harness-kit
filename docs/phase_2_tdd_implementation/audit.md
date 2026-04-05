@@ -14,10 +14,11 @@
 - `docs/standard/coding_guidelines_core.md`
 - 프로젝트 `docs/standard/architecture.md`
 - 프로젝트 `docs/standard/implementation_order.md`
+- 프로젝트 `docs/standard/coding_conventions_project.md`
 
 ### 조건부 참조
 
-- 프로젝트 `docs/standard/coding_guidelines_project.md`
+- 없음
 
 ## Phase 체크리스트
 
@@ -29,6 +30,7 @@
 - 테스트 더블 선택이 검증 책임과 맞는가
 - 선택한 레이어 명칭, 순서, 세분화가 프로젝트 `docs/standard/implementation_order.md`와 정합한가
 - 프로젝트 문서가 없거나 모호한 상태에서 임의 순서로 진행하지 않았는가
+- 프로젝트 `docs/standard/coding_conventions_project.md`에 정의한 convention과 충돌하지 않는가
 - 불필요한 리팩터링이나 선제 추상화가 섞이지 않았는가
 - 실패 경로와 핵심 예외가 검토되었는가
 - 경계 번역, 민감정보 보호, 외부 에러 차단 규칙이 지켜졌는가
@@ -45,6 +47,7 @@
 - 각 선택 레이어가 `테스트 작성 -> 구현 -> 감사` 순서로 진행되었는가
 - 선택한 레이어 명칭, 순서, 세분화 기준이 프로젝트 `docs/standard/implementation_order.md`와 충돌하지 않는가
 - 프로젝트 문서가 없거나 현재 TASK 기준으로 모호한 상태에서 임의 순서를 적용하지 않았는가
+- 프로젝트 `docs/standard/coding_conventions_project.md`가 정의한 language/framework convention과 구현이 충돌하지 않는가
 - 테스트를 통과시키는 최소 구현이 반영되었는가
 - `mock`, `stub`, `fake`가 현재 단위 테스트 책임에 맞게 선택되었는가
 - 승인되지 않은 범위 확장이 없는가
