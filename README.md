@@ -29,6 +29,8 @@
   - 새 프로젝트 또는 거의 빈 디렉터리에 최소 project overlay 문서 세트를 deterministic하게 생성하는 init CLI다. 현재 MVP는 관리 대상 문서 경로만 검사하고 생성한다.
 - `docs/project_overlay/`
   - 프로젝트별로 추가 작성해야 하는 문서와 템플릿을 둔다.
+- `docs/project_overlay/first_success_guide.md`
+  - 새 프로젝트 또는 거의 빈 프로젝트에서 최소 문서 세트와 첫 성공 상태를 빠르게 재현하는 가이드다.
 - `docs/kit_maintenance/audit_policy.md`
   - harness-kit core 수정 시 maintainer가 따르는 전용 감사 기준이다.
 - `docs/kit_maintenance/drift_response_guide.md`
@@ -84,10 +86,11 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 ## 권장 도입 순서
 
 1. `harness-kit`를 새 프로젝트로 가져온다.
-2. 프로젝트 로컬 `docs/harness_guide.md`를 얇은 index 문서로 만든다.
-3. `docs/project_overlay/`의 템플릿을 기준으로 프로젝트 전용 문서를 작성한다.
-4. `docs/templates/task/`를 복사해 첫 task를 시작한다.
-5. 실제 task 몇 개를 돌린 뒤 project overlay만 보강한다.
+2. 새 프로젝트 first success 경로는 `docs/project_overlay/first_success_guide.md`를 먼저 본다.
+3. init CLI 또는 `docs/project_overlay/` 수동 복사로 최소 문서 세트를 만든다.
+4. 생성된 `docs/harness_guide.md`와 `docs/standard/coding_conventions_project.md`의 vendored 경로를 실제 배치 경로에 맞게 현지화한다.
+5. `docs/templates/task/`를 복사해 첫 task를 시작한다.
+6. 실제 task 몇 개를 돌린 뒤 project overlay만 보강한다.
 
 ## 최소 프로젝트 문서 세트
 
