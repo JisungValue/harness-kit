@@ -61,4 +61,5 @@
 
 ## 프로젝트별 세부 기준
 
-- 실제 테스트 프레임워크, 실행 명령, coverage 기준은 project overlay의 `testing_profile.md`에서 정의한다.
+- 실제 테스트 프레임워크, coverage 기준, 통합 테스트 대상, 외부 의존성 기동 방식은 프로젝트 `docs/standard/testing_profile.md`에서 정의한다.
+- test 실행 명령과 test 게이트의 필수 여부, 실패 처리 기준은 프로젝트 `docs/standard/quality_gate_profile.md`에서 정의한다.

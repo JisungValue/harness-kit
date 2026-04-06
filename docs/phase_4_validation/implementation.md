@@ -9,6 +9,7 @@
 ### 필수 재참조
 
 - `docs/harness/common/validation_policy.md`
+- 프로젝트 `docs/standard/quality_gate_profile.md`
 
 ### 조건부 참조
 
@@ -38,6 +39,7 @@
 ## 수행 규칙
 
 - 자동 검증과 수동 검증을 구분해 기록한다.
+- 프로젝트 `docs/standard/quality_gate_profile.md`가 현재 Phase 4 기록 시점까지 적용하도록 정의한 품질 게이트 중 무엇을 실행했고 무엇을 미실행했는지 함께 기록한다.
 - 미실행 검증은 누락하지 말고 사유를 남긴다.
 - Validation 단계에서는 `issue.md`, `requirements.md`, `plan.md`, `implementation_notes.md`, 실제 구현 결과를 교차 검토한다.
 - Phase 1에서 정의한 요청사항, 제약사항, 비범위의 반영 여부를 확인한다.

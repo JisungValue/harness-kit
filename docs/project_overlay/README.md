@@ -8,6 +8,7 @@
 - `docs/standard/architecture.md`
 - `docs/standard/implementation_order.md`
 - `docs/standard/coding_conventions_project.md`
+- `docs/standard/quality_gate_profile.md`
 - `docs/standard/testing_profile.md`
 - `docs/standard/commit_rule.md`
 
@@ -24,8 +25,12 @@
 - `docs/standard/coding_conventions_project.md`
   - 프레임워크 특화 규칙, DTO postfix, 프로젝트 전용 네이밍, 트랜잭션 관례처럼 core에 두기 어려운 convention을 둔다.
   - 언어별 convention 초안이 필요하면 `bootstrap/language_conventions/`에서 해당 언어 템플릿을 골라 수동 복사 또는 병합해 시작한다.
+- `docs/standard/quality_gate_profile.md`
+  - formatter, linter, type checker, test, 조건부 architecture rule 같은 품질 게이트 실행 명령과 실패 기준을 정의한다.
+  - 각 게이트의 필수 여부, 실행 시점, 실패 시 처리 기준을 한곳에 둔다.
 - `docs/standard/testing_profile.md`
-  - 테스트 실행 명령, 환경 준비, coverage 기준, 통합 테스트 의존성을 정의한다.
+  - 테스트 환경 준비, coverage 기준, 통합 테스트 대상, 외부 의존성 기동 방식 같은 테스트 세부 기준을 정의한다.
+  - 테스트 실행 명령 자체와 게이트 강제 여부는 `docs/standard/quality_gate_profile.md`에서 정의한다.
 - `docs/standard/commit_rule.md`
   - 커밋 품질 최소 규칙과 원자성 운영 기준을 정의한다.
   - 알려진 compile, type, build, test 실패 상태 커밋 금지와 깨지지 않는 상태 우선 원칙을 둔다.
@@ -46,6 +51,7 @@
 - `docs/standard/architecture.md`
 - `docs/standard/implementation_order.md`
 - `docs/standard/coding_conventions_project.md`
+- `docs/standard/quality_gate_profile.md`
 - `docs/standard/testing_profile.md`
 - `docs/standard/commit_rule.md`
 ```

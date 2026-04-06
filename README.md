@@ -57,7 +57,8 @@
 - 프레임워크 또는 런타임 특화 규칙
 - 인프라 또는 클라우드 특화 규칙
 - DTO postfix, 네이밍 세부 규칙처럼 프로젝트 결정이 필요한 규칙
-- 테스트 실행 명령, 실제 coverage 기준, 로컬 개발 규칙
+- 테스트 전략, 실제 coverage 기준, 통합 테스트 범위, 로컬 개발 규칙
+- formatter, linter, type checker, test 같은 품질 게이트 실행 명령과 실패 기준
 
 ## 문서 적용 경계
 
@@ -92,6 +93,7 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 - `docs/standard/architecture.md`
 - `docs/standard/implementation_order.md`
 - `docs/standard/coding_conventions_project.md`
+- `docs/standard/quality_gate_profile.md`
 - `docs/standard/testing_profile.md`
 - `docs/standard/commit_rule.md`
 

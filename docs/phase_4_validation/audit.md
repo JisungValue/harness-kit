@@ -10,6 +10,7 @@
 
 - `docs/harness/common/audit_policy.md`
 - `docs/harness/common/validation_policy.md`
+- 프로젝트 `docs/standard/quality_gate_profile.md`
 
 ## Phase 체크리스트
 
@@ -29,6 +30,7 @@
 
 - 자동 검증과 수동 검증이 구분되어 있는가
 - 검증 항목별 실행 방법과 결과가 남아 있는가
+- 프로젝트 `docs/standard/quality_gate_profile.md`가 현재 Phase 4 기록 시점까지 적용하도록 정의한 필수 게이트의 실행 여부 또는 미실행 사유가 남아 있는가
 - 미실행 검증과 그 사유가 기록되어 있는가
 - `issue.md`, `requirements.md`, `plan.md`, `implementation_notes.md`, 실제 구현 결과를 함께 대조했는가
 - Phase 1에서 확정한 요청사항, 제약사항, 비범위의 반영 여부를 검증했는가

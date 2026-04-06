@@ -11,11 +11,12 @@
 - `docs/harness/common/testing_policy.md`
 - `docs/harness/common/test_double_policy.md`
 - `docs/harness/common/validation_policy.md`
+- 프로젝트 `docs/standard/quality_gate_profile.md`
+- 프로젝트 `docs/standard/testing_profile.md`
 
 ### 조건부 참조
 
 - `docs/harness/common/audit_policy.md`
-- 프로젝트 `testing_profile.md`
 
 ## Phase 체크리스트
 
@@ -25,6 +26,7 @@
 - entrypoint, bootstrap, adapter의 실제 연결 책임이 단위 테스트만으로 남겨지지 않았는가
 - storage adapter, gateway, client adapter 같은 외부 port 구현체의 실제 연결 책임을 구현체 단위 통합 테스트로 검증할 대상을 식별했는가
 - 통합 테스트에서 내부 협력을 `mock`으로 대체해 연결 책임을 지우지 않았는가
+- 프로젝트 `docs/standard/quality_gate_profile.md`가 현재 Phase 3까지 적용하도록 정의한 test gate가 실행되었거나, 미실행 사유가 기록되었는가
 - 단위 테스트로 충분한 책임을 중복 검증하지 않았는가
 - 미확인 연동 리스크가 있으면 기록했는가
 
@@ -32,7 +34,8 @@
 
 - Phase 2 구현 결과
 - `implementation_notes.md`
-- 프로젝트 `testing_profile.md`
+- 프로젝트 `docs/standard/quality_gate_profile.md`
+- 프로젝트 `docs/standard/testing_profile.md`
 
 ## 수행 규칙
 
@@ -45,6 +48,7 @@
 - 외부 port 구현체는 전체 애플리케이션 end-to-end 대신 구현체 단위 통합 테스트로도 검증할 수 있다.
 - storage adapter, gateway, client adapter 구현체는 실제 저장/조회 연산, 실제 응답 포맷, driver 또는 client 설정, 저장소별 경계 책임, 에러 번역처럼 더블로 가리기 어려운 책임을 우선 통합 테스트 대상으로 삼는다.
 - 외부 경계가 아니라면 통합 테스트 안에서 내부 협력 객체를 테스트 더블로 대체하지 않는다.
+- 프로젝트 `docs/standard/quality_gate_profile.md`가 현재 Phase 3까지 적용하도록 정의한 test gate가 있으면, 해당 실행 또는 미실행 사유를 함께 남긴다.
 
 ## 출력
 

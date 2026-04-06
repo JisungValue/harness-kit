@@ -4,8 +4,11 @@
 
 - `docs/harness_guide.md`
 - `docs/standard/architecture.md`
+- `docs/standard/implementation_order.md`
 - `docs/standard/coding_conventions_project.md`
+- `docs/standard/quality_gate_profile.md`
 - `docs/standard/testing_profile.md`
+- `docs/standard/commit_rule.md`
 
 ## 레이어별 작업 계획
 
