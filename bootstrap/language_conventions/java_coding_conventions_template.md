@@ -53,13 +53,27 @@
 - 24+에서 표준화된 기능으로 대체 가능한 보조 유틸리티나 관성적 패턴이 있으면 새 라이브러리 추가보다 JDK 표준 기능을 우선 검토한다.
 - preview 기능은 도입 이유, 롤백 가능성, 대체안이 없으면 기본 convention으로 채택하지 않는다.
 
-## Effective Java 적용 관점
+## 참조 관점
 
-- 아래 항목은 사용자가 가져온 `Effective Java` 분류를 Java bootstrap convention으로 재정리한 것이다.
-- 책의 모든 항목을 그대로 복제하지 않고, 현재 harness의 project-facing bootstrap 자산에 맞는 Java-specific 판단 기준만 남긴다.
-- 공통 프로세스, 경계 번역, 테스트 책임, 에러 처리의 기본 규칙은 `docs/standard/coding_guidelines_core.md`를 우선하고, 여기서는 Java에서 반복적으로 결정해야 하는 구체 선택만 추가한다.
+- 아래 항목은 `Effective Java`의 장별 주제를 project-facing bootstrap convention으로 재정리한 것이다.
+- 책의 모든 항목을 그대로 복제하지 않고, project-facing bootstrap 자산에서 바로 복사하거나 현지화할 수 있는 Java-specific 선택 기준만 남긴다.
 
-## 2장 객체 생성과 파괴
+## 타입과 모델링
+
+- 값 의미가 있는 타입은 mutable POJO보다 `record` 또는 명시적 값 객체를 우선 검토한다.
+- `equals`를 재정의하면 `hashCode`도 함께 맞추고, hash 기반 컬렉션 사용 시 테스트로 확인한다.
+- 자연 순서가 있는 값 타입은 `Comparable` 구현을 검토하되 `equals`와 충돌하지 않게 유지한다.
+- 값 의미가 있는 타입은 `toString` 재정의를 검토하되 민감정보는 직접 노출하지 않는다.
+- enum 외부 계약에는 ordinal을 사용하지 않고, 필요한 값은 명시 필드로 둔다.
+- 상태 집합 연산은 bit field보다 `EnumSet`을, enum key 기반 매핑은 배열 인덱싱보다 `EnumMap`을 우선 검토한다.
+- API가 구체 구현보다 추상 계약에 의존하게 `List`, `Set`, `Map` 같은 인터페이스 타입을 우선 노출한다.
+- 식별자, 복합 키, 상태를 단순 문자열 하나에 몰아넣지 말고 더 적절한 타입을 검토한다.
+- `Optional`은 반환 타입에서만 우선 사용하고, 엔티티 필드, DTO 필드, 직렬화 모델 필드의 기본 표현으로 삼지 않는다.
+- `Optional<List<T>>`, `Optional<Set<T>>`, `Optional<T[]>`, `Optional<Stream<T>>`보다 빈 결과를 반환한다.
+- `Optional.get()`을 기본 흐름 제어로 사용하지 않고, `orElseThrow`, `map`, `flatMap`, `ifPresent` 같은 의도를 드러내는 연산을 우선한다.
+- `isPresent()` 후 `get()`으로 다시 꺼내는 패턴은 분기 책임이 분명하지 않으면 피한다.
+
+## 객체 생성과 API 설계
 
 - 생성자 오버로드가 의미를 숨기면 named static factory를 우선 검토한다.
 - 선택 인자가 많아지는 타입은 telescoping constructor보다 builder 또는 별도 request/value type을 우선 검토한다.
@@ -70,90 +84,47 @@
 - listener, cache, thread-local, static registry에 넣은 참조는 수명주기와 해제 책임을 함께 문서화한다.
 - finalizer와 cleaner는 기본 자원 정리 수단으로 사용하지 않는다.
 - `AutoCloseable` 자원은 `try-finally`보다 `try-with-resources`를 기본으로 사용한다.
+- public API는 boxed primitive, `null`, sentinel value를 섞어 애매한 계약을 만들지 않는다.
+- 컬렉션 내부 상태를 그대로 노출하지 않고, 방어적 복사 또는 불변 뷰 필요 여부를 계약으로 명시한다.
+- public/protected 메서드는 매개변수 유효성 검사를 빠뜨리지 않는다.
+- mutable 입력과 내부 상태 노출이 계약을 깨뜨릴 수 있으면 방어적 복사를 검토한다.
+- 컬렉션이나 배열 결과가 비어 있을 수 있으면 `null` 대신 빈 값을 반환한다.
 
-## 3장 모든 객체의 공통 메서드
-
-- 값 의미가 있는 타입만 `equals`를 재정의하고, 대칭성/추이성/일관성을 깨는 설계는 피한다.
-- `equals`를 재정의하면 `hashCode`도 함께 맞추고, hash 기반 컬렉션 사용 시 테스트로 확인한다.
-- 공개 value type과 디버깅 가치가 높은 타입은 `toString` 재정의를 검토하되 민감정보는 직접 노출하지 않는다.
-- `Cloneable`/`clone`은 기본 선택지로 쓰지 않고, 복제가 필요하면 복사 생성자나 복사 팩터리를 우선 검토한다.
-- 자연 순서가 있는 값 타입은 `Comparable` 구현을 검토하되 `equals`와 충돌하지 않게 유지한다.
-
-## 4장 클래스와 인터페이스
+## 함수와 추상화 설계
 
 - 클래스와 멤버의 접근 권한은 가능한 최소로 유지한다.
 - public 클래스는 mutable public 필드 대신 접근자와 명시적 메서드 계약을 사용한다.
-- 변경이 거의 없는 값 객체는 mutable POJO보다 불변 타입을 우선한다.
 - 상속보다 합성을 우선하고, 상속은 진짜 is-a 관계와 override 계약을 유지할 수 있을 때만 사용한다.
 - 상속을 열어 두는 클래스는 protected hook, 호출 순서, 상태 불변식까지 문서화하고, 그렇지 않으면 상속을 막는다.
 - public 확장 지점은 추상 클래스보다 인터페이스를 우선 검토한다.
 - 인터페이스는 타입을 표현하는 용도로 쓰고, 상수 묶음 역할은 지양한다.
 - 태그 값으로 분기하는 클래스보다 sealed hierarchy 또는 명시적 타입 계층을 우선 검토한다.
 - 바깥 인스턴스가 필요 없는 멤버 클래스는 static nested class를 우선 사용한다.
-- 톱레벨 타입은 가능한 한 파일당 하나로 유지한다.
-
-## 5장 제네릭
-
 - raw type은 사용하지 않는다.
 - 비검사 경고는 무시하지 말고 제거하거나, 정말 필요한 경우 가장 좁은 범위에서만 근거와 함께 억제한다.
-- 공개 API에서는 배열보다 `List` 같은 컬렉션 인터페이스를 우선 검토한다.
 - 타입 관계가 반복되는 도우미는 제네릭 타입 또는 제네릭 메서드로 일반화할 수 있는지 검토한다.
 - producer/consumer 성격이 분명한 API는 bounded wildcard로 유연성을 높일 수 있는지 검토한다.
 - 제네릭과 가변인수를 함께 쓸 때는 힙 오염 가능성을 확인하고, 안전성이 명확할 때만 제한적으로 사용한다.
 - 타입 안전 이종 컨테이너 패턴은 ad-hoc `Map<String, Object>`보다 계약이 더 분명해질 때만 사용한다.
+- reflection보다는 인터페이스와 명시적 계약을 우선 사용한다.
 
-## 6장 열거 타입과 애너테이션
+## 컬렉션과 데이터 처리
 
-- int/string 상수 묶음보다 enum을 우선 사용한다.
-- enum의 외부 계약에는 ordinal을 사용하지 않고, 필요한 값은 명시 필드로 둔다.
-- 상태 집합 연산은 bit field보다 `EnumSet`을 우선 검토한다.
-- enum key 기반 매핑은 배열 인덱싱보다 `EnumMap`을 우선 검토한다.
-- 확장 가능한 enum 유사 구조가 필요하면 인터페이스와 다형성을 우선 검토한다.
-- 명명 패턴 규칙보다 annotation 기반 메타데이터를 우선 검토한다.
-- 재정의 메서드에는 `@Override`를 일관되게 사용한다.
-- 타입 정체성이 필요한 마킹에는 marker annotation보다 marker interface가 더 맞는지 검토한다.
-
-## 7장 람다와 스트림
-
-- 익명 클래스보다 람다가 더 짧고 명확하면 람다를 사용한다.
-- 람다보다 메서드 참조가 더 읽기 쉬울 때만 메서드 참조로 바꾼다.
-- ad-hoc 함수 타입보다 표준 함수형 인터페이스를 우선 검토한다.
-- stream은 선언형 구성이 더 읽기 쉬울 때 사용하고, 그렇지 않으면 loop를 선택한다.
+- 한 번의 명시적 loop가 더 읽기 쉬우면 stream보다 loop를 선택한다.
+- stream 파이프라인은 mapping/filtering/aggregation 책임이 한눈에 읽히는 길이까지만 허용한다.
 - stream 안에는 부작용 없는 함수를 유지하고, 상태 변경을 숨기지 않는다.
 - 재사용 가능한 결과를 반환할 때는 `Stream`보다 `Collection` 반환이 더 나은지 먼저 검토한다.
 - `parallelStream()`은 기본값으로 사용하지 않고, workload 특성과 검증 근거가 있을 때만 도입한다.
-
-## 8장 메서드
-
-- public/protected 메서드는 매개변수 유효성 검사를 빠뜨리지 않는다.
-- mutable 입력과 내부 상태 노출이 계약을 깨뜨릴 수 있으면 방어적 복사를 검토한다.
-- 메서드 시그니처는 boolean flag, 같은 타입의 연속 파라미터, 의미가 숨은 overload를 줄이도록 설계한다.
-- 다중정의는 boxing, varargs, lambda 추론과 충돌하지 않게 신중히 사용한다.
-- 가변인수는 정말 가변 개수 의미가 있을 때만 쓰고, hot path면 고정 인자 오버로드가 더 나은지 검토한다.
-- 컬렉션이나 배열 결과가 비어 있을 수 있으면 `null` 대신 빈 값을 반환한다.
-- `Optional`은 반환 타입에서만 우선 사용하고, 엔티티 필드, DTO 필드, 직렬화 모델 필드의 기본 표현으로 삼지 않는다.
-- `Optional<List<T>>`, `Optional<Set<T>>`, `Optional<T[]>`, `Optional<Stream<T>>`보다 빈 결과를 반환한다.
-- `Optional.get()`을 기본 흐름 제어로 사용하지 않고, `orElseThrow`, `map`, `flatMap`, `ifPresent` 같은 의도를 드러내는 연산을 우선한다.
-- `isPresent()` 후 `get()`으로 다시 꺼내는 패턴은 분기 책임이 분명하지 않으면 피한다.
-- nullable API와 `Optional` API를 같은 계층에 함께 노출하지 않도록 프로젝트 기준을 통일한다.
-- 외부에 공개되는 API는 Javadoc 유지 범위와 작성 수준을 프로젝트에서 정한다.
-
-## 9장 일반적인 프로그래밍 원칙
-
-- 지역변수의 범위는 가능한 한 좁게 유지한다.
-- index나 remove 제어가 필요 없으면 전통적 `for`보다 for-each를 우선 검토한다.
-- 표준 라이브러리로 충분한 기능은 직접 재구현하지 않는다.
+- 정렬, grouping, deduplication처럼 표준 collector로 충분한 경우 직접 상태 누적 코드를 반복하지 않는다.
+- 문자열 누적은 반복 `+`보다 `StringBuilder`, `StringJoiner`, collector가 더 명확한지 비교한다.
+- stream, lambda, boxing이 hot path에서 반복되면 loop, primitive specialization, 중간 객체 제거가 더 단순한지 먼저 검토한다.
+- `map().filter().collect()` 연쇄가 큰 중간 컬렉션을 여러 번 만들면 한 번의 순회로 줄일 수 있는지 확인한다.
+- `Stream<Integer>`처럼 boxing 비용이 반복되는 경로는 `IntStream`, `LongStream`, `DoubleStream` 적용 가능성을 검토한다.
 - 정확한 수치 계산이 필요하면 `float`/`double` 대신 프로젝트 표준 수치 타입을 명시한다.
 - hot path와 null 허용 비교에서는 boxed primitive보다 primitive를 우선 검토한다.
-- 식별자, 복합 키, 상태를 단순 문자열 하나에 몰아넣지 말고 더 적절한 타입을 검토한다.
-- 문자열 누적은 반복 `+`보다 `StringBuilder`, `StringJoiner`, collector가 더 명확한지 비교한다.
-- API가 구체 구현보다 추상 계약에 의존하게 `List`, `Set`, `Map` 같은 인터페이스 타입을 우선 노출한다.
-- reflection보다는 인터페이스와 명시적 계약을 우선 사용한다.
-- native method는 꼭 필요할 때만 사용하고, 대체 불가 사유를 남긴다.
 - 최적화는 측정 근거와 병목 정보가 있을 때만 도입한다.
-- 일반적으로 통용되는 Java naming convention을 따른다.
 
-## 10장 예외
+## 예외와 결과 표현
 
 - 예외는 진짜 예외 상황에만 사용하고 정상 흐름 제어 수단으로 남용하지 않는다.
 - 복구 가능한 상황은 checked exception, 프로그래밍 오류는 runtime exception이 더 맞는지 구분한다.
@@ -164,19 +135,20 @@
 - 예외를 무시하지 않고, 정말 삼켜야 하면 이유와 보완을 남긴다.
 - `InterruptedException`을 삼키지 않고 interrupt 의미를 보존한다.
 
-## 11장 동시성
+## 동시성과 비동기
 
 - 공유 mutable 상태는 동기화하거나, 더 먼저 공유 자체를 제거할 수 있는지 검토한다.
 - 과도한 동기화와 lock 내부 외부 호출을 피한다.
 - raw thread 생성보다 executor, task, concurrency utility를 우선 검토한다.
-- virtual thread는 기본 강제가 아니라 비교 검토 대상이며, thread-local, transaction, MDC, 외부 라이브러리 호환성은 `[프로젝트 결정 필요]`로 남긴다.
 - `wait`/`notify`보다 `java.util.concurrent` 유틸리티를 우선 검토한다.
 - thread-safety 수준을 프로젝트 문서나 타입 계약에 명시한다.
 - 지연 초기화는 동시성 비용과 초기화 비용을 비교해 신중히 사용한다.
 - correctness를 sleep, timing, scheduler 우연성에 기대지 않는다.
 
-## 12장 직렬화
+## Interop, Reflection, Serialization
 
+- native method는 꼭 필요할 때만 사용하고, 대체 불가 사유를 남긴다.
+- reflection, bytecode 조작, annotation processor, agent 기반 접근은 필요성과 대체 불가 사유가 있을 때만 도입한다.
 - 외부 경계 계약은 Java native serialization보다 명시적 포맷(JSON, Protobuf, 별도 mapper)을 우선 검토한다.
 - `Serializable` 구현은 장기 호환성과 공격 표면을 고려해 신중히 결정한다.
 - 직렬화가 꼭 필요하면 기본 직렬화 형태가 아니라 커스텀 직렬화 형태가 더 안전한지 검토한다.
@@ -184,11 +156,10 @@
 - 인스턴스 수 통제가 중요한 singleton은 `readResolve`보다 enum singleton이 더 맞는지 우선 검토한다.
 - 복잡한 직렬화 대상은 serialization proxy 패턴이 더 안전한지 검토한다.
 
-## import 와 dependency 사용 관례
+## Import 와 Dependency 사용 관례
 
 - static import는 assertion, math, enum constant처럼 반복 사용으로 오히려 의미가 선명해질 때만 제한적으로 사용한다.
 - 표준 JDK 기능으로 충분한 경우 작은 편의 라이브러리 추가보다 JDK 표준 API를 우선 검토한다.
-- reflection, bytecode 조작, annotation processor, agent 기반 접근은 필요성과 대체 불가 사유가 있을 때만 도입한다.
 - Lombok 같은 코드 생성 도구 사용 여부와 허용 범위는 `[프로젝트 결정 필요]`로 남긴다.
 
 ## 패키지와 파일 구조
@@ -196,6 +167,7 @@
 - 패키지 구조는 프로젝트의 구조 문서가 정한 책임 경계를 먼저 드러내고, framework 중심 그룹화만 남지 않게 정한다.
 - public 타입 이름은 역할 중심 명사로 두고, 구현 상세가 드러나는 `Impl`, `Util`, `Helper` 남용은 피한다.
 - 하나의 파일에는 함께 변경될 이유가 높은 타입만 둔다. 붙어 다니지 않는 보조 타입을 관성적으로 중첩시키지 않는다.
+- 톱레벨 타입은 가능한 한 파일당 하나로 유지한다.
 - record, enum, sealed hierarchy는 파일 배치만으로도 닫힌 모델 관계가 읽히게 유지한다.
 
 ## 테스트 관례 초안
