@@ -1,0 +1,93 @@
+from __future__ import annotations
+
+import subprocess
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+SCRIPT = ROOT / "scripts" / "bootstrap_init.py"
+
+
+class BootstrapInitCliTest(unittest.TestCase):
+    def run_cli(self, target: Path, *extra_args: str) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(
+            [sys.executable, str(SCRIPT), str(target), "--language", "python", *extra_args],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+    def test_creates_required_project_docs(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+
+            result = self.run_cli(target)
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertTrue((target / "docs/harness_guide.md").exists())
+            self.assertTrue((target / "docs/standard/architecture.md").exists())
+            self.assertTrue((target / "docs/standard/implementation_order.md").exists())
+            self.assertTrue((target / "docs/standard/coding_conventions_project.md").exists())
+            self.assertTrue((target / "docs/standard/quality_gate_profile.md").exists())
+            self.assertTrue((target / "docs/standard/testing_profile.md").exists())
+            self.assertTrue((target / "docs/standard/commit_rule.md").exists())
+
+            content = (target / "docs/standard/coding_conventions_project.md").read_text(
+                encoding="utf-8"
+            )
+            self.assertIn("- 현재 프로젝트의 활성 언어/런타임: `python`", content)
+            self.assertIn(
+                "vendor/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md",
+                content,
+            )
+
+    def test_fails_fast_when_generated_file_exists(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            target.mkdir(parents=True)
+            docs_dir = target / "docs"
+            docs_dir.mkdir()
+            (docs_dir / "harness_guide.md").write_text("existing\n", encoding="utf-8")
+
+            result = self.run_cli(target)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("bootstrap init failed", result.stderr)
+            self.assertIn("docs/harness_guide.md", result.stderr)
+
+    def test_force_overwrites_existing_generated_files(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+
+            first_result = self.run_cli(target)
+            self.assertEqual(first_result.returncode, 0, first_result.stderr)
+
+            guide_path = target / "docs/harness_guide.md"
+            guide_path.write_text("changed\n", encoding="utf-8")
+
+            second_result = self.run_cli(target, "--force")
+
+            self.assertEqual(second_result.returncode, 0, second_result.stderr)
+            self.assertIn("Overwrote harness bootstrap docs", second_result.stdout)
+            self.assertNotEqual(guide_path.read_text(encoding="utf-8"), "changed\n")
+
+    def test_fails_when_parent_path_is_a_file(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            docs_path = target / "docs"
+            target.mkdir(parents=True)
+            docs_path.write_text("not a directory\n", encoding="utf-8")
+
+            result = self.run_cli(target, "--force")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("not writable as a bootstrap tree", result.stderr)
+            self.assertIn(str(docs_path), result.stderr)
+
+
+if __name__ == "__main__":
+    unittest.main()
