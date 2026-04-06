@@ -10,6 +10,27 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 LANGUAGE_TEMPLATE_REQUIRED_HEADINGS = {
+    "bootstrap/language_conventions/python_coding_conventions_template.md": [
+        "목적",
+        "사용 방법",
+        "코드 스타일과 convention 분리",
+        "공통 품질 규칙 참조",
+        "적용 전 결정",
+        "런타임과 패키징 검토 예시",
+        "참조 관점",
+        "타입과 모델링",
+        "객체 생성과 API 설계",
+        "함수와 추상화 설계",
+        "컬렉션과 데이터 처리",
+        "예외와 결과 표현",
+        "동시성과 비동기",
+        "동적 기능, 직렬화, 런타임 경계",
+        "Import 와 Dependency 사용 관례",
+        "패키지와 파일 구조",
+        "테스트 관례 초안",
+        "자주 생기는 품질 리스크와 금지 패턴",
+        "확인 필요 항목",
+    ],
     "bootstrap/language_conventions/java_coding_conventions_template.md": [
         "목적",
         "사용 방법",
