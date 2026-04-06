@@ -55,7 +55,8 @@
 - 자동 검증은 가능하면 실행 명령 또는 실행 단위를 남긴다.
 - 프로젝트 `docs/standard/quality_gate_profile.md`를 기준으로 어떤 품질 게이트를 실행했는지와 미실행 사유를 남긴다.
 - code hygiene 관련 자동 게이트를 실행했다면 어떤 항목을 확인했는지 또는 왜 수동 검토로 대체했는지도 남긴다.
-- design quality와 performance가 충돌한 경우 대안, 추천안, 근거, trade-off가 `implementation_notes.md`에 정리됐는지와 `validation_report.md`에 그 요약이 남았는지도 기록한다.
+- 성능 민감 변경 또는 성능 최적화 주장이 있으면 대상 경로, 근거, 검증 방법 또는 미실행 사유, 잔여 리스크가 `implementation_notes.md`와 `validation_report.md`에 식별 가능하게 남았는지 기록한다.
+- design quality와 performance가 충돌한 경우 대안, 추천안, 근거, 검증 계획, trade-off가 `implementation_notes.md`에 정리됐는지와 `validation_report.md`에 그 요약이 남았는지도 기록한다.
 - 수동 검증은 무엇을 어떻게 확인했는지 남긴다.
 - 미실행 검증은 누락하지 말고 사유를 적는다.
 - 추적성 검증에서 불일치가 있으면 `누락` 또는 `범위 확장`으로 명시하고 근거를 남긴다.

@@ -42,10 +42,26 @@
   - 판정: 정합
   - 잔여 리스크: 실제 프로젝트에서는 어떤 설계 품질 항목을 수동 감사로 보고 어떤 항목을 architecture rule로 볼지 더 구체적으로 적어야 한다
 
+- 검증 항목: performance 판단 기준 존재 여부
+  - 대조한 입력물: `docs/harness/common/performance_policy.md`, `docs/standard/quality_gate_profile.md`, `docs/examples/sample-task/implementation_notes.md`
+  - 실행 방법 또는 확인 방식: 시간복잡도, 메모리, 중간 컬렉션, 반복 호출, 성능 근거와 검증 계획을 어떤 구조로 남기는지 수동 검토
+  - 결과: `performance_policy.md`에 yes/no 판정 질문, 기록 형식, quality gate 연결 원칙이 있고 sample task에도 대상 경로, 입력 규모, 근거, 검증 계획이 포함된 성능 검토 기록 예시가 있다
+  - 실패 또는 미실행 사유: sample task는 문서 구조 예시라 `implementation_notes.md`에 적은 10건/50,000건 데이터셋 비교와 peak memory 확인은 실제 실행하지 않았다
+  - 판정: 정합
+  - 잔여 리스크: 실제 프로젝트에서는 샘플보다 더 실제 데이터 규모와 운영 지표에 가까운 근거가 필요할 수 있다
+
+- 검증 항목: performance 검증 계획의 Phase 4 반영 여부
+  - 대조한 입력물: `docs/examples/sample-task/implementation_notes.md`, `docs/harness/common/validation_policy.md`, `validation_report.md`
+  - 실행 방법 또는 확인 방식: `implementation_notes.md`의 성능 검토 기록에서 대상 경로, 근거, 검증 계획을 읽고 `validation_report.md`가 실행 결과 또는 미실행 사유, 잔여 리스크를 함께 남기는지 수동 검토
+  - 결과: 대상 경로는 대량 사용자 export 배치 함수이고, 근거는 중간 컬렉션 3회 생성과 payload 복사이며, 검증 계획은 샘플/대량 데이터셋 비교와 peak memory 확인으로 요약할 수 있다
+  - 실패 또는 미실행 사유: sample task는 문서 예시라 실제 대량 데이터셋 생성과 profiler 실행은 수행하지 않았다
+  - 판정: 정합
+  - 잔여 리스크: 실제 프로젝트에서는 같은 형식으로 실제 실행 결과 또는 정확한 미실행 사유를 더 구체적으로 남겨야 한다
+
 - 검증 항목: design quality trade-off 기록 예시 존재 여부
-  - 대조한 입력물: `docs/examples/sample-task/implementation_notes.md`, `docs/harness/common/design_quality_policy.md`
-  - 실행 방법 또는 확인 방식: `implementation_notes.md`에 함수 분리 판정 질문, 대안/추천안/근거/trade-off 기록 형식이 남아 있고 `validation_report.md`가 이를 요약하는지 수동 검토
-  - 결과: sample task에 design quality 판단과 design-performance 충돌 예시를 `implementation_notes.md`에 남기고, validation 단계가 그 canonical source를 다시 확인하는 흐름을 추가했다
+  - 대조한 입력물: `docs/examples/sample-task/implementation_notes.md`, `docs/harness/common/design_quality_policy.md`, `docs/harness/common/performance_policy.md`
+  - 실행 방법 또는 확인 방식: `implementation_notes.md`에 함수 분리 판정 질문, 대안/추천안/근거/검증 계획/trade-off 기록 형식이 남아 있고 `validation_report.md`가 이를 요약하는지 수동 검토
+  - 결과: sample task에 design quality 판단, 독립 performance 검토, design-performance 충돌 예시를 `implementation_notes.md`에 남기고, validation 단계가 그 canonical source를 다시 확인하는 흐름을 추가했다
   - 실패 또는 미실행 사유: 없음
   - 판정: 정합
   - 잔여 리스크: 실제 프로젝트에서는 sample보다 더 실제 코드와 가까운 trade-off 근거가 필요할 수 있다

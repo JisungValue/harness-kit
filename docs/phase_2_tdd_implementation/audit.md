@@ -13,6 +13,7 @@
 - `docs/harness/common/test_double_policy.md`
 - `docs/harness/common/code_hygiene_policy.md`
 - `docs/harness/common/design_quality_policy.md`
+- `docs/harness/common/performance_policy.md`
 - `docs/standard/coding_guidelines_core.md`
 - 프로젝트 `docs/standard/architecture.md`
 - 프로젝트 `docs/standard/implementation_order.md`
@@ -39,9 +40,11 @@
 - 프로젝트 `docs/standard/quality_gate_profile.md`가 현재 Phase 2까지 적용하도록 정의한 품질 게이트와 모순되거나 생략된 검증이 있는가
 - 현재 변경과 직접 관련 있는 import/unused/dead code/debug 흔적이 남아 있지 않은가
 - 현재 변경이 책임 분리, 추상화 수준, 응집도, 경계 분리를 악화시키지 않았는가
+- 현재 변경이 시간복잡도, 메모리 사용, 중간 컬렉션, 반복 호출, 과도한 I/O를 불필요하게 악화시키지 않았는가
 - 불필요한 리팩터링이나 선제 추상화가 섞이지 않았는가
 - 실패 경로와 핵심 예외가 검토되었는가
 - 경계 번역, 민감정보 보호, 외부 에러 차단 규칙이 지켜졌는가
+- 성능 이슈나 최적화 주장이 있다면 근거와 검증 계획이 식별 가능한가
 
 ## 프로젝트 구현 순서 준수 감사
 
@@ -63,7 +66,8 @@
 - 현재 변경과 직접 관련 있는 import/unused/dead code/debug 흔적이 남아 있지 않은가
 - 현재 변경이 긴 함수, 긴 인수 목록, 메시지 체인, 기능 편애, 거대한 클래스 같은 구조 악취를 더 심하게 만들지 않았는가
 - 추측성 일반화, 재사용 근거 없는 추상화, 범위 밖 재설계가 포함되지 않았는가
-- design quality와 performance 충돌 시 대안, 추천안, 근거, trade-off가 `implementation_notes.md`에 식별 가능하게 남아 있는가
+- 성능 민감 경로이거나 성능 이슈 또는 최적화 주장이 있으면 대상 경로, 근거, 검토 항목, 검증 방법 또는 후속 검증 계획이 `implementation_notes.md`에 식별 가능하게 남아 있는가
+- design quality와 performance 충돌 시 `performance_policy.md` 기준의 대안, 추천안, 근거, 검증 계획, trade-off가 `implementation_notes.md`에 식별 가능하게 남아 있는가
 - 테스트를 통과시키는 최소 구현이 반영되었는가
 - `mock`, `stub`, `fake`가 현재 단위 테스트 책임에 맞게 선택되었는가
 - 승인되지 않은 범위 확장이 없는가
@@ -101,9 +105,20 @@
 - 중복 처리 방식이 현재 TASK에서 가장 단순한 선택인지 설명 가능한가
 - 추측성 일반화, 불필요한 wrapper/facade/interface/helper가 추가되지 않았는가
 - 메시지 체인, 기능 편애, 뒤엉킨 변경, 산탄총 수술 징후가 더 심해지지 않았는가
-- design quality와 performance 충돌이 있다면 근거 없는 최적화 대신 대안과 trade-off가 식별 가능한가
+- design quality와 performance 충돌이 있다면 근거 없는 최적화 대신 `performance_policy.md` 기준의 대안과 trade-off가 식별 가능한가
 - 위 판단이 애매하면 `docs/harness/common/design_quality_policy.md`의 함수 분리 판정 질문, 추상화 도입 판정 질문, 중복 처리 결정 규칙, 빠른 판정 체크리스트로 다시 좁혀 보았는가
 - design quality trade-off 기록이 있다면 `implementation_notes.md`가 canonical source로 사용됐는가
+
+## Performance 감사 체크리스트
+
+- 현재 변경에서 핵심 입력 규모와 비용 증가 축을 설명할 수 있는가
+- 큰 컬렉션, 대량 배치, 큰 파일, 스트림, 전체 조회 경로에서 중첩 탐색이나 반복 정렬 같은 불필요한 비용 증가가 없는가
+- 같은 요청이나 배치 안에서 반복 호출, 중복 계산, 외부 I/O 루프를 새 기본값으로 만들지 않았는가
+- 중간 컬렉션, 큰 객체 복사, 전체 materialization이 현재 요구사항 대비 과도하지 않은가
+- 성능 이슈나 최적화 주장이 있다면 측정값, 운영 증상, 입력 규모, query 수, timeout, 메모리 사용량 중 하나 이상의 근거가 있는가
+- 정확한 측정이 어렵다면 대상 경로, 우려 이유, 후속 검증 계획, 미실행 사유, 잔여 리스크가 대신 남아 있는가
+- 설계 품질과 성능 충돌 시 더 작은 국소 변경으로 해결 가능한지 먼저 검토했는가
+- 위 판단이 애매하면 `docs/harness/common/performance_policy.md`의 성능 검토 트리거 규칙, 시간복잡도 판정 질문, 메모리 판정 질문, 반복 호출 판정 질문, 빠른 판정 체크리스트로 다시 좁혀 보았는가
 
 ## 승인 불가 기준
 
@@ -114,6 +129,7 @@
 - 프로젝트 문서가 없거나 모호한 상태에서 기준 확정 없이 구현을 진행함
 - 승인되지 않은 범위 확장이 있음
 - 현재 변경과 직접 관련 없는 기존 중복 제거 또는 구조 정리가 함께 반영됨
+- 성능 민감 변경 또는 성능 최적화 주장이 있는데 근거, 검증 계획, 미실행 사유 없이 추측성 최적화를 반영함
 - 외부 포맷이나 원시 에러가 core로 직접 유입됨
 - 로그 또는 에러 메시지에 민감정보가 직접 포함됨
 - 테스트가 핵심 동작과 계약을 설명하지 못함

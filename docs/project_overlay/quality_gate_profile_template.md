@@ -61,6 +61,15 @@
 - design quality를 architecture rule로 일부 자동화한다면 어떤 경계, 계층, 의존성 규칙을 검사하는지 적는다.
 - 자동화되지 않는 design quality 판단은 `implementation_notes.md`를 수동 기록 위치로 사용한다고 명시한다.
 
+### Performance Check
+
+- 명령: `[프로젝트 결정 필요]`
+- 필수 여부: `[없으면 생략 가능]`
+- 적용 시점: `[프로젝트 결정 필요]`
+- 실패 처리 기준: `[프로젝트 결정 필요]`
+- benchmark, profile, query-count check, load test, performance smoke test처럼 재현 가능한 성능 확인 명령이 있으면 이 섹션에 적는다.
+- 성능 검토 근거와 trade-off의 canonical source는 `implementation_notes.md`로 두고, 데이터 규모나 실행 환경 상세는 `testing_profile.md`를 참조한다고 적는다.
+
 ## 작성 원칙
 
 - 특정 도구를 core 기본값으로 강제하지 않는다.
@@ -68,3 +77,4 @@
 - 명령이 없으면 왜 없는지 또는 어떤 수동 검증으로 대체하는지 남긴다.
 - `필수 여부`와 `적용 시점`을 함께 적어, 현재 phase에서 바로 실행해야 하는지 later phase 또는 CI에서만 실행해도 되는지 구분한다.
 - `testing_profile.md`와 중복 설명하지 않고, 테스트 세부 기준은 해당 문서를 참조한다.
+- 프로젝트가 성능 민감한 경로를 다룬다면 benchmark나 profile 명령이 없더라도 수동 검증 방식이나 후속 검증 위치를 남긴다.

@@ -14,7 +14,7 @@
 - `docs/harness_guide.md`
   - kit의 공통 진입점이다.
 - `docs/harness/common/`
-  - process, artifact, audit, testing, validation, code hygiene, design quality, lightweight 정책을 둔다.
+  - process, artifact, audit, testing, validation, code hygiene, design quality, performance, lightweight 정책을 둔다.
 - `docs/phase_*`
   - 각 Phase의 구현 기준과 감사 기준을 둔다.
 - `docs/standard/coding_guidelines_core.md`
@@ -47,7 +47,7 @@
 - 감사 입력물 기준과 결과 형식
 - 검증 기록 형식
 - 경량 태스크 예외 운영 원칙
-- 코드 품질, 리팩터링 범위 제한, 에러 처리, 로깅, 경계 번역, 리뷰 체크리스트
+- 코드 품질, 리팩터링 범위 제한, 설계 품질, 성능 검토, 에러 처리, 로깅, 경계 번역, 리뷰 체크리스트
 
 ## 무엇이 Project Overlay 인가
 
