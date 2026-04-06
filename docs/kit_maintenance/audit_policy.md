@@ -37,6 +37,7 @@
 - maintainer 전용 지침을 수정하는 작업은 maintainer 전용 문서 집합 안에서만 끝나야 한다.
 - 예외: 모든 감사에 공통으로 적용할 audit 운영 규칙을 바꾸는 경우 `docs/harness/common/audit_policy.md`를 함께 수정할 수 있다. 이때도 maintainer 전용 경로, `harness.log` 규칙, drift 대응 절차는 프로젝트 영향 문서 본문으로 복제하지 않는다.
 - 프로젝트 영향 문서와 overlay template를 수정하는 작업은 프로젝트 영향 문서 집합 안에서만 끝나야 하며, maintainer 전용 문서는 `harness.log` 기록 외에는 함께 수정하지 않는다.
+- `README.md`는 저장소 진입 문서라 project-facing 안내와 maintainer 안내가 함께 존재할 수 있으므로, maintainer 전용 경로 substring 자동 누수 검사는 기본적으로 `README.md`를 제외하고 whole-harness 수동 감사로 확인한다.
 
 ## 감사 실행 원칙
 

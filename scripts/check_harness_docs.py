@@ -9,9 +9,87 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 
+LANGUAGE_TEMPLATE_REQUIRED_HEADINGS = {
+    "bootstrap/language_conventions/java_coding_conventions_template.md": [
+        "목적",
+        "사용 방법",
+        "코드 스타일과 convention 분리",
+        "공통 품질 규칙 참조",
+        "적용 전 결정",
+        "버전별 검토 예시",
+        "참조 관점",
+        "타입과 모델링",
+        "객체 생성과 API 설계",
+        "함수와 추상화 설계",
+        "컬렉션과 데이터 처리",
+        "예외와 결과 표현",
+        "동시성과 비동기",
+        "Interop, Reflection, Serialization",
+        "Import 와 Dependency 사용 관례",
+        "패키지와 파일 구조",
+        "테스트 관례 초안",
+        "자주 생기는 품질 리스크와 금지 패턴",
+        "확인 필요 항목",
+    ],
+    "bootstrap/language_conventions/kotlin_coding_conventions_template.md": [
+        "목적",
+        "사용 방법",
+        "코드 스타일과 convention 분리",
+        "공통 품질 규칙 참조",
+        "적용 전 결정",
+        "런타임과 언어 기능 검토 예시",
+        "참조 관점",
+        "타입과 모델링",
+        "객체 생성과 API 설계",
+        "함수와 추상화 설계",
+        "컬렉션과 데이터 처리",
+        "예외와 결과 표현",
+        "동시성과 비동기",
+        "Interop, Reflection, Serialization",
+        "Import 와 Dependency 사용 관례",
+        "패키지와 파일 구조",
+        "테스트 관례 초안",
+        "자주 생기는 품질 리스크와 금지 패턴",
+        "확인 필요 항목",
+    ],
+}
+
+PROJECT_FACING_MD_GLOBS = [
+    "bootstrap/**/*.md",
+    "docs/examples/**/*.md",
+    "docs/harness/common/**/*.md",
+    "docs/harness_guide.md",
+    "docs/phase_*/*.md",
+    "docs/project_overlay/**/*.md",
+    "docs/standard/coding_guidelines_core.md",
+    "docs/templates/task/**/*.md",
+]
+
+PROJECT_FACING_LEAKAGE_EXCLUDES: set[str] = set()
+
+MAINTAINER_ONLY_REFERENCES = [
+    "harness.log",
+    "docs/kit_maintenance/",
+    "scripts/check_harness_docs.py",
+    ".github/workflows/harness-doc-guard.yml",
+]
+
+AUDIT_SUMMARY_PLACEHOLDERS = {"pending", "todo", "tbd"}
+
 
 def read_text(rel_path: str) -> str:
     return (ROOT / rel_path).read_text(encoding="utf-8")
+
+
+def iter_globbed_files(patterns: list[str]) -> list[Path]:
+    paths: set[Path] = set()
+    for pattern in patterns:
+        paths.update(path for path in ROOT.glob(pattern) if path.is_file())
+    return sorted(paths)
+
+
+def extract_h2_headings(text: str) -> list[str]:
+    return [match.group(1) for match in re.finditer(r"^##\s+(.+?)\s*$", text, re.MULTILINE)]
 
 
 def extract_h2_section(text: str, heading: str) -> list[str]:
@@ -149,6 +227,14 @@ def check_harness_log(errors: list[str]) -> None:
                 f"harness.log {date_header} 엔트리에 `audit-summary:`가 없습니다."
             )
 
+        audit_summary_line = next((line for line in block_lines if "audit-summary:" in line), "")
+        if audit_summary_line:
+            summary_value = audit_summary_line.split("audit-summary:", 1)[1].strip().lower()
+            if summary_value in AUDIT_SUMMARY_PLACEHOLDERS:
+                errors.append(
+                    f"harness.log {date_header} 엔트리의 `audit-summary:`가 placeholder 상태입니다."
+                )
+
         audit_line = next((line for line in block_lines if "audit:" in line), "")
         if audit_line and (
             "changed-parts" not in audit_line or "whole-harness" not in audit_line
@@ -158,11 +244,40 @@ def check_harness_log(errors: list[str]) -> None:
             )
 
 
+def check_language_template_structure(errors: list[str]) -> None:
+    for rel_path, required_headings in LANGUAGE_TEMPLATE_REQUIRED_HEADINGS.items():
+        headings = extract_h2_headings(read_text(rel_path))
+        positions: list[int] = []
+        for heading in required_headings:
+            if heading not in headings:
+                errors.append(f"{rel_path}에 `## {heading}` 섹션이 없습니다.")
+                continue
+            positions.append(headings.index(heading))
+
+        if positions and positions != sorted(positions):
+            errors.append(f"{rel_path}의 공통 골격 섹션 순서가 맞지 않습니다.")
+
+
+def check_project_facing_maintainer_leakage(errors: list[str]) -> None:
+    for path in iter_globbed_files(PROJECT_FACING_MD_GLOBS):
+        rel_path = path.relative_to(ROOT).as_posix()
+        if rel_path in PROJECT_FACING_LEAKAGE_EXCLUDES:
+            continue
+        text = path.read_text(encoding="utf-8")
+        for forbidden in MAINTAINER_ONLY_REFERENCES:
+            if forbidden in text:
+                errors.append(
+                    f"{rel_path}에 maintainer 전용 경로 `{forbidden}` 참조가 남아 있습니다."
+                )
+
+
 def main() -> int:
     errors: list[str] = []
 
     check_project_doc_path_consistency(errors)
     check_harness_log(errors)
+    check_language_template_structure(errors)
+    check_project_facing_maintainer_leakage(errors)
 
     if errors:
         print("Harness doc guard failed:")
