@@ -25,6 +25,8 @@
   - 기대 산출물 밀도를 보여 주는 예시 task들을 둔다.
 - `bootstrap/`
   - 프로젝트 스캐폴딩 또는 수동 복사에 쓰는 bootstrap 자산을 둔다.
+- `scripts/bootstrap_init.py`
+  - 새 프로젝트 또는 거의 빈 디렉터리에 최소 project overlay 문서 세트를 deterministic하게 생성하는 init CLI다. 현재 MVP는 관리 대상 문서 경로만 검사하고 생성한다.
 - `docs/project_overlay/`
   - 프로젝트별로 추가 작성해야 하는 문서와 템플릿을 둔다.
 - `docs/kit_maintenance/audit_policy.md`
@@ -101,6 +103,7 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 
 - maintainer 감사 기준의 정본은 `docs/kit_maintenance/audit_policy.md`를 따른다.
 - maintainer 감사는 `docs/kit_maintenance/audit_policy.md`의 Strict Mode 체크포인트를 기준으로 수행한다.
+- maintainer가 GitHub issue를 해결하기 위해 `harness-kit` core를 수정할 때는 issue마다 전용 브랜치를 따로 잡아 진행하고, 이름은 `{issue_num}_{title}` 형식을 사용한다.
 - `harness-kit` core에 의미 있는 변경이 있으면 같은 변경에서 루트 `harness.log`를 반드시 함께 갱신한다.
 - `harness.log` 항목마다 `변경`과 `이유`를 모두 적는다. 둘 중 하나라도 빠지면 기록으로 인정하지 않는다.
 - core 의미 변경 항목은 `변경`, `이유`, `audit`, `audit-summary`를 같은 항목에 함께 남긴다.

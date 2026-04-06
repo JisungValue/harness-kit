@@ -26,13 +26,13 @@
 ## 프로젝트 문서 변경과 Kit 변경의 판별 기준
 
 - 비대상: downstream 프로젝트 로컬 `docs/harness_guide.md`, `docs/standard/*`, 프로젝트 저장소 안의 task 산출물 변경
-- 대상: 이 저장소의 `docs/harness_guide.md`, `docs/harness/common/*`, `docs/phase_*`, `docs/project_overlay/*` template, `bootstrap/*`, `README.md`, `scripts/check_harness_docs.py`, `harness.log` 변경
+- 대상: 이 저장소의 `docs/harness_guide.md`, `docs/harness/common/*`, `docs/phase_*`, `docs/project_overlay/*` template, `bootstrap/*`, `README.md`, `scripts/check_harness_docs.py`, `scripts/bootstrap_init.py`, `harness.log` 변경
 - downstream 프로젝트에서 복사해 간 overlay 문서를 수정하는 일은 프로젝트 문서 변경이지 `harness-kit` 유지보수가 아니다.
 - 반대로 이 저장소의 overlay template를 수정해 모든 프로젝트의 기본값을 바꾸는 일은 `harness-kit` 유지보수다.
 
 ## 문서 집합 경계
 
-- 프로젝트 영향 문서: `docs/harness_guide.md`, `docs/harness/common/*`, `docs/phase_*`, `docs/project_overlay/*`, `docs/standard/coding_guidelines_core.md`, `docs/templates/task/*`, `docs/examples/*`, `bootstrap/*`
+- 프로젝트 영향 문서: `docs/harness_guide.md`, `docs/harness/common/*`, `docs/phase_*`, `docs/project_overlay/*`, `docs/standard/coding_guidelines_core.md`, `docs/templates/task/*`, `docs/examples/*`, `bootstrap/*`, `scripts/bootstrap_init.py`
 - maintainer 전용 문서: `docs/kit_maintenance/*`, `harness.log`, `scripts/check_harness_docs.py`, `.github/workflows/harness-doc-guard.yml`
 - maintainer 전용 지침을 수정하는 작업은 maintainer 전용 문서 집합 안에서만 끝나야 한다.
 - 예외: 모든 감사에 공통으로 적용할 audit 운영 규칙을 바꾸는 경우 `docs/harness/common/audit_policy.md`를 함께 수정할 수 있다. 이때도 maintainer 전용 경로, `harness.log` 규칙, drift 대응 절차는 프로젝트 영향 문서 본문으로 복제하지 않는다.
@@ -41,6 +41,14 @@
 
 ## 감사 실행 원칙
 
+- maintainer가 GitHub issue를 해결하기 위해 `harness-kit` core를 수정할 때는 issue마다 전용 브랜치를 따로 잡아 진행한다.
+- 이 규칙은 maintainer의 issue 기반 core 작업에서 일반 task 브랜치 권장 형식인 `{task_id}_{task_name}`보다 우선한다.
+- issue 기반 maintainer 브랜치 이름은 `{issue_num}_{title}` 형식을 사용한다.
+- `issue_num`은 숫자 issue 번호만 사용하고, `title`은 issue 제목을 branch-safe 문자열로 정리해 사용한다.
+- 공백은 `_`로 치환하고, 브랜치 구분을 깨는 문자는 제거하거나 같은 수준의 안전한 문자로 치환한다.
+- 하나의 issue 해결에 사용한 maintainer 브랜치를 다른 issue 작업에 재사용하지 않는다.
+- maintainer 감사에서는 현재 작업 브랜치가 대상 issue의 `{issue_num}_{title}` 형식을 따르는지와, 작업이 기본 브랜치가 아니라 issue 전용 브랜치에서 진행 중인지 확인한다.
+- 브랜치 생성 시점이나 과거 재사용 이력은 자동 또는 저장소 상태만으로 완전 검증하기 어려우므로, 이 둘은 maintainer 운영 원칙으로 관리한다.
 - core 의미 변경이 있으면 구현 주체와 분리된 subagent audit를 수행한다.
 - audit는 반드시 `changed-parts`와 `whole-harness`로 분리해 수행한다.
 - `changed-parts`와 `whole-harness`는 각각 독립된 subagent 세션으로 수행하고 self-audit만으로 대체하지 않는다.
