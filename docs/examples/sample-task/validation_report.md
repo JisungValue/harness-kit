@@ -26,6 +26,14 @@
   - 판정: 정합
   - 잔여 리스크: 실제 프로젝트에서는 quality gate 실행 결과를 더 구체적으로 남겨야 한다
 
+- 검증 항목: language-specific convention 확인 기준 존재 여부
+  - 대조한 입력물: `docs/examples/sample-task/coding_conventions_project_example.md`, `plan.md`
+  - 실행 방법 또는 확인 방식: 현재 작업과 직접 관련 있는 언어별 규칙 범주, 금지 패턴, 미해결 금지 항목이 식별 가능한지 수동 검토
+  - 결과: sample task 예시에 활성 언어/런타임, 관련 규칙 범주, 주요 금지 패턴, 현재 Phase 2에서 미해결로 둘 수 없는 항목을 함께 기록했다
+  - 실패 또는 미실행 사유: 없음
+  - 판정: 정합
+  - 잔여 리스크: 실제 프로젝트에서는 sample 예시보다 현재 코드베이스에 더 밀착된 규칙 범주를 적어야 한다
+
 ## 실행하지 못한 검증
 
 - 실제 새 프로젝트에 kit를 가져와 end-to-end로 적용하는 검증은 미실행

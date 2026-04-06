@@ -25,6 +25,7 @@
 
 - 프로젝트 로컬 guide를 갱신한다.
 - 필요한 overlay 문서를 추가한다.
+- 현재 작업과 직접 관련 있는 언어별 convention 항목을 project convention 문서에서 식별 가능하게 정리한다.
 
 ## 비범위
 
