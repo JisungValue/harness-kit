@@ -35,6 +35,7 @@
 - 필수 여부: `[필수/선택]`
 - 적용 시점: `[프로젝트 결정 필요]`
 - 실패 처리 기준: `[프로젝트 결정 필요]`
+- code hygiene를 linter 또는 별도 check로 다룬다면 어떤 항목(import, dead code, debug 흔적 등)을 이 게이트가 책임지는지 적는다.
 
 ### Type Checker
 

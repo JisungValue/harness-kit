@@ -14,7 +14,7 @@
 - `docs/harness_guide.md`
   - kit의 공통 진입점이다.
 - `docs/harness/common/`
-  - process, artifact, audit, testing, validation, lightweight 정책을 둔다.
+  - process, artifact, audit, testing, validation, code hygiene, lightweight 정책을 둔다.
 - `docs/phase_*`
   - 각 Phase의 구현 기준과 감사 기준을 둔다.
 - `docs/standard/coding_guidelines_core.md`

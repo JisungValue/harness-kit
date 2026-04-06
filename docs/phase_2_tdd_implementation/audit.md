@@ -11,6 +11,7 @@
 - `docs/harness/common/audit_policy.md`
 - `docs/harness/common/testing_policy.md`
 - `docs/harness/common/test_double_policy.md`
+- `docs/harness/common/code_hygiene_policy.md`
 - `docs/standard/coding_guidelines_core.md`
 - 프로젝트 `docs/standard/architecture.md`
 - 프로젝트 `docs/standard/implementation_order.md`
@@ -35,6 +36,7 @@
 - 현재 변경과 직접 관련 있는 언어별 convention 항목이 `coding_conventions_project.md`에 식별 가능하게 정리돼 있는가
 - 현재 변경과 직접 관련 있는 언어별 금지 패턴을 실제로 위반하지 않았는가
 - 프로젝트 `docs/standard/quality_gate_profile.md`가 현재 Phase 2까지 적용하도록 정의한 품질 게이트와 모순되거나 생략된 검증이 있는가
+- 현재 변경과 직접 관련 있는 import/unused/dead code/debug 흔적이 남아 있지 않은가
 - 불필요한 리팩터링이나 선제 추상화가 섞이지 않았는가
 - 실패 경로와 핵심 예외가 검토되었는가
 - 경계 번역, 민감정보 보호, 외부 에러 차단 규칙이 지켜졌는가
@@ -56,6 +58,7 @@
 - 현재 변경에 직접 영향을 주는 언어별 항목이 아직 `[프로젝트 결정 필요]` 상태로 남아 있지 않은가
 - 현재 변경이 프로젝트 convention 문서의 주요 금지 패턴을 사실상 새 기본값으로 만들지 않는가
 - 프로젝트 `docs/standard/quality_gate_profile.md`가 현재 Phase 2까지 적용하도록 정의한 formatter/linter/type checker/test 게이트가 누락되었거나 생략 사유 없이 빠지지 않았는가
+- 현재 변경과 직접 관련 있는 import/unused/dead code/debug 흔적이 남아 있지 않은가
 - 테스트를 통과시키는 최소 구현이 반영되었는가
 - `mock`, `stub`, `fake`가 현재 단위 테스트 책임에 맞게 선택되었는가
 - 승인되지 않은 범위 확장이 없는가
@@ -75,6 +78,14 @@
 - 현재 변경과 직접 관련 있는 규칙 범주(naming, modeling, error handling, concurrency, collections, testing, interop 등)가 식별 가능하게 정리돼 있는가
 - 현재 변경에 영향을 주는 항목이 아직 `[프로젝트 결정 필요]` 상태면, 그 상태를 암묵적 예외처럼 사용하지 않았는가
 - 현재 변경이 프로젝트가 금지한 언어별 패턴을 새 기본값처럼 도입하지 않는가
+
+## Code Hygiene 감사 체크리스트
+
+- 사용하지 않는 import가 남아 있지 않은가
+- dead code, 더 이상 호출되지 않는 helper, 의미 없는 fallback 분기가 현재 변경 결과에 남아 있지 않은가
+- 임시 debug print/log, 주석 처리된 코드, 의미 없는 실험 흔적이 제거되었는가
+- framework/generator/serialization 같은 예외가 실제 필요 이상으로 넓게 적용되지 않았는가
+- hygiene를 명분으로 현재 TASK와 무관한 대규모 코드 청소가 함께 반영되지 않았는가
 
 ## 승인 불가 기준
 

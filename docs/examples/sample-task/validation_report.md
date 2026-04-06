@@ -26,6 +26,14 @@
   - 판정: 정합
   - 잔여 리스크: 실제 프로젝트에서는 quality gate 실행 결과를 더 구체적으로 남겨야 한다
 
+- 검증 항목: code hygiene 확인 기준 존재 여부
+  - 대조한 입력물: `docs/harness/common/code_hygiene_policy.md`, `docs/standard/quality_gate_profile.md`, `validation_report.md`
+  - 실행 방법 또는 확인 방식: import, dead code, debug 흔적을 자동 게이트 또는 수동 검토 중 어떤 방식으로 확인하는지 기록 구조가 있는지 수동 검토
+  - 결과: sample task는 문서 구조 예시라 실제 hygiene gate는 미실행이지만, policy와 quality gate 위치는 식별 가능하다
+  - 실패 또는 미실행 사유: project-specific hygiene command가 아직 없는 예시 task이기 때문
+  - 판정: 정합
+  - 잔여 리스크: 실제 프로젝트에서는 hygiene를 자동 게이트로 볼지 수동 검토로 둘지 더 구체적으로 적어야 한다
+
 - 검증 항목: language-specific convention 확인 기준 존재 여부
   - 대조한 입력물: `docs/examples/sample-task/coding_conventions_project_example.md`, `plan.md`
   - 실행 방법 또는 확인 방식: 현재 작업과 직접 관련 있는 언어별 규칙 범주, 금지 패턴, 미해결 금지 항목이 식별 가능한지 수동 검토
