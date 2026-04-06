@@ -116,8 +116,10 @@ python3 -c "from pathlib import Path; paths = ['docs/harness_guide.md', 'docs/st
 
 - `docs/harness_guide.md`가 존재한다.
 - `docs/harness_guide.md` 안에 공통 규칙으로 `vendor/harness-kit/docs/harness_guide.md` 또는 프로젝트가 실제로 사용하는 vendored kit 경로가 적혀 있다.
+- `docs/harness_guide.md` 안에 `docs/standard/*` project 문서 경로가 함께 연결되어 있다.
 - `docs/standard/coding_conventions_project.md` 안에 현재 선택한 언어와 bootstrap 기준 문서가 적혀 있다.
-- `docs/standard/quality_gate_profile.md`, `testing_profile.md`, `commit_rule.md`가 비어 있지 않고 팀 결정이 필요한 자리가 남아 있다.
+- `docs/standard/quality_gate_profile.md`, `testing_profile.md`, `commit_rule.md`가 비어 있지 않다.
+- `docs/standard/quality_gate_profile.md`와 `commit_rule.md`에는 아직 팀 또는 프로젝트가 채워야 하는 결정 자리가 남아 있다.
 
 ## 성공 상태 예시
 
@@ -154,3 +156,7 @@ docs/
 - 문서는 생겼는데 경로가 이상하면: `docs/harness_guide.md`와 `docs/standard/coding_conventions_project.md`의 vendored 경로를 먼저 확인한다.
 - 문서는 맞는데 무엇부터 채워야 할지 막히면: `architecture.md`, `implementation_order.md`, `coding_conventions_project.md` 순으로 프로젝트 결정을 채운다.
 - 품질 게이트와 테스트 기준이 섞여 보이면: 실행 명령은 `quality_gate_profile.md`, 테스트 범위와 환경은 `testing_profile.md`에 둔다.
+
+## 참고 검증 자산
+
+- 실제 end-to-end smoke validation 예시는 `docs/examples/bootstrap-first-success/validation_report.md`를 본다.
