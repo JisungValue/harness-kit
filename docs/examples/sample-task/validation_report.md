@@ -34,6 +34,22 @@
   - 판정: 정합
   - 잔여 리스크: 실제 프로젝트에서는 hygiene를 자동 게이트로 볼지 수동 검토로 둘지 더 구체적으로 적어야 한다
 
+- 검증 항목: design quality 판단 기준 존재 여부
+  - 대조한 입력물: `docs/harness/common/design_quality_policy.md`, `docs/standard/quality_gate_profile.md`, `validation_report.md`
+  - 실행 방법 또는 확인 방식: 책임 분리, 추상화 수준, 구조 악취, design-performance trade-off를 어떤 방식으로 확인하는지 기록 구조가 있는지 수동 검토
+  - 결과: policy, quality gate 연결 지점, `implementation_notes.md` canonical source가 모두 식별 가능하고 sample task에도 실제 trade-off 기록 예시가 있다
+  - 실패 또는 미실행 사유: 없음
+  - 판정: 정합
+  - 잔여 리스크: 실제 프로젝트에서는 어떤 설계 품질 항목을 수동 감사로 보고 어떤 항목을 architecture rule로 볼지 더 구체적으로 적어야 한다
+
+- 검증 항목: design quality trade-off 기록 예시 존재 여부
+  - 대조한 입력물: `docs/examples/sample-task/implementation_notes.md`, `docs/harness/common/design_quality_policy.md`
+  - 실행 방법 또는 확인 방식: `implementation_notes.md`에 함수 분리 판정 질문, 대안/추천안/근거/trade-off 기록 형식이 남아 있고 `validation_report.md`가 이를 요약하는지 수동 검토
+  - 결과: sample task에 design quality 판단과 design-performance 충돌 예시를 `implementation_notes.md`에 남기고, validation 단계가 그 canonical source를 다시 확인하는 흐름을 추가했다
+  - 실패 또는 미실행 사유: 없음
+  - 판정: 정합
+  - 잔여 리스크: 실제 프로젝트에서는 sample보다 더 실제 코드와 가까운 trade-off 근거가 필요할 수 있다
+
 - 검증 항목: language-specific convention 확인 기준 존재 여부
   - 대조한 입력물: `docs/examples/sample-task/coding_conventions_project_example.md`, `plan.md`
   - 실행 방법 또는 확인 방식: 현재 작업과 직접 관련 있는 언어별 규칙 범주, 금지 패턴, 미해결 금지 항목이 식별 가능한지 수동 검토

@@ -11,6 +11,7 @@
 - `docs/harness/common/testing_policy.md`
 - `docs/harness/common/test_double_policy.md`
 - `docs/harness/common/code_hygiene_policy.md`
+- `docs/harness/common/design_quality_policy.md`
 - `docs/standard/coding_guidelines_core.md`
 - 프로젝트 `docs/standard/architecture.md`
 - 프로젝트 `docs/standard/implementation_order.md`
@@ -32,6 +33,7 @@
 - 현재 작업과 직접 관련 있는 언어별 convention 항목을 프로젝트 `docs/standard/coding_conventions_project.md`에서 먼저 식별했는가
 - 현재 변경에 영향을 주는 언어별 항목이 아직 `[프로젝트 결정 필요]` 상태면 구현 전에 기준을 확정했는가
 - 현재 변경과 직접 관련 있는 import/unused/dead code/debug 흔적을 함께 정리했는가
+- 현재 변경이 책임 분리, 추상화 수준, 응집도, 경계 분리를 악화시키지 않는가
 - 현재 TASK와 직접 관련 없는 리팩터링을 함께 넣지 않았는가
 - 단위 테스트가 부적절한 책임을 `implementation_notes.md`에 기록했는가
 
@@ -61,6 +63,8 @@
 - 언어별 상세 규칙이 별도 문서로 분리돼 있으면 `coding_conventions_project.md`가 그 경로를 정확히 가리키는지 먼저 확인한다.
 - 현재 변경과 직접 관련 있는 규칙이 아직 `[프로젝트 결정 필요]` 상태면 구현 전에 프로젝트 기준을 먼저 확정한다.
 - 현재 변경과 직접 관련 있는 import, dead code, 임시 디버깅 흔적은 함께 정리하되, 대규모 hygiene 정리는 별도 태스크로 분리한다.
+- 현재 변경이 책임 분리, 추상화 수준, 응집도, 경계 분리를 악화시키지 않는지 `docs/harness/common/design_quality_policy.md`의 판정 질문과 빠른 체크리스트 기준으로 함께 확인한다.
+- design quality와 performance가 실제로 충돌하면 대안, 추천안, 근거, trade-off를 `implementation_notes.md`에 기록하고 필요하면 사용자 승인 또는 후속 태스크 분리로 넘긴다.
 - formatter, linter, type checker, test 게이트의 실제 실행 명령과 현재 Phase 2까지 적용돼야 하는 시점은 프로젝트 `docs/standard/quality_gate_profile.md`를 참조한다.
 - 프로젝트 문서가 없거나 현재 TASK 기준으로 모호하면 구현 전에 프로젝트 문서를 먼저 보강해 기준을 확정한다.
 - 현재 TASK 수행에 직접 필요하지 않은 리팩터링은 함께 진행하지 않는다.

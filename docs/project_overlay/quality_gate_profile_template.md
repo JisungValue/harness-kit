@@ -58,6 +58,8 @@
 - 필수 여부: `[없으면 생략 가능]`
 - 적용 시점: `[프로젝트 결정 필요]`
 - 실패 처리 기준: `[프로젝트 결정 필요]`
+- design quality를 architecture rule로 일부 자동화한다면 어떤 경계, 계층, 의존성 규칙을 검사하는지 적는다.
+- 자동화되지 않는 design quality 판단은 `implementation_notes.md`를 수동 기록 위치로 사용한다고 명시한다.
 
 ## 작성 원칙
 

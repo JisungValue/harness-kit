@@ -28,6 +28,7 @@
 - 테스트 더블 규칙: `docs/harness/common/test_double_policy.md`
 - 검증 규칙: `docs/harness/common/validation_policy.md`
 - 코드 hygiene 규칙: `docs/harness/common/code_hygiene_policy.md`
+- 설계 품질 규칙: `docs/harness/common/design_quality_policy.md`
 - 경량 태스크 예외 규칙: `docs/harness/common/lightweight_task_policy.md`
 - 공통 코드 규칙: `docs/standard/coding_guidelines_core.md`
 
@@ -62,8 +63,8 @@
 
 ### Phase 2. TDD Implementation
 
-- 구현 중 필수 재참조: `docs/harness/common/testing_policy.md`, `docs/harness/common/test_double_policy.md`, `docs/harness/common/code_hygiene_policy.md`, `docs/standard/coding_guidelines_core.md`, 프로젝트 `docs/standard/architecture.md`, 프로젝트 `docs/standard/implementation_order.md`, 프로젝트 `docs/standard/coding_conventions_project.md`, 프로젝트 `docs/standard/quality_gate_profile.md`
-- 감사 직전 필수 재참조: `docs/harness/common/audit_policy.md`, `docs/harness/common/testing_policy.md`, `docs/harness/common/test_double_policy.md`, `docs/harness/common/code_hygiene_policy.md`, `docs/standard/coding_guidelines_core.md`, 프로젝트 `docs/standard/architecture.md`, 프로젝트 `docs/standard/implementation_order.md`, 프로젝트 `docs/standard/coding_conventions_project.md`, 프로젝트 `docs/standard/quality_gate_profile.md`
+- 구현 중 필수 재참조: `docs/harness/common/testing_policy.md`, `docs/harness/common/test_double_policy.md`, `docs/harness/common/code_hygiene_policy.md`, `docs/harness/common/design_quality_policy.md`, `docs/standard/coding_guidelines_core.md`, 프로젝트 `docs/standard/architecture.md`, 프로젝트 `docs/standard/implementation_order.md`, 프로젝트 `docs/standard/coding_conventions_project.md`, 프로젝트 `docs/standard/quality_gate_profile.md`
+- 감사 직전 필수 재참조: `docs/harness/common/audit_policy.md`, `docs/harness/common/testing_policy.md`, `docs/harness/common/test_double_policy.md`, `docs/harness/common/code_hygiene_policy.md`, `docs/harness/common/design_quality_policy.md`, `docs/standard/coding_guidelines_core.md`, 프로젝트 `docs/standard/architecture.md`, 프로젝트 `docs/standard/implementation_order.md`, 프로젝트 `docs/standard/coding_conventions_project.md`, 프로젝트 `docs/standard/quality_gate_profile.md`
 - 조건부 참조: `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`
 
 ### Phase 3. Integration
