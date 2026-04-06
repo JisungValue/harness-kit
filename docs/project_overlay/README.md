@@ -2,6 +2,11 @@
 
 공통 Harness Kit를 가져온 프로젝트는 core를 그대로 재사용하고, 아래 문서만 프로젝트 전용으로 유지한다.
 
+## 첫 도입 가이드
+
+- 새 프로젝트 또는 거의 빈 프로젝트에서 first success를 빠르게 재현하려면 `docs/project_overlay/first_success_guide.md`를 먼저 본다.
+- init CLI를 쓰든 수동 복사를 쓰든, 이 가이드의 최소 문서 세트와 성공 상태를 기준으로 맞춘다.
+
 ## 필수 문서
 
 - `docs/harness_guide.md`
