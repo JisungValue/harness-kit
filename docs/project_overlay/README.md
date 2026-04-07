@@ -11,6 +11,7 @@
 
 - unresolved placeholder 검증 규칙과 실행 명령은 `docs/project_overlay/unresolved_decision_validator.md`를 본다.
 - 같은 프로젝트라도 `first-success`와 `phase2` readiness에서 허용되는 미결정 범위가 다르다.
+- 문서 간 교차 정합성 검사는 `docs/project_overlay/cross_document_consistency_checker.md`를 본다.
 
 ## 필수 문서
 
@@ -31,7 +32,7 @@
   - 실제 레이어 구조, 모듈 경계, 주요 의존성 방향을 정의한다.
 - `docs/standard/implementation_order.md`
   - Phase 2에서 사용할 프로젝트별 레이어 진행 순서와 세분화 기준을 정의한다.
-  - `architecture.md`에서 반드시 참조한다.
+  - `architecture.md`의 실제 구조와 의존성 방향을 기준으로 작성한다.
 - `docs/standard/coding_conventions_project.md`
   - 프레임워크 특화 규칙, DTO postfix, 프로젝트 전용 네이밍, 트랜잭션 관례처럼 core에 두기 어려운 convention을 둔다.
   - 언어별 convention 초안이 필요하면 `bootstrap/language_conventions/`에서 해당 언어 템플릿을 골라 수동 복사 또는 병합해 시작한다.

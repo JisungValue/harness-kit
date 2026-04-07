@@ -78,3 +78,4 @@ python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness f
 ```
 
 - 더 엄격한 게이트가 필요하면 Phase 2 진입 전 CI나 local check에서 `--readiness phase2`를 사용한다.
+- unresolved placeholder와 별개로 문서 간 교차 계약도 보려면 `docs/project_overlay/cross_document_consistency_checker.md`를 함께 사용한다.
