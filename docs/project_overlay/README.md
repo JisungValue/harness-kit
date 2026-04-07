@@ -12,6 +12,7 @@
 - unresolved placeholder 검증 규칙과 실행 명령은 `docs/project_overlay/unresolved_decision_validator.md`를 본다.
 - 같은 프로젝트라도 `first-success`와 `phase2` readiness에서 허용되는 미결정 범위가 다르다.
 - 문서 간 교차 정합성 검사는 `docs/project_overlay/cross_document_consistency_checker.md`를 본다.
+- 기존 프로젝트 상태를 bootstrap 기준과 비교하는 read-only adopt 흐름은 `docs/project_overlay/adopt_dry_run.md`를 본다.
 
 ## 필수 문서
 
