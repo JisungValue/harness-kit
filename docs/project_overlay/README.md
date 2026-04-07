@@ -6,6 +6,7 @@
 
 - 새 프로젝트 또는 거의 빈 프로젝트에서 first success를 빠르게 재현하려면 `docs/project_overlay/first_success_guide.md`를 먼저 본다.
 - init CLI를 쓰든 수동 복사를 쓰든, 이 가이드의 최소 문서 세트와 성공 상태를 기준으로 맞춘다.
+- 로컬에서 어떤 명령을 먼저 돌리고 dry-run 출력을 어떻게 읽을지는 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 본다.
 
 ## Overlay Validator
 
