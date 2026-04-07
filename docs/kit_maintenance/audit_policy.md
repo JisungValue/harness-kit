@@ -152,6 +152,10 @@ whole-harness는 전체 문서 흐름과 core 일관성을 본다.
 
 - Harness Doc Guard CI가 실패하면 `docs/kit_maintenance/drift_response_guide.md` 순서로 보완한다.
 
+## 릴리스 절차
+
+- 버전 릴리스 준비와 tag / GitHub Release 생성 순서는 `docs/kit_maintenance/release_process.md`를 따른다.
+
 ## 자동검사 실행 기준
 
 - 기본 검사 스크립트는 `scripts/check_harness_docs.py`를 사용한다.
