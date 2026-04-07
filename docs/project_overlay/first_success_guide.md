@@ -168,5 +168,6 @@ docs/
 ## 참고 검증 자산
 
 - 실제 end-to-end smoke validation 예시는 `docs/examples/bootstrap-first-success/validation_report.md`를 본다.
+- init, validator, adopt dry-run의 로컬 진단 순서는 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 본다.
 - first success 이후 unresolved placeholder를 점검하려면 `docs/project_overlay/unresolved_decision_validator.md`를 본다.
 - 문서 간 교차 정합성을 점검하려면 `docs/project_overlay/cross_document_consistency_checker.md`를 본다.

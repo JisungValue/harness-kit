@@ -51,3 +51,4 @@ python3 vendor/harness-kit/scripts/adopt_dry_run.py . --language python
 - `missing files`를 먼저 확인해 안전하게 추가 가능한 범위를 판단한다.
 - `differing files`와 `conflict candidates`는 수동 검토 대상으로 남긴다.
 - 이후 `validate_overlay_decisions.py`, `validate_overlay_consistency.py`와 함께 현재 프로젝트 overlay 상태를 더 구체적으로 점검한다.
+- init / validator / adopt dry-run을 어떤 순서로 로컬에서 먼저 돌릴지는 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 본다.
