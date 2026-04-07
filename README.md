@@ -55,6 +55,8 @@
   - harness-kit core 수정 시 maintainer가 따르는 전용 감사 기준이다.
 - `docs/kit_maintenance/drift_response_guide.md`
   - Harness Doc Guard CI 실패 시 maintainer 대응 순서를 정의한다.
+- `docs/kit_maintenance/release_process.md`
+  - maintainer가 release gate 점검, release note 작성, tag, GitHub Release 생성을 어떤 순서로 수행할지 정의한다.
 - `scripts/check_harness_docs.py`
   - core/overlay 경로 정합성과 `harness.log` 기록 규칙을 자동 검사한다.
 - `.github/workflows/harness-doc-guard.yml`
@@ -94,7 +96,7 @@
   - `docs/project_overlay/*`는 downstream 프로젝트 문서를 시작할 때 복사하거나 참조하는 template/guide다.
 - harness-kit maintainer용 문서
   - 목적: `harness-kit` core 규칙, template, example, 문서 구조 자체를 수정할 때의 감사와 기록
-  - 주 문서: `docs/kit_maintenance/audit_policy.md`, `docs/kit_maintenance/drift_response_guide.md`, `harness.log`
+  - 주 문서: `docs/kit_maintenance/audit_policy.md`, `docs/kit_maintenance/drift_response_guide.md`, `docs/kit_maintenance/release_process.md`, `harness.log`
 
 개별 서비스 프로젝트의 task 수행자는 maintainer 문서를 기본 운영 규칙으로 사용하지 않는다.
 `docs/kit_maintenance/*`는 downstream 프로젝트가 가져가야 하는 최소 프로젝트 문서 세트에 포함되지 않는다.
