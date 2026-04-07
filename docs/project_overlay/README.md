@@ -14,6 +14,7 @@
 - 같은 프로젝트라도 `first-success`와 `phase2` readiness에서 허용되는 미결정 범위가 다르다.
 - 문서 간 교차 정합성 검사는 `docs/project_overlay/cross_document_consistency_checker.md`를 본다.
 - 기존 프로젝트 상태를 bootstrap 기준과 비교하는 read-only adopt 흐름은 `docs/project_overlay/adopt_dry_run.md`를 본다.
+- 사람이 읽는 overlay 완료 기준은 `docs/project_overlay/overlay_completion_checklist.md`를 보고, sample validation 예시는 `docs/examples/bootstrap-first-success/overlay_completion_validation_report.md`를 본다.
 
 ## 필수 문서
 

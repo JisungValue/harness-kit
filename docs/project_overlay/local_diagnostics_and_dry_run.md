@@ -177,3 +177,4 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - 기존 프로젝트 read-only 비교: `docs/project_overlay/adopt_dry_run.md`
 - unresolved placeholder readiness: `docs/project_overlay/unresolved_decision_validator.md`
 - cross-document consistency: `docs/project_overlay/cross_document_consistency_checker.md`
+- 사람이 읽는 overlay 완료 판정: `docs/project_overlay/overlay_completion_checklist.md`
