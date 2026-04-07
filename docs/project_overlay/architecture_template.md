@@ -4,10 +4,10 @@
 
 이 문서는 프로젝트의 실제 레이어 구조와 의존성 방향을 정의한다.
 
-## Phase 2 구현 순서 참조
+## 구현 순서 문서와의 관계
 
-- `docs/standard/implementation_order.md`
-- Phase 2에서 레이어 선택, 세분화, 진행 순서는 위 문서를 기준으로 판단한다.
+- `docs/standard/implementation_order.md`는 이 문서의 레이어 구조와 의존성 방향을 기준으로 작성한다.
+- 이 문서는 구조와 경계를 정의하고, 실제 Phase 2 진행 순서는 `implementation_order.md`에서 확정한다.
 
 ## 레이어 또는 모듈 구조
 
