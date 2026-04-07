@@ -9,6 +9,14 @@
 - 프로젝트별 문서는 공통 규칙 위에 얇은 overlay만 추가하도록 한다.
 - 한 번 생성되는 코드의 품질을 높이고, 이후 변경에서도 유지보수성과 지속 가능성을 계속 유지할 수 있는 프로젝트 코드를 만들도록 돕는다.
 
+## 시작 문서
+
+- 처음 시작: `docs/quickstart.md`
+- 전체 동작 설명: `docs/how_harness_kit_works.md`
+- 새 프로젝트 first success: `docs/project_overlay/first_success_guide.md`
+- 로컬 진단과 dry-run: `docs/project_overlay/local_diagnostics_and_dry_run.md`
+- 기존 프로젝트 read-only adopt: `docs/project_overlay/adopt_dry_run.md`
+
 ## 디렉터리 구조
 
 - `docs/harness_guide.md`
@@ -39,6 +47,10 @@
   - 새 프로젝트 또는 거의 빈 프로젝트에서 최소 문서 세트와 첫 성공 상태를 빠르게 재현하는 가이드다.
 - `docs/project_overlay/local_diagnostics_and_dry_run.md`
   - init, validator, adopt dry-run을 로컬에서 어떤 순서로 실행하고 출력을 어떻게 해석할지 정리한 진단 가이드다.
+- `docs/quickstart.md`
+  - 0.1.0 사용자 관점에서 greenfield/brownfield 시작 절차를 한 번에 보여 주는 상위 입문 문서다.
+- `docs/how_harness_kit_works.md`
+  - core, overlay, bootstrap, validation, adopt dry-run이 어떤 역할로 나뉘는지 설명하는 개념 문서다.
 - `docs/kit_maintenance/audit_policy.md`
   - harness-kit core 수정 시 maintainer가 따르는 전용 감사 기준이다.
 - `docs/kit_maintenance/drift_response_guide.md`
@@ -100,7 +112,7 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 5. 생성된 `docs/harness_guide.md`와 `docs/standard/coding_conventions_project.md`의 vendored 경로를 실제 배치 경로에 맞게 현지화한다.
 6. `python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success`로 unresolved decision readiness를 확인한다.
 7. `python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .`로 문서 간 교차 정합성을 확인한다.
-8. `docs/templates/task/`를 복사해 첫 task를 시작한다.
+8. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
 9. 실제 task 몇 개를 돌린 뒤 project overlay만 보강한다.
 
 기존 프로젝트나 부분 도입 상태를 먼저 읽어야 하면 `docs/project_overlay/adopt_dry_run.md`의 read-only adopt 흐름부터 시작한다.
