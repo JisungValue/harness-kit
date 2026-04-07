@@ -110,6 +110,13 @@ python3 -c "from pathlib import Path; paths = ['docs/harness_guide.md', 'docs/st
 - 성공이면 `first success docs are present`가 출력된다.
 - 실패면 빠진 문서 경로가 `missing: ...` 형식으로 출력된다.
 
+이 명령은 문서 존재 여부만 확인하는 가장 얕은 체크다.
+unresolved placeholder readiness까지 보려면 아래 validator를 이어서 실행한다.
+
+```bash
+python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
+```
+
 ## 첫 검증 포인트
 
 아래 항목이 보이면 first success로 본다.
@@ -160,3 +167,4 @@ docs/
 ## 참고 검증 자산
 
 - 실제 end-to-end smoke validation 예시는 `docs/examples/bootstrap-first-success/validation_report.md`를 본다.
+- first success 이후 unresolved placeholder를 점검하려면 `docs/project_overlay/unresolved_decision_validator.md`를 본다.

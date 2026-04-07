@@ -1,0 +1,182 @@
+from __future__ import annotations
+
+import subprocess
+import sys
+import tempfile
+import unittest
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+BOOTSTRAP_SCRIPT = ROOT / "scripts" / "bootstrap_init.py"
+VALIDATOR_SCRIPT = ROOT / "scripts" / "validate_overlay_decisions.py"
+
+
+class ValidateOverlayDecisionsTest(unittest.TestCase):
+    def bootstrap_project(self, target: Path) -> None:
+        result = subprocess.run(
+            [sys.executable, str(BOOTSTRAP_SCRIPT), str(target), "--language", "python"],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def run_validator(self, target: Path, readiness: str) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(
+            [sys.executable, str(VALIDATOR_SCRIPT), str(target), "--readiness", readiness],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+    def test_fresh_bootstrap_passes_first_success_with_allowed_markers(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            result = self.run_validator(target, "first-success")
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("overlay decision validation passed", result.stdout)
+            self.assertIn("Allowed unresolved markers", result.stdout)
+            self.assertIn("docs/standard/quality_gate_profile.md", result.stdout)
+            self.assertIn("docs/standard/commit_rule.md", result.stdout)
+
+    def test_fresh_bootstrap_fails_phase2_due_to_unresolved_overlay_docs(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            result = self.run_validator(target, "phase2")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("overlay decision validation failed", result.stderr)
+            self.assertIn("docs/standard/coding_conventions_project.md", result.stderr)
+            self.assertIn("docs/standard/quality_gate_profile.md", result.stderr)
+            self.assertIn("Allowed unresolved markers for this readiness", result.stderr)
+            self.assertIn("docs/standard/commit_rule.md", result.stderr)
+
+    def test_todo_marker_is_always_blocking(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+            architecture_path = target / "docs/standard/architecture.md"
+            architecture_path.write_text(
+                architecture_path.read_text(encoding="utf-8") + "\nTODO: fill me\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_validator(target, "first-success")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("TODO", result.stderr)
+            self.assertIn("docs/standard/architecture.md", result.stderr)
+
+    def test_missing_required_doc_fails_validation(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+            (target / "docs/standard/testing_profile.md").unlink()
+
+            result = self.run_validator(target, "first-success")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("Missing required overlay docs", result.stderr)
+            self.assertIn("docs/standard/testing_profile.md", result.stderr)
+
+    def test_phase2_passes_after_required_decisions_are_resolved(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            coding_path = target / "docs/standard/coding_conventions_project.md"
+            coding_text = coding_path.read_text(encoding="utf-8")
+            coding_text = coding_text.replace(
+                "- 현재 프로젝트에서 우선 적용하는 핵심 규칙 범주: `[naming / modeling / error handling / concurrency / collections / testing / interop 등]`",
+                "- 현재 프로젝트에서 우선 적용하는 핵심 규칙 범주: `naming / modeling / error handling`",
+                1,
+            )
+            coding_text = coding_text.replace(
+                "- 현재 프로젝트의 주요 금지 패턴: `[프로젝트 결정 필요]`",
+                "- 현재 프로젝트의 주요 금지 패턴: `raw external error propagation`",
+                1,
+            )
+            coding_text = coding_text.replace(
+                "- 현재 Phase 2에서 미해결로 둘 수 없는 언어별 결정 항목: `[프로젝트 결정 필요]`",
+                "- 현재 Phase 2에서 미해결로 둘 수 없는 언어별 결정 항목: `error handling style, async boundary`",
+                1,
+            )
+            coding_path.write_text(coding_text, encoding="utf-8")
+
+            quality_gate_path = target / "docs/standard/quality_gate_profile.md"
+            quality_gate_text = quality_gate_path.read_text(encoding="utf-8")
+            quality_gate_text = quality_gate_text.replace("[프로젝트 결정 필요]", "`poetry run ruff check .`", 1)
+            quality_gate_text = quality_gate_text.replace("[프로젝트 결정 필요]", "formatter failure blocks commit", 1)
+            quality_gate_text = quality_gate_text.replace("[프로젝트 결정 필요]", "`poetry run ruff check .`", 1)
+            quality_gate_text = quality_gate_text.replace("[프로젝트 결정 필요]", "Phase 2 종료 전", 1)
+            quality_gate_text = quality_gate_text.replace("[프로젝트 결정 필요]", "linter failure blocks commit", 1)
+            quality_gate_text = quality_gate_text.replace("[프로젝트 결정 필요]", "`poetry run mypy .`", 1)
+            quality_gate_text = quality_gate_text.replace("[프로젝트 결정 필요]", "Phase 2 종료 전", 1)
+            quality_gate_text = quality_gate_text.replace("[프로젝트 결정 필요]", "type failure blocks commit", 1)
+            quality_gate_text = quality_gate_text.replace("[프로젝트 결정 필요]", "`poetry run pytest`", 1)
+            quality_gate_text = quality_gate_text.replace("[프로젝트 결정 필요]", "Phase 2 종료 전", 1)
+            quality_gate_text = quality_gate_text.replace("[프로젝트 결정 필요]", "test failure blocks commit", 1)
+            quality_gate_text = quality_gate_text.replace("[프로젝트 결정 필요]", "`poetry run import-linter`", 1)
+            quality_gate_text = quality_gate_text.replace("[프로젝트 결정 필요]", "CI 전용", 1)
+            quality_gate_text = quality_gate_text.replace("[프로젝트 결정 필요]", "architecture rule failure blocks merge", 1)
+            quality_gate_text = quality_gate_text.replace("[프로젝트 결정 필요]", "`poetry run pytest tests/perf`", 1)
+            quality_gate_text = quality_gate_text.replace("[프로젝트 결정 필요]", "CI 전용", 1)
+            quality_gate_text = quality_gate_text.replace("[프로젝트 결정 필요]", "performance regression blocks release", 1)
+            quality_gate_path.write_text(quality_gate_text, encoding="utf-8")
+
+            result = self.run_validator(target, "phase2")
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("overlay decision validation passed", result.stdout)
+
+    def test_first_success_requires_canonical_resolved_language_fields(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            coding_path = target / "docs/standard/coding_conventions_project.md"
+            coding_text = coding_path.read_text(encoding="utf-8")
+            coding_text = coding_text.replace(
+                "- 현재 프로젝트의 활성 언어/런타임: `python`",
+                "- 활성 언어: `[프로젝트 결정 필요]`",
+                1,
+            )
+            coding_path.write_text(coding_text, encoding="utf-8")
+
+            result = self.run_validator(target, "first-success")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("required-field", result.stderr)
+            self.assertIn("활성 언어/런타임 필드", result.stderr)
+
+    def test_first_success_fails_if_unresolved_canonical_field_is_left_and_duplicated(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            coding_path = target / "docs/standard/coding_conventions_project.md"
+            coding_text = coding_path.read_text(encoding="utf-8")
+            coding_text = coding_text.replace(
+                "- 현재 프로젝트의 활성 언어/런타임: `python`",
+                "- 현재 프로젝트의 활성 언어/런타임: `[프로젝트 결정 필요]`\n"
+                "- 현재 프로젝트의 활성 언어/런타임: `python`",
+                1,
+            )
+            coding_path.write_text(coding_text, encoding="utf-8")
+
+            result = self.run_validator(target, "first-success")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("unresolved canonical 활성 언어/런타임 필드", result.stderr)
+
+
+if __name__ == "__main__":
+    unittest.main()
