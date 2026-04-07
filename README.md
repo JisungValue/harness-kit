@@ -31,6 +31,8 @@
   - project overlay 문서의 unresolved placeholder를 `first-success` 또는 `phase2` readiness 기준으로 검사하는 validator다.
 - `scripts/validate_overlay_consistency.py`
   - project overlay 문서 간 참조와 책임 경계 불일치를 검사하는 cross-document consistency checker다.
+- `scripts/adopt_dry_run.py`
+  - 기존 프로젝트의 현재 overlay 상태를 bootstrap baseline과 비교해 missing, unchanged, differing, conflict candidate를 read-only로 분류하는 adopt dry-run이다.
 - `docs/project_overlay/`
   - 프로젝트별로 추가 작성해야 하는 문서와 템플릿을 둔다.
 - `docs/project_overlay/first_success_guide.md`
@@ -97,6 +99,8 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 6. `python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .`로 문서 간 교차 정합성을 확인한다.
 7. `docs/templates/task/`를 복사해 첫 task를 시작한다.
 8. 실제 task 몇 개를 돌린 뒤 project overlay만 보강한다.
+
+기존 프로젝트나 부분 도입 상태를 먼저 읽어야 하면 `docs/project_overlay/adopt_dry_run.md`의 read-only adopt 흐름부터 시작한다.
 
 ## 최소 프로젝트 문서 세트
 
