@@ -50,6 +50,12 @@
 - 기존 프로젝트에 대해 write 없이 현재 상태를 읽는 단계다.
 - `adopt_dry_run.py`는 baseline 비교만 하고, merge/write는 하지 않는다.
 
+### Repository 와 Downstream Bundle
+
+- 이 저장소 안에는 downstream 프로젝트가 실제로 사용하는 자산과, maintainer가 core를 유지보수할 때만 쓰는 자산이 함께 존재할 수 있다.
+- downstream bundle은 project-facing guide, overlay template, bootstrap 자산, deterministic script, sample/example 중심의 배포용 부분집합이다.
+- maintainer 감사, 릴리스 기록, 저장소 자체 검증 자산은 downstream bundle의 기본 포함 대상이 아니다.
+
 ## 사용자 흐름
 
 ### Greenfield
@@ -109,6 +115,7 @@
   - semantic merge
   - interactive onboarding UI
   - repo-aware assisted adoption
+  - generated downstream bundle artifact
 
 ## 흔한 오해
 

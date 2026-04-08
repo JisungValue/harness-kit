@@ -53,6 +53,8 @@
 - audit는 반드시 `changed-parts`와 `whole-harness`로 분리해 수행한다.
 - `changed-parts`와 `whole-harness`는 각각 독립된 subagent 세션으로 수행하고 self-audit만으로 대체하지 않는다.
 - 최종 판정은 두 audit가 모두 승인 가능일 때만 승인 가능으로 본다.
+- 새 운영 경계, 승인 기준, 배포 단위, validator 판정 규칙처럼 이후 maintainer audit의 판정 기준 자체를 바꿀 수 있는 변경이라면, 이번 작업에서 기존 audit 체크포인트 보강이 필요한지도 명시적으로 판단한다.
+- audit 체크포인트 보강이 필요하면 같은 작업에서 `docs/kit_maintenance/audit_policy.md`를 함께 갱신하는 것을 기본으로 하고, 범위를 분리해야 하면 follow-up issue와 분리 이유를 남긴다.
 
 ## Changed-Parts 감사 기준
 
@@ -75,6 +77,8 @@ changed-parts는 바뀐 파일과 인접 영향만 본다.
 - 기존 규칙 의미를 우연히 뒤집거나 약화하지 않았는가
 - maintainer 전용 지침 변경인데 프로젝트 영향 문서 본문에 maintainer 전용 경로, `harness.log` 규칙, drift 대응 절차가 추가되지 않았는가
 - 프로젝트 영향 문서 변경인데 `harness.log` 외의 maintainer 전용 문서 수정이 불필요하게 섞이지 않았는가
+- downstream bundle 포함/제외 경계를 바꾸는 변경이라면 `docs/kit_maintenance/downstream_bundle_boundary.md`, 인접 project-facing 문서, 관련 release 문서가 같은 경계를 가리키는가
+- downstream bundle에 포함될 자산이 배포 후 존재하지 않을 maintainer 전용 문서를 canonical reference로 요구하지 않는가
 
 ## Whole-Harness 감사 기준
 
@@ -84,6 +88,7 @@ whole-harness는 전체 문서 흐름과 core 일관성을 본다.
 
 - `README.md`, `docs/harness_guide.md`, phase-local 문서 사이에 충돌이 없는가
 - core와 project overlay의 책임 경계가 흐려지지 않았는가
+- repo source-of-truth 자산, downstream bundle 자산, maintainer 전용 자산의 경계가 서로 충돌하지 않는가
 - maintainer 전용 규칙이 프로젝트 영향 문서 본문으로 새어 들어가지 않았는가
 - 프로젝트 수행 규칙이 maintainer 전용 문서에 불필요하게 복제되지 않았는가
 - 현재 작업 범위와 무관한 실제 downstream 프로젝트 폴더 또는 로컬 문서 변경이 섞이지 않았는가
@@ -106,6 +111,8 @@ whole-harness는 전체 문서 흐름과 core 일관성을 본다.
 - 여러 구현 에이전트가 같은 입력으로 작업해도 동일한 필수 재참조 문서, 체크리스트, 감사 게이트를 따라 유사한 품질 결론에 수렴할 수 있게 기준이 재현 가능한가
 - 새 지침이나 정책이 너무 넓거나 모호해서 서로 다른 session이 같은 입력을 보고 다른 결론에 도달할 위험이 있는지 직접 점검했는가
 - 편차 위험이 있다면 yes/no 질문, 명시적 판정 단위, 승인 불가 예시, 긍정 예시, sample artifact 중 하나 이상으로 해석 범위를 좁혔는가
+- bundle generation, bundle validation, release 절차, upgrade 판단이 생기거나 바뀌면 ad hoc 목록이 아니라 같은 boundary source-of-truth에 묶여 있는가
+- 이번 변경이 기존 changed-parts/whole-harness 체크포인트만으로 충분히 통제되는지 판단했고, 부족하면 audit policy 또는 후속 issue에 보강 근거를 남겼는가
 - 새 규칙이나 템플릿이 책임 혼합, 과도한 추상화, 테스트 없는 핵심 변경, 원시 외부 에러 유입 같은 금지 패턴을 사실상 새 기본값으로 만들지 않는가
 - 코드 생성 품질 목표가 단기 작성 편의보다 장기 유지보수성, 책임 분리, 변경 용이성, 안전한 확장 가능성을 높이는 방향으로 유지되는가
 - 새 규칙이나 템플릿이 convention, 품질 기준, 구조 패턴 drift를 키워 프로젝트별 산출물 품질 편차를 늘리지 않는가
@@ -129,6 +136,7 @@ whole-harness는 전체 문서 흐름과 core 일관성을 본다.
 - Phase 게이트를 우회하거나 약화하는 문구가 추가됨
 - 필수 재참조 경로가 불일치하거나 깨짐
 - `harness.log`에 `변경`, `이유`, `audit`, `audit-summary` 중 하나라도 누락됨
+- 새 운영 경계나 판정 규칙이 추가됐는데, 이번 변경으로 기존 audit 체크포인트가 부족해졌는지 판단하지 않았고 보강 근거도 없음
 
 ## Subagent 판정 기준
 
