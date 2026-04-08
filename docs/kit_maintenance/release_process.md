@@ -25,6 +25,7 @@
 4. 의미 있는 core 변경은 모두 `harness.log`에 기록돼 있다.
 5. representative changed-parts / whole-harness audit 기록이 남아 있다.
 6. 릴리스에 포함될 사용자 진입 문서와 도구 설명이 현재 동작과 맞는다.
+7. downstream bundle artifact를 함께 배포하는 릴리스라면, 포함/제외 기준이 `docs/kit_maintenance/downstream_bundle_boundary.md`와 일치한다.
 
 ## Release Gate 정리
 
@@ -87,6 +88,7 @@ gh release create v0.1.0 --title "harness-kit v0.1.0" --notes-file "/tmp/harness
 - `harness.log` 누락 상태에서 릴리스를 만들지 않는다.
 - release note에서 `0.1.0` 지원 범위와 이후 버전 계획을 구분한다.
 - patch/minor release라도 배포 당시 진입 문서가 실제 현재 동작과 맞는지 다시 확인한다.
+- downstream bundle artifact를 배포하기 시작한 이후에는, bundle 생성 결과가 boundary 문서와 어긋난 상태로 릴리스하지 않는다.
 
 ## 배포 이후
 
