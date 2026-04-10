@@ -109,13 +109,13 @@
   - cross-document consistency validation
   - existing-project adopt dry-run
   - 로컬 진단 경로
+  - maintainer-managed downstream bundle directory artifact generation
 
 - 아직 지원하지 않는다.
   - automatic adopt write
   - semantic merge
   - interactive onboarding UI
   - repo-aware assisted adoption
-  - generated downstream bundle artifact
 
 ## 흔한 오해
 
