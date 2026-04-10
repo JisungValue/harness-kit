@@ -75,6 +75,7 @@ python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --for
 
 7. `differing files`와 `conflict candidates`는 기본적으로 수동 비교 대상으로 남긴다.
 8. 최소 문서 세트가 어느 정도 맞춰진 뒤에만 아래 validator로 넘어간다.
+9. 새 bundle 버전을 반영할 때 영향도를 먼저 분류하려면 `docs/project_overlay/harness_upgrade_impact_policy.md`를 함께 본다.
 
 ```bash
 python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
@@ -117,3 +118,4 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - 새 프로젝트 시작: `docs/project_overlay/first_success_guide.md`
 - 로컬 진단: `docs/project_overlay/local_diagnostics_and_dry_run.md`
 - 기존 프로젝트 dry-run: `docs/project_overlay/adopt_dry_run.md`
+- 기존 프로젝트 upgrade impact 분류: `docs/project_overlay/harness_upgrade_impact_policy.md`

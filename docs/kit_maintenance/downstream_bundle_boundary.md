@@ -123,3 +123,4 @@ scripts/
 - bundle generation은 이 문서의 포함/제외 기준을 그대로 사용해야 한다.
 - bundle validation은 이 문서의 분류와 기대 구조를 검사 기준으로 사용해야 한다.
 - safe write/update, change classification, upgrade guide, diff review는 repo 전체가 아니라 downstream bundle 경계를 기준으로 판단해야 한다.
+- consumer-facing change classification policy는 `docs/project_overlay/harness_upgrade_impact_policy.md`처럼 downstream bundle에 포함되는 경로에 두는 편을 우선한다.
