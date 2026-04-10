@@ -63,6 +63,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             bundle_readme = (output / "README.md").read_text(encoding="utf-8")
             self.assertIn("# Harness Kit Project Bundle", bundle_readme)
             self.assertNotIn("docs/kit_maintenance/downstream_bundle_boundary.md", bundle_readme)
+            self.assertIn("- `.git*`", bundle_readme)
 
             manifest = json.loads((output / "bundle_manifest.json").read_text(encoding="utf-8"))
             copied_paths = [entry["path"] for entry in manifest["copied_files"]]
@@ -86,6 +87,8 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
                 "- `scripts/bootstrap_init.py`",
                 "### 2) Downstream 선택 자산",
                 "- `docs/examples/**/*.md`",
+                "### 3) Maintainer 전용 자산",
+                "- `scripts/validate_downstream_bundle.py`",
             ]
         )
 
@@ -103,6 +106,26 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
         self.assertTrue(
             all(path == "scripts/bootstrap_init.py" or path.startswith("docs/examples/") for path in bundle_paths)
         )
+
+    def test_bundle_readme_exclusions_are_read_from_boundary_document(self) -> None:
+        module = load_bundle_module()
+        synthetic_boundary = "\n".join(
+            [
+                "### 1) Downstream 필수 자산",
+                "- `scripts/bootstrap_init.py`",
+                "### 2) Downstream 선택 자산",
+                "- `docs/examples/**/*.md`",
+                "### 3) Maintainer 전용 자산",
+                "- `scripts/check_harness_docs.py`",
+                "- `scripts/validate_downstream_bundle.py`",
+            ]
+        )
+
+        with mock.patch.object(module, "read_boundary_document", return_value=synthetic_boundary):
+            readme_text = module.bundle_readme_text([])
+
+        self.assertIn("- `scripts/check_harness_docs.py`", readme_text)
+        self.assertIn("- `scripts/validate_downstream_bundle.py`", readme_text)
 
     def test_manifest_is_deterministic_across_output_locations(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
