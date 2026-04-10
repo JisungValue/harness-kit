@@ -98,11 +98,13 @@ scripts/
 
 - canonical generation command: `python3 scripts/generate_downstream_bundle.py`
 - canonical validation command: `python3 scripts/validate_downstream_bundle.py`
+- canonical smoke validation command: `python3 -m unittest tests.test_downstream_bundle_smoke`
 - 기본 출력 경로: `dist/harness-kit-project-bundle/`
 - canonical artifact format은 directory다.
 - `README.md`는 bundle entry artifact로 생성한다.
 - `bundle_manifest.json`은 copied source file 목록과 checksum을 기록한다.
 - validation은 boundary 문서의 include pattern, 실제 copied file 내용, generated `README.md`, `bundle_manifest.json`이 서로 일치하는지 검사해야 한다.
+- smoke validation은 canonical `dist/harness-kit-project-bundle/`를 임시 consumer project에 vendored 한 뒤, bundle 안의 project-facing script만 실행해 greenfield/brownfield 기본 경로가 유지되는지 확인해야 한다.
 - zip/tarball이 필요하면 이 directory artifact에서 파생 생성한다. source-of-truth는 압축본이 아니라 위 디렉터리 구조와 manifest다.
 
 ## 분류 판단 규칙

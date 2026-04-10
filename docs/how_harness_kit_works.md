@@ -111,6 +111,7 @@
   - 로컬 진단 경로
   - maintainer-managed downstream bundle directory artifact generation
   - maintainer-managed downstream bundle content validation
+  - maintainer-managed downstream bundle install/adoption smoke validation
 
 - 아직 지원하지 않는다.
   - automatic adopt write
