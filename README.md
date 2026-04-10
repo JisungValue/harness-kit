@@ -16,6 +16,7 @@
 - 새 프로젝트 first success: `docs/project_overlay/first_success_guide.md`
 - 로컬 진단과 dry-run: `docs/project_overlay/local_diagnostics_and_dry_run.md`
 - 기존 프로젝트 read-only adopt: `docs/project_overlay/adopt_dry_run.md`
+- 기존 프로젝트 upgrade impact 분류: `docs/project_overlay/harness_upgrade_impact_policy.md`
 
 ## 디렉터리 구조
 
@@ -53,6 +54,8 @@
   - 새 프로젝트 또는 거의 빈 프로젝트에서 최소 문서 세트와 첫 성공 상태를 빠르게 재현하는 가이드다.
 - `docs/project_overlay/local_diagnostics_and_dry_run.md`
   - init, validator, adopt dry-run을 로컬에서 어떤 순서로 실행하고 출력을 어떻게 해석할지 정리한 진단 가이드다.
+- `docs/project_overlay/harness_upgrade_impact_policy.md`
+  - downstream bundle 변경을 consumer 관점의 impact category로 분류해 adoption timing, manual intervention 필요성, breaking 가능성을 판단하는 정책 문서다.
 - `docs/quickstart.md`
   - 0.1.0 사용자 관점에서 greenfield/brownfield 시작 절차를 한 번에 보여 주는 상위 입문 문서다.
 - `docs/how_harness_kit_works.md`

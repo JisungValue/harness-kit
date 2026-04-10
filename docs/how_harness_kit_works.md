@@ -58,6 +58,12 @@
 - user-modified 파일 overwrite는 명시적으로 선택한 `--force-overwrite` 경로에 한해 수행한다.
 - automatic merge나 semantic update는 아직 지원하지 않는다.
 
+### Upgrade Impact Classification
+
+- downstream bundle 변경은 모두 같은 위험도로 반영하지 않는다.
+- `docs/project_overlay/harness_upgrade_impact_policy.md`는 bundle 경계 안의 변경을 C0~C4 impact category로 분류한다.
+- 이 분류는 adoption timing, manual review 필요성, breaking 가능성을 소비자 관점에서 해석하기 위한 기준이다.
+
 ### Repository 와 Downstream Bundle
 
 - 이 저장소 안에는 downstream 프로젝트가 실제로 사용하는 자산과, maintainer가 core를 유지보수할 때만 쓰는 자산이 함께 존재할 수 있다.
@@ -95,6 +101,8 @@
   - 기존 상태를 읽는다.
 - `adopt_safe_write.py`
   - dry-run과 같은 분류를 기준으로 missing create, exact-match refresh, explicit regular-file overwrite만 수행한다.
+- `harness_upgrade_impact_policy.md`
+  - bundle 변경이 단순 설명 개선인지, additive update인지, review-required인지, breaking 가능성이 큰지 구분한다.
 
 한 도구가 이 역할을 전부 담당하면, write / validation / inspection의 의미가 섞여서 사용자가 실패 원인을 해석하기 어려워진다.
 
@@ -145,4 +153,5 @@
 - 처음 쓰는 사용자라면 `docs/quickstart.md`
 - 새 프로젝트라면 `docs/project_overlay/first_success_guide.md`
 - 기존 프로젝트라면 `docs/project_overlay/adopt_dry_run.md`
+- upgrade 위험도를 먼저 판단하려면 `docs/project_overlay/harness_upgrade_impact_policy.md`
 - 로컬 진단이 필요하면 `docs/project_overlay/local_diagnostics_and_dry_run.md`
