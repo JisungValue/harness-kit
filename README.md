@@ -61,6 +61,8 @@
   - Harness Doc Guard CI 실패 시 maintainer 대응 순서를 정의한다.
 - `docs/kit_maintenance/release_process.md`
   - maintainer가 release gate 점검, release note 작성, tag, GitHub Release 생성을 어떤 순서로 수행할지 정의한다.
+- `docs/kit_maintenance/downstream_bundle_smoke_validation.md`
+  - generated bundle을 vendored dependency처럼 써서 greenfield/brownfield 기본 경로가 실제로 동작하는지 점검하는 maintainer용 smoke validation 기준이다.
 - `docs/kit_maintenance/downstream_bundle_boundary.md`
   - maintainer가 downstream bundle에 포함할 자산과 제외할 자산의 경계를 정의한다.
 - `scripts/check_harness_docs.py`
@@ -102,7 +104,7 @@
   - `docs/project_overlay/*`는 downstream 프로젝트 문서를 시작할 때 복사하거나 참조하는 template/guide다.
 - harness-kit maintainer용 문서
   - 목적: `harness-kit` core 규칙, template, example, 문서 구조 자체를 수정할 때의 감사와 기록
-  - 주 문서: `docs/kit_maintenance/audit_policy.md`, `docs/kit_maintenance/drift_response_guide.md`, `docs/kit_maintenance/release_process.md`, `harness.log`
+  - 주 문서: `docs/kit_maintenance/audit_policy.md`, `docs/kit_maintenance/drift_response_guide.md`, `docs/kit_maintenance/release_process.md`, `docs/kit_maintenance/downstream_bundle_smoke_validation.md`, `harness.log`
 
 이 경계와 별도로, downstream에 실제로 배포할 자산은 저장소 전체가 아니라 project-facing 문서/스크립트/예시/bootstrapping 자산 중심의 부분집합으로 본다. downstream bundle 경계의 정본은 `docs/kit_maintenance/downstream_bundle_boundary.md`를 따른다.
 

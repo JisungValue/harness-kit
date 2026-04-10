@@ -26,6 +26,7 @@
 5. representative changed-parts / whole-harness audit 기록이 남아 있다.
 6. 릴리스에 포함될 사용자 진입 문서와 도구 설명이 현재 동작과 맞는다.
 7. downstream bundle artifact를 함께 배포하는 릴리스라면, 포함/제외 기준이 `docs/kit_maintenance/downstream_bundle_boundary.md`와 일치한다.
+8. downstream bundle artifact를 함께 배포하는 릴리스라면, generated bundle 기준 install/adoption smoke test가 최근 기준선에서 통과한다.
 
 ## Release Gate 정리
 
@@ -77,6 +78,7 @@ downstream bundle artifact도 함께 배포한다면, canonical directory artifa
 ```bash
 python3 scripts/generate_downstream_bundle.py --force
 python3 scripts/validate_downstream_bundle.py
+python3 -m unittest tests.test_downstream_bundle_smoke
 tar -czf "/tmp/harness-kit-project-bundle-v0.1.0.tar.gz" -C dist harness-kit-project-bundle
 gh release create v0.1.0 --title "harness-kit v0.1.0" --notes-file "/tmp/harness-kit-v0.1.0-notes.md" "/tmp/harness-kit-project-bundle-v0.1.0.tar.gz#harness-kit-project-bundle-v0.1.0.tar.gz"
 ```
@@ -88,11 +90,13 @@ gh release create v0.1.0 --title "harness-kit v0.1.0" --notes-file "/tmp/harness
 3. `main` 최신화와 worktree clean 상태를 확인한다.
 4. downstream bundle artifact를 함께 배포하는 릴리스라면 `python3 scripts/generate_downstream_bundle.py --force`로 canonical directory artifact를 다시 생성한다.
 5. `python3 scripts/validate_downstream_bundle.py`로 bundle의 `README.md`, `bundle_manifest.json`, 포함/제외 경계, copied file 내용이 `docs/kit_maintenance/downstream_bundle_boundary.md`와 일치하는지 확인한다.
-6. bundle artifact를 함께 배포한다면 `dist/harness-kit-project-bundle/`에서 release asset용 archive를 만든다.
-7. annotated tag를 만든다.
-8. tag를 remote에 push한다.
-9. GitHub Release를 생성하고, bundle archive를 함께 release asset으로 붙인다.
-10. 생성된 release 본문, tag, release asset 이름이 의도한 버전과 일치하는지 확인한다.
+6. bundle artifact를 함께 배포한다면 `python3 -m unittest tests.test_downstream_bundle_smoke`로 generated bundle을 vendored dependency처럼 사용했을 때 greenfield/brownfield 기본 경로가 실제로 동작하는지 확인한다.
+   관련 시나리오와 기대 결과 예시는 `docs/kit_maintenance/downstream_bundle_smoke_validation.md`를 따른다.
+7. bundle artifact를 함께 배포한다면 `dist/harness-kit-project-bundle/`에서 release asset용 archive를 만든다.
+8. annotated tag를 만든다.
+9. tag를 remote에 push한다.
+10. GitHub Release를 생성하고, bundle archive를 함께 release asset으로 붙인다.
+11. 생성된 release 본문, tag, release asset 이름이 의도한 버전과 일치하는지 확인한다.
 
 ## 주의점
 
@@ -101,6 +105,7 @@ gh release create v0.1.0 --title "harness-kit v0.1.0" --notes-file "/tmp/harness
 - release note에서 `0.1.0` 지원 범위와 이후 버전 계획을 구분한다.
 - patch/minor release라도 배포 당시 진입 문서가 실제 현재 동작과 맞는지 다시 확인한다.
 - downstream bundle artifact를 배포하기 시작한 이후에는, bundle 생성 결과가 boundary 문서와 어긋난 상태로 릴리스하지 않는다.
+- downstream bundle artifact를 배포한다면, bundle structure/content validation만 통과한 상태로 바로 릴리스하지 말고 generated bundle consumer smoke test까지 확인한다.
 - downstream bundle artifact의 canonical input은 `dist/harness-kit-project-bundle/` directory와 `bundle_manifest.json`이다. zip/tarball은 필요 시 이 결과에서 파생한다.
 
 ## 배포 이후
