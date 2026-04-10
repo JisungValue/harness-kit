@@ -22,6 +22,7 @@ BOUNDARY_INCLUDE_SECTIONS = (
     "### 1) Downstream 필수 자산",
     "### 2) Downstream 선택 자산",
 )
+BOUNDARY_EXCLUDE_SECTIONS = ("### 3) Maintainer 전용 자산",)
 
 SOURCE_ROOTS = (ROOT / "bootstrap", ROOT / "docs", ROOT / "scripts")
 
@@ -85,12 +86,12 @@ def extract_markdown_section(text: str, heading: str) -> list[str]:
     return lines[start:end]
 
 
-def extract_bundle_patterns() -> list[str]:
+def extract_boundary_paths(headings: tuple[str, ...]) -> list[str]:
     patterns: list[str] = []
     seen: set[str] = set()
     text = read_boundary_document()
 
-    for heading in BOUNDARY_INCLUDE_SECTIONS:
+    for heading in headings:
         for line in extract_markdown_section(text, heading):
             match = re.match(r"^\s*-\s+`([^`]+)`\s*$", line)
             if not match:
@@ -102,9 +103,17 @@ def extract_bundle_patterns() -> list[str]:
             patterns.append(pattern)
 
     if not patterns:
-        raise ValueError("Boundary document does not define any downstream bundle patterns")
+        raise ValueError(f"Boundary document does not define any paths for sections: {', '.join(headings)}")
 
     return patterns
+
+
+def extract_bundle_patterns() -> list[str]:
+    return extract_boundary_paths(BOUNDARY_INCLUDE_SECTIONS)
+
+
+def extract_maintainer_only_paths() -> list[str]:
+    return extract_boundary_paths(BOUNDARY_EXCLUDE_SECTIONS)
 
 
 def build_bundle_files() -> list[BundleFile]:
@@ -130,6 +139,7 @@ def build_bundle_files() -> list[BundleFile]:
 
 
 def bundle_readme_text(bundle_files: list[BundleFile]) -> str:
+    maintainer_only_paths = extract_maintainer_only_paths()
     return "\n".join(
         [
             "# Harness Kit Project Bundle",
@@ -151,11 +161,7 @@ def bundle_readme_text(bundle_files: list[BundleFile]) -> str:
             "",
             "## Not Included",
             "",
-            "- `docs/kit_maintenance/*`",
-            "- `tests/*`",
-            "- `scripts/check_harness_docs.py`",
-            "- `harness.log`",
-            "- repo metadata such as `.git*`",
+            *[f"- `{path}`" for path in maintainer_only_paths],
             "",
             "## Bundle Facts",
             "",
