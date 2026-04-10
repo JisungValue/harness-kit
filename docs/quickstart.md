@@ -15,11 +15,12 @@
 - overlay 문서의 unresolved decision을 점검한다.
 - overlay 문서 간 교차 정합성을 점검한다.
 - 기존 프로젝트 상태를 read-only dry-run으로 읽고 baseline과 비교한다.
+- 기존 프로젝트에서 missing file create와 explicit path overwrite 중심의 제한적 safe write/update를 수행한다.
 
 ## 0.1.0에서 아직 안 되는 것
 
 - 기존 프로젝트에 대한 자동 merge
-- 기존 파일 overwrite를 동반한 adopt write 자동화
+- user-modified existing file에 대한 automatic merge/update
 - framework별 semantic diff
 - interactive TUI
 
@@ -59,10 +60,21 @@ python3 vendor/harness-kit/scripts/adopt_dry_run.py . --language python
    - `existing but unchanged targets`: baseline과 동일
    - `differing files`: 수동 검토 대상
    - `conflict candidates`: 수동 판단 우선 대상
-5. 먼저 `missing files`를 기준으로 최소 문서 세트를 수동으로 맞춘다.
-   - 필요한 문서는 `vendor/harness-kit/docs/project_overlay/*` template에서 복사한다.
-   - `differing files`와 `conflict candidates`는 overwrite하지 말고 수동 비교 대상으로 남긴다.
-6. 최소 문서 세트가 어느 정도 맞춰진 뒤에만 아래 validator로 넘어간다.
+5. `missing files`를 먼저 안전하게 반영하려면 아래 명령을 실행한다.
+
+```bash
+python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python
+```
+
+6. exact-match target만 다시 쓰거나 특정 경로만 명시적으로 덮어쓰려면 아래처럼 범위를 좁힌다.
+
+```bash
+python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --update-unchanged
+python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --force-overwrite docs/harness_guide.md
+```
+
+7. `differing files`와 `conflict candidates`는 기본적으로 수동 비교 대상으로 남긴다.
+8. 최소 문서 세트가 어느 정도 맞춰진 뒤에만 아래 validator로 넘어간다.
 
 ```bash
 python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
@@ -79,6 +91,8 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
   - 문서 간 참조와 책임 경계를 본다.
 - `adopt_dry_run.py`
   - 기존 프로젝트 상태를 read-only로 분류한다.
+- `adopt_safe_write.py`
+  - 기존 프로젝트에서 missing file create, unchanged refresh, explicit path force overwrite만 허용하는 제한적 write 도구다.
 
 ## first-success 와 phase2 차이
 

@@ -50,6 +50,14 @@
 - 기존 프로젝트에 대해 write 없이 현재 상태를 읽는 단계다.
 - `adopt_dry_run.py`는 baseline 비교만 하고, merge/write는 하지 않는다.
 
+### Selective Safe Write
+
+- `adopt_safe_write.py`는 `adopt_dry_run.py`와 같은 판정 규칙을 사용해 제한된 write만 수행한다.
+- 기본 동작은 missing file create다.
+- exact-match target refresh는 `--update-unchanged`로만 수행한다.
+- user-modified 파일 overwrite는 명시적으로 선택한 `--force-overwrite` 경로에 한해 수행한다.
+- automatic merge나 semantic update는 아직 지원하지 않는다.
+
 ### Repository 와 Downstream Bundle
 
 - 이 저장소 안에는 downstream 프로젝트가 실제로 사용하는 자산과, maintainer가 core를 유지보수할 때만 쓰는 자산이 함께 존재할 수 있다.
@@ -70,9 +78,10 @@
 
 1. `adopt_dry_run.py`로 현재 상태를 baseline과 비교한다.
 2. `missing` / `differing` / `conflict`를 나눈다.
-3. `missing files`를 기준으로 최소 문서 세트를 수동으로 맞춘다.
-4. 최소 문서 세트가 어느 정도 맞춰진 뒤 validator를 실행한다.
-5. 아직은 수동 판단과 수동 적용이 중심이다.
+3. `missing files`가 주 문제면 `adopt_safe_write.py`로 제한적 create-only write를 먼저 적용한다.
+4. exact-match target refresh 또는 특정 regular-file overwrite가 꼭 필요할 때만 `--update-unchanged`, `--force-overwrite`를 좁게 사용한다.
+5. `differing files`와 path-shape conflict는 기본적으로 수동 판단 대상으로 남긴다.
+6. 최소 문서 세트가 어느 정도 맞춰진 뒤 validator를 실행한다.
 
 ## 왜 여러 도구로 나누는가
 
@@ -84,6 +93,8 @@
   - 문서 간 관계를 본다.
 - `adopt_dry_run.py`
   - 기존 상태를 읽는다.
+- `adopt_safe_write.py`
+  - dry-run과 같은 분류를 기준으로 missing create, exact-match refresh, explicit regular-file overwrite만 수행한다.
 
 한 도구가 이 역할을 전부 담당하면, write / validation / inspection의 의미가 섞여서 사용자가 실패 원인을 해석하기 어려워진다.
 
@@ -108,13 +119,14 @@
   - unresolved decision validation
   - cross-document consistency validation
   - existing-project adopt dry-run
+  - existing-project selective safe write/update
   - 로컬 진단 경로
   - maintainer-managed downstream bundle directory artifact generation
   - maintainer-managed downstream bundle content validation
   - maintainer-managed downstream bundle install/adoption smoke validation
 
 - 아직 지원하지 않는다.
-  - automatic adopt write
+  - automatic merge-based adopt update
   - semantic merge
   - interactive onboarding UI
   - repo-aware assisted adoption

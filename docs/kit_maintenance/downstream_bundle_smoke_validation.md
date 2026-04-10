@@ -10,6 +10,7 @@
 - canonical `dist/harness-kit-project-bundle/`
 - generated bundle 안의 `scripts/bootstrap_init.py`
 - generated bundle 안의 `scripts/adopt_dry_run.py`
+- generated bundle 안의 `scripts/adopt_safe_write.py`
 - generated bundle 안의 `scripts/validate_overlay_decisions.py`
 - generated bundle 안의 `scripts/validate_overlay_consistency.py`
 - `tests/test_downstream_bundle_smoke.py`
@@ -53,6 +54,22 @@ python3 vendor/harness-kit/scripts/adopt_dry_run.py . --language python
   - 위 조건에서는 `docs/harness_guide.md`가 `differing files`로 분류되고, 나머지 최소 문서 세트는 `missing files`로 남는다.
   - maintainer 전용 자산 없이도 brownfield inspection 경로가 동작한다.
 
+### 시나리오 3. brownfield missing-file safe write
+
+- 입력 조건:
+  - canonical `dist/harness-kit-project-bundle/`를 `vendor/harness-kit/`로 복사한 임시 consumer project
+  - 기존 프로젝트 쪽에는 localized `docs/harness_guide.md`만 있고, 나머지 최소 문서 세트는 없음
+- 실행 명령:
+
+```bash
+python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python
+```
+
+- 기대 결과:
+  - `missing files`는 생성되고 localized `docs/harness_guide.md`는 기본 동작에서 그대로 남는다.
+  - 실행 후 first-success 문서 존재 확인과 overlay decision validator가 통과한다.
+  - maintainer 전용 자산 없이도 brownfield create-only safe write 경로가 동작한다.
+
 ## 실행 명령
 
 ```bash
@@ -61,10 +78,10 @@ python3 -m unittest tests.test_downstream_bundle_smoke
 
 ## 현재 기준 기대 결과
 
-- canonical `dist/harness-kit-project-bundle/`만으로 greenfield bootstrap, first-success validator, brownfield adopt dry-run의 최소 흐름이 재현된다.
+- canonical `dist/harness-kit-project-bundle/`만으로 greenfield bootstrap, first-success validator, brownfield adopt dry-run, brownfield create-only safe write의 최소 흐름이 재현된다.
 - smoke test는 maintainer 전용 자산 누락 때문에 consumer 경로가 깨지는 문제를 release 전에 조기에 드러낸다.
 
 ## 잔여 리스크
 
-- smoke test는 bundle usability를 보는 경량 검증이다. safe write/update, upgrade impact classification, diff review는 후속 이슈에서 더 추가된다.
+- smoke test는 bundle usability를 보는 경량 검증이다. explicit overwrite 정책의 세부 upgrade 판단, impact classification, diff review는 후속 이슈에서 더 추가된다.
 - brownfield 경로는 여전히 read-only inspection 중심이며 자동 merge나 semantic update는 지원하지 않는다.

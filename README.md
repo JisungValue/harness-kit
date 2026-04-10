@@ -41,6 +41,8 @@
   - project overlay 문서 간 참조와 책임 경계 불일치를 검사하는 cross-document consistency checker다.
 - `scripts/adopt_dry_run.py`
   - 기존 프로젝트의 현재 overlay 상태를 bootstrap baseline과 비교해 missing, unchanged, differing, conflict candidate를 read-only로 분류하는 adopt dry-run이다.
+- `scripts/adopt_safe_write.py`
+  - 기존 프로젝트에 대해 `adopt_dry_run.py`와 같은 판정 규칙을 사용해 missing file create, unchanged refresh, explicit path force overwrite만 허용하는 제한적 safe write/update 도구다.
 - `scripts/generate_downstream_bundle.py`
   - downstream 배포 경계 기준으로 project-facing 자산만 모아 `dist/harness-kit-project-bundle/` directory artifact와 `bundle_manifest.json`을 생성하는 maintainer용 bundle generation command다.
 - `scripts/validate_downstream_bundle.py`
