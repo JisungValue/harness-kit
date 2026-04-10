@@ -155,6 +155,49 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
                 adopt_result.stdout,
             )
 
+    def test_generated_bundle_supports_brownfield_safe_write_for_missing_files(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_root, vendor_root = self.vendor_generated_bundle(Path(tmp_dir))
+
+            self.assert_maintainer_assets_absent(vendor_root)
+
+            harness_guide_template = (vendor_root / "docs/project_overlay/project_harness_guide_template.md").read_text(
+                encoding="utf-8"
+            )
+            harness_guide_template = harness_guide_template.replace(
+                DEFAULT_HARNESS_GUIDE_REFERENCE,
+                "third_party/harness-kit/docs/harness_guide.md",
+                1,
+            )
+            existing_harness_guide = project_root / "docs/harness_guide.md"
+            existing_harness_guide.parent.mkdir(parents=True, exist_ok=True)
+            existing_harness_guide.write_text(harness_guide_template, encoding="utf-8")
+
+            safe_write_result = self.run_bundle_script(
+                project_root,
+                "adopt_safe_write.py",
+                ".",
+                "--language",
+                LANGUAGE,
+            )
+            self.assertEqual(safe_write_result.returncode, 0, safe_write_result.stderr)
+            self.assertIn("- created files: 6", safe_write_result.stdout)
+            self.assertIn("- remaining missing files: 0", safe_write_result.stdout)
+            self.assertIn("- remaining differing files: 1", safe_write_result.stdout)
+
+            first_success_result = self.run_first_success_command(project_root)
+            self.assertEqual(first_success_result.returncode, 0, first_success_result.stderr)
+            self.assertIn("first success docs are present", first_success_result.stdout)
+
+            decisions_result = self.run_bundle_script(
+                project_root,
+                "validate_overlay_decisions.py",
+                ".",
+                "--readiness",
+                "first-success",
+            )
+            self.assertEqual(decisions_result.returncode, 0, decisions_result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()

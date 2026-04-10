@@ -12,7 +12,7 @@
 
 - 새 프로젝트 또는 거의 빈 프로젝트면 `first success` 경로를 따른다.
 - 기존 프로젝트나 부분 도입 상태면 `adopt dry-run`부터 시작한다.
-- 현재 `0.1.0` 범위에서 read-only 비교는 `adopt_dry_run.py`이고, write 동작은 `bootstrap_init.py`뿐이다.
+- 현재 `0.1.0` 범위에서 기존 프로젝트 비교는 `adopt_dry_run.py`, 제한적 brownfield write는 `adopt_safe_write.py`가 담당한다.
 - `bootstrap_init.py --force`는 merge가 아니라 overwrite다.
 
 ## 권장 로컬 진단 순서
@@ -33,6 +33,12 @@ python3 vendor/harness-kit/scripts/adopt_dry_run.py . --language python
 ```
 
 그 다음 `missing files`와 `conflict candidates`가 크지 않고, 최소 overlay 문서 세트가 어느 정도 맞춰졌을 때만 아래 validator로 넘어간다.
+
+필요하면 `missing files`를 먼저 안전하게 생성한다.
+
+```bash
+python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python
+```
 
 ```bash
 python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
@@ -137,13 +143,33 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
   - target path shape가 잘못됐거나, unrelated 문서일 가능성이 높은 대상
   - overwrite보다 수동 판단이 먼저 필요하다
 
+### adopt_safe_write.py
+
+- 역할: `adopt_dry_run.py`와 같은 분류를 기준으로 제한적 write를 수행한다.
+- write 여부: write 한다.
+- 기본 동작: `missing files`만 생성한다.
+- `--update-unchanged`: exact-match target을 현재 bootstrap 기준으로 다시 쓴다.
+- `--force-overwrite`: 명시한 특정 경로만 overwrite한다.
+- merge/semantic update: 하지 않는다.
+
+성공 신호:
+
+- `adopt safe write for ...`
+- `created files`, `refreshed unchanged targets`, `forced overwrites`
+
+실패 신호:
+
+- `adopt safe write failed.`
+- `invalid force-overwrite target:`
+- `force-overwrite blocked by target path shape conflict:`
+
 ## fail-fast 와 dry-run 해석 규칙
 
 - fail-fast는 write 전에 멈춘다는 뜻이다.
 - dry-run은 분류와 보고만 하고 파일은 바꾸지 않는다는 뜻이다.
-- 현재 `0.1.0`에서 adopt는 dry-run만 있다.
-- 현재 `0.1.0`에서 write는 `bootstrap_init.py`가 담당한다.
-- 따라서 `adopt_dry_run.py` 결과를 보고 바로 merge/write가 일어난다고 기대하면 안 된다.
+- 현재 `0.1.0`에서 adopt는 read-only dry-run과 제한적 safe write까지만 있다.
+- 현재 `0.1.0`에서 일반 merge-based update는 없다.
+- 따라서 `adopt_dry_run.py` 결과를 보고 바로 전체 merge/write가 일어난다고 기대하면 안 된다.
 
 ## 흔한 로컬 진단 순서
 
@@ -169,12 +195,14 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 1. `adopt_dry_run.py`부터 실행한다.
 2. `missing files`와 `conflict candidates`를 먼저 구분한다.
-3. baseline과 큰 차이가 없는 경우에만 이후 validator로 넘어간다.
+3. `missing files`가 주 문제면 `adopt_safe_write.py`로 제한적 생성부터 수행한다.
+4. baseline과 큰 차이가 없는 경우에만 이후 validator로 넘어간다.
 
 ## 관련 문서
 
 - 새 프로젝트 first success: `docs/project_overlay/first_success_guide.md`
 - 기존 프로젝트 read-only 비교: `docs/project_overlay/adopt_dry_run.md`
+- 기존 프로젝트 제한적 write: `docs/project_overlay/adopt_safe_write.md`
 - unresolved placeholder readiness: `docs/project_overlay/unresolved_decision_validator.md`
 - cross-document consistency: `docs/project_overlay/cross_document_consistency_checker.md`
 - 사람이 읽는 overlay 완료 판정: `docs/project_overlay/overlay_completion_checklist.md`
