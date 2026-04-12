@@ -56,26 +56,33 @@ python3 vendor/harness-kit/scripts/adopt_dry_run.py . --language python
 ```
 
 4. 결과를 아래처럼 읽는다.
-   - `missing files`: 안전하게 생성 가능한 후보
-   - `existing but unchanged targets`: baseline과 동일
-   - `differing files`: 수동 검토 대상
-   - `conflict candidates`: 수동 판단 우선 대상
-5. `missing files`를 먼저 안전하게 반영하려면 아래 명령을 실행한다.
+    - `missing files`: 안전하게 생성 가능한 후보
+    - `existing but unchanged targets`: baseline과 동일
+    - `differing files`: 수동 검토 대상
+    - `conflict candidates`: 수동 판단 우선 대상
+    - `legacy entrypoint migration candidates`: 예전 `docs/harness_guide.md`를 새 canonical `docs/project_entrypoint.md`로 옮겨야 하는 상태
+5. `legacy entrypoint migration candidates`가 보이면 아래 rename migration부터 먼저 검토한다.
+
+```bash
+python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --migrate-legacy-entrypoint
+```
+
+6. legacy migration candidate가 없고 `missing files`를 먼저 안전하게 반영하려면 아래 명령을 실행한다.
 
 ```bash
 python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python
 ```
 
-6. exact-match target만 다시 쓰거나 특정 경로만 명시적으로 덮어쓰려면 아래처럼 범위를 좁힌다.
+7. exact-match target만 다시 쓰거나 특정 경로만 명시적으로 덮어쓰려면 아래처럼 범위를 좁힌다.
 
 ```bash
 python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --update-unchanged
 python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --force-overwrite docs/project_entrypoint.md
 ```
 
-7. `differing files`와 `conflict candidates`는 기본적으로 수동 비교 대상으로 남긴다.
-8. 최소 문서 세트가 어느 정도 맞춰진 뒤에만 아래 validator로 넘어간다.
-9. 새 bundle 버전을 반영할 때 영향도를 먼저 분류하려면 `docs/project_overlay/harness_upgrade_impact_policy.md`를 함께 본다.
+8. `differing files`와 `conflict candidates`는 기본적으로 수동 비교 대상으로 남긴다.
+9. 최소 문서 세트가 어느 정도 맞춰진 뒤에만 아래 validator로 넘어간다.
+10. 새 bundle 버전을 반영할 때 영향도를 먼저 분류하려면 `docs/project_overlay/harness_upgrade_impact_policy.md`를 함께 본다.
 
 ```bash
 python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
@@ -110,6 +117,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - vendored path를 실제 프로젝트 경로에 맞게 현지화하지 않음
 - `--language`를 실제 프로젝트와 다르게 선택함
 - 기존 프로젝트에서 `adopt_dry_run.py` 결과를 보지 않고 validator를 너무 일찍 실행함
+- 기존 프로젝트에서 legacy `docs/harness_guide.md`를 그냥 두고 `docs/project_entrypoint.md`만 새로 생성해 반쪽 migration 상태가 됨
 - `validate_overlay_decisions.py`와 `validate_overlay_consistency.py`의 역할 차이를 혼동함
 
 ## 다음에 읽을 문서

@@ -24,6 +24,8 @@ REQUIRED_RUNTIME_ENTRYPOINTS = (
     "GEMINI.md",
 )
 
+LEGACY_PROJECT_ENTRYPOINT = "docs/harness_guide.md"
+
 EXPECTED_STANDARD_DOCS = {
     "docs/standard/architecture.md",
     "docs/standard/implementation_order.md",
@@ -129,6 +131,14 @@ def validate_runtime_entrypoints(project_root: Path, errors: list[str]) -> None:
         adapter_targets = set(extract_bullet_paths(adapter_lines))
         if "AGENTS.md" not in adapter_targets:
             errors.append(f"{adapter_path}: `AGENTS.md`를 공통 진입점으로 연결하지 않습니다.")
+
+
+def validate_legacy_project_entrypoint_absence(project_root: Path, errors: list[str]) -> None:
+    legacy_path = project_root / LEGACY_PROJECT_ENTRYPOINT
+    if legacy_path.exists():
+        errors.append(
+            "legacy project-local entrypoint가 남아 있습니다: docs/harness_guide.md -> docs/project_entrypoint.md로 migrate하고 기존 파일을 retire해야 합니다."
+        )
 
 
 def validate_architecture_and_order(project_root: Path, errors: list[str]) -> None:
@@ -253,6 +263,7 @@ def main(argv: list[str] | None = None) -> int:
 
     validate_project_entrypoint(project_root, errors)
     validate_runtime_entrypoints(project_root, errors)
+    validate_legacy_project_entrypoint_absence(project_root, errors)
     validate_architecture_and_order(project_root, errors)
     validate_quality_gate_and_testing(project_root, errors)
     validate_coding_conventions(project_root, errors)

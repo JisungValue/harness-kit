@@ -202,6 +202,57 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             )
             self.assertEqual(decisions_result.returncode, 0, decisions_result.stderr)
 
+    def test_generated_bundle_supports_legacy_entrypoint_migration(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_root, vendor_root = self.vendor_generated_bundle(Path(tmp_dir))
+
+            self.assert_maintainer_assets_absent(vendor_root)
+
+            legacy_template = (vendor_root / "docs/project_overlay/project_entrypoint_template.md").read_text(
+                encoding="utf-8"
+            )
+            legacy_template = legacy_template.replace(
+                DEFAULT_HARNESS_GUIDE_REFERENCE,
+                "third_party/harness-kit/docs/harness_guide.md",
+                1,
+            )
+            legacy_path = project_root / "docs/harness_guide.md"
+            legacy_path.parent.mkdir(parents=True, exist_ok=True)
+            legacy_path.write_text(legacy_template, encoding="utf-8")
+
+            agents_template = (vendor_root / "docs/project_overlay/agent_entrypoint_template.md").read_text(
+                encoding="utf-8"
+            )
+            agents_template = agents_template.replace("docs/project_entrypoint.md", "docs/harness_guide.md", 1)
+            (project_root / "AGENTS.md").write_text(agents_template, encoding="utf-8")
+
+            dry_run_result = self.run_bundle_script(
+                project_root,
+                "adopt_dry_run.py",
+                ".",
+                "--language",
+                LANGUAGE,
+            )
+            self.assertEqual(dry_run_result.returncode, 0, dry_run_result.stderr)
+            self.assertIn("- legacy entrypoint migration candidates: 1", dry_run_result.stdout)
+
+            migrate_result = self.run_bundle_script(
+                project_root,
+                "adopt_safe_write.py",
+                ".",
+                "--language",
+                LANGUAGE,
+                "--migrate-legacy-entrypoint",
+            )
+            self.assertEqual(migrate_result.returncode, 0, migrate_result.stderr)
+            self.assertIn("- migrated legacy entrypoints: 1", migrate_result.stdout)
+            self.assertFalse(legacy_path.exists())
+            self.assertTrue((project_root / "docs/project_entrypoint.md").exists())
+
+            consistency_result = self.run_bundle_script(project_root, "validate_overlay_consistency.py", ".")
+            self.assertEqual(consistency_result.returncode, 0, consistency_result.stderr)
+            self.assertIn("overlay consistency validation passed.", consistency_result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

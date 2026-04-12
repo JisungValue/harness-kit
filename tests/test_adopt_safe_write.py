@@ -133,6 +133,57 @@ class AdoptSafeWriteTest(unittest.TestCase):
             self.assertIn("- refreshed unchanged targets: 10", result.stdout)
             self.assertIn("- remaining unchanged targets: 10", result.stdout)
 
+    def test_safe_write_can_migrate_legacy_project_entrypoint(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            target.mkdir(parents=True)
+
+            docs_dir = target / "docs"
+            docs_dir.mkdir()
+            legacy_path = docs_dir / "harness_guide.md"
+            legacy_path.write_text(
+                "# Project Harness Entry Point\n\n## 공통 규칙\n\n- `third_party/harness-kit/docs/harness_guide.md`\n",
+                encoding="utf-8",
+            )
+
+            result = self.run_adopt_safe_write(target, "--migrate-legacy-entrypoint")
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("- migrated legacy entrypoints: 1", result.stdout)
+            self.assertIn("- created runtime entrypoints for migration: 3", result.stdout)
+            self.assertFalse(legacy_path.exists())
+            migrated_path = target / "docs/project_entrypoint.md"
+            self.assertTrue(migrated_path.exists())
+            self.assertIn("third_party/harness-kit/docs/harness_guide.md", migrated_path.read_text(encoding="utf-8"))
+            agents_text = (target / "AGENTS.md").read_text(encoding="utf-8")
+            self.assertIn("docs/project_entrypoint.md", agents_text)
+
+    def test_safe_write_rejects_legacy_entrypoint_migration_when_no_candidate_exists(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            result = self.run_adopt_safe_write(target, "--migrate-legacy-entrypoint")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("no legacy docs/harness_guide.md migration candidate", result.stderr)
+
+    def test_safe_write_rejects_legacy_entrypoint_migration_when_canonical_file_already_exists(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            legacy_path = target / "docs/harness_guide.md"
+            legacy_path.write_text(
+                (target / "docs/project_entrypoint.md").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+
+            result = self.run_adopt_safe_write(target, "--migrate-legacy-entrypoint")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("canonical docs/project_entrypoint.md already exists", result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()
