@@ -39,6 +39,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ### harness guide와 standard 문서 세트
 
 - `docs/project_entrypoint.md`가 project-local entrypoint 역할을 유지한 채 vendored core guide를 공통 규칙으로 참조하는지 본다.
+- vendored core guide 경로가 실제 프로젝트에서 존재하는지도 본다.
 - `docs/project_entrypoint.md`의 `프로젝트 전용 규칙` 섹션이 필수 standard 문서 세트를 빠짐없이 참조하는지 본다.
 - `공통 규칙` 섹션이 공통 harness guide 경로를 포함하는지도 본다.
 
@@ -58,6 +59,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - `coding_conventions_project.md`가 `docs/standard/quality_gate_profile.md`를 책임 경계 문서로 참조하는지 본다.
 - `bootstrap 출처 또는 기준 언어 문서`가 `.md` 경로인지 본다.
 - bootstrap 기준 문서가 `bootstrap/language_conventions/...` 같은 repo-local path로 남아 있지 않은지도 본다.
+- bootstrap 기준 문서 경로가 실제 프로젝트에서 존재하는지도 본다.
 
 ### commit rule과 품질/검증 흐름 연결
 

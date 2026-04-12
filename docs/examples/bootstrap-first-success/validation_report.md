@@ -120,6 +120,10 @@ docs/
 python3 -m unittest tests.test_bootstrap_e2e
 ```
 
+## 해석 메모
+
+- non-default vendored path를 쓰는 프로젝트는 `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`를 먼저 현지화한 뒤 validator를 실행해야 한다.
+
 ## 결과 요약
 
 - 새 프로젝트 first success 경로는 init CLI와 수동 복사 양쪽 모두에서 재현 가능하다.

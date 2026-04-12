@@ -33,17 +33,26 @@
    - 다른 경로를 쓰면 예시 명령의 `vendor/harness-kit/` 부분을 실제 경로로 바꿔서 실행한다.
 2. `docs/project_overlay/first_success_guide.md`를 본다.
 3. `docs/project_overlay/local_diagnostics_and_dry_run.md`를 같이 본다.
-4. 아래 명령을 실행한다.
+4. 먼저 bootstrap만 실행한다.
 
 ```bash
 python3 vendor/harness-kit/scripts/bootstrap_init.py . --language python
+```
+
+5. `harness-kit`를 `vendor/harness-kit/` 이외의 경로에 두었다면, validator를 돌리기 전에 아래 파일의 vendored 경로를 실제 배치 경로로 먼저 현지화한다.
+
+- `docs/project_entrypoint.md`
+- `docs/standard/coding_conventions_project.md`
+
+6. 그다음 아래 검증 명령을 실행한다.
+
+```bash
 python3 -c "from pathlib import Path; paths = ['docs/project_entrypoint.md', 'docs/standard/architecture.md', 'docs/standard/implementation_order.md', 'docs/standard/coding_conventions_project.md', 'docs/standard/quality_gate_profile.md', 'docs/standard/testing_profile.md', 'docs/standard/commit_rule.md']; missing = [p for p in paths if not Path(p).exists()]; print('first success docs are present') if not missing else (_ for _ in ()).throw(SystemExit('missing: ' + ', '.join(missing)))"
 python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ```
 
-5. `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 vendored 경로를 실제 배치 경로에 맞게 현지화한다.
-6. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
+7. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
 
 ### 기존 프로젝트 또는 부분 도입 상태
 
@@ -115,6 +124,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 - init 대상 경로에 이미 생성 대상 문서가 있어 fail-fast가 발생함
 - vendored path를 실제 프로젝트 경로에 맞게 현지화하지 않음
+- non-default vendored path인데 현지화 전에 consistency validator부터 실행해 false confidence 또는 즉시 실패를 만듦
 - `--language`를 실제 프로젝트와 다르게 선택함
 - 기존 프로젝트에서 `adopt_dry_run.py` 결과를 보지 않고 validator를 너무 일찍 실행함
 - 기존 프로젝트에서 legacy `docs/harness_guide.md`를 그냥 두고 `docs/project_entrypoint.md`만 새로 생성해 반쪽 migration 상태가 됨

@@ -85,6 +85,17 @@ def extract_bullet_paths(lines: list[str]) -> list[str]:
     return paths
 
 
+def partition_existing_file_paths(project_root: Path, paths: list[str]) -> tuple[list[str], list[str]]:
+    existing: list[str] = []
+    missing: list[str] = []
+    for path in paths:
+        if (project_root / path).is_file():
+            existing.append(path)
+        else:
+            missing.append(path)
+    return existing, missing
+
+
 def validate_project_entrypoint(project_root: Path, errors: list[str]) -> None:
     try:
         guide = read_text(project_root, "docs/project_entrypoint.md")
@@ -95,10 +106,27 @@ def validate_project_entrypoint(project_root: Path, errors: list[str]) -> None:
         return
 
     common_paths = extract_bullet_paths(common_lines)
-    if not any(path.endswith("/docs/harness_guide.md") and path != "docs/project_entrypoint.md" for path in common_paths):
+    candidate_common_paths = [
+        path for path in common_paths if path.endswith("/docs/harness_guide.md") and path != "docs/project_entrypoint.md"
+    ]
+    if not candidate_common_paths:
         errors.append(
             "docs/project_entrypoint.md: 공통 규칙 섹션에 공통 harness guide 경로가 없습니다."
         )
+    else:
+        existing_paths, missing_paths = partition_existing_file_paths(project_root, candidate_common_paths)
+        if not existing_paths:
+            joined = ", ".join(candidate_common_paths)
+            errors.append(
+                "docs/project_entrypoint.md: 공통 규칙의 vendored harness guide 경로가 실제 프로젝트에서 존재하지 않습니다. "
+                f"먼저 vendored 경로를 현지화하거나 배치 상태를 확인하세요: {joined}"
+            )
+        elif missing_paths:
+            joined = ", ".join(missing_paths)
+            errors.append(
+                "docs/project_entrypoint.md: 공통 규칙에 stale vendored harness guide 경로가 남아 있습니다. "
+                f"존재하지 않는 경로를 정리하거나 현지화하세요: {joined}"
+            )
 
     project_paths = set(extract_bullet_paths(project_lines))
     missing_paths = EXPECTED_STANDARD_DOCS - project_paths
@@ -209,6 +237,11 @@ def validate_coding_conventions(project_root: Path, errors: list[str]) -> None:
         if bootstrap_reference.startswith("bootstrap/language_conventions/"):
             errors.append(
                 "docs/standard/coding_conventions_project.md: bootstrap 기준 문서가 repo-local path로 남아 있습니다. vendored 또는 project-local path로 현지화해야 합니다."
+            )
+        elif not (project_root / bootstrap_reference).is_file():
+            errors.append(
+                "docs/standard/coding_conventions_project.md: bootstrap 기준 문서 경로가 실제 프로젝트에서 존재하지 않습니다. "
+                f"먼저 vendored 경로를 현지화하거나 배치 상태를 확인하세요: {bootstrap_reference}"
             )
     else:
         errors.append(

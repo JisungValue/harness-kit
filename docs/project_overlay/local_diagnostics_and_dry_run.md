@@ -26,6 +26,8 @@ python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness f
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ```
 
+`vendor/harness-kit/`가 아닌 다른 경로에 kit를 뒀다면, `validate_overlay_consistency.py` 전에 `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 vendored 경로를 먼저 실제 배치 경로로 맞춘다.
+
 ### 2. 기존 프로젝트 또는 부분 도입 상태
 
 ```bash
@@ -124,6 +126,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 - unresolved decision이 아니라, 문서 세트의 구조적 연결이 맞는지 보는 단계다.
 - 예: `AGENTS.md`가 `docs/project_entrypoint.md`로 연결되는지, `implementation_order.md`가 `architecture.md`를 기준으로 연결하는지, quality gate와 testing profile이 서로 역할을 나누는지.
+- non-default vendored path라면 common guide 경로나 bootstrap 기준 문서 경로가 실제로 존재하는지도 함께 본다.
 
 ### adopt_dry_run.py
 
