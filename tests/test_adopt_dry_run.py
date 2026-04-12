@@ -62,7 +62,7 @@ class AdoptDryRunTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
-            guide_path = target / "docs/harness_guide.md"
+            guide_path = target / "docs/project_entrypoint.md"
             guide_text = guide_path.read_text(encoding="utf-8")
             guide_text = guide_text.replace(
                 "vendor/harness-kit/docs/harness_guide.md",
@@ -76,7 +76,7 @@ class AdoptDryRunTest(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("- differing files: 1", result.stdout)
             self.assertIn("Differing files (manual review):", result.stdout)
-            self.assertIn("docs/harness_guide.md", result.stdout)
+            self.assertIn("docs/project_entrypoint.md", result.stdout)
 
     def test_unrelated_file_at_target_path_is_reported_as_conflict_candidate(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:

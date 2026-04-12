@@ -14,7 +14,7 @@ TEMPLATE_MAPPINGS = {
     "docs/project_overlay/agent_entrypoint_template.md": "AGENTS.md",
     "docs/project_overlay/claude_entrypoint_template.md": "CLAUDE.md",
     "docs/project_overlay/gemini_entrypoint_template.md": "GEMINI.md",
-    "docs/project_overlay/project_harness_guide_template.md": "docs/harness_guide.md",
+    "docs/project_overlay/project_entrypoint_template.md": "docs/project_entrypoint.md",
     "docs/project_overlay/architecture_template.md": "docs/standard/architecture.md",
     "docs/project_overlay/implementation_order_template.md": "docs/standard/implementation_order.md",
     "docs/project_overlay/coding_conventions_project_template.md": "docs/standard/coding_conventions_project.md",
@@ -30,7 +30,7 @@ DEFAULT_BOOTSTRAP_REFERENCE = (
 )
 FIRST_SUCCESS_COMMAND = (
     "from pathlib import Path; "
-    "paths = ['docs/harness_guide.md', 'docs/standard/architecture.md', "
+    "paths = ['docs/project_entrypoint.md', 'docs/standard/architecture.md', "
     "'docs/standard/implementation_order.md', 'docs/standard/coding_conventions_project.md', "
     "'docs/standard/quality_gate_profile.md', 'docs/standard/testing_profile.md', "
     "'docs/standard/commit_rule.md']; "
@@ -51,12 +51,13 @@ class BootstrapEndToEndTest(unittest.TestCase):
         harness_guide_reference: str,
         bootstrap_reference: str,
     ) -> None:
-        harness_guide = (project_root / "docs/harness_guide.md").read_text(encoding="utf-8")
+        harness_guide = (project_root / "docs/project_entrypoint.md").read_text(encoding="utf-8")
         coding_conventions = (
             project_root / "docs/standard/coding_conventions_project.md"
         ).read_text(encoding="utf-8")
 
         self.assertIn(harness_guide_reference, harness_guide)
+        self.assertIn("# Project Harness Entry Point", harness_guide)
         for project_doc_path in (
             "docs/standard/architecture.md",
             "docs/standard/implementation_order.md",
@@ -97,8 +98,11 @@ class BootstrapEndToEndTest(unittest.TestCase):
 
         self.assertIn("[프로젝트 결정 필요]", quality_gate_profile)
         self.assertIn("[팀 결정 필요]", commit_rule)
-        self.assertIn("docs/harness_guide.md", agents)
+        self.assertIn("# Agent Runtime Entry Point", agents)
+        self.assertIn("docs/project_entrypoint.md", agents)
+        self.assertIn("# Claude Adapter Entry Point", claude)
         self.assertIn("AGENTS.md", claude)
+        self.assertIn("# Gemini Adapter Entry Point", gemini)
         self.assertIn("AGENTS.md", gemini)
 
     def localize_manual_path(
@@ -107,7 +111,7 @@ class BootstrapEndToEndTest(unittest.TestCase):
         harness_guide_reference: str,
         bootstrap_reference: str,
     ) -> None:
-        harness_guide_path = project_root / "docs/harness_guide.md"
+        harness_guide_path = project_root / "docs/project_entrypoint.md"
         harness_guide_content = harness_guide_path.read_text(encoding="utf-8")
         harness_guide_content = harness_guide_content.replace(
             DEFAULT_HARNESS_GUIDE_REFERENCE,
@@ -175,7 +179,7 @@ class BootstrapEndToEndTest(unittest.TestCase):
             self.assertEqual(init_result.returncode, 0, init_result.stderr)
             self.assertIn("Created harness bootstrap docs in", init_result.stdout)
             self.assertIn(
-                "docs/harness_guide.md <- docs/project_overlay/project_harness_guide_template.md",
+                "docs/project_entrypoint.md <- docs/project_overlay/project_entrypoint_template.md",
                 init_result.stdout,
             )
             self.assertIn(

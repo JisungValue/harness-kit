@@ -18,14 +18,14 @@
 
 이 문서는 `harness-kit`를 사용하는 개별 프로젝트의 일반 task 수행 규칙이 아니다.
 
-- 개별 프로젝트의 task/phase 운영은 프로젝트 로컬 `docs/harness_guide.md`와 project overlay 문서가 담당한다.
+- 개별 프로젝트의 task/phase 운영은 프로젝트 로컬 `docs/project_entrypoint.md`와 project overlay 문서가 담당한다.
 - 본 문서는 `harness-kit` 저장소의 core 규칙, 공통 phase 기준, template, example, bootstrap 자산, overlay template, 문서 구조를 수정할 때만 적용한다.
 - downstream 프로젝트에서 kit를 사용해 구현하거나 감사하는 일만으로는 본 maintainer 절차를 적용하지 않는다.
 - 단, downstream 프로젝트 요구를 반영하기 위해 `harness-kit` core 또는 overlay template 자체를 수정하는 순간부터 본 문서를 적용한다.
 
 ## 프로젝트 문서 변경과 Kit 변경의 판별 기준
 
-- 비대상: downstream 프로젝트 로컬 `docs/harness_guide.md`, `docs/standard/*`, 프로젝트 저장소 안의 task 산출물 변경
+- 비대상: downstream 프로젝트 로컬 `docs/project_entrypoint.md`, `docs/standard/*`, 프로젝트 저장소 안의 task 산출물 변경
 - 대상: 이 저장소의 `docs/harness_guide.md`, `docs/harness/common/*`, `docs/phase_*`, `docs/project_overlay/*` template, `bootstrap/*`, `README.md`, `scripts/check_harness_docs.py`, `scripts/bootstrap_init.py`, `harness.log` 변경
 - downstream 프로젝트에서 복사해 간 overlay 문서를 수정하는 일은 프로젝트 문서 변경이지 `harness-kit` 유지보수가 아니다.
 - 반대로 이 저장소의 overlay template를 수정해 모든 프로젝트의 기본값을 바꾸는 일은 `harness-kit` 유지보수다.
@@ -86,7 +86,7 @@ whole-harness는 전체 문서 흐름과 core 일관성을 본다.
 
 ### 1) 아키텍처 및 경계 검사
 
-- `README.md`, `docs/harness_guide.md`, phase-local 문서 사이에 충돌이 없는가
+- `README.md`, `docs/harness_guide.md`, downstream `docs/project_entrypoint.md` 설명, phase-local 문서 사이에 충돌이 없는가
 - core와 project overlay의 책임 경계가 흐려지지 않았는가
 - repo source-of-truth 자산, downstream bundle 자산, maintainer 전용 자산의 경계가 서로 충돌하지 않는가
 - maintainer 전용 규칙이 프로젝트 영향 문서 본문으로 새어 들어가지 않았는가

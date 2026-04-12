@@ -9,7 +9,7 @@ from pathlib import Path
 
 
 REQUIRED_DOCS = (
-    "docs/harness_guide.md",
+    "docs/project_entrypoint.md",
     "docs/standard/architecture.md",
     "docs/standard/implementation_order.md",
     "docs/standard/coding_conventions_project.md",
@@ -83,26 +83,26 @@ def extract_bullet_paths(lines: list[str]) -> list[str]:
     return paths
 
 
-def validate_harness_guide(project_root: Path, errors: list[str]) -> None:
+def validate_project_entrypoint(project_root: Path, errors: list[str]) -> None:
     try:
-        guide = read_text(project_root, "docs/harness_guide.md")
+        guide = read_text(project_root, "docs/project_entrypoint.md")
         common_lines = extract_h2_section(guide, "공통 규칙")
         project_lines = extract_h2_section(guide, "프로젝트 전용 규칙")
     except ValueError as exc:
-        errors.append(f"docs/harness_guide.md: {exc}")
+        errors.append(f"docs/project_entrypoint.md: {exc}")
         return
 
     common_paths = extract_bullet_paths(common_lines)
-    if not any(path.endswith("/docs/harness_guide.md") and path != "docs/harness_guide.md" for path in common_paths):
+    if not any(path.endswith("/docs/harness_guide.md") and path != "docs/project_entrypoint.md" for path in common_paths):
         errors.append(
-            "docs/harness_guide.md: 공통 규칙 섹션에 공통 harness guide 경로가 없습니다."
+            "docs/project_entrypoint.md: 공통 규칙 섹션에 공통 harness guide 경로가 없습니다."
         )
 
     project_paths = set(extract_bullet_paths(project_lines))
     missing_paths = EXPECTED_STANDARD_DOCS - project_paths
     if missing_paths:
         errors.append(
-            "docs/harness_guide.md: 프로젝트 전용 규칙에서 필수 standard 문서 참조가 누락됐습니다."
+            "docs/project_entrypoint.md: 프로젝트 전용 규칙에서 필수 standard 문서 참조가 누락됐습니다."
         )
 
 
@@ -115,8 +115,8 @@ def validate_runtime_entrypoints(project_root: Path, errors: list[str]) -> None:
         return
 
     agent_paths = set(extract_bullet_paths(agent_lines))
-    if "docs/harness_guide.md" not in agent_paths:
-        errors.append("AGENTS.md: `docs/harness_guide.md`를 우선 읽을 문서로 연결하지 않습니다.")
+    if "docs/project_entrypoint.md" not in agent_paths:
+        errors.append("AGENTS.md: `docs/project_entrypoint.md`를 우선 읽을 문서로 연결하지 않습니다.")
 
     for adapter_path in ("CLAUDE.md", "GEMINI.md"):
         try:
@@ -251,7 +251,7 @@ def main(argv: list[str] | None = None) -> int:
             print(f"- {error}", file=sys.stderr)
         return 1
 
-    validate_harness_guide(project_root, errors)
+    validate_project_entrypoint(project_root, errors)
     validate_runtime_entrypoints(project_root, errors)
     validate_architecture_and_order(project_root, errors)
     validate_quality_gate_and_testing(project_root, errors)

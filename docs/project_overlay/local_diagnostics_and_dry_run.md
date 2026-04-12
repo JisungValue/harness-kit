@@ -21,7 +21,7 @@
 
 ```bash
 python3 vendor/harness-kit/scripts/bootstrap_init.py . --language python
-python3 -c "from pathlib import Path; paths = ['docs/harness_guide.md', 'docs/standard/architecture.md', 'docs/standard/implementation_order.md', 'docs/standard/coding_conventions_project.md', 'docs/standard/quality_gate_profile.md', 'docs/standard/testing_profile.md', 'docs/standard/commit_rule.md']; missing = [p for p in paths if not Path(p).exists()]; print('first success docs are present') if not missing else (_ for _ in ()).throw(SystemExit('missing: ' + ', '.join(missing)))"
+python3 -c "from pathlib import Path; paths = ['docs/project_entrypoint.md', 'docs/standard/architecture.md', 'docs/standard/implementation_order.md', 'docs/standard/coding_conventions_project.md', 'docs/standard/quality_gate_profile.md', 'docs/standard/testing_profile.md', 'docs/standard/commit_rule.md']; missing = [p for p in paths if not Path(p).exists()]; print('first success docs are present') if not missing else (_ for _ in ()).throw(SystemExit('missing: ' + ', '.join(missing)))"
 python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ```
@@ -122,7 +122,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 해석:
 
 - unresolved decision이 아니라, 문서 세트의 구조적 연결이 맞는지 보는 단계다.
-- 예: `AGENTS.md`가 `docs/harness_guide.md`로 연결되는지, `implementation_order.md`가 `architecture.md`를 기준으로 연결하는지, quality gate와 testing profile이 서로 역할을 나누는지.
+- 예: `AGENTS.md`가 `docs/project_entrypoint.md`로 연결되는지, `implementation_order.md`가 `architecture.md`를 기준으로 연결하는지, quality gate와 testing profile이 서로 역할을 나누는지.
 
 ### adopt_dry_run.py
 
@@ -176,7 +176,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 ### 새 프로젝트인데 init가 안 된다
 
-1. 대상 경로에 이미 `docs/harness_guide.md`나 `docs/standard/*`가 있는지 본다.
+1. 대상 경로에 이미 `docs/project_entrypoint.md`나 `docs/standard/*`가 있는지 본다.
 2. 부모 경로 중 파일이 있는지 본다.
 3. overwrite가 정말 필요한 경우에만 `--force`를 쓴다.
 
@@ -188,7 +188,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 ### decision validator는 통과하는데 consistency checker가 실패한다
 
-1. `AGENTS.md`가 `docs/harness_guide.md`를 가리키고, `CLAUDE.md`/`GEMINI.md`가 `AGENTS.md`를 다시 가리키는지 본다.
+1. `AGENTS.md`가 `docs/project_entrypoint.md`를 가리키고, `CLAUDE.md`/`GEMINI.md`가 `AGENTS.md`를 다시 가리키는지 본다.
 2. `implementation_order.md`가 `architecture.md`를 기준 문서로 연결하는지 본다.
 3. `quality_gate_profile.md`와 `testing_profile.md`가 서로 책임 경계를 참조하는지 본다.
 

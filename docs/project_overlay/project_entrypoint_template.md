@@ -1,6 +1,11 @@
-# Project Harness Guide
+# Project Harness Entry Point
 
-이 프로젝트는 공통 Harness Kit를 기본 규칙으로 사용한다.
+이 파일은 프로젝트 로컬 문서 entrypoint다.
+
+## 문서 역할
+
+- agent runtime은 `AGENTS.md`에서 이 파일로 들어온다.
+- 사람은 이 파일에서 vendored core guide와 프로젝트 전용 overlay 문서를 함께 찾는다.
 
 ## 공통 규칙
 

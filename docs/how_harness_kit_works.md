@@ -22,8 +22,9 @@
 
 - 프로젝트마다 달라져야 하는 문서 세트다.
 - 여기서 말하는 문서는 downstream 프로젝트 안에 놓이는 로컬 문서다.
+- 이 문서 세트의 project-local 문서 entrypoint는 `docs/project_entrypoint.md`이고, 이 파일이 vendored core guide와 `docs/standard/*`를 함께 연결한다.
 - 대표적으로 아래 문서가 속한다.
-  - `docs/harness_guide.md`
+  - `docs/project_entrypoint.md`
   - `docs/standard/architecture.md`
   - `docs/standard/implementation_order.md`
   - `docs/standard/coding_conventions_project.md`
@@ -41,7 +42,7 @@
 
 - `AGENTS.md`는 agent runtime이 공통으로 먼저 읽는 canonical instruction entrypoint다.
 - `CLAUDE.md`, `GEMINI.md`는 agent별 기본 파일명 차이를 흡수하는 얇은 adapter다.
-- 이 entrypoint들은 실제 규칙 본문을 중복 복사하지 않고 `docs/harness_guide.md`로 수렴한다.
+- 이 entrypoint들은 실제 규칙 본문을 중복 복사하지 않고 `docs/project_entrypoint.md`로 수렴한다.
 
 ### Validation
 

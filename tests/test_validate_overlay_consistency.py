@@ -47,7 +47,7 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            guide_path = target / "docs/harness_guide.md"
+            guide_path = target / "docs/project_entrypoint.md"
             guide_text = guide_path.read_text(encoding="utf-8")
             guide_text = guide_text.replace("- `docs/standard/testing_profile.md`\n", "", 1)
             guide_path.write_text(guide_text, encoding="utf-8")
@@ -75,7 +75,7 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
 
             gemini_path = target / "GEMINI.md"
             gemini_text = gemini_path.read_text(encoding="utf-8")
-            gemini_text = gemini_text.replace("- `AGENTS.md`\n", "- `docs/harness_guide.md`\n", 1)
+            gemini_text = gemini_text.replace("- `AGENTS.md`\n", "- `docs/project_entrypoint.md`\n", 1)
             gemini_path.write_text(gemini_text, encoding="utf-8")
 
             result = self.run_checker(target)
@@ -88,11 +88,11 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            guide_path = target / "docs/harness_guide.md"
+            guide_path = target / "docs/project_entrypoint.md"
             guide_text = guide_path.read_text(encoding="utf-8")
             guide_text = guide_text.replace(
                 "vendor/harness-kit/docs/harness_guide.md",
-                "docs/harness_guide.md",
+                "docs/project_entrypoint.md",
                 1,
             )
             guide_path.write_text(guide_text, encoding="utf-8")

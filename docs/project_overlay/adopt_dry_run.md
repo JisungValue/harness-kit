@@ -35,7 +35,7 @@ python3 vendor/harness-kit/scripts/adopt_dry_run.py . --language python
 
 ## 예시 해석
 
-- `docs/harness_guide.md`가 vendored path만 다르면 보통 `differing files`로 나온다.
+- `docs/project_entrypoint.md`가 vendored path만 다르면 보통 `differing files`로 나온다.
 - `docs/standard/commit_rule.md`가 다른 제목의 unrelated 문서로 바뀌어 있으면 `conflict candidates`로 나온다.
 - `docs/standard/testing_profile.md`가 없으면 `missing files`로 나온다.
 

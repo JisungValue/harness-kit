@@ -104,7 +104,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             bundle_paths = [bundle_file.relative_path.as_posix() for bundle_file in bundle_files]
 
         self.assertIn("scripts/bootstrap_init.py", bundle_paths)
-        self.assertNotIn("docs/harness_guide.md", bundle_paths)
+        self.assertNotIn("docs/project_entrypoint.md", bundle_paths)
         self.assertTrue(
             all(path == "scripts/bootstrap_init.py" or path.startswith("docs/examples/") for path in bundle_paths)
         )
@@ -166,6 +166,33 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertTrue((output / "bundle_manifest.json").exists())
+
+    def test_force_allows_stale_previous_bundle_paths_listed_in_manifest(self) -> None:
+        with self.make_dist_temp_dir() as tmp_dir:
+            output = Path(tmp_dir) / "bundle"
+
+            first_result = self.run_cli("--output", str(output))
+            self.assertEqual(first_result.returncode, 0, first_result.stderr)
+
+            stale_path = output / "docs/project_overlay/project_harness_guide_template.md"
+            stale_path.parent.mkdir(parents=True, exist_ok=True)
+            stale_path.write_text("stale previous bundle file\n", encoding="utf-8")
+
+            manifest_path = output / "bundle_manifest.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest["copied_files"].append(
+                {
+                    "path": "docs/project_overlay/project_harness_guide_template.md",
+                    "sha256": "0" * 64,
+                    "size_bytes": stale_path.stat().st_size,
+                }
+            )
+            manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+            result = self.run_cli("--output", str(output), "--force")
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertFalse(stale_path.exists())
 
     def test_force_rejects_non_bundle_directory(self) -> None:
         with self.make_dist_temp_dir() as tmp_dir:

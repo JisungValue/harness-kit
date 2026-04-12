@@ -26,7 +26,7 @@
 - 대상 경로 자체가 디렉터리가 아니거나, 생성 경로의 부모가 파일인 경우에는 부분 생성 없이 즉시 실패한다.
 - 현재 MVP는 관리 대상 문서 경로만 검사한다. 즉, unrelated 파일이 있는 비어 있지 않은 저장소라도 생성 대상 경로와 충돌하지 않으면 진행한다.
 - 생성되는 기본 문서 경로는 아래와 같다.
-  - `docs/harness_guide.md`
+  - `docs/project_entrypoint.md`
   - `docs/standard/architecture.md`
   - `docs/standard/implementation_order.md`
   - `docs/standard/coding_conventions_project.md`
@@ -34,7 +34,7 @@
   - `docs/standard/testing_profile.md`
   - `docs/standard/commit_rule.md`
 - 선택 언어 convention은 프로젝트 문서 안에 `vendor/harness-kit/bootstrap/language_conventions/...` 참조를 기본값으로 기록한다.
-- 로컬 `docs/harness_guide.md`도 기본적으로 `vendor/harness-kit/docs/harness_guide.md`를 참조하는 초안을 생성한다.
+- 로컬 `docs/project_entrypoint.md`도 기본적으로 `vendor/harness-kit/docs/harness_guide.md`를 참조하는 초안을 생성한다.
 - 따라서 init 결과를 사용하는 프로젝트는 vendored harness-kit 경로를 실제 배치 경로에 맞게 현지화해야 한다.
 
 ## 사용 예시

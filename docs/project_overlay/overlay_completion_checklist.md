@@ -18,7 +18,7 @@
 
 ### 1. 필수 문서 세트
 
-- [ ] `docs/harness_guide.md`가 있다.
+- [ ] `docs/project_entrypoint.md`가 있다.
 - [ ] `docs/standard/architecture.md`가 있다.
 - [ ] `docs/standard/implementation_order.md`가 있다.
 - [ ] `docs/standard/coding_conventions_project.md`가 있다.
@@ -28,13 +28,13 @@
 
 ### 2. local harness guide 연결
 
-- [ ] `docs/harness_guide.md`의 `공통 규칙`에 vendored `harness-kit/docs/harness_guide.md` 또는 실제 사용하는 공통 guide 경로가 있다.
-- [ ] `docs/harness_guide.md`의 `프로젝트 전용 규칙`이 필수 `docs/standard/*` 문서를 모두 연결한다.
+- [ ] `docs/project_entrypoint.md`의 `공통 규칙`에 vendored `harness-kit/docs/harness_guide.md` 또는 실제 사용하는 공통 guide 경로가 있다.
+- [ ] `docs/project_entrypoint.md`의 `프로젝트 전용 규칙`이 필수 `docs/standard/*` 문서를 모두 연결한다.
 
 ### 3. runtime instruction entrypoint 연결
 
 - [ ] `AGENTS.md`가 있다.
-- [ ] `AGENTS.md`가 `docs/harness_guide.md`를 우선 읽을 문서로 연결한다.
+- [ ] `AGENTS.md`가 `docs/project_entrypoint.md`를 우선 읽을 문서로 연결한다.
 - [ ] `CLAUDE.md`가 `AGENTS.md`를 공통 진입점으로 연결한다.
 - [ ] `GEMINI.md`가 `AGENTS.md`를 공통 진입점으로 연결한다.
 

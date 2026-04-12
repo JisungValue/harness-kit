@@ -37,12 +37,12 @@
 
 ```bash
 python3 vendor/harness-kit/scripts/bootstrap_init.py . --language python
-python3 -c "from pathlib import Path; paths = ['docs/harness_guide.md', 'docs/standard/architecture.md', 'docs/standard/implementation_order.md', 'docs/standard/coding_conventions_project.md', 'docs/standard/quality_gate_profile.md', 'docs/standard/testing_profile.md', 'docs/standard/commit_rule.md']; missing = [p for p in paths if not Path(p).exists()]; print('first success docs are present') if not missing else (_ for _ in ()).throw(SystemExit('missing: ' + ', '.join(missing)))"
+python3 -c "from pathlib import Path; paths = ['docs/project_entrypoint.md', 'docs/standard/architecture.md', 'docs/standard/implementation_order.md', 'docs/standard/coding_conventions_project.md', 'docs/standard/quality_gate_profile.md', 'docs/standard/testing_profile.md', 'docs/standard/commit_rule.md']; missing = [p for p in paths if not Path(p).exists()]; print('first success docs are present') if not missing else (_ for _ in ()).throw(SystemExit('missing: ' + ', '.join(missing)))"
 python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ```
 
-5. `docs/harness_guide.md`와 `docs/standard/coding_conventions_project.md`의 vendored 경로를 실제 배치 경로에 맞게 현지화한다.
+5. `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 vendored 경로를 실제 배치 경로에 맞게 현지화한다.
 6. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
 
 ### 기존 프로젝트 또는 부분 도입 상태
@@ -70,7 +70,7 @@ python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python
 
 ```bash
 python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --update-unchanged
-python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --force-overwrite docs/harness_guide.md
+python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --force-overwrite docs/project_entrypoint.md
 ```
 
 7. `differing files`와 `conflict candidates`는 기본적으로 수동 비교 대상으로 남긴다.
