@@ -1,6 +1,6 @@
 # Adopt Safe Write
 
-이 문서는 `adopt_dry_run.py` 결과를 바탕으로, 기존 프로젝트에 대해 제한된 범위에서만 bootstrap 기준 문서를 쓰는 방법을 설명한다.
+이 문서는 `adopt_dry_run.py` 결과를 바탕으로, 기존 프로젝트에 대해 제한된 범위에서만 bootstrap 기준 파일을 쓰는 방법을 설명한다.
 
 ## 목적
 

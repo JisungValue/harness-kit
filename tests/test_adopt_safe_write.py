@@ -130,8 +130,8 @@ class AdoptSafeWriteTest(unittest.TestCase):
             result = self.run_adopt_safe_write(target, "--update-unchanged")
 
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertIn("- refreshed unchanged targets: 7", result.stdout)
-            self.assertIn("- remaining unchanged targets: 7", result.stdout)
+            self.assertIn("- refreshed unchanged targets: 10", result.stdout)
+            self.assertIn("- remaining unchanged targets: 10", result.stdout)
 
 
 if __name__ == "__main__":

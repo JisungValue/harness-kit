@@ -18,6 +18,9 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 ## 검사 대상 문서
 
+- `AGENTS.md`
+- `CLAUDE.md`
+- `GEMINI.md`
 - `docs/harness_guide.md`
 - `docs/standard/architecture.md`
 - `docs/standard/implementation_order.md`
@@ -27,6 +30,11 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - `docs/standard/commit_rule.md`
 
 ## 현재 checker가 보는 교차 계약
+
+### runtime instruction entrypoint와 local harness guide 연결
+
+- `AGENTS.md`가 `docs/harness_guide.md`를 우선 읽을 문서로 연결하는지 본다.
+- `CLAUDE.md`, `GEMINI.md`가 `AGENTS.md`를 공통 진입점으로 다시 가리키는지 본다.
 
 ### harness guide와 standard 문서 세트
 
@@ -64,7 +72,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 ## unresolved decision validator와의 관계
 
-- `validate_overlay_consistency.py`는 문서 간 연결과 책임 경계를 본다.
+- `validate_overlay_consistency.py`는 문서 간 연결, runtime instruction entrypoint 연결, 책임 경계를 본다.
 - `validate_overlay_decisions.py`는 placeholder와 readiness 상태를 본다.
 - 둘은 대체 관계가 아니라 보완 관계다.
 

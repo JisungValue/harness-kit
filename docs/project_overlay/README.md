@@ -28,11 +28,23 @@
 - `docs/standard/testing_profile.md`
 - `docs/standard/commit_rule.md`
 
+## Runtime Instruction Entrypoints
+
+- `AGENTS.md`
+- `CLAUDE.md`
+- `GEMINI.md`
+
 ## 역할 분리
 
 - `docs/harness_guide.md`
   - 프로젝트 로컬 진입점이다.
   - 공통 kit 문서와 프로젝트 전용 문서를 함께 연결하는 index 역할만 한다.
+- `AGENTS.md`
+  - agent runtime이 공통으로 먼저 읽는 canonical instruction entrypoint다.
+  - 실제 규칙은 `docs/harness_guide.md`로 연결하고, adapter별 파일은 이 파일만 다시 가리킨다.
+- `CLAUDE.md`, `GEMINI.md`
+  - agent별 기본 파일명 차이를 흡수하는 얇은 adapter entrypoint다.
+  - 규칙 본문을 중복 복사하지 않고 `AGENTS.md`로 수렴시킨다.
 - `docs/standard/architecture.md`
   - 실제 레이어 구조, 모듈 경계, 주요 의존성 방향을 정의한다.
 - `docs/standard/implementation_order.md`
@@ -77,6 +89,16 @@
 - `docs/project_overlay/harness_doc_guard_workflow_template.yml`
   - 프로젝트 `.github/workflows/`로 복사해 harness-kit 문서 정합성 검사를 자동 실행한다.
   - 템플릿의 `@<pin-tag-or-sha>`를 릴리스 태그 또는 고정 커밋 SHA로 치환해 재현 가능성을 유지한다.
+
+## 권장 runtime entrypoint
+
+```md
+# Agent Entry Point
+
+## 우선 읽을 문서
+
+- `docs/harness_guide.md`
+```
 
 ## 언어별 Convention Bootstrap
 

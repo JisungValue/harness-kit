@@ -89,7 +89,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - `validate_overlay_decisions.py`
   - unresolved placeholder와 readiness 상태를 본다.
 - `validate_overlay_consistency.py`
-  - 문서 간 참조와 책임 경계를 본다.
+  - 문서 간 참조, runtime instruction entrypoint 연결, 책임 경계를 본다.
 - `adopt_dry_run.py`
   - 기존 프로젝트 상태를 read-only로 분류한다.
 - `adopt_safe_write.py`

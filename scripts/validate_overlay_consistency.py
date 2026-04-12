@@ -18,6 +18,12 @@ REQUIRED_DOCS = (
     "docs/standard/commit_rule.md",
 )
 
+REQUIRED_RUNTIME_ENTRYPOINTS = (
+    "AGENTS.md",
+    "CLAUDE.md",
+    "GEMINI.md",
+)
+
 EXPECTED_STANDARD_DOCS = {
     "docs/standard/architecture.md",
     "docs/standard/implementation_order.md",
@@ -98,6 +104,31 @@ def validate_harness_guide(project_root: Path, errors: list[str]) -> None:
         errors.append(
             "docs/harness_guide.md: 프로젝트 전용 규칙에서 필수 standard 문서 참조가 누락됐습니다."
         )
+
+
+def validate_runtime_entrypoints(project_root: Path, errors: list[str]) -> None:
+    try:
+        agents = read_text(project_root, "AGENTS.md")
+        agent_lines = extract_h2_section(agents, "우선 읽을 문서")
+    except ValueError as exc:
+        errors.append(f"AGENTS.md: {exc}")
+        return
+
+    agent_paths = set(extract_bullet_paths(agent_lines))
+    if "docs/harness_guide.md" not in agent_paths:
+        errors.append("AGENTS.md: `docs/harness_guide.md`를 우선 읽을 문서로 연결하지 않습니다.")
+
+    for adapter_path in ("CLAUDE.md", "GEMINI.md"):
+        try:
+            adapter = read_text(project_root, adapter_path)
+            adapter_lines = extract_h2_section(adapter, "공통 진입점")
+        except ValueError as exc:
+            errors.append(f"{adapter_path}: {exc}")
+            continue
+
+        adapter_targets = set(extract_bullet_paths(adapter_lines))
+        if "AGENTS.md" not in adapter_targets:
+            errors.append(f"{adapter_path}: `AGENTS.md`를 공통 진입점으로 연결하지 않습니다.")
 
 
 def validate_architecture_and_order(project_root: Path, errors: list[str]) -> None:
@@ -203,6 +234,10 @@ def validate_required_docs(project_root: Path, errors: list[str]) -> None:
         if not (project_root / relative_path).exists():
             errors.append(f"필수 overlay 문서가 없습니다: {relative_path}")
 
+    for relative_path in REQUIRED_RUNTIME_ENTRYPOINTS:
+        if not (project_root / relative_path).exists():
+            errors.append(f"필수 runtime instruction entrypoint가 없습니다: {relative_path}")
+
 
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
@@ -217,6 +252,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     validate_harness_guide(project_root, errors)
+    validate_runtime_entrypoints(project_root, errors)
     validate_architecture_and_order(project_root, errors)
     validate_quality_gate_and_testing(project_root, errors)
     validate_coding_conventions(project_root, errors)

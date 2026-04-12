@@ -21,7 +21,7 @@ python3 vendor/harness-kit/scripts/adopt_dry_run.py . --language python
 ## 출력 분류
 
 - `missing files`
-  - 현재 프로젝트에 없는 대상 문서다.
+  - 현재 프로젝트에 없는 bootstrap 대상 파일이다.
   - bootstrap 기준으로 안전하게 생성 가능한 후보로 본다.
 - `existing but unchanged targets`
   - 현재 파일이 bootstrap 기준과 완전히 같은 상태다.

@@ -34,6 +34,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 - 기대 결과:
   - canonical bundle의 project-facing script만으로 최소 문서 세트 생성과 first-success validator 실행이 끝난다.
+  - `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`도 함께 생성되고 `AGENTS.md -> docs/harness_guide.md` 연결이 성립한다.
   - `docs/harness_guide.md`와 `coding_conventions_project.md`는 vendored bundle 경로를 그대로 참조한다.
   - bundle 안에 maintainer 전용 문서나 maintainer용 bundle script가 없어도 greenfield 경로가 막히지 않는다.
 
@@ -51,7 +52,7 @@ python3 vendor/harness-kit/scripts/adopt_dry_run.py . --language python
 
 - 기대 결과:
   - dry-run이 write 없이 `missing files`, `differing files`, `conflict candidates`를 출력한다.
-  - 위 조건에서는 `docs/harness_guide.md`가 `differing files`로 분류되고, 나머지 최소 문서 세트는 `missing files`로 남는다.
+  - 위 조건에서는 `docs/harness_guide.md`가 `differing files`로 분류되고, 나머지 최소 문서 세트와 runtime entrypoint 세트는 `missing files`로 남는다.
   - maintainer 전용 자산 없이도 brownfield inspection 경로가 동작한다.
 
 ### 시나리오 3. brownfield missing-file safe write

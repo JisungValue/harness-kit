@@ -57,6 +57,32 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             self.assertEqual(result.returncode, 1)
             self.assertIn("필수 standard 문서 참조가 누락", result.stderr)
 
+    def test_missing_agents_entrypoint_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+            (target / "AGENTS.md").unlink()
+
+            result = self.run_checker(target)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("필수 runtime instruction entrypoint가 없습니다: AGENTS.md", result.stderr)
+
+    def test_gemini_adapter_without_agents_reference_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            gemini_path = target / "GEMINI.md"
+            gemini_text = gemini_path.read_text(encoding="utf-8")
+            gemini_text = gemini_text.replace("- `AGENTS.md`\n", "- `docs/harness_guide.md`\n", 1)
+            gemini_path.write_text(gemini_text, encoding="utf-8")
+
+            result = self.run_checker(target)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("GEMINI.md: `AGENTS.md`를 공통 진입점으로 연결하지 않습니다.", result.stderr)
+
     def test_self_referencing_common_harness_guide_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
