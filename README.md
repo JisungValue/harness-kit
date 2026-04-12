@@ -20,7 +20,7 @@
 
 ## 디렉터리 구조
 
-- `docs/harness_guide.md`
+- `docs/harness_guide.md` - reusable core guide
   - kit의 공통 진입점이다.
 - `docs/harness/common/`
   - process, artifact, audit, testing, validation, code hygiene, design quality, performance, lightweight 정책을 둔다.
@@ -126,7 +126,7 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 2. 새 프로젝트 first success 경로는 `docs/project_overlay/first_success_guide.md`를 먼저 본다.
 3. 로컬 진단 순서와 dry-run 해석은 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 함께 본다.
 4. init CLI 또는 `docs/project_overlay/` 수동 복사로 최소 문서 세트를 만든다.
-5. 생성된 `docs/harness_guide.md`와 `docs/standard/coding_conventions_project.md`의 vendored 경로를 실제 배치 경로에 맞게 현지화한다.
+5. 생성된 `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 vendored 경로를 실제 배치 경로에 맞게 현지화한다.
 6. `python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success`로 unresolved decision readiness를 확인한다.
 7. `python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .`로 문서 간 교차 정합성과 runtime instruction entrypoint 연결을 확인한다.
 8. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
@@ -136,7 +136,7 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 
 ## 최소 프로젝트 문서 세트
 
-- `docs/harness_guide.md`
+- `docs/project_entrypoint.md`
 - `docs/standard/architecture.md`
 - `docs/standard/implementation_order.md`
 - `docs/standard/coding_conventions_project.md`
@@ -146,9 +146,16 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 
 ## Runtime Instruction Entrypoint 세트
 
-- `AGENTS.md`
-- `CLAUDE.md`
-- `GEMINI.md`
+- `AGENTS.md` - canonical runtime entrypoint
+- `CLAUDE.md` - Claude adapter entrypoint
+- `GEMINI.md` - Gemini adapter entrypoint
+
+## 권장 읽기 순서
+
+- runtime 시작점: `AGENTS.md`
+- project-local 문서 entrypoint: `docs/project_entrypoint.md`
+- reusable core guide: `vendor/harness-kit/docs/harness_guide.md`
+- project-specific supporting docs: `docs/standard/*`
 
 ## Kit 유지보수 기록 규칙
 

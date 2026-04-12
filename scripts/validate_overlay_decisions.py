@@ -10,7 +10,7 @@ from pathlib import Path
 
 
 REQUIRED_DOCS = (
-    "docs/harness_guide.md",
+    "docs/project_entrypoint.md",
     "docs/standard/architecture.md",
     "docs/standard/implementation_order.md",
     "docs/standard/coding_conventions_project.md",

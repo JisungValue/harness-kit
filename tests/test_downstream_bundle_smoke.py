@@ -18,7 +18,7 @@ DEFAULT_BOOTSTRAP_REFERENCE = (
 )
 FIRST_SUCCESS_COMMAND = (
     "from pathlib import Path; "
-    "paths = ['docs/harness_guide.md', 'docs/standard/architecture.md', "
+    "paths = ['docs/project_entrypoint.md', 'docs/standard/architecture.md', "
     "'docs/standard/implementation_order.md', 'docs/standard/coding_conventions_project.md', "
     "'docs/standard/quality_gate_profile.md', 'docs/standard/testing_profile.md', "
     "'docs/standard/commit_rule.md']; "
@@ -98,7 +98,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             self.assertEqual(first_success_result.returncode, 0, first_success_result.stderr)
             self.assertIn("first success docs are present", first_success_result.stdout)
 
-            harness_guide = (project_root / "docs/harness_guide.md").read_text(encoding="utf-8")
+            harness_guide = (project_root / "docs/project_entrypoint.md").read_text(encoding="utf-8")
             coding_conventions = (project_root / "docs/standard/coding_conventions_project.md").read_text(
                 encoding="utf-8"
             )
@@ -106,7 +106,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             gemini = (project_root / "GEMINI.md").read_text(encoding="utf-8")
             self.assertIn(DEFAULT_HARNESS_GUIDE_REFERENCE, harness_guide)
             self.assertIn(DEFAULT_BOOTSTRAP_REFERENCE, coding_conventions)
-            self.assertIn("docs/harness_guide.md", agents)
+            self.assertIn("docs/project_entrypoint.md", agents)
             self.assertIn("AGENTS.md", gemini)
 
             decisions_result = self.run_bundle_script(
@@ -129,7 +129,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
 
             self.assert_maintainer_assets_absent(vendor_root)
 
-            harness_guide_template = (vendor_root / "docs/project_overlay/project_harness_guide_template.md").read_text(
+            harness_guide_template = (vendor_root / "docs/project_overlay/project_entrypoint_template.md").read_text(
                 encoding="utf-8"
             )
             harness_guide_template = harness_guide_template.replace(
@@ -137,7 +137,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
                 "third_party/harness-kit/docs/harness_guide.md",
                 1,
             )
-            existing_harness_guide = project_root / "docs/harness_guide.md"
+            existing_harness_guide = project_root / "docs/project_entrypoint.md"
             existing_harness_guide.parent.mkdir(parents=True, exist_ok=True)
             existing_harness_guide.write_text(harness_guide_template, encoding="utf-8")
 
@@ -155,7 +155,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             self.assertIn("- conflict candidates: 0", adopt_result.stdout)
             self.assertIn("Differing files (manual review):", adopt_result.stdout)
             self.assertIn(
-                "docs/harness_guide.md <- docs/project_overlay/project_harness_guide_template.md",
+                "docs/project_entrypoint.md <- docs/project_overlay/project_entrypoint_template.md",
                 adopt_result.stdout,
             )
 
@@ -165,7 +165,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
 
             self.assert_maintainer_assets_absent(vendor_root)
 
-            harness_guide_template = (vendor_root / "docs/project_overlay/project_harness_guide_template.md").read_text(
+            harness_guide_template = (vendor_root / "docs/project_overlay/project_entrypoint_template.md").read_text(
                 encoding="utf-8"
             )
             harness_guide_template = harness_guide_template.replace(
@@ -173,7 +173,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
                 "third_party/harness-kit/docs/harness_guide.md",
                 1,
             )
-            existing_harness_guide = project_root / "docs/harness_guide.md"
+            existing_harness_guide = project_root / "docs/project_entrypoint.md"
             existing_harness_guide.parent.mkdir(parents=True, exist_ok=True)
             existing_harness_guide.write_text(harness_guide_template, encoding="utf-8")
 

@@ -3,7 +3,7 @@
 ## 실행한 검증
 
 - 검증 항목: 공통 guide 참조 구조 확인
-  - 대조한 입력물: `docs/harness_guide.md`, `docs/project_overlay/README.md`
+  - 대조한 입력물: `docs/project_entrypoint.md`, `docs/project_overlay/README.md`
   - 실행 방법 또는 확인 방식: 문서 경로와 역할을 수동 검토
   - 결과: 공통 guide와 project overlay 문서가 분리되어 있음
   - 실패 또는 미실행 사유: 없음
@@ -11,8 +11,8 @@
   - 잔여 리스크: 없음
 
 - 검증 항목: overlay 최소 문서 세트 확인
-  - 대조한 입력물: `README.md`, `docs/project_overlay/README.md`, `docs/project_overlay/project_harness_guide_template.md`
-  - 실행 방법 또는 확인 방식: `docs/harness_guide.md`, `docs/standard/architecture.md`, `docs/standard/implementation_order.md`, `docs/standard/coding_conventions_project.md`, `docs/standard/quality_gate_profile.md`, `docs/standard/testing_profile.md`, `docs/standard/commit_rule.md` 존재 여부 확인
+  - 대조한 입력물: `README.md`, `docs/project_overlay/README.md`, `docs/project_overlay/project_entrypoint_template.md`
+  - 실행 방법 또는 확인 방식: `docs/project_entrypoint.md`, `docs/standard/architecture.md`, `docs/standard/implementation_order.md`, `docs/standard/coding_conventions_project.md`, `docs/standard/quality_gate_profile.md`, `docs/standard/testing_profile.md`, `docs/standard/commit_rule.md` 존재 여부 확인
   - 결과: 최소 세트 정의 완료
   - 실패 또는 미실행 사유: 없음
   - 판정: 정합

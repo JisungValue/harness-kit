@@ -49,7 +49,7 @@ class AdoptSafeWriteTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
-            guide_path = target / "docs/harness_guide.md"
+            guide_path = target / "docs/project_entrypoint.md"
             guide_text = guide_path.read_text(encoding="utf-8").replace(
                 "vendor/harness-kit/docs/harness_guide.md",
                 "third_party/harness-kit/docs/harness_guide.md",
@@ -68,10 +68,10 @@ class AdoptSafeWriteTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
-            guide_path = target / "docs/harness_guide.md"
-            guide_path.write_text("# Harness Guide\n\nlocalized\n", encoding="utf-8")
+            guide_path = target / "docs/project_entrypoint.md"
+            guide_path.write_text("# Project Harness Entry Point\n\nlocalized\n", encoding="utf-8")
 
-            result = self.run_adopt_safe_write(target, "--force-overwrite", "docs/harness_guide.md")
+            result = self.run_adopt_safe_write(target, "--force-overwrite", "docs/project_entrypoint.md")
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("- forced overwrites: 1", result.stdout)
@@ -117,7 +117,7 @@ class AdoptSafeWriteTest(unittest.TestCase):
             target = Path(tmp_dir) / "not-a-project"
             target.write_text("not a directory\n", encoding="utf-8")
 
-            result = self.run_adopt_safe_write(target, "--force-overwrite", "docs/harness_guide.md")
+            result = self.run_adopt_safe_write(target, "--force-overwrite", "docs/project_entrypoint.md")
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("force-overwrite blocked by target path shape conflict", result.stderr)

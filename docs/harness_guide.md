@@ -1,4 +1,9 @@
-# Harness Guide
+# Harness Core Guide
+
+## 문서 역할
+
+- 이 파일은 vendored `harness-kit` 안의 재사용 가능한 core guide다.
+- downstream 프로젝트의 로컬 문서 entrypoint는 `docs/project_entrypoint.md`이고, 그 파일이 이 core guide와 프로젝트 전용 overlay 문서를 함께 연결한다.
 
 ## 빠른 시작 요약
 
@@ -47,7 +52,7 @@
 
 아래 문서는 모든 구현 태스크에서 시작 전에 먼저 확인한다.
 
-- `docs/harness_guide.md`
+- `docs/project_entrypoint.md`
 - `docs/harness/common/process_policy.md`
 - `docs/harness/common/artifact_policy.md`
 

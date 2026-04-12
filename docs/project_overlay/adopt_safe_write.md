@@ -20,7 +20,7 @@ python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python
 
 ```bash
 python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --update-unchanged
-python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --force-overwrite docs/harness_guide.md
+python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --force-overwrite docs/project_entrypoint.md
 ```
 
 ## 기본 규칙

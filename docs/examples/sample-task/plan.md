@@ -2,7 +2,7 @@
 
 ## 변경 대상 파일 또는 모듈
 
-- `docs/harness_guide.md`
+- `docs/project_entrypoint.md`
 - `docs/standard/architecture.md`
 - `docs/standard/implementation_order.md`
 - `docs/standard/coding_conventions_project.md`
@@ -19,11 +19,11 @@
 ## 테스트 계획
 
 - 문서 링크와 참조 경로가 일관적인지 검토한다.
-- 새 작업자가 guide만 보고 시작 가능한지 수동 검토한다.
+- 새 작업자가 entrypoint와 supporting docs 구분만 보고 시작 가능한지 수동 검토한다.
 
 ## 문서 반영 계획
 
-- 프로젝트 로컬 guide를 갱신한다.
+- 프로젝트 로컬 entrypoint를 갱신한다.
 - 필요한 overlay 문서를 추가한다.
 - 현재 작업과 직접 관련 있는 언어별 convention 항목을 project convention 문서에서 식별 가능하게 정리한다.
 

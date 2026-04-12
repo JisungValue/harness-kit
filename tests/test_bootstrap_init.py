@@ -31,7 +31,7 @@ class BootstrapInitCliTest(unittest.TestCase):
             self.assertTrue((target / "AGENTS.md").exists())
             self.assertTrue((target / "CLAUDE.md").exists())
             self.assertTrue((target / "GEMINI.md").exists())
-            self.assertTrue((target / "docs/harness_guide.md").exists())
+            self.assertTrue((target / "docs/project_entrypoint.md").exists())
             self.assertTrue((target / "docs/standard/architecture.md").exists())
             self.assertTrue((target / "docs/standard/implementation_order.md").exists())
             self.assertTrue((target / "docs/standard/coding_conventions_project.md").exists())
@@ -49,12 +49,18 @@ class BootstrapInitCliTest(unittest.TestCase):
             )
 
             agent_entrypoint = (target / "AGENTS.md").read_text(encoding="utf-8")
-            self.assertIn("docs/harness_guide.md", agent_entrypoint)
+            self.assertIn("# Agent Runtime Entry Point", agent_entrypoint)
+            self.assertIn("docs/project_entrypoint.md", agent_entrypoint)
+
+            project_entrypoint = (target / "docs/project_entrypoint.md").read_text(encoding="utf-8")
+            self.assertIn("# Project Harness Entry Point", project_entrypoint)
 
             claude_entrypoint = (target / "CLAUDE.md").read_text(encoding="utf-8")
+            self.assertIn("# Claude Adapter Entry Point", claude_entrypoint)
             self.assertIn("AGENTS.md", claude_entrypoint)
 
             gemini_entrypoint = (target / "GEMINI.md").read_text(encoding="utf-8")
+            self.assertIn("# Gemini Adapter Entry Point", gemini_entrypoint)
             self.assertIn("AGENTS.md", gemini_entrypoint)
 
     def test_fails_fast_when_generated_file_exists(self) -> None:
@@ -63,13 +69,13 @@ class BootstrapInitCliTest(unittest.TestCase):
             target.mkdir(parents=True)
             docs_dir = target / "docs"
             docs_dir.mkdir()
-            (docs_dir / "harness_guide.md").write_text("existing\n", encoding="utf-8")
+            (docs_dir / "project_entrypoint.md").write_text("existing\n", encoding="utf-8")
 
             result = self.run_cli(target)
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("bootstrap init failed", result.stderr)
-            self.assertIn("docs/harness_guide.md", result.stderr)
+            self.assertIn("docs/project_entrypoint.md", result.stderr)
 
     def test_force_overwrites_existing_generated_files(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -78,7 +84,7 @@ class BootstrapInitCliTest(unittest.TestCase):
             first_result = self.run_cli(target)
             self.assertEqual(first_result.returncode, 0, first_result.stderr)
 
-            guide_path = target / "docs/harness_guide.md"
+            guide_path = target / "docs/project_entrypoint.md"
             guide_path.write_text("changed\n", encoding="utf-8")
 
             second_result = self.run_cli(target, "--force")

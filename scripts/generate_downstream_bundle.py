@@ -212,6 +212,40 @@ def owned_bundle_paths(bundle_files: list[BundleFile]) -> set[str]:
     return owned_paths
 
 
+def load_existing_manifest_paths(output_root: Path) -> set[str]:
+    manifest_path = output_root / MANIFEST_NAME
+    if not manifest_path.exists() or not manifest_path.is_file():
+        return set()
+
+    try:
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    except (OSError, json.JSONDecodeError):
+        return set()
+
+    if manifest.get("boundary_document") != BOUNDARY_DOCUMENT:
+        return set()
+    if manifest.get("entry_readme") != ENTRY_README:
+        return set()
+    if manifest.get("manifest_path") != MANIFEST_NAME:
+        return set()
+
+    owned_paths = {ENTRY_README, MANIFEST_NAME}
+
+    for section in ("copied_files", "generated_files"):
+        for entry in manifest.get(section, []):
+            path = entry.get("path")
+            if not isinstance(path, str) or not path:
+                continue
+            relative_path = Path(path)
+            owned_paths.add(relative_path.as_posix())
+            for parent in relative_path.parents:
+                if parent == Path("."):
+                    break
+                owned_paths.add(parent.as_posix())
+
+    return owned_paths
+
+
 def existing_output_paths(output_root: Path) -> set[str]:
     return {path.relative_to(output_root).as_posix() for path in output_root.rglob("*")}
 
@@ -255,7 +289,8 @@ def prepare_output_dir(output_root: Path, bundle_files: list[BundleFile], force:
                 "bundle generation failed: output directory already contains files. Re-run with --force to replace it."
             )
 
-        unknown_paths = sorted(existing_output_paths(output_root) - owned_bundle_paths(bundle_files))
+        allowed_paths = owned_bundle_paths(bundle_files) | load_existing_manifest_paths(output_root)
+        unknown_paths = sorted(existing_output_paths(output_root) - allowed_paths)
         if unknown_paths:
             preview = ", ".join(unknown_paths[:5])
             raise ValueError(

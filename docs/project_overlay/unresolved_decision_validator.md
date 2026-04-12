@@ -19,7 +19,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness p
 
 ## 검사 대상 문서
 
-- `docs/harness_guide.md`
+- `docs/project_entrypoint.md`
 - `docs/standard/architecture.md`
 - `docs/standard/implementation_order.md`
 - `docs/standard/coding_conventions_project.md`

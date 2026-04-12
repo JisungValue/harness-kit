@@ -9,7 +9,7 @@
 - `AGENTS.md`
 - `CLAUDE.md`
 - `GEMINI.md`
-- `docs/harness_guide.md`
+- `docs/project_entrypoint.md`
 - `docs/standard/*`
 - `validate_overlay_decisions.py`
 - `validate_overlay_consistency.py`
@@ -26,7 +26,7 @@
 
 - 판정: 통과
 - 근거:
-  - `docs/harness_guide.md`
+  - `docs/project_entrypoint.md`
   - `docs/standard/architecture.md`
   - `docs/standard/implementation_order.md`
   - `docs/standard/coding_conventions_project.md`
@@ -39,14 +39,14 @@
 
 - 판정: 통과
 - 근거:
-  - `docs/harness_guide.md`가 vendored common guide 경로를 가진다.
+  - `docs/project_entrypoint.md`가 vendored common guide 경로를 가진다.
   - `docs/standard/*` 문서 세트를 모두 연결한다.
 
 ### 3. runtime instruction entrypoint 연결
 
 - 판정: 통과
 - 근거:
-  - `AGENTS.md`가 `docs/harness_guide.md`를 우선 읽을 문서로 가진다.
+  - `AGENTS.md`가 `docs/project_entrypoint.md`를 우선 읽을 문서로 가진다.
   - `CLAUDE.md`, `GEMINI.md`가 `AGENTS.md`를 공통 진입점으로 가진다.
 
 ### 4. 프로젝트 결정 필요 항목 해소 여부

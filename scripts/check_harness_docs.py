@@ -170,7 +170,7 @@ def extract_codeblock_paths(lines: list[str], prefix: str | None = None) -> list
 def check_project_doc_path_consistency(errors: list[str]) -> None:
     readme = read_text("README.md")
     overlay_readme = read_text("docs/project_overlay/README.md")
-    project_guide_template = read_text("docs/project_overlay/project_harness_guide_template.md")
+    project_guide_template = read_text("docs/project_overlay/project_entrypoint_template.md")
     harness_guide = read_text("docs/harness_guide.md")
 
     readme_min = set(extract_bullet_paths(extract_h2_section(readme, "최소 프로젝트 문서 세트")))
@@ -187,12 +187,12 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
     template_docs = set(extract_bullet_paths(project_guide_template.splitlines(), "docs/standard/"))
     if template_docs != expected_project_docs:
         errors.append(
-            "project_harness_guide_template의 docs/standard 문서 목록이 README 최소 문서 세트와 다릅니다."
+            "project_entrypoint_template의 docs/standard 문서 목록이 README 최소 문서 세트와 다릅니다."
         )
 
     overlay_local_guide_docs = set(
         extract_codeblock_paths(
-            extract_h2_section(overlay_readme, "권장 로컬 `docs/harness_guide.md`"),
+            extract_h2_section(overlay_readme, "권장 로컬 `docs/project_entrypoint.md`"),
             "docs/standard/",
         )
     )
@@ -203,6 +203,30 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
 
     if "프로젝트 `testing_profile.md`" in harness_guide:
         errors.append("harness_guide에 구식 경로 `프로젝트 testing_profile.md` 표현이 남아 있습니다.")
+
+
+def check_entrypoint_role_labels(errors: list[str]) -> None:
+    expected_titles = {
+        "docs/harness_guide.md": "# Harness Core Guide",
+        "docs/project_overlay/project_entrypoint_template.md": "# Project Harness Entry Point",
+        "docs/project_overlay/agent_entrypoint_template.md": "# Agent Runtime Entry Point",
+        "docs/project_overlay/claude_entrypoint_template.md": "# Claude Adapter Entry Point",
+        "docs/project_overlay/gemini_entrypoint_template.md": "# Gemini Adapter Entry Point",
+    }
+
+    for rel_path, expected_title in expected_titles.items():
+        first_line = read_text(rel_path).splitlines()[0].strip()
+        if first_line != expected_title:
+            errors.append(f"{rel_path}의 제목은 `{expected_title}`여야 합니다.")
+
+    overlay_readme = read_text("docs/project_overlay/README.md")
+    local_entrypoint_lines = extract_h2_section(overlay_readme, "권장 로컬 `docs/project_entrypoint.md`")
+    if "# Project Harness Entry Point" not in "\n".join(local_entrypoint_lines):
+        errors.append("project_overlay/README의 로컬 entrypoint 예시 제목이 최신 구조와 다릅니다.")
+
+    runtime_entrypoint_lines = extract_h2_section(overlay_readme, "권장 runtime entrypoint")
+    if "# Agent Runtime Entry Point" not in "\n".join(runtime_entrypoint_lines):
+        errors.append("project_overlay/README의 runtime entrypoint 예시 제목이 최신 구조와 다릅니다.")
 
 
 def iter_harness_log_entries(lines: list[str]):
@@ -296,6 +320,7 @@ def main() -> int:
     errors: list[str] = []
 
     check_project_doc_path_consistency(errors)
+    check_entrypoint_role_labels(errors)
     check_harness_log(errors)
     check_language_template_structure(errors)
     check_project_facing_maintainer_leakage(errors)

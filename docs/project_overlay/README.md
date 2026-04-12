@@ -20,7 +20,7 @@
 
 ## 필수 문서
 
-- `docs/harness_guide.md`
+- `docs/project_entrypoint.md`
 - `docs/standard/architecture.md`
 - `docs/standard/implementation_order.md`
 - `docs/standard/coding_conventions_project.md`
@@ -34,14 +34,24 @@
 - `CLAUDE.md`
 - `GEMINI.md`
 
+## 권장 읽기 순서
+
+- runtime 시작점: `AGENTS.md`
+- project-local 문서 entrypoint: `docs/project_entrypoint.md`
+- reusable core guide: `vendor/harness-kit/docs/harness_guide.md`
+- project-specific supporting docs: `docs/standard/*`
+
 ## 역할 분리
 
-- `docs/harness_guide.md`
-  - 프로젝트 로컬 진입점이다.
-  - 공통 kit 문서와 프로젝트 전용 문서를 함께 연결하는 index 역할만 한다.
+- `vendor/harness-kit/docs/harness_guide.md`
+  - vendored reusable core guide다.
+  - 프로젝트 로컬 entrypoint가 먼저 이 core guide를 참조하고, 실제 프로젝트 차이는 `docs/standard/*`에서 덧붙인다.
+- `docs/project_entrypoint.md`
+  - 프로젝트 로컬 문서 entrypoint다.
+  - vendored core guide와 프로젝트 전용 `docs/standard/*`를 함께 연결하는 index 역할만 한다.
 - `AGENTS.md`
   - agent runtime이 공통으로 먼저 읽는 canonical instruction entrypoint다.
-  - 실제 규칙은 `docs/harness_guide.md`로 연결하고, adapter별 파일은 이 파일만 다시 가리킨다.
+  - 실제 규칙은 `docs/project_entrypoint.md`로 연결하고, adapter별 파일은 이 파일만 다시 가리킨다.
 - `CLAUDE.md`, `GEMINI.md`
   - agent별 기본 파일명 차이를 흡수하는 얇은 adapter entrypoint다.
   - 규칙 본문을 중복 복사하지 않고 `AGENTS.md`로 수렴시킨다.
@@ -65,10 +75,15 @@
   - 기본 커밋 메시지 형식(`type(scope): subject`), 제목 50자 제한, 제목 동사 시작 규칙을 기본안으로 제공한다.
   - 템플릿의 `[팀 결정 필요]` 항목을 프로젝트 정책으로 확정해 사용한다.
 
-## 권장 로컬 `docs/harness_guide.md`
+## 권장 로컬 `docs/project_entrypoint.md`
 
 ```md
-# Project Harness Guide
+# Project Harness Entry Point
+
+## 문서 역할
+
+- agent runtime은 `AGENTS.md`에서 이 파일로 들어온다.
+- 사람은 이 파일에서 vendored core guide와 프로젝트 전용 overlay 문서를 함께 찾는다.
 
 ## 공통 규칙
 
@@ -93,11 +108,11 @@
 ## 권장 runtime entrypoint
 
 ```md
-# Agent Entry Point
+# Agent Runtime Entry Point
 
 ## 우선 읽을 문서
 
-- `docs/harness_guide.md`
+- `docs/project_entrypoint.md`
 ```
 
 ## 언어별 Convention Bootstrap

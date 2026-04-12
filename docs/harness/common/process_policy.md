@@ -19,7 +19,7 @@
 
 공통 정책 문서를 함께 참조할 때 해석 우선순위는 아래와 같다.
 
-1. `docs/harness_guide.md`
+1. `docs/project_entrypoint.md`
 2. 현재 수행 중인 Phase의 `implementation.md`, `audit.md`
 3. `docs/harness/common/process_policy.md`
 4. `docs/harness/common/artifact_policy.md`
@@ -39,7 +39,7 @@
 
 ## Phase 운영 원칙
 
-- 모든 구현 태스크는 `docs/harness_guide.md`에 정의된 Phase 순서를 따른다.
+- 모든 구현 태스크는 `docs/project_entrypoint.md`에 정의된 Phase 순서를 따른다.
 - 각 Phase는 해당 `implementation.md`를 기준으로 구현한 뒤 `audit.md`를 기준으로 감사를 수행한다.
 - 현재 Phase는 `implementation -> audit -> 사용자 승인 -> 다음 Phase` 순서를 지킨다.
 - 감사 결과가 승인 불가이면, 피드백을 반영한 뒤 같은 Phase에서 다시 구현과 감사를 반복한다.

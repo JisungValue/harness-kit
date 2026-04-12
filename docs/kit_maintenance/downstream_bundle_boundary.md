@@ -98,6 +98,8 @@ scripts/
   validate_overlay_decisions.py
 ```
 
+`docs/project_entrypoint.md`는 bundle 안에 직접 들어가는 파일이 아니라, downstream 프로젝트에서 `docs/project_overlay/project_entrypoint_template.md`를 bootstrap 또는 수동 복사해 생성하는 consumer-local 파일이다.
+
 ## Bundle Generation Command
 
 - canonical generation command: `python3 scripts/generate_downstream_bundle.py`
