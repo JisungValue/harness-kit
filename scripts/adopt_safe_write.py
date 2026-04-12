@@ -8,7 +8,12 @@ from pathlib import Path
 
 from bootstrap_init import LANGUAGE_BOOTSTRAP_PATHS
 
-from adopt_common import classify_targets, find_target_by_relative_path, render_section
+from adopt_common import (
+    classify_targets,
+    find_target_by_relative_path,
+    render_legacy_migration_section,
+    render_section,
+)
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -40,6 +45,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         metavar="RELATIVE_PATH",
         help="Explicitly overwrite a selected target path relative to the project root.",
     )
+    parser.add_argument(
+        "--migrate-legacy-entrypoint",
+        action="store_true",
+        help="Rename legacy docs/harness_guide.md to docs/project_entrypoint.md and apply safe runtime entrypoint follow-up when possible.",
+    )
     return parser.parse_args(argv)
 
 
@@ -66,6 +76,10 @@ def main(argv: list[str] | None = None) -> int:
     invalid_force_paths: list[str] = []
     blocked_force_paths: list[str] = []
     forced_targets = []
+    migration_errors: list[str] = []
+    migrated_legacy_entrypoints = []
+    migration_created_targets = []
+    migration_refreshed_targets = []
 
     allowed_force_targets = {target.path: target for target in (*initial.differing, *initial.conflicts)}
 
@@ -82,7 +96,18 @@ def main(argv: list[str] | None = None) -> int:
             continue
         forced_targets.append(target)
 
-    if invalid_force_paths or blocked_force_paths:
+    legacy_migration = initial.legacy_migrations[0] if initial.legacy_migrations else None
+    if args.migrate_legacy_entrypoint:
+        if legacy_migration is None:
+            migration_errors.append(
+                "- no legacy docs/harness_guide.md migration candidate was found in this project"
+            )
+        elif not legacy_migration.safe_to_apply:
+            migration_errors.append(
+                f"- legacy entrypoint migration blocked: {legacy_migration.blocked_reason}"
+            )
+
+    if invalid_force_paths or blocked_force_paths or migration_errors:
         print("adopt safe write failed.", file=sys.stderr)
         for relative_path in invalid_force_paths:
             print(
@@ -94,10 +119,23 @@ def main(argv: list[str] | None = None) -> int:
                 f"- force-overwrite blocked by target path shape conflict: {relative_path}",
                 file=sys.stderr,
             )
+        for error in migration_errors:
+            print(error, file=sys.stderr)
         return 1
 
     created_targets = list(initial.missing)
     refreshed_targets = list(initial.unchanged) if args.update_unchanged else []
+
+    if args.migrate_legacy_entrypoint and legacy_migration is not None:
+        legacy_migration.canonical_path.parent.mkdir(parents=True, exist_ok=True)
+        legacy_migration.legacy_path.replace(legacy_migration.canonical_path)
+        migrated_legacy_entrypoints.append(legacy_migration)
+        for target in legacy_migration.runtime_create_targets:
+            write_target(target)
+            migration_created_targets.append(target)
+        if legacy_migration.agents_refresh_target is not None:
+            write_target(legacy_migration.agents_refresh_target)
+            migration_refreshed_targets.append(legacy_migration.agents_refresh_target)
 
     for target in created_targets:
         write_target(target)
@@ -114,12 +152,36 @@ def main(argv: list[str] | None = None) -> int:
     print(f"- created files: {len(created_targets)}")
     print(f"- refreshed unchanged targets: {len(refreshed_targets)}")
     print(f"- forced overwrites: {len(forced_targets)}")
+    print(f"- migrated legacy entrypoints: {len(migrated_legacy_entrypoints)}")
+    print(f"- created runtime entrypoints for migration: {len(migration_created_targets)}")
+    print(f"- refreshed runtime entrypoints for migration: {len(migration_refreshed_targets)}")
     print(f"- remaining missing files: {len(final.missing)}")
     print(f"- remaining unchanged targets: {len(final.unchanged)}")
     print(f"- remaining differing files: {len(final.differing)}")
     print(f"- remaining conflict candidates: {len(final.conflicts)}")
 
     sections = []
+    sections.extend(
+        render_legacy_migration_section(
+            "Migrated legacy entrypoints:",
+            tuple(migrated_legacy_entrypoints),
+            target_root,
+        )
+    )
+    sections.extend(
+        render_section(
+            "Created runtime entrypoints for migration:",
+            tuple(migration_created_targets),
+            target_root,
+        )
+    )
+    sections.extend(
+        render_section(
+            "Refreshed runtime entrypoints for migration:",
+            tuple(migration_refreshed_targets),
+            target_root,
+        )
+    )
     sections.extend(render_section("Created files:", tuple(created_targets), target_root))
     sections.extend(render_section("Refreshed unchanged targets:", tuple(refreshed_targets), target_root))
     sections.extend(render_section("Forced overwrites:", tuple(forced_targets), target_root))

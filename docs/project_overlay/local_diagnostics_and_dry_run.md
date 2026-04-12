@@ -32,11 +32,12 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 python3 vendor/harness-kit/scripts/adopt_dry_run.py . --language python
 ```
 
-그 다음 `missing files`와 `conflict candidates`가 크지 않고, 최소 overlay 문서 세트가 어느 정도 맞춰졌을 때만 아래 validator로 넘어간다.
+그 다음 `legacy entrypoint migration candidates`, `missing files`, `conflict candidates`를 먼저 읽고, 최소 overlay 문서 세트가 어느 정도 맞춰졌을 때만 아래 validator로 넘어간다.
 
-필요하면 `missing files`를 먼저 안전하게 생성한다.
+legacy `docs/harness_guide.md`가 남아 있으면 먼저 rename migration을 검토한다.
 
 ```bash
+python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --migrate-legacy-entrypoint
 python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python
 ```
 
@@ -143,6 +144,9 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - `conflict candidates`
   - target path shape가 잘못됐거나, unrelated 문서일 가능성이 높은 대상
   - overwrite보다 수동 판단이 먼저 필요하다
+- `legacy entrypoint migration candidates`
+  - 예전 project-local `docs/harness_guide.md`가 남아 있어 `docs/project_entrypoint.md`로 rename migration이 먼저 필요한 대상
+  - 기본 safe create보다 `--migrate-legacy-entrypoint` 또는 수동 rename 검토가 우선이다
 
 ### adopt_safe_write.py
 
@@ -151,6 +155,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - 기본 동작: `missing files`만 생성한다.
 - `--update-unchanged`: exact-match target을 현재 bootstrap 기준으로 다시 쓴다.
 - `--force-overwrite`: 명시한 특정 경로만 overwrite한다.
+- `--migrate-legacy-entrypoint`: legacy `docs/harness_guide.md`를 새 canonical `docs/project_entrypoint.md`로 rename하고 안전한 runtime entrypoint follow-up을 적용한다.
 - merge/semantic update: 하지 않는다.
 
 성공 신호:
@@ -163,6 +168,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - `adopt safe write failed.`
 - `invalid force-overwrite target:`
 - `force-overwrite blocked by target path shape conflict:`
+- `legacy entrypoint migration blocked:`
 
 ## fail-fast 와 dry-run 해석 규칙
 
@@ -195,9 +201,10 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ### 기존 프로젝트인데 무엇부터 해야 할지 모르겠다
 
 1. `adopt_dry_run.py`부터 실행한다.
-2. `missing files`와 `conflict candidates`를 먼저 구분한다.
-3. `missing files`가 주 문제면 `adopt_safe_write.py`로 제한적 생성부터 수행한다.
-4. baseline과 큰 차이가 없는 경우에만 이후 validator로 넘어간다.
+2. `legacy entrypoint migration candidates`가 있으면 `docs/harness_guide.md -> docs/project_entrypoint.md` migration부터 검토한다.
+3. `missing files`와 `conflict candidates`를 먼저 구분한다.
+4. `missing files`가 주 문제면 `adopt_safe_write.py`로 제한적 생성부터 수행한다.
+5. baseline과 큰 차이가 없는 경우에만 이후 validator로 넘어간다.
 
 ## 관련 문서
 

@@ -79,6 +79,8 @@ changed-parts는 바뀐 파일과 인접 영향만 본다.
 - 프로젝트 영향 문서 변경인데 `harness.log` 외의 maintainer 전용 문서 수정이 불필요하게 섞이지 않았는가
 - downstream bundle 포함/제외 경계를 바꾸는 변경이라면 `docs/kit_maintenance/downstream_bundle_boundary.md`, 인접 project-facing 문서, 관련 release 문서가 같은 경계를 가리키는가
 - downstream bundle에 포함될 자산이 배포 후 존재하지 않을 maintainer 전용 문서를 canonical reference로 요구하지 않는가
+- downstream canonical path rename 또는 migration 경로를 바꾸는 변경이라면 legacy-only 상태, stale coexistence 상태, canonical target 상태를 dry-run, write 경로, validator, project-facing 문서가 같은 계약으로 설명하는가
+- 새 project-facing migration flag 또는 upgrade 자동화 경로를 추가했다면 source-tree unit test만이 아니라 vendored downstream bundle smoke까지 같은 경로를 실제로 검증하는가
 
 ## Whole-Harness 감사 기준
 
@@ -112,6 +114,7 @@ whole-harness는 전체 문서 흐름과 core 일관성을 본다.
 - 새 지침이나 정책이 너무 넓거나 모호해서 서로 다른 session이 같은 입력을 보고 다른 결론에 도달할 위험이 있는지 직접 점검했는가
 - 편차 위험이 있다면 yes/no 질문, 명시적 판정 단위, 승인 불가 예시, 긍정 예시, sample artifact 중 하나 이상으로 해석 범위를 좁혔는가
 - bundle generation, bundle validation, release 절차, upgrade 판단이 생기거나 바뀌면 ad hoc 목록이 아니라 같은 boundary source-of-truth에 묶여 있는가
+- downstream migration automation이나 rename migration을 지원한다고 project-facing 문서에 적었다면, generated bundle consumer 경로에서도 같은 계약이 재현되는지 확인했는가
 - 이번 변경이 기존 changed-parts/whole-harness 체크포인트만으로 충분히 통제되는지 판단했고, 부족하면 audit policy 또는 후속 issue에 보강 근거를 남겼는가
 - 새 규칙이나 템플릿이 책임 혼합, 과도한 추상화, 테스트 없는 핵심 변경, 원시 외부 에러 유입 같은 금지 패턴을 사실상 새 기본값으로 만들지 않는가
 - 코드 생성 품질 목표가 단기 작성 편의보다 장기 유지보수성, 책임 분리, 변경 용이성, 안전한 확장 가능성을 높이는 방향으로 유지되는가

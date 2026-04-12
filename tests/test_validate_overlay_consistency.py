@@ -179,6 +179,22 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             self.assertEqual(result.returncode, 1)
             self.assertIn("`test` 기준이 없습니다", result.stderr)
 
+    def test_legacy_project_local_entrypoint_leftover_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            legacy_path = target / "docs/harness_guide.md"
+            legacy_path.write_text(
+                (target / "docs/project_entrypoint.md").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+
+            result = self.run_checker(target)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("legacy project-local entrypoint가 남아 있습니다", result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -8,7 +8,7 @@ from pathlib import Path
 
 from bootstrap_init import LANGUAGE_BOOTSTRAP_PATHS
 
-from adopt_common import classify_targets, render_section
+from adopt_common import classify_targets, render_legacy_migration_section, render_section
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -42,8 +42,16 @@ def main(argv: list[str] | None = None) -> int:
     print(f"- existing but unchanged targets: {len(classification.unchanged)}")
     print(f"- differing files: {len(classification.differing)}")
     print(f"- conflict candidates: {len(classification.conflicts)}")
+    print(f"- legacy entrypoint migration candidates: {len(classification.legacy_migrations)}")
 
     sections = []
+    sections.extend(
+        render_legacy_migration_section(
+            "Legacy entrypoint migration candidates:",
+            classification.legacy_migrations,
+            target_root,
+        )
+    )
     sections.extend(render_section("Missing files (safe to create):", classification.missing, target_root))
     sections.extend(render_section("Existing but unchanged targets:", classification.unchanged, target_root))
     sections.extend(render_section("Differing files (manual review):", classification.differing, target_root))

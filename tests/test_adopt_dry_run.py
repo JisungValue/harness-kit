@@ -119,6 +119,44 @@ class AdoptDryRunTest(unittest.TestCase):
             self.assertIn("- conflict candidates: 7", result.stdout)
             self.assertIn("parent path is not a directory", result.stdout)
 
+    def test_legacy_project_entrypoint_is_reported_as_migration_candidate(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            legacy_path = target / "docs/harness_guide.md"
+            (target / "docs/project_entrypoint.md").replace(legacy_path)
+
+            agents_path = target / "AGENTS.md"
+            agents_text = agents_path.read_text(encoding="utf-8")
+            agents_text = agents_text.replace("docs/project_entrypoint.md", "docs/harness_guide.md", 1)
+            agents_path.write_text(agents_text, encoding="utf-8")
+
+            result = self.run_adopt_dry_run(target)
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("- legacy entrypoint migration candidates: 1", result.stdout)
+            self.assertIn("Legacy entrypoint migration candidates:", result.stdout)
+            self.assertIn("docs/harness_guide.md -> docs/project_entrypoint.md", result.stdout)
+            self.assertNotIn("Missing files (safe to create):\n- docs/project_entrypoint.md", result.stdout)
+
+    def test_stale_legacy_entrypoint_leftover_is_reported_as_blocked_migration_candidate(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            legacy_path = target / "docs/harness_guide.md"
+            legacy_path.write_text(
+                (target / "docs/project_entrypoint.md").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+
+            result = self.run_adopt_dry_run(target)
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("- legacy entrypoint migration candidates: 1", result.stdout)
+            self.assertIn("retire the stale legacy file manually", result.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

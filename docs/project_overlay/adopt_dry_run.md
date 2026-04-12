@@ -32,10 +32,14 @@ python3 vendor/harness-kit/scripts/adopt_dry_run.py . --language python
 - `conflict candidates`
   - 현재 파일이 unrelated 문서이거나, target path가 파일이 아니거나, bootstrap 기준과의 shape 충돌이 크다.
   - overwrite보다 수동 판단이 먼저 필요한 대상으로 본다.
+- `legacy entrypoint migration candidates`
+  - 예전 project-local 경로 `docs/harness_guide.md`가 남아 있어, 새 canonical 경로 `docs/project_entrypoint.md`로 rename migration이 먼저 필요한 상태다.
+  - 기본 safe create보다 `adopt_safe_write.py --migrate-legacy-entrypoint` 또는 수동 rename 검토가 우선이다.
 
 ## 예시 해석
 
 - `docs/project_entrypoint.md`가 vendored path만 다르면 보통 `differing files`로 나온다.
+- legacy `docs/harness_guide.md`만 있고 `docs/project_entrypoint.md`가 아직 없으면 보통 `legacy entrypoint migration candidates`로 나온다.
 - `docs/standard/commit_rule.md`가 다른 제목의 unrelated 문서로 바뀌어 있으면 `conflict candidates`로 나온다.
 - `docs/standard/testing_profile.md`가 없으면 `missing files`로 나온다.
 
@@ -48,7 +52,8 @@ python3 vendor/harness-kit/scripts/adopt_dry_run.py . --language python
 
 ## 다음 단계
 
-- `missing files`를 먼저 확인해 안전하게 추가 가능한 범위를 판단한다.
+- `legacy entrypoint migration candidates`가 있으면 먼저 rename migration부터 검토한다.
+- `missing files`는 legacy migration candidate가 없을 때 우선적으로 확인해 안전하게 추가 가능한 범위를 판단한다.
 - 자동 복사가 괜찮은 `missing files`는 `docs/project_overlay/adopt_safe_write.md`의 제한적 safe write 경로로 생성할 수 있다.
 - `differing files`와 `conflict candidates`는 수동 검토 대상으로 남긴다.
 - 이후 `validate_overlay_decisions.py`, `validate_overlay_consistency.py`와 함께 현재 프로젝트 overlay 상태를 더 구체적으로 점검한다.
