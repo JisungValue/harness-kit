@@ -124,7 +124,7 @@ python3 -c "from pathlib import Path; paths = ['docs/project_entrypoint.md', 'do
 - 실패면 빠진 문서 경로가 `missing: ...` 형식으로 출력된다.
 
 이 명령은 문서 존재 여부만 확인하는 가장 얕은 체크다.
-runtime instruction entrypoint 연결과 unresolved placeholder readiness까지 보려면 아래 validator를 이어서 실행한다.
+runtime instruction entrypoint 연결과 unresolved placeholder readiness까지 보려면 아래 validator를 이어서 실행한다. `vendor/harness-kit/`가 아닌 다른 경로에 kit를 뒀다면, validator보다 먼저 `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 vendored 경로를 실제 배치 경로로 맞춰야 한다.
 
 ```bash
 python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
@@ -181,6 +181,7 @@ docs/
 
 - init CLI 실패 시: 충돌한 파일을 정리하거나, 정말 overwrite가 맞는 경우에만 `--force`를 쓴다.
 - 문서는 생겼는데 경로가 이상하면: `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 vendored 경로를 먼저 확인한다.
+- non-default vendored 경로라면: localize가 끝나기 전에는 consistency validator green을 기대하지 않는다.
 - consistency checker가 entrypoint 관련으로 실패하면: `AGENTS.md -> docs/project_entrypoint.md`, `CLAUDE.md`/`GEMINI.md` -> `AGENTS.md` 연결을 먼저 확인한다.
 - 문서는 맞는데 무엇부터 채워야 할지 막히면: `architecture.md`, `implementation_order.md`, `coding_conventions_project.md` 순으로 프로젝트 결정을 채운다.
 - 품질 게이트와 테스트 기준이 섞여 보이면: 실행 명령은 `quality_gate_profile.md`, 테스트 범위와 환경은 `testing_profile.md`에 둔다.

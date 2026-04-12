@@ -216,6 +216,9 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
                 "third_party/harness-kit/docs/harness_guide.md",
                 1,
             )
+            third_party_guide = project_root / "third_party/harness-kit/docs/harness_guide.md"
+            third_party_guide.parent.mkdir(parents=True, exist_ok=True)
+            third_party_guide.write_text("# Harness Core Guide\n", encoding="utf-8")
             legacy_path = project_root / "docs/harness_guide.md"
             legacy_path.parent.mkdir(parents=True, exist_ok=True)
             legacy_path.write_text(legacy_template, encoding="utf-8")

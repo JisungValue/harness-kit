@@ -13,6 +13,20 @@ CONSISTENCY_SCRIPT = ROOT / "scripts" / "validate_overlay_consistency.py"
 
 
 class ValidateOverlayConsistencyTest(unittest.TestCase):
+    def create_reference_files(
+        self,
+        target: Path,
+        harness_guide_reference: str = "vendor/harness-kit/docs/harness_guide.md",
+        bootstrap_reference: str = "vendor/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md",
+    ) -> None:
+        harness_guide_path = target / harness_guide_reference
+        harness_guide_path.parent.mkdir(parents=True, exist_ok=True)
+        harness_guide_path.write_text("# Harness Core Guide\n", encoding="utf-8")
+
+        bootstrap_path = target / bootstrap_reference
+        bootstrap_path.parent.mkdir(parents=True, exist_ok=True)
+        bootstrap_path.write_text("# Python Coding Conventions\n", encoding="utf-8")
+
     def bootstrap_project(self, target: Path) -> None:
         result = subprocess.run(
             [sys.executable, str(BOOTSTRAP_SCRIPT), str(target), "--language", "python"],
@@ -22,6 +36,7 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             check=False,
         )
         self.assertEqual(result.returncode, 0, result.stderr)
+        self.create_reference_files(target)
 
     def run_checker(self, target: Path) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
@@ -125,6 +140,109 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("repo-local path로 남아 있습니다", result.stderr)
+
+    def test_missing_localized_common_harness_guide_path_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            guide_path = target / "docs/project_entrypoint.md"
+            guide_text = guide_path.read_text(encoding="utf-8")
+            guide_text = guide_text.replace(
+                "vendor/harness-kit/docs/harness_guide.md",
+                "third_party/harness-kit/docs/harness_guide.md",
+                1,
+            )
+            guide_path.write_text(guide_text, encoding="utf-8")
+
+            result = self.run_checker(target)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("vendored harness guide 경로가 실제 프로젝트에서 존재하지 않습니다", result.stderr)
+            self.assertIn("third_party/harness-kit/docs/harness_guide.md", result.stderr)
+
+    def test_existing_localized_common_harness_guide_path_passes(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            guide_path = target / "docs/project_entrypoint.md"
+            guide_text = guide_path.read_text(encoding="utf-8")
+            guide_text = guide_text.replace(
+                "vendor/harness-kit/docs/harness_guide.md",
+                "third_party/harness-kit/docs/harness_guide.md",
+                1,
+            )
+            guide_path.write_text(guide_text, encoding="utf-8")
+            self.create_reference_files(target, harness_guide_reference="third_party/harness-kit/docs/harness_guide.md")
+
+            result = self.run_checker(target)
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("overlay consistency validation passed", result.stdout)
+
+    def test_mixed_valid_and_stale_common_harness_guide_paths_fail(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            guide_path = target / "docs/project_entrypoint.md"
+            guide_text = guide_path.read_text(encoding="utf-8")
+            guide_text = guide_text.replace(
+                "- `vendor/harness-kit/docs/harness_guide.md`\n",
+                "- `vendor/harness-kit/docs/harness_guide.md`\n- `third_party/harness-kit/docs/harness_guide.md`\n",
+                1,
+            )
+            guide_path.write_text(guide_text, encoding="utf-8")
+
+            result = self.run_checker(target)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("stale vendored harness guide 경로가 남아 있습니다", result.stderr)
+            self.assertIn("third_party/harness-kit/docs/harness_guide.md", result.stderr)
+
+    def test_missing_localized_bootstrap_reference_path_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            coding_path = target / "docs/standard/coding_conventions_project.md"
+            coding_text = coding_path.read_text(encoding="utf-8")
+            coding_text = coding_text.replace(
+                "- bootstrap 출처 또는 기준 언어 문서: `vendor/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md`",
+                "- bootstrap 출처 또는 기준 언어 문서: `third_party/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md`",
+                1,
+            )
+            coding_path.write_text(coding_text, encoding="utf-8")
+
+            result = self.run_checker(target)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("bootstrap 기준 문서 경로가 실제 프로젝트에서 존재하지 않습니다", result.stderr)
+            self.assertIn("third_party/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md", result.stderr)
+
+    def test_existing_localized_bootstrap_reference_path_passes(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            coding_path = target / "docs/standard/coding_conventions_project.md"
+            coding_text = coding_path.read_text(encoding="utf-8")
+            coding_text = coding_text.replace(
+                "- bootstrap 출처 또는 기준 언어 문서: `vendor/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md`",
+                "- bootstrap 출처 또는 기준 언어 문서: `third_party/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md`",
+                1,
+            )
+            coding_path.write_text(coding_text, encoding="utf-8")
+            self.create_reference_files(
+                target,
+                bootstrap_reference="third_party/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md",
+            )
+
+            result = self.run_checker(target)
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("overlay consistency validation passed", result.stdout)
 
     def test_missing_quality_gate_boundary_reference_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
