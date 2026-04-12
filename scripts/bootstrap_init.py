@@ -11,6 +11,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 
 TEMPLATE_TARGETS = {
+    "docs/project_overlay/agent_entrypoint_template.md": "AGENTS.md",
+    "docs/project_overlay/claude_entrypoint_template.md": "CLAUDE.md",
+    "docs/project_overlay/gemini_entrypoint_template.md": "GEMINI.md",
     "docs/project_overlay/project_harness_guide_template.md": "docs/harness_guide.md",
     "docs/project_overlay/architecture_template.md": "docs/standard/architecture.md",
     "docs/project_overlay/implementation_order_template.md": "docs/standard/implementation_order.md",

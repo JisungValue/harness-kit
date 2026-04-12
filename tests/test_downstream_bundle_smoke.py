@@ -102,8 +102,12 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             coding_conventions = (project_root / "docs/standard/coding_conventions_project.md").read_text(
                 encoding="utf-8"
             )
+            agents = (project_root / "AGENTS.md").read_text(encoding="utf-8")
+            gemini = (project_root / "GEMINI.md").read_text(encoding="utf-8")
             self.assertIn(DEFAULT_HARNESS_GUIDE_REFERENCE, harness_guide)
             self.assertIn(DEFAULT_BOOTSTRAP_REFERENCE, coding_conventions)
+            self.assertIn("docs/harness_guide.md", agents)
+            self.assertIn("AGENTS.md", gemini)
 
             decisions_result = self.run_bundle_script(
                 project_root,
@@ -146,7 +150,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             )
             self.assertEqual(adopt_result.returncode, 0, adopt_result.stderr)
             self.assertIn("write mode: disabled (read-only)", adopt_result.stdout)
-            self.assertIn("- missing files: 6", adopt_result.stdout)
+            self.assertIn("- missing files: 9", adopt_result.stdout)
             self.assertIn("- differing files: 1", adopt_result.stdout)
             self.assertIn("- conflict candidates: 0", adopt_result.stdout)
             self.assertIn("Differing files (manual review):", adopt_result.stdout)
@@ -181,7 +185,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
                 LANGUAGE,
             )
             self.assertEqual(safe_write_result.returncode, 0, safe_write_result.stderr)
-            self.assertIn("- created files: 6", safe_write_result.stdout)
+            self.assertIn("- created files: 9", safe_write_result.stdout)
             self.assertIn("- remaining missing files: 0", safe_write_result.stdout)
             self.assertIn("- remaining differing files: 1", safe_write_result.stdout)
 

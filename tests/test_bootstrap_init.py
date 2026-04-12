@@ -28,6 +28,9 @@ class BootstrapInitCliTest(unittest.TestCase):
             result = self.run_cli(target)
 
             self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertTrue((target / "AGENTS.md").exists())
+            self.assertTrue((target / "CLAUDE.md").exists())
+            self.assertTrue((target / "GEMINI.md").exists())
             self.assertTrue((target / "docs/harness_guide.md").exists())
             self.assertTrue((target / "docs/standard/architecture.md").exists())
             self.assertTrue((target / "docs/standard/implementation_order.md").exists())
@@ -44,6 +47,15 @@ class BootstrapInitCliTest(unittest.TestCase):
                 "vendor/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md",
                 content,
             )
+
+            agent_entrypoint = (target / "AGENTS.md").read_text(encoding="utf-8")
+            self.assertIn("docs/harness_guide.md", agent_entrypoint)
+
+            claude_entrypoint = (target / "CLAUDE.md").read_text(encoding="utf-8")
+            self.assertIn("AGENTS.md", claude_entrypoint)
+
+            gemini_entrypoint = (target / "GEMINI.md").read_text(encoding="utf-8")
+            self.assertIn("AGENTS.md", gemini_entrypoint)
 
     def test_fails_fast_when_generated_file_exists(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:

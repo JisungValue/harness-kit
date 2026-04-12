@@ -107,6 +107,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ### validate_overlay_consistency.py
 
 - 역할: 문서 간 참조와 책임 경계가 맞는지 본다.
+- 추가로 runtime instruction entrypoint가 같은 공통 진입점으로 수렴하는지도 본다.
 - write 여부: read-only
 
 성공 신호:
@@ -121,7 +122,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 해석:
 
 - unresolved decision이 아니라, 문서 세트의 구조적 연결이 맞는지 보는 단계다.
-- 예: `implementation_order.md`가 `architecture.md`를 기준으로 연결하는지, quality gate와 testing profile이 서로 역할을 나누는지.
+- 예: `AGENTS.md`가 `docs/harness_guide.md`로 연결되는지, `implementation_order.md`가 `architecture.md`를 기준으로 연결하는지, quality gate와 testing profile이 서로 역할을 나누는지.
 
 ### adopt_dry_run.py
 
@@ -187,7 +188,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 ### decision validator는 통과하는데 consistency checker가 실패한다
 
-1. `docs/harness_guide.md`가 필수 `docs/standard/*`를 모두 참조하는지 본다.
+1. `AGENTS.md`가 `docs/harness_guide.md`를 가리키고, `CLAUDE.md`/`GEMINI.md`가 `AGENTS.md`를 다시 가리키는지 본다.
 2. `implementation_order.md`가 `architecture.md`를 기준 문서로 연결하는지 본다.
 3. `quality_gate_profile.md`와 `testing_profile.md`가 서로 책임 경계를 참조하는지 본다.
 

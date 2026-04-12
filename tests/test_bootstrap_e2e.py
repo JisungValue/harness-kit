@@ -11,6 +11,9 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 BOOTSTRAP_SCRIPT = ROOT / "scripts" / "bootstrap_init.py"
 TEMPLATE_MAPPINGS = {
+    "docs/project_overlay/agent_entrypoint_template.md": "AGENTS.md",
+    "docs/project_overlay/claude_entrypoint_template.md": "CLAUDE.md",
+    "docs/project_overlay/gemini_entrypoint_template.md": "GEMINI.md",
     "docs/project_overlay/project_harness_guide_template.md": "docs/harness_guide.md",
     "docs/project_overlay/architecture_template.md": "docs/standard/architecture.md",
     "docs/project_overlay/implementation_order_template.md": "docs/standard/implementation_order.md",
@@ -19,7 +22,7 @@ TEMPLATE_MAPPINGS = {
     "docs/project_overlay/testing_profile_template.md": "docs/standard/testing_profile.md",
     "docs/project_overlay/commit_rule_template.md": "docs/standard/commit_rule.md",
 }
-EXPECTED_DOCS = tuple(TEMPLATE_MAPPINGS.values())
+EXPECTED_FILES = tuple(TEMPLATE_MAPPINGS.values())
 LANGUAGE = "python"
 DEFAULT_HARNESS_GUIDE_REFERENCE = "vendor/harness-kit/docs/harness_guide.md"
 DEFAULT_BOOTSTRAP_REFERENCE = (
@@ -38,9 +41,9 @@ FIRST_SUCCESS_COMMAND = (
 
 
 class BootstrapEndToEndTest(unittest.TestCase):
-    def assert_expected_docs_exist(self, project_root: Path) -> None:
-        missing = [path for path in EXPECTED_DOCS if not (project_root / path).exists()]
-        self.assertEqual(missing, [], f"Missing docs: {missing}")
+    def assert_expected_files_exist(self, project_root: Path) -> None:
+        missing = [path for path in EXPECTED_FILES if not (project_root / path).exists()]
+        self.assertEqual(missing, [], f"Missing bootstrap files: {missing}")
 
     def assert_first_success_signals(
         self,
@@ -74,6 +77,9 @@ class BootstrapEndToEndTest(unittest.TestCase):
         quality_gate_profile = (
             project_root / "docs/standard/quality_gate_profile.md"
         ).read_text(encoding="utf-8")
+        agents = (project_root / "AGENTS.md").read_text(encoding="utf-8")
+        claude = (project_root / "CLAUDE.md").read_text(encoding="utf-8")
+        gemini = (project_root / "GEMINI.md").read_text(encoding="utf-8")
         commit_rule = (project_root / "docs/standard/commit_rule.md").read_text(
             encoding="utf-8"
         )
@@ -91,6 +97,9 @@ class BootstrapEndToEndTest(unittest.TestCase):
 
         self.assertIn("[프로젝트 결정 필요]", quality_gate_profile)
         self.assertIn("[팀 결정 필요]", commit_rule)
+        self.assertIn("docs/harness_guide.md", agents)
+        self.assertIn("AGENTS.md", claude)
+        self.assertIn("AGENTS.md", gemini)
 
     def localize_manual_path(
         self,
@@ -173,7 +182,7 @@ class BootstrapEndToEndTest(unittest.TestCase):
                 "docs/standard/coding_conventions_project.md <- docs/project_overlay/coding_conventions_project_template.md",
                 init_result.stdout,
             )
-            self.assert_expected_docs_exist(project_root)
+            self.assert_expected_files_exist(project_root)
             self.assert_first_success_signals(
                 project_root,
                 DEFAULT_HARNESS_GUIDE_REFERENCE,
@@ -206,7 +215,7 @@ class BootstrapEndToEndTest(unittest.TestCase):
                 bootstrap_reference,
             )
 
-            self.assert_expected_docs_exist(project_root)
+            self.assert_expected_files_exist(project_root)
             self.assert_first_success_signals(
                 project_root,
                 harness_guide_reference,

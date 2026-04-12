@@ -34,8 +34,14 @@
 ### Bootstrap
 
 - overlay 문서를 시작하기 위한 초기 자산과 copier다.
-- `bootstrap_init.py`는 `docs/project_overlay/*` template를 source of truth로 사용해 최소 문서 세트를 생성한다.
+- `bootstrap_init.py`는 `docs/project_overlay/*` template를 source of truth로 사용해 최소 문서 세트와 runtime instruction entrypoint 파일을 생성한다.
 - 언어별 convention 초안은 `bootstrap/language_conventions/*`에 있고, 프로젝트 문서로 병합해 쓴다.
+
+### Runtime Instruction Entrypoint
+
+- `AGENTS.md`는 agent runtime이 공통으로 먼저 읽는 canonical instruction entrypoint다.
+- `CLAUDE.md`, `GEMINI.md`는 agent별 기본 파일명 차이를 흡수하는 얇은 adapter다.
+- 이 entrypoint들은 실제 규칙 본문을 중복 복사하지 않고 `docs/harness_guide.md`로 수렴한다.
 
 ### Validation
 
@@ -43,7 +49,7 @@
 - 각각 도구가 다르다.
   - 존재 확인: first-success one-liner
   - readiness 확인: `validate_overlay_decisions.py`
-  - 교차 정합성 확인: `validate_overlay_consistency.py`
+  - 교차 정합성 및 runtime instruction 연결 확인: `validate_overlay_consistency.py`
 
 ### Adopt Dry-Run
 
