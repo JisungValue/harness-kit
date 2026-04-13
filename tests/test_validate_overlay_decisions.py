@@ -56,7 +56,7 @@ class ValidateOverlayDecisionsTest(unittest.TestCase):
             self.assertIn("overlay decision validation failed", result.stderr)
             self.assertIn("docs/standard/coding_conventions_project.md", result.stderr)
             self.assertIn("docs/standard/quality_gate_profile.md", result.stderr)
-            self.assertIn("Allowed unresolved markers for this readiness", result.stderr)
+            self.assertIn("Still allowed after the blocking items above are fixed", result.stderr)
             self.assertIn("docs/standard/commit_rule.md", result.stderr)
 
     def test_todo_marker_is_always_blocking(self) -> None:
@@ -155,7 +155,10 @@ class ValidateOverlayDecisionsTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("required-field", result.stderr)
-            self.assertIn("활성 언어/런타임 필드", result.stderr)
+            self.assertIn("Resolve these required canonical fields first", result.stderr)
+            self.assertIn("- 활성 언어: `[프로젝트 결정 필요]`", result.stderr)
+            self.assertRegex(result.stderr, r"docs/standard/coding_conventions_project\.md:\d+")
+            self.assertIn("next: Replace the canonical active runtime line with a resolved value.", result.stderr)
 
     def test_first_success_fails_if_unresolved_canonical_field_is_left_and_duplicated(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -175,7 +178,29 @@ class ValidateOverlayDecisionsTest(unittest.TestCase):
             result = self.run_validator(target, "first-success")
 
             self.assertEqual(result.returncode, 1)
-            self.assertIn("unresolved canonical 활성 언어/런타임 필드", result.stderr)
+            self.assertIn("- 현재 프로젝트의 활성 언어/런타임: `[프로젝트 결정 필요]`", result.stderr)
+            self.assertNotIn("docs/standard/coding_conventions_project.md:24 [프로젝트 결정 필요]", result.stderr)
+
+    def test_same_line_todo_is_not_suppressed_by_required_field_dedup(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            coding_path = target / "docs/standard/coding_conventions_project.md"
+            coding_text = coding_path.read_text(encoding="utf-8")
+            coding_text = coding_text.replace(
+                "- 현재 프로젝트의 활성 언어/런타임: `python`",
+                "- 현재 프로젝트의 활성 언어/런타임: `[프로젝트 결정 필요]` TODO",
+                1,
+            )
+            coding_path.write_text(coding_text, encoding="utf-8")
+
+            result = self.run_validator(target, "first-success")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("required-field", result.stderr)
+            self.assertIn("TODO", result.stderr)
+            self.assertIn("docs/standard/coding_conventions_project.md:24 TODO", result.stderr)
 
 
 if __name__ == "__main__":

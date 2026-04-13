@@ -102,13 +102,15 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 - `overlay decision validation failed for readiness '...'`
 - `Missing required overlay docs:`
-- `Blocking unresolved markers:`
+- `Resolve these required canonical fields first:`
+- `Then resolve these blocking unresolved markers:`
 
 해석:
 
 - `first-success` 통과는 최소 시작 상태가 맞는지 보는 것이다.
 - `phase2` 통과는 더 많은 placeholder가 정리되어야 한다.
-- `Allowed unresolved markers`가 함께 나오면, 현재 readiness에서 허용되는 미결정이 남아 있다는 뜻이다.
+- `Still allowed after the blocking items above are fixed:`가 함께 나오면, 현재 readiness에서 허용되는 미결정이 참고용으로 남아 있다는 뜻이다.
+- `required-field`는 먼저 해결해야 하는 canonical 항목이며, 같은 줄의 placeholder가 allowed여도 중복으로 참고 목록에 다시 나오지 않는다.
 
 ### validate_overlay_consistency.py
 

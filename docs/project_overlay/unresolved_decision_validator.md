@@ -66,7 +66,9 @@ python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness p
 - 실패 시:
   - `overlay decision validation failed for readiness '...'`
   - 누락된 필수 문서와 blocking unresolved marker를 함께 출력한다.
-  - 같은 readiness에서 허용 가능한 미결정이 있으면 참고용으로 함께 출력한다.
+  - canonical field가 비어 있으면 `Resolve these required canonical fields first:` 아래에 실제 문서 경로와 line 번호, 다음 수정 액션을 함께 출력한다.
+  - 일반 blocking marker는 `Then resolve these blocking unresolved markers:` 아래에 출력한다.
+  - 같은 readiness에서 허용 가능한 미결정이 있으면 `Still allowed after the blocking items above are fixed:` 아래에 참고용으로 출력한다.
 
 ## CI 사용
 

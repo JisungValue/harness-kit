@@ -110,7 +110,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - `check_first_success_docs.py`
   - 최소 문서 세트 존재 여부만 가장 빠르게 확인한다.
 - `validate_overlay_decisions.py`
-  - unresolved placeholder와 readiness 상태를 본다.
+  - unresolved placeholder와 readiness 상태를 보고, 먼저 고쳐야 하는 canonical field를 우선순위와 함께 보여 준다.
 - `validate_overlay_consistency.py`
   - 문서 간 참조, decisions index 연결, runtime instruction entrypoint 연결, traversal contract, 책임 경계를 본다.
 - `adopt_dry_run.py`
