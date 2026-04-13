@@ -228,6 +228,64 @@ def check_entrypoint_role_labels(errors: list[str]) -> None:
     if "# Agent Runtime Entry Point" not in "\n".join(runtime_entrypoint_lines):
         errors.append("project_overlay/README의 runtime entrypoint 예시 제목이 최신 구조와 다릅니다.")
 
+    expected_sections = {
+        "docs/project_overlay/agent_entrypoint_template.md": "## 실행 계약",
+        "docs/project_overlay/project_entrypoint_template.md": "## 실행 계약",
+    }
+    for rel_path, section in expected_sections.items():
+        if section not in read_text(rel_path):
+            errors.append(f"{rel_path}에 `{section}` 섹션이 없습니다.")
+
+    traversal_phrase_sets = {
+        "docs/project_overlay/agent_entrypoint_template.md": (
+            "순서대로 모두 읽고 적용",
+            "공통 규칙",
+            "프로젝트 전용 규칙",
+            "중간 문서에서 멈추지 않는다",
+        ),
+        "docs/project_overlay/project_entrypoint_template.md": (
+            "공통 규칙",
+            "프로젝트 전용 규칙",
+            "순서대로 모두 읽고 적용",
+            "둘 중 하나만 읽고 멈추지 않는다",
+        ),
+        "docs/project_overlay/claude_entrypoint_template.md": (
+            "연결된 문서 체인도 끝까지 따라간다",
+        ),
+        "docs/project_overlay/gemini_entrypoint_template.md": (
+            "연결된 문서 체인도 끝까지 따라간다",
+        ),
+    }
+    for rel_path, phrases in traversal_phrase_sets.items():
+        text = read_text(rel_path)
+        for phrase in phrases:
+            if phrase not in text:
+                errors.append(f"{rel_path}에 traversal contract 문구 `{phrase}`가 없습니다.")
+
+    local_entrypoint_joined = "\n".join(local_entrypoint_lines)
+    if "## 실행 계약" not in local_entrypoint_joined:
+        errors.append("project_overlay/README의 로컬 entrypoint 예시에 실행 계약 섹션이 없습니다.")
+    for phrase in (
+        "공통 규칙",
+        "프로젝트 전용 규칙",
+        "순서대로 모두 읽고 적용",
+        "둘 중 하나만 읽고 멈추지 않는다",
+    ):
+        if phrase not in local_entrypoint_joined:
+            errors.append(f"project_overlay/README의 로컬 entrypoint 예시에 traversal contract 문구 `{phrase}`가 없습니다.")
+
+    runtime_entrypoint_joined = "\n".join(runtime_entrypoint_lines)
+    if "## 실행 계약" not in runtime_entrypoint_joined:
+        errors.append("project_overlay/README의 runtime entrypoint 예시에 실행 계약 섹션이 없습니다.")
+    for phrase in (
+        "순서대로 모두 읽고 적용",
+        "공통 규칙",
+        "프로젝트 전용 규칙",
+        "중간 문서에서 멈추지 않는다",
+    ):
+        if phrase not in runtime_entrypoint_joined:
+            errors.append(f"project_overlay/README의 runtime entrypoint 예시에 traversal contract 문구 `{phrase}`가 없습니다.")
+
 
 def iter_harness_log_entries(lines: list[str]):
     date_header = None

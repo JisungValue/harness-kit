@@ -40,6 +40,7 @@
 - project-local 문서 entrypoint: `docs/project_entrypoint.md`
 - reusable core guide: `vendor/harness-kit/docs/harness_guide.md`
 - project-specific supporting docs: `docs/standard/*`
+- `AGENTS.md`를 열었으면 `docs/project_entrypoint.md`에서 멈추지 말고, 그 문서가 가리키는 core guide와 supporting docs까지 순서대로 모두 읽고 적용한다.
 
 ## 역할 분리
 
@@ -49,9 +50,11 @@
 - `docs/project_entrypoint.md`
   - 프로젝트 로컬 문서 entrypoint다.
   - vendored core guide와 프로젝트 전용 `docs/standard/*`를 함께 연결하는 index 역할만 한다.
+  - runtime이나 작업자는 이 문서에 적힌 공통 규칙과 프로젝트 전용 규칙 문서를 함께 읽고 적용해야 한다.
 - `AGENTS.md`
   - agent runtime이 공통으로 먼저 읽는 canonical instruction entrypoint다.
   - 실제 규칙은 `docs/project_entrypoint.md`로 연결하고, adapter별 파일은 이 파일만 다시 가리킨다.
+  - linked document chain을 끝까지 읽고 적용해야 한다는 traversal contract를 함께 둔다.
 - `CLAUDE.md`, `GEMINI.md`
   - agent별 기본 파일명 차이를 흡수하는 얇은 adapter entrypoint다.
   - 규칙 본문을 중복 복사하지 않고 `AGENTS.md`로 수렴시킨다.
@@ -85,6 +88,11 @@
 - agent runtime은 `AGENTS.md`에서 이 파일로 들어온다.
 - 사람은 이 파일에서 vendored core guide와 프로젝트 전용 overlay 문서를 함께 찾는다.
 
+## 실행 계약
+
+- 이 문서에 들어온 runtime 또는 작업자는 `공통 규칙`, `프로젝트 전용 규칙`에 적힌 문서를 순서대로 모두 읽고 적용한 뒤에만 구현 또는 판단을 진행한다.
+- vendored core guide는 공통 규칙 기준을 주고, `docs/standard/*` 문서는 프로젝트 전용 기준을 주므로 둘 중 하나만 읽고 멈추지 않는다.
+
 ## 공통 규칙
 
 - `vendor/harness-kit/docs/harness_guide.md`
@@ -113,6 +121,12 @@
 ## 우선 읽을 문서
 
 - `docs/project_entrypoint.md`
+
+## 실행 계약
+
+- 이 파일에 연결된 문서는 순서대로 모두 읽고 적용한 뒤에만 다음 작업으로 넘어간다.
+- `docs/project_entrypoint.md`를 열었으면 그 문서의 `공통 규칙`, `프로젝트 전용 규칙`에 연결된 문서까지 끝까지 이어서 읽고 적용한다.
+- 링크만 확인하고 중간 문서에서 멈추지 않는다.
 ```
 
 ## 언어별 Convention Bootstrap

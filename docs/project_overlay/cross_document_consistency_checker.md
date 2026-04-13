@@ -35,10 +35,13 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 - `AGENTS.md`가 `docs/project_entrypoint.md`를 우선 읽을 문서로 연결하는지 본다.
 - `CLAUDE.md`, `GEMINI.md`가 `AGENTS.md`를 공통 진입점으로 다시 가리키는지 본다.
+- `AGENTS.md`가 linked document를 순서대로 모두 읽고 적용해야 한다는 traversal contract를 명시하는지 본다.
+- adapter entrypoint도 `AGENTS.md` 이후 연결된 문서 체인을 끝까지 따르라고 설명하는지 본다.
 
 ### harness guide와 standard 문서 세트
 
 - `docs/project_entrypoint.md`가 project-local entrypoint 역할을 유지한 채 vendored core guide를 공통 규칙으로 참조하는지 본다.
+- `docs/project_entrypoint.md`가 `공통 규칙`과 `프로젝트 전용 규칙` 문서를 함께 읽고 적용해야 한다는 contract를 명시하는지 본다.
 - vendored core guide 경로가 실제 프로젝트에서 존재하는지도 본다.
 - `docs/project_entrypoint.md`의 `프로젝트 전용 규칙` 섹션이 필수 standard 문서 세트를 빠짐없이 참조하는지 본다.
 - `공통 규칙` 섹션이 공통 harness guide 경로를 포함하는지도 본다.

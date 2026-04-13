@@ -107,7 +107,10 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             self.assertIn(DEFAULT_HARNESS_GUIDE_REFERENCE, harness_guide)
             self.assertIn(DEFAULT_BOOTSTRAP_REFERENCE, coding_conventions)
             self.assertIn("docs/project_entrypoint.md", agents)
+            self.assertIn("순서대로 모두 읽고 적용", agents)
+            self.assertIn("둘 중 하나만 읽고 멈추지 않는다", harness_guide)
             self.assertIn("AGENTS.md", gemini)
+            self.assertIn("연결된 문서 체인도 끝까지 따라간다", gemini)
 
             decisions_result = self.run_bundle_script(
                 project_root,

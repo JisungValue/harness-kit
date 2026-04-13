@@ -138,6 +138,8 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - `docs/project_entrypoint.md`가 존재한다.
 - `docs/project_entrypoint.md` 제목이 project-local entrypoint 역할을 드러낸다.
 - `AGENTS.md`가 `docs/project_entrypoint.md`를 우선 읽을 문서로 가리킨다.
+- `AGENTS.md`가 linked document를 순서대로 모두 읽고 적용하라고 명시한다.
+- `docs/project_entrypoint.md`가 `공통 규칙`, `프로젝트 전용 규칙` 문서를 함께 읽고 적용하라고 명시한다.
 - `CLAUDE.md`, `GEMINI.md`가 `AGENTS.md`를 공통 진입점으로 가리킨다.
 - `docs/project_entrypoint.md` 안에 공통 규칙으로 `vendor/harness-kit/docs/harness_guide.md` 또는 프로젝트가 실제로 사용하는 vendored kit 경로가 적혀 있다.
 - `docs/project_entrypoint.md` 안에 `docs/standard/*` project 문서 경로가 함께 연결되어 있다.
@@ -183,6 +185,7 @@ docs/
 - 문서는 생겼는데 경로가 이상하면: `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 vendored 경로를 먼저 확인한다.
 - non-default vendored 경로라면: localize가 끝나기 전에는 consistency validator green을 기대하지 않는다.
 - consistency checker가 entrypoint 관련으로 실패하면: `AGENTS.md -> docs/project_entrypoint.md`, `CLAUDE.md`/`GEMINI.md` -> `AGENTS.md` 연결을 먼저 확인한다.
+- agent가 첫 문서만 읽고 멈추는 것 같으면: `AGENTS.md`와 `docs/project_entrypoint.md`의 실행 계약 문구가 남아 있는지 먼저 확인한다.
 - 문서는 맞는데 무엇부터 채워야 할지 막히면: `architecture.md`, `implementation_order.md`, `coding_conventions_project.md` 순으로 프로젝트 결정을 채운다.
 - 품질 게이트와 테스트 기준이 섞여 보이면: 실행 명령은 `quality_gate_profile.md`, 테스트 범위와 환경은 `testing_profile.md`에 둔다.
 
