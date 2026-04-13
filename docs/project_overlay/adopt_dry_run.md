@@ -54,7 +54,9 @@ python3 vendor/harness-kit/scripts/adopt_dry_run.py . --language python
 
 - `legacy entrypoint migration candidates`가 있으면 먼저 rename migration부터 검토한다.
 - `missing files`는 legacy migration candidate가 없을 때 우선적으로 확인해 안전하게 추가 가능한 범위를 판단한다.
+- partial adoption 상태가 structurally safe한지 먼저 보려면 `python3 vendor/harness-kit/scripts/validate_overlay_consistency.py . --mode incremental`을 함께 실행한다.
+- incremental mode는 missing docs/runtime entrypoints를 follow-up으로 보여 주고, legacy leftover나 broken traversal chain 같은 unsafe state는 계속 fail 한다.
 - 자동 복사가 괜찮은 `missing files`는 `docs/project_overlay/adopt_safe_write.md`의 제한적 safe write 경로로 생성할 수 있다.
 - `differing files`와 `conflict candidates`는 수동 검토 대상으로 남긴다.
-- 이후 `validate_overlay_decisions.py`, `validate_overlay_consistency.py`와 함께 현재 프로젝트 overlay 상태를 더 구체적으로 점검한다.
+- 최소 문서 세트가 더 맞춰지면 `validate_overlay_decisions.py`, `validate_overlay_consistency.py` full mode로 올라가 현재 프로젝트 overlay 상태를 더 구체적으로 점검한다.
 - init / validator / adopt dry-run을 어떤 순서로 로컬에서 먼저 돌릴지는 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 본다.

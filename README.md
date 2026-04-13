@@ -39,7 +39,7 @@
 - `scripts/validate_overlay_decisions.py`
   - project overlay 문서의 unresolved placeholder를 `first-success` 또는 `phase2` readiness 기준으로 검사하는 validator다.
 - `scripts/validate_overlay_consistency.py`
-  - project overlay 문서 간 참조, runtime instruction entrypoint 연결, 책임 경계 불일치를 검사하는 cross-document consistency checker다.
+  - project overlay 문서 간 참조, runtime instruction entrypoint 연결, 책임 경계 불일치를 검사하는 cross-document consistency checker다. `--mode incremental`은 brownfield partial adoption의 safe gap과 blocker를 구분하는 intermediate mode다.
 - `scripts/adopt_dry_run.py`
   - 기존 프로젝트의 현재 overlay 상태를 bootstrap baseline과 비교해 missing, unchanged, differing, conflict candidate를 read-only로 분류하는 adopt dry-run이다.
 - `scripts/adopt_safe_write.py`

@@ -14,7 +14,12 @@
 
 ```bash
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
+python3 vendor/harness-kit/scripts/validate_overlay_consistency.py . --mode incremental
 ```
+
+- 기본값인 full mode는 complete overlay shape를 요구한다.
+- `--mode incremental`은 already-underway project의 partial adoption 상태를 읽을 때 쓴다.
+- incremental mode는 missing overlay docs와 missing runtime entrypoints를 non-blocking follow-up, 즉 safe gap으로 보고, legacy leftover, stale vendored path, broken traversal chain 같은 unsafe state는 계속 blocking으로 본다.
 
 ## 검사 대상 문서
 
@@ -82,13 +87,17 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 - 통과 시:
   - `overlay consistency validation passed.`
+  - incremental mode면 `overlay consistency validation passed for mode 'incremental'.`
+  - incremental mode에서 아직 없는 문서나 runtime entrypoint는 `Still missing ... allowed in incremental mode:` 섹션으로 함께 출력된다.
 - 실패 시:
   - `overlay consistency validation failed.`
+  - incremental mode면 `overlay consistency validation failed for mode 'incremental'.`
   - 어떤 문서에서 어떤 계약이 깨졌는지 bullet 목록으로 출력한다.
 
 ## unresolved decision validator와의 관계
 
 - `validate_overlay_consistency.py`는 문서 간 연결, runtime instruction entrypoint 연결, 책임 경계를 본다.
+- incremental mode는 full consistency를 대체하지 않고, partial adoption 상태에서 "지금 계속 진행해도 안전한가"를 먼저 보는 intermediate gate다.
 - `validate_overlay_decisions.py`는 placeholder와 readiness 상태를 본다.
 - 둘은 대체 관계가 아니라 보완 관계다.
 
@@ -99,4 +108,5 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 ```bash
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
+python3 vendor/harness-kit/scripts/validate_overlay_consistency.py . --mode incremental
 ```

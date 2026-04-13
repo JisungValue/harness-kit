@@ -57,9 +57,9 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             bootstrap_reference=f"{vendor_path}/bootstrap/language_conventions/python_coding_conventions_template.md",
         )
 
-    def run_checker(self, target: Path) -> subprocess.CompletedProcess[str]:
+    def run_checker(self, target: Path, *extra_args: str) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
-            [sys.executable, str(CONSISTENCY_SCRIPT), str(target)],
+            [sys.executable, str(CONSISTENCY_SCRIPT), str(target), *extra_args],
             cwd=ROOT,
             capture_output=True,
             text=True,
@@ -75,6 +75,119 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("overlay consistency validation passed", result.stdout)
+
+    def test_incremental_mode_passes_partial_overlay_and_reports_missing_followups(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            for relative_path in (
+                "AGENTS.md",
+                "CLAUDE.md",
+                "GEMINI.md",
+                "docs/decisions/README.md",
+                "docs/standard/architecture.md",
+                "docs/standard/implementation_order.md",
+                "docs/standard/coding_conventions_project.md",
+                "docs/standard/quality_gate_profile.md",
+                "docs/standard/testing_profile.md",
+                "docs/standard/commit_rule.md",
+            ):
+                (target / relative_path).unlink()
+
+            result = self.run_checker(target, "--mode", "incremental")
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("overlay consistency validation passed for mode 'incremental'.", result.stdout)
+            self.assertIn("Still missing overlay docs allowed in incremental mode:", result.stdout)
+            self.assertIn("docs/decisions/README.md", result.stdout)
+            self.assertIn("docs/standard/architecture.md", result.stdout)
+            self.assertIn("Still missing runtime instruction entrypoints allowed in incremental mode:", result.stdout)
+            self.assertIn("AGENTS.md", result.stdout)
+
+    def test_incremental_mode_passes_when_overlay_is_not_bootstrapped_yet(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            target.mkdir(parents=True)
+
+            result = self.run_checker(target, "--mode", "incremental")
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("overlay consistency validation passed for mode 'incremental'.", result.stdout)
+            self.assertIn("Still missing overlay docs allowed in incremental mode:", result.stdout)
+            self.assertIn("docs/project_entrypoint.md", result.stdout)
+            self.assertIn("Still missing runtime instruction entrypoints allowed in incremental mode:", result.stdout)
+            self.assertIn("AGENTS.md", result.stdout)
+
+    def test_incremental_mode_fails_when_adapter_exists_without_agents(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+            (target / "AGENTS.md").unlink()
+
+            result = self.run_checker(target, "--mode", "incremental")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("overlay consistency validation failed for mode 'incremental'.", result.stderr)
+            self.assertIn("CLAUDE.md: `AGENTS.md` 없이 adapter entrypoint만 부분 도입된 상태는 허용되지 않습니다.", result.stderr)
+
+    def test_incremental_mode_still_fails_on_legacy_project_entrypoint_leftover(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+            legacy_path = target / "docs/harness_guide.md"
+            legacy_path.write_text(
+                (target / "docs/project_entrypoint.md").read_text(encoding="utf-8"),
+                encoding="utf-8",
+            )
+
+            result = self.run_checker(target, "--mode", "incremental")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("legacy project-local entrypoint가 남아 있습니다", result.stderr)
+
+    def test_incremental_mode_fails_on_stale_localized_harness_guide_path(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            for relative_path in (
+                "AGENTS.md",
+                "CLAUDE.md",
+                "GEMINI.md",
+                "docs/decisions/README.md",
+                "docs/standard/architecture.md",
+                "docs/standard/implementation_order.md",
+                "docs/standard/coding_conventions_project.md",
+                "docs/standard/quality_gate_profile.md",
+                "docs/standard/testing_profile.md",
+                "docs/standard/commit_rule.md",
+            ):
+                (target / relative_path).unlink()
+
+            guide_path = target / "docs/project_entrypoint.md"
+            guide_text = guide_path.read_text(encoding="utf-8")
+            guide_text = guide_text.replace(
+                "vendor/harness-kit/docs/harness_guide.md",
+                "third_party/harness-kit/docs/harness_guide.md",
+                1,
+            )
+            guide_path.write_text(guide_text, encoding="utf-8")
+
+            result = self.run_checker(target, "--mode", "incremental")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("vendored harness guide 경로가 실제 프로젝트에서 존재하지 않습니다", result.stderr)
+
+    def test_incremental_mode_on_full_overlay_suggests_full_validation(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            result = self.run_checker(target, "--mode", "incremental")
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("No incremental follow-ups remain.", result.stdout)
 
     def test_missing_project_doc_link_in_harness_guide_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:

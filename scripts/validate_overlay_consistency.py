@@ -57,11 +57,21 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         type=Path,
         help="Target project root. Defaults to the current directory.",
     )
+    parser.add_argument(
+        "--mode",
+        choices=("full", "incremental"),
+        default="full",
+        help="Validation mode. `full` requires the complete overlay set, `incremental` allows safe adoption gaps.",
+    )
     return parser.parse_args(argv)
 
 
 def read_text(project_root: Path, relative_path: str) -> str:
     return (project_root / relative_path).read_text(encoding="utf-8")
+
+
+def path_exists(project_root: Path, relative_path: str) -> bool:
+    return (project_root / relative_path).is_file()
 
 
 def extract_h2_section(text: str, heading: str) -> list[str]:
@@ -112,14 +122,17 @@ def partition_existing_file_paths(project_root: Path, paths: list[str]) -> tuple
     return existing, missing
 
 
-def validate_project_entrypoint(project_root: Path, errors: list[str]) -> None:
+def validate_project_entrypoint(project_root: Path, errors: list[str], mode: str) -> None:
+    if mode == "incremental" and not path_exists(project_root, "docs/project_entrypoint.md"):
+        return
+
     try:
         guide = read_text(project_root, "docs/project_entrypoint.md")
         traversal_lines = extract_h2_section(guide, "실행 계약")
         common_lines = extract_h2_section(guide, "공통 규칙")
         project_lines = extract_h2_section(guide, "프로젝트 전용 규칙")
         decisions_lines = extract_h2_section(guide, "프로젝트 결정 문서")
-    except ValueError as exc:
+    except (FileNotFoundError, ValueError) as exc:
         errors.append(f"docs/project_entrypoint.md: {exc}")
         return
 
@@ -170,7 +183,10 @@ def validate_project_entrypoint(project_root: Path, errors: list[str]) -> None:
         errors.append("docs/project_entrypoint.md: `docs/decisions/README.md`를 프로젝트 결정 문서 진입점으로 연결하지 않습니다.")
 
 
-def validate_decisions_index(project_root: Path, errors: list[str]) -> None:
+def validate_decisions_index(project_root: Path, errors: list[str], mode: str) -> None:
+    if mode == "incremental" and not path_exists(project_root, "docs/decisions/README.md"):
+        return
+
     try:
         decisions_index = read_text(project_root, "docs/decisions/README.md")
         extract_h2_section(decisions_index, "문서 역할")
@@ -180,7 +196,7 @@ def validate_decisions_index(project_root: Path, errors: list[str]) -> None:
         extract_h2_section(decisions_index, "읽기 방법")
         current_lines = extract_h2_section(decisions_index, "Current Decisions")
         superseded_lines = extract_h2_section(decisions_index, "Superseded Decisions")
-    except ValueError as exc:
+    except (FileNotFoundError, ValueError) as exc:
         errors.append(f"docs/decisions/README.md: {exc}")
         return
 
@@ -212,12 +228,18 @@ def validate_decision_record(project_root: Path, relative_path: str, errors: lis
             errors.append(f"{relative_path}: `## {heading}` 섹션이 없습니다.")
 
 
-def validate_runtime_entrypoints(project_root: Path, errors: list[str]) -> None:
+def validate_runtime_entrypoints(project_root: Path, errors: list[str], mode: str) -> None:
+    if mode == "incremental" and not path_exists(project_root, "AGENTS.md"):
+        for adapter_path in ("CLAUDE.md", "GEMINI.md"):
+            if path_exists(project_root, adapter_path):
+                errors.append(f"{adapter_path}: `AGENTS.md` 없이 adapter entrypoint만 부분 도입된 상태는 허용되지 않습니다.")
+        return
+
     try:
         agents = read_text(project_root, "AGENTS.md")
         agent_lines = extract_h2_section(agents, "우선 읽을 문서")
         traversal_lines = extract_h2_section(agents, "실행 계약")
-    except ValueError as exc:
+    except (FileNotFoundError, ValueError) as exc:
         errors.append(f"AGENTS.md: {exc}")
         return
 
@@ -236,12 +258,16 @@ def validate_runtime_entrypoints(project_root: Path, errors: list[str]) -> None:
     agent_paths = set(extract_bullet_paths(agent_lines))
     if "docs/project_entrypoint.md" not in agent_paths:
         errors.append("AGENTS.md: `docs/project_entrypoint.md`를 우선 읽을 문서로 연결하지 않습니다.")
+    elif not path_exists(project_root, "docs/project_entrypoint.md"):
+        errors.append("AGENTS.md: `docs/project_entrypoint.md`를 가리키지만 실제 파일이 없습니다.")
 
     for adapter_path in ("CLAUDE.md", "GEMINI.md"):
+        if mode == "incremental" and not path_exists(project_root, adapter_path):
+            continue
         try:
             adapter = read_text(project_root, adapter_path)
             adapter_lines = extract_h2_section(adapter, "공통 진입점")
-        except ValueError as exc:
+        except (FileNotFoundError, ValueError) as exc:
             errors.append(f"{adapter_path}: {exc}")
             continue
 
@@ -260,7 +286,16 @@ def validate_legacy_project_entrypoint_absence(project_root: Path, errors: list[
         )
 
 
-def validate_architecture_and_order(project_root: Path, errors: list[str]) -> None:
+def validate_architecture_and_order(project_root: Path, errors: list[str], mode: str) -> None:
+    if mode == "incremental" and not path_exists(project_root, "docs/standard/implementation_order.md"):
+        return
+
+    if mode == "incremental" and not path_exists(project_root, "docs/standard/architecture.md"):
+        errors.append(
+            "docs/standard/implementation_order.md: implementation_order 문서가 있으면 architecture.md도 함께 있어야 합니다."
+        )
+        return
+
     implementation_order = read_text(project_root, "docs/standard/implementation_order.md")
     if "architecture.md" not in implementation_order:
         errors.append(
@@ -268,45 +303,55 @@ def validate_architecture_and_order(project_root: Path, errors: list[str]) -> No
         )
 
 
-def validate_quality_gate_and_testing(project_root: Path, errors: list[str]) -> None:
-    quality_gate = read_text(project_root, "docs/standard/quality_gate_profile.md")
-    testing = read_text(project_root, "docs/standard/testing_profile.md")
+def validate_quality_gate_and_testing(project_root: Path, errors: list[str], mode: str) -> None:
+    has_quality_gate = path_exists(project_root, "docs/standard/quality_gate_profile.md")
+    has_testing = path_exists(project_root, "docs/standard/testing_profile.md")
 
-    if "testing_profile.md" not in quality_gate:
+    if mode == "incremental" and not has_quality_gate and not has_testing:
+        return
+
+    quality_gate = read_text(project_root, "docs/standard/quality_gate_profile.md") if has_quality_gate else ""
+    testing = read_text(project_root, "docs/standard/testing_profile.md") if has_testing else ""
+
+    if has_quality_gate and "testing_profile.md" not in quality_gate:
         errors.append(
             "docs/standard/quality_gate_profile.md: testing_profile.md 참조가 없어 테스트 세부 기준 책임 경계가 불명확합니다."
         )
-    if "quality_gate_profile.md" not in testing:
+    if has_testing and "quality_gate_profile.md" not in testing:
         errors.append(
             "docs/standard/testing_profile.md: quality_gate_profile.md 참조가 없어 테스트 명령 책임 경계가 불명확합니다."
         )
 
-    try:
-        testing_owner_lines = extract_h2_section(testing, "quality_gate_profile에 두는 항목")
-    except ValueError as exc:
-        errors.append(f"docs/standard/testing_profile.md: {exc}")
-        return
+    if has_testing:
+        try:
+            testing_owner_lines = extract_h2_section(testing, "quality_gate_profile에 두는 항목")
+        except ValueError as exc:
+            errors.append(f"docs/standard/testing_profile.md: {exc}")
+            return
 
-    joined = "\n".join(testing_owner_lines)
-    required_keywords = (
-        "실행 명령",
-        "필수 여부",
-        "언제 test를 반드시 돌려야 하는지",
-        "테스트 실패 시 커밋/승인 불가 기준",
-    )
-    for phrase in required_keywords:
-        if phrase not in joined:
-            errors.append(
-                f"docs/standard/testing_profile.md: quality_gate_profile 책임 항목에서 `{phrase}` 설명이 빠져 있습니다."
-            )
+        joined = "\n".join(testing_owner_lines)
+        required_keywords = (
+            "실행 명령",
+            "필수 여부",
+            "언제 test를 반드시 돌려야 하는지",
+            "테스트 실패 시 커밋/승인 불가 기준",
+        )
+        for phrase in required_keywords:
+            if phrase not in joined:
+                errors.append(
+                    f"docs/standard/testing_profile.md: quality_gate_profile 책임 항목에서 `{phrase}` 설명이 빠져 있습니다."
+                )
 
-    if "testing_profile.md" not in quality_gate or "세부 테스트 범위" not in quality_gate:
+    if has_quality_gate and ("testing_profile.md" not in quality_gate or "세부 테스트 범위" not in quality_gate):
         errors.append(
             "docs/standard/quality_gate_profile.md: test 섹션이 testing_profile.md로 세부 기준을 연결하지 않습니다."
         )
 
 
-def validate_coding_conventions(project_root: Path, errors: list[str]) -> None:
+def validate_coding_conventions(project_root: Path, errors: list[str], mode: str) -> None:
+    if mode == "incremental" and not path_exists(project_root, "docs/standard/coding_conventions_project.md"):
+        return
+
     coding = read_text(project_root, "docs/standard/coding_conventions_project.md")
 
     if "docs/standard/quality_gate_profile.md" not in coding:
@@ -340,7 +385,10 @@ def validate_coding_conventions(project_root: Path, errors: list[str]) -> None:
         )
 
 
-def validate_commit_rule(project_root: Path, errors: list[str]) -> None:
+def validate_commit_rule(project_root: Path, errors: list[str], mode: str) -> None:
+    if mode == "incremental" and not path_exists(project_root, "docs/standard/commit_rule.md"):
+        return
+
     commit_rule = read_text(project_root, "docs/standard/commit_rule.md")
 
     try:
@@ -363,14 +411,31 @@ def validate_commit_rule(project_root: Path, errors: list[str]) -> None:
             )
 
 
-def validate_required_docs(project_root: Path, errors: list[str]) -> None:
-    for relative_path in REQUIRED_DOCS:
-        if not (project_root / relative_path).exists():
+def collect_missing_required_paths(project_root: Path) -> tuple[list[str], list[str]]:
+    missing_docs = [relative_path for relative_path in REQUIRED_DOCS if not path_exists(project_root, relative_path)]
+    missing_runtime = [relative_path for relative_path in REQUIRED_RUNTIME_ENTRYPOINTS if not path_exists(project_root, relative_path)]
+    return missing_docs, missing_runtime
+
+
+def validate_required_docs(project_root: Path, errors: list[str], mode: str) -> tuple[list[str], list[str]]:
+    missing_docs, missing_runtime = collect_missing_required_paths(project_root)
+
+    if mode == "full":
+        for relative_path in missing_docs:
             errors.append(f"필수 overlay 문서가 없습니다: {relative_path}")
 
-    for relative_path in REQUIRED_RUNTIME_ENTRYPOINTS:
-        if not (project_root / relative_path).exists():
+        for relative_path in missing_runtime:
             errors.append(f"필수 runtime instruction entrypoint가 없습니다: {relative_path}")
+
+    return missing_docs, missing_runtime
+
+
+def print_missing_paths(header: str, paths: list[str], stream) -> None:
+    if not paths:
+        return
+    print(header, file=stream)
+    for relative_path in paths:
+        print(f"- {relative_path}", file=stream)
 
 
 def main(argv: list[str] | None = None) -> int:
@@ -378,27 +443,59 @@ def main(argv: list[str] | None = None) -> int:
     project_root = args.target.expanduser().resolve()
     errors: list[str] = []
 
-    validate_required_docs(project_root, errors)
+    missing_docs, missing_runtime = validate_required_docs(project_root, errors, args.mode)
     if errors:
         print("overlay consistency validation failed.", file=sys.stderr)
         for error in errors:
             print(f"- {error}", file=sys.stderr)
         return 1
 
-    validate_project_entrypoint(project_root, errors)
-    validate_decisions_index(project_root, errors)
-    validate_runtime_entrypoints(project_root, errors)
+    validate_project_entrypoint(project_root, errors, args.mode)
+    validate_decisions_index(project_root, errors, args.mode)
+    validate_runtime_entrypoints(project_root, errors, args.mode)
     validate_legacy_project_entrypoint_absence(project_root, errors)
-    validate_architecture_and_order(project_root, errors)
-    validate_quality_gate_and_testing(project_root, errors)
-    validate_coding_conventions(project_root, errors)
-    validate_commit_rule(project_root, errors)
+    validate_architecture_and_order(project_root, errors, args.mode)
+    validate_quality_gate_and_testing(project_root, errors, args.mode)
+    validate_coding_conventions(project_root, errors, args.mode)
+    validate_commit_rule(project_root, errors, args.mode)
 
     if errors:
+        if args.mode == "incremental":
+            print("overlay consistency validation failed for mode 'incremental'.", file=sys.stderr)
+            for error in errors:
+                print(f"- {error}", file=sys.stderr)
+            print_missing_paths(
+                "Still missing overlay docs allowed in incremental mode:",
+                missing_docs,
+                sys.stderr,
+            )
+            print_missing_paths(
+                "Still missing runtime instruction entrypoints allowed in incremental mode:",
+                missing_runtime,
+                sys.stderr,
+            )
+            return 1
+
         print("overlay consistency validation failed.", file=sys.stderr)
         for error in errors:
             print(f"- {error}", file=sys.stderr)
         return 1
+
+    if args.mode == "incremental":
+        print("overlay consistency validation passed for mode 'incremental'.")
+        print_missing_paths(
+            "Still missing overlay docs allowed in incremental mode:",
+            missing_docs,
+            sys.stdout,
+        )
+        print_missing_paths(
+            "Still missing runtime instruction entrypoints allowed in incremental mode:",
+            missing_runtime,
+            sys.stdout,
+        )
+        if not missing_docs and not missing_runtime:
+            print("No incremental follow-ups remain. Re-run without `--mode incremental` to confirm the full overlay shape.")
+        return 0
 
     print("overlay consistency validation passed.")
     return 0
