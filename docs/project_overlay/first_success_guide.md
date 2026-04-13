@@ -9,6 +9,7 @@
 - 아래 예시는 `vendor/harness-kit/`에 vendored 되어 있다고 가정한다.
 - Python, Java, Kotlin 중 이번 프로젝트의 주 언어를 하나 먼저 정한다.
 - bootstrap과 validator 예시는 모두 Python 3 runtime으로 실행한다.
+- `vendor/harness-kit/`가 아닌 다른 경로를 쓴다면 init CLI에서 같은 경로를 `--vendor-path`로 함께 준다.
 - 현재 MVP는 생성 대상 문서 경로만 검사하므로, first success를 빠르게 재현하려면 빈 디렉터리 또는 거의 빈 디렉터리에서 시작하는 편이 안전하다.
 
 ## 목표 성공 상태
@@ -19,6 +20,29 @@ first success의 최소 기준은 아래 둘이다.
 - runtime instruction entrypoint 세트(`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`)가 함께 생긴다.
 - 로컬 `docs/project_entrypoint.md`가 공통 kit 문서와 프로젝트 전용 문서를 함께 가리킨다.
 - 로컬 `docs/decisions/README.md`가 프로젝트 결정 문서 진입점으로 함께 생긴다.
+
+## Confidence Path
+
+greenfield first success는 아래 신호를 순서대로 쌓는 경로로 본다.
+
+1. bootstrap output
+   - `bootstrap_init.py`가 최소 문서 세트와 runtime entrypoint 세트를 생성한다.
+   - non-default vendoring이면 `--vendor-path`를 받은 generated reference가 즉시 현지화된다.
+2. minimum docs present
+   - `check_first_success_docs.py`가 최소 문서 세트 존재 여부를 가장 얕게 확인한다.
+3. ready for the next session
+   - `validate_overlay_decisions.py --readiness first-success`가 canonical field와 허용 가능한 unresolved marker 경계를 확인한다.
+   - `validate_overlay_consistency.py`가 runtime traversal contract, decisions index link, vendored guide/bootstrap reference가 실제로 이어지는지 확인한다.
+4. future-session guardrail installed
+   - `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사하고 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꿔 future PR에서도 같은 검사를 고정한다.
+
+위 4단계가 되면 새 세션이 최소 문서 세트, runtime traversal, decisions entrypoint, early CI guardrail을 같은 계약으로 따라갈 수 있다.
+
+아직 수동 확인이 남는 항목:
+
+- `architecture.md`, `implementation_order.md`, `coding_conventions_project.md`의 프로젝트별 실제 결정 내용
+- `quality_gate_profile.md`, `testing_profile.md`, `commit_rule.md`의 팀/프로젝트 정책 확정
+- workflow template의 ref pin을 실제 릴리스 태그 또는 고정 SHA로 바꾸는 작업
 
 ## 최소 문서 세트
 
@@ -42,10 +66,11 @@ first success의 최소 기준은 아래 둘이다.
 1. 프로젝트 루트에 `harness-kit`를 vendoring 하거나 참조 가능한 경로로 둔다.
 2. 이번 프로젝트의 주 언어를 하나 정한다.
 3. init CLI 또는 수동 복사로 최소 문서 세트를 만든다.
-4. `docs/project_entrypoint.md`와 `docs/decisions/README.md`를 먼저 읽고, 현재 프로젝트에서 바로 확정할 중요한 결정이 있는지 확인한다.
-5. `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md` 안의 vendored 경로를 실제 배치 경로와 맞춘다.
-6. 아래 첫 검증 명령으로 최소 문서 세트 존재 여부를 확인한다.
-6. 그다음 프로젝트 결정이 필요한 항목을 `architecture.md`, `implementation_order.md`, `coding_conventions_project.md`부터 채운다.
+4. `vendor/harness-kit/`가 아닌 경로에 kit를 뒀다면 init CLI에 `--vendor-path <actual-path>`를 함께 준다. 이미 default 경로로 생성했다면 이후 수동 현지화가 필요하다.
+5. `docs/project_entrypoint.md`와 `docs/decisions/README.md`를 먼저 읽고, 현재 프로젝트에서 바로 확정할 중요한 결정이 있는지 확인한다.
+6. 아래 첫 검증 명령으로 최소 문서 세트 존재 여부와 next-session readiness를 확인한다.
+7. local validator가 통과하면 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사하고 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꾼다.
+8. 그다음 프로젝트 결정이 필요한 항목을 `architecture.md`, `implementation_order.md`, `coding_conventions_project.md`부터 채운다.
 
 ## 가장 빠른 경로: init CLI
 
@@ -60,6 +85,12 @@ python3 vendor/harness-kit/scripts/bootstrap_init.py . --language python
 ```bash
 python3 vendor/harness-kit/scripts/bootstrap_init.py . --language java
 python3 vendor/harness-kit/scripts/bootstrap_init.py . --language kotlin
+```
+
+non-default vendoring이면 같은 시점에 vendored 경로도 같이 고정한다.
+
+```bash
+python3 third_party/harness-kit/scripts/bootstrap_init.py . --language python --vendor-path third_party/harness-kit
 ```
 
 ### 기대 결과
@@ -130,12 +161,20 @@ python3 vendor/harness-kit/scripts/check_first_success_docs.py .
 - 실패면 빠진 문서 경로가 bullet 목록으로 출력된다.
 
 이 명령은 문서 존재 여부만 확인하는 가장 얕은 체크다.
-runtime instruction entrypoint 연결과 unresolved placeholder readiness까지 보려면 아래 validator를 이어서 실행한다. `vendor/harness-kit/`가 아닌 다른 경로에 kit를 뒀다면, validator보다 먼저 `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 vendored 경로를 실제 배치 경로로 맞춰야 한다.
+runtime instruction entrypoint 연결과 unresolved placeholder readiness까지 보려면 아래 validator를 이어서 실행한다. `bootstrap_init.py`를 non-default vendoring으로 실행할 때 `--vendor-path`를 함께 줬다면 별도 현지화 없이 바로 다음 validator로 넘어갈 수 있다. 수동 복사 경로나 default 경로로 먼저 생성한 뒤 위치를 바꾼 경우에는 validator보다 먼저 `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 vendored 경로를 실제 배치 경로로 맞춘다.
 
 ```bash
 python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ```
+
+local validator가 통과하면 아래 workflow template를 복사해 future-session CI guardrail을 붙인다.
+
+```text
+vendor/harness-kit/docs/project_overlay/harness_doc_guard_workflow_template.yml -> project .github/workflows/ 아래 harness doc guard workflow 파일
+```
+
+non-default vendoring이면 source 경로의 `vendor/harness-kit/` 부분만 실제 경로로 바꾸고, workflow 안의 `@<pin-tag-or-sha>`를 릴리스 태그 또는 고정 SHA로 치환한다.
 
 ## 첫 검증 포인트
 
@@ -193,7 +232,9 @@ docs/
 
 - init CLI 실패 시: 충돌한 파일을 정리하거나, 정말 overwrite가 맞는 경우에만 `--force`를 쓴다.
 - 문서는 생겼는데 경로가 이상하면: `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 vendored 경로를 먼저 확인한다.
+- non-default vendoring인데 매번 수동 수정이 생기면: bootstrap 단계부터 `--vendor-path <actual-path>`를 같이 줬는지 먼저 확인한다.
 - non-default vendored 경로라면: localize가 끝나기 전에는 consistency validator green을 기대하지 않는다.
+- local validator는 통과했는데 이후 PR에서 drift가 다시 생기면: `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 복사했고 `@<pin-tag-or-sha>`를 실제 ref로 바꿨는지 확인한다.
 - consistency checker가 entrypoint 관련으로 실패하면: `AGENTS.md -> docs/project_entrypoint.md`, `CLAUDE.md`/`GEMINI.md` -> `AGENTS.md` 연결을 먼저 확인한다.
 - agent가 첫 문서만 읽고 멈추는 것 같으면: `AGENTS.md`와 `docs/project_entrypoint.md`의 실행 계약 문구가 남아 있는지 먼저 확인한다.
 - 문서는 맞는데 무엇부터 채워야 할지 막히면: `architecture.md`, `implementation_order.md`, `coding_conventions_project.md` 순으로 프로젝트 결정을 채운다.

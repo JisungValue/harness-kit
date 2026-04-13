@@ -159,6 +159,7 @@ def bundle_readme_text(bundle_files: list[BundleFile]) -> str:
             "- `docs/how_harness_kit_works.md`",
             "- `docs/project_overlay/first_success_guide.md`",
             "- `docs/project_overlay/adopt_dry_run.md`",
+            "- `docs/project_overlay/harness_doc_guard_workflow_template.yml`",
             "- `scripts/check_first_success_docs.py`",
             "",
             "## Included",

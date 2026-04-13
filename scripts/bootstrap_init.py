@@ -6,9 +6,12 @@ import argparse
 import sys
 from dataclasses import dataclass
 from pathlib import Path
+from pathlib import PurePosixPath
+from pathlib import PureWindowsPath
 
 
 ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_VENDOR_PATH = "vendor/harness-kit"
 
 TEMPLATE_TARGETS = {
     "docs/project_overlay/agent_entrypoint_template.md": "AGENTS.md",
@@ -60,6 +63,11 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Primary project language for bootstrap convention references.",
     )
     parser.add_argument(
+        "--vendor-path",
+        default=DEFAULT_VENDOR_PATH,
+        help="Project-root relative vendored harness-kit path used in generated references.",
+    )
+    parser.add_argument(
         "--force",
         action="store_true",
         help="Overwrite generated files if they already exist.",
@@ -67,19 +75,46 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     return parser.parse_args(argv)
 
 
-def build_plan(target_root: Path, language: str) -> list[PlannedFile]:
+def normalize_vendor_path(raw_path: str) -> str:
+    candidate = raw_path.replace("\\", "/").strip()
+    windows_path = PureWindowsPath(candidate)
+    if candidate.startswith("/") or windows_path.is_absolute() or windows_path.drive:
+        raise ValueError("vendor path must be project-root relative, not absolute")
+
+    normalized = candidate.strip("/")
+    vendor_path = PurePosixPath(normalized)
+
+    if not normalized or normalized == ".":
+        raise ValueError("vendor path must be a non-empty project-root relative path")
+    if any(part in {"", ".", ".."} for part in vendor_path.parts):
+        raise ValueError("vendor path must stay inside the project root")
+
+    return vendor_path.as_posix()
+
+
+def build_plan(target_root: Path, language: str, vendor_path: str = DEFAULT_VENDOR_PATH) -> list[PlannedFile]:
     plan: list[PlannedFile] = []
-    bootstrap_ref = LANGUAGE_BOOTSTRAP_PATHS[language]
+    bootstrap_ref = f"{vendor_path}/bootstrap/language_conventions/{Path(LANGUAGE_BOOTSTRAP_PATHS[language]).name}"
+    harness_guide_ref = f"{vendor_path}/docs/harness_guide.md"
 
     for source_rel, destination_rel in TEMPLATE_TARGETS.items():
         source = ROOT / source_rel
         destination = target_root / destination_rel
         content = source.read_text(encoding="utf-8")
+        if destination_rel == "docs/project_entrypoint.md":
+            content = customize_project_entrypoint_template(content, harness_guide_ref)
         if destination_rel == "docs/standard/coding_conventions_project.md":
             content = customize_coding_conventions_template(content, language, bootstrap_ref)
         plan.append(PlannedFile(source=source, destination=destination, content=content))
 
     return plan
+
+
+def customize_project_entrypoint_template(content: str, harness_guide_ref: str) -> str:
+    default_reference = f"{DEFAULT_VENDOR_PATH}/docs/harness_guide.md"
+    if default_reference not in content:
+        raise ValueError(f"Expected template snippet not found: {default_reference}")
+    return content.replace(default_reference, harness_guide_ref, 1)
 
 
 def customize_coding_conventions_template(content: str, language: str, bootstrap_ref: str) -> str:
@@ -155,7 +190,12 @@ def print_plan(plan: list[PlannedFile], target_root: Path, overwritten: bool) ->
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     target_root = args.target.expanduser().resolve()
-    plan = build_plan(target_root, args.language)
+    try:
+        vendor_path = normalize_vendor_path(args.vendor_path)
+        plan = build_plan(target_root, args.language, vendor_path)
+    except ValueError as exc:
+        print(f"bootstrap init failed: {exc}", file=sys.stderr)
+        return 1
     preflight_errors = collect_preflight_errors(target_root, plan)
     conflicts = find_conflicts(plan)
 

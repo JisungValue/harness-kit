@@ -47,12 +47,15 @@ class ValidateDownstreamBundleTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             output = Path(tmp_dir) / "bundle"
             self.assertEqual(self.run_generate(output).returncode, 0)
-            (output / "docs/harness_guide.md").unlink()
+            (output / "docs/project_overlay/harness_doc_guard_workflow_template.yml").unlink()
 
             validate_result = self.run_validate(output)
 
             self.assertEqual(validate_result.returncode, 1)
-            self.assertIn("missing required bundle file: docs/harness_guide.md", validate_result.stderr)
+            self.assertIn(
+                "missing required bundle file: docs/project_overlay/harness_doc_guard_workflow_template.yml",
+                validate_result.stderr,
+            )
 
     def test_unexpected_maintainer_path_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:

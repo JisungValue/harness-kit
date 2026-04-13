@@ -12,6 +12,7 @@
 
 - 새 프로젝트에 최소 overlay 문서 세트를 생성한다.
 - first success 상태를 로컬에서 확인한다.
+- future-session consistency를 doc-guard CI로 조기에 고정한다.
 - overlay 문서의 unresolved decision을 점검한다.
 - overlay 문서 간 교차 정합성을 점검한다.
 - 기존 프로젝트 상태를 read-only dry-run으로 읽고 baseline과 비교한다.
@@ -37,6 +38,7 @@
 
 - `bootstrap_init.py`, `check_first_success_docs.py`, validator 예시는 모두 Python 3 runtime이 필요하다.
 - 현재 bootstrap CLI는 `python`, `java`, `kotlin` language profile을 지원하지만, 실행 자체는 Python 3로 한다.
+- non-default vendoring이면 bootstrap 시점부터 `--vendor-path <actual-path>`를 함께 줘 generated reference를 바로 현지화한다.
 
 ```bash
 python3 vendor/harness-kit/scripts/bootstrap_init.py . --language python
@@ -44,7 +46,7 @@ python3 vendor/harness-kit/scripts/bootstrap_init.py . --language python
 
 5. bootstrap 직후 `docs/project_entrypoint.md`와 `docs/decisions/README.md`를 먼저 읽고, 현재 프로젝트에서 구조/정책/예외/책임 위치 중 바로 확정해야 할 결정이 있는지 확인한다.
 
-6. `harness-kit`를 `vendor/harness-kit/` 이외의 경로에 두었다면, validator를 돌리기 전에 아래 파일의 vendored 경로를 실제 배치 경로로 먼저 현지화한다.
+6. `harness-kit`를 `vendor/harness-kit/` 이외의 경로에 두었다면, bootstrap 때 `--vendor-path`를 이미 준 경우 generated reference는 바로 맞는다. 그 옵션 없이 생성했다면 validator를 돌리기 전에 아래 파일의 vendored 경로를 실제 배치 경로로 먼저 현지화한다.
 
 - `docs/project_entrypoint.md`
 - `docs/standard/coding_conventions_project.md`
@@ -57,7 +59,9 @@ python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness f
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ```
 
-8. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
+8. local validator가 통과하면 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사하고 workflow 안의 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꾼다.
+
+9. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
 
 ### 기존 프로젝트 또는 부분 도입 상태
 
@@ -109,6 +113,9 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
   - 새 프로젝트용 문서 세트를 실제로 생성한다.
 - `check_first_success_docs.py`
   - 최소 문서 세트 존재 여부만 가장 빠르게 확인한다.
+- `docs/project_overlay/harness_doc_guard_workflow_template.yml`
+  - first-success local validator가 통과한 뒤 future-session consistency를 CI에 고정하는 workflow template다.
+  - 복사 후 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꿔 사용한다.
 - `validate_overlay_decisions.py`
   - unresolved placeholder와 readiness 상태를 보고, 먼저 고쳐야 하는 canonical field를 우선순위와 함께 보여 준다.
 - `validate_overlay_consistency.py`
@@ -131,10 +138,12 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 - init 대상 경로에 이미 생성 대상 문서가 있어 fail-fast가 발생함
 - vendored path를 실제 프로젝트 경로에 맞게 현지화하지 않음
+- non-default vendoring인데 bootstrap 때 `--vendor-path`를 주지 않아 unnecessary 수동 현지화가 생김
 - non-default vendored path인데 현지화 전에 consistency validator부터 실행해 false confidence 또는 즉시 실패를 만듦
 - agent가 `AGENTS.md`만 읽고 `docs/project_entrypoint.md`, core guide, `docs/standard/*`까지 따라가지 않음
 - 중요한 정책/예외/책임 위치 변경인데 `docs/decisions/README.md`와 관련 decision 문서를 같이 안 봄
 - `--language`를 실제 프로젝트와 다르게 선택함
+- local validator 이후 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 복사하지 않거나 `@<pin-tag-or-sha>`를 그대로 둬 future-session guardrail이 고정되지 않음
 - 기존 프로젝트에서 `adopt_dry_run.py` 결과를 보지 않고 validator를 너무 일찍 실행함
 - 기존 프로젝트에서 legacy `docs/harness_guide.md`를 그냥 두고 `docs/project_entrypoint.md`만 새로 생성해 반쪽 migration 상태가 됨
 - `validate_overlay_decisions.py`와 `validate_overlay_consistency.py`의 역할 차이를 혼동함

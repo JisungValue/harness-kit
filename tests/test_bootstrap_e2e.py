@@ -10,6 +10,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 BOOTSTRAP_SCRIPT = ROOT / "scripts" / "bootstrap_init.py"
+CONSISTENCY_SCRIPT = ROOT / "scripts" / "validate_overlay_consistency.py"
 TEMPLATE_MAPPINGS = {
     "docs/project_overlay/agent_entrypoint_template.md": "AGENTS.md",
     "docs/project_overlay/claude_entrypoint_template.md": "CLAUDE.md",
@@ -150,9 +151,32 @@ class BootstrapEndToEndTest(unittest.TestCase):
         )
         coding_conventions_path.write_text(content, encoding="utf-8")
 
+    def create_reference_files(
+        self,
+        project_root: Path,
+        harness_guide_reference: str,
+        bootstrap_reference: str,
+    ) -> None:
+        harness_guide_path = project_root / harness_guide_reference
+        harness_guide_path.parent.mkdir(parents=True, exist_ok=True)
+        harness_guide_path.write_text("# Harness Core Guide\n", encoding="utf-8")
+
+        bootstrap_path = project_root / bootstrap_reference
+        bootstrap_path.parent.mkdir(parents=True, exist_ok=True)
+        bootstrap_path.write_text("# Python Coding Conventions\n", encoding="utf-8")
+
     def run_first_success_command(self, project_root: Path) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
             [sys.executable, str(FIRST_SUCCESS_SCRIPT), str(project_root)],
+            cwd=project_root,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+
+    def run_consistency_command(self, project_root: Path) -> subprocess.CompletedProcess[str]:
+        return subprocess.run(
+            [sys.executable, str(CONSISTENCY_SCRIPT), str(project_root)],
             cwd=project_root,
             capture_output=True,
             text=True,
@@ -196,6 +220,48 @@ class BootstrapEndToEndTest(unittest.TestCase):
 
             self.assertEqual(verify_result.returncode, 0, verify_result.stderr)
             self.assertIn("first success docs are present", verify_result.stdout)
+
+    def test_init_cli_supports_localized_vendor_path_without_manual_edits(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_root = Path(tmp_dir) / "bootstrap-cli-localized-project"
+            harness_guide_reference = "third_party/harness-kit/docs/harness_guide.md"
+            bootstrap_reference = (
+                "third_party/harness-kit/bootstrap/language_conventions/"
+                "python_coding_conventions_template.md"
+            )
+
+            init_result = subprocess.run(
+                [
+                    sys.executable,
+                    str(BOOTSTRAP_SCRIPT),
+                    str(project_root),
+                    "--language",
+                    "python",
+                    "--vendor-path",
+                    "third_party/harness-kit",
+                ],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            self.assertEqual(init_result.returncode, 0, init_result.stderr)
+            self.assert_expected_files_exist(project_root)
+            self.assert_first_success_signals(
+                project_root,
+                harness_guide_reference,
+                bootstrap_reference,
+            )
+            self.create_reference_files(project_root, harness_guide_reference, bootstrap_reference)
+
+            verify_result = self.run_first_success_command(project_root)
+            consistency_result = self.run_consistency_command(project_root)
+
+            self.assertEqual(verify_result.returncode, 0, verify_result.stderr)
+            self.assertIn("first success docs are present", verify_result.stdout)
+            self.assertEqual(consistency_result.returncode, 0, consistency_result.stderr)
+            self.assertIn("overlay consistency validation passed", consistency_result.stdout)
 
     def test_manual_template_copy_reaches_same_minimum_doc_set(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:

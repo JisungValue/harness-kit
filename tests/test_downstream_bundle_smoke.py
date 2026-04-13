@@ -15,6 +15,7 @@ BOOTSTRAP_SCRIPT = ROOT / "scripts" / "bootstrap_init.py"
 CANONICAL_BUNDLE_ROOT = ROOT / "dist" / "harness-kit-project-bundle"
 DEFAULT_HARNESS_GUIDE_REFERENCE = "vendor/harness-kit/docs/harness_guide.md"
 FIRST_SUCCESS_SCRIPT = "check_first_success_docs.py"
+DEFAULT_VENDOR_RELATIVE_PATH = Path("vendor/harness-kit")
 
 
 def load_bootstrap_module():
@@ -41,13 +42,18 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             check=False,
         )
 
-    def vendor_generated_bundle(self, workspace_root: Path, project_name: str = "consumer-project") -> tuple[Path, Path]:
+    def vendor_generated_bundle(
+        self,
+        workspace_root: Path,
+        project_name: str = "consumer-project",
+        vendor_relative_path: Path = DEFAULT_VENDOR_RELATIVE_PATH,
+    ) -> tuple[Path, Path]:
         generate_result = self.run_generate_canonical_bundle()
         self.assertEqual(generate_result.returncode, 0, generate_result.stderr)
         self.assertTrue(CANONICAL_BUNDLE_ROOT.exists())
 
         project_root = workspace_root / project_name
-        vendor_root = project_root / "vendor" / "harness-kit"
+        vendor_root = project_root / vendor_relative_path
         vendor_root.parent.mkdir(parents=True, exist_ok=True)
         shutil.copytree(CANONICAL_BUNDLE_ROOT, vendor_root)
         return project_root, vendor_root
@@ -57,17 +63,22 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
         project_root: Path,
         script_name: str,
         *args: str,
+        vendor_relative_path: Path = DEFAULT_VENDOR_RELATIVE_PATH,
     ) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
-            [sys.executable, str(project_root / "vendor" / "harness-kit" / "scripts" / script_name), *args],
+            [sys.executable, str(project_root / vendor_relative_path / "scripts" / script_name), *args],
             cwd=project_root,
             capture_output=True,
             text=True,
             check=False,
         )
 
-    def run_first_success_command(self, project_root: Path) -> subprocess.CompletedProcess[str]:
-        return self.run_bundle_script(project_root, FIRST_SUCCESS_SCRIPT, ".")
+    def run_first_success_command(
+        self,
+        project_root: Path,
+        vendor_relative_path: Path = DEFAULT_VENDOR_RELATIVE_PATH,
+    ) -> subprocess.CompletedProcess[str]:
+        return self.run_bundle_script(project_root, FIRST_SUCCESS_SCRIPT, ".", vendor_relative_path=vendor_relative_path)
 
     def assert_maintainer_assets_absent(self, vendor_root: Path) -> None:
         self.assertFalse((vendor_root / "docs/kit_maintenance").exists())
@@ -75,22 +86,38 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
         self.assertFalse((vendor_root / "scripts/validate_downstream_bundle.py").exists())
         self.assertFalse((vendor_root / "harness.log").exists())
 
-    def assert_greenfield_bundle_language_flow(self, workspace_root: Path, language: str, bootstrap_reference: str) -> None:
-        project_root, vendor_root = self.vendor_generated_bundle(workspace_root, f"consumer-project-{language}")
+    def assert_greenfield_bundle_language_flow(
+        self,
+        workspace_root: Path,
+        language: str,
+        bootstrap_reference: str,
+        vendor_relative_path: Path = DEFAULT_VENDOR_RELATIVE_PATH,
+        vendor_path_arg: str | None = None,
+    ) -> None:
+        project_root, vendor_root = self.vendor_generated_bundle(
+            workspace_root,
+            f"consumer-project-{language}-{vendor_relative_path.name}",
+            vendor_relative_path=vendor_relative_path,
+        )
 
         self.assert_maintainer_assets_absent(vendor_root)
+        workflow_template = vendor_root / "docs/project_overlay/harness_doc_guard_workflow_template.yml"
+        self.assertTrue(workflow_template.exists())
+        self.assertIn("@<pin-tag-or-sha>", workflow_template.read_text(encoding="utf-8"))
 
+        init_args = [".", "--language", language]
+        if vendor_path_arg is not None:
+            init_args.extend(["--vendor-path", vendor_path_arg])
         init_result = self.run_bundle_script(
             project_root,
             "bootstrap_init.py",
-            ".",
-            "--language",
-            language,
+            *init_args,
+            vendor_relative_path=vendor_relative_path,
         )
         self.assertEqual(init_result.returncode, 0, init_result.stderr)
         self.assertIn("Created harness bootstrap docs in", init_result.stdout)
 
-        first_success_result = self.run_first_success_command(project_root)
+        first_success_result = self.run_first_success_command(project_root, vendor_relative_path=vendor_relative_path)
         self.assertEqual(first_success_result.returncode, 0, first_success_result.stderr)
         self.assertIn("first success docs are present", first_success_result.stdout)
 
@@ -101,7 +128,10 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
         )
         agents = (project_root / "AGENTS.md").read_text(encoding="utf-8")
         gemini = (project_root / "GEMINI.md").read_text(encoding="utf-8")
-        self.assertIn(DEFAULT_HARNESS_GUIDE_REFERENCE, harness_guide)
+        expected_harness_guide_reference = DEFAULT_HARNESS_GUIDE_REFERENCE
+        if vendor_path_arg is not None:
+            expected_harness_guide_reference = f"{vendor_path_arg}/docs/harness_guide.md"
+        self.assertIn(expected_harness_guide_reference, harness_guide)
         self.assertIn(bootstrap_reference, coding_conventions)
         self.assertIn("docs/project_entrypoint.md", agents)
         self.assertIn("순서대로 모두 읽고 적용", agents)
@@ -117,11 +147,17 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             ".",
             "--readiness",
             "first-success",
+            vendor_relative_path=vendor_relative_path,
         )
         self.assertEqual(decisions_result.returncode, 0, decisions_result.stderr)
         self.assertIn("overlay decision validation passed", decisions_result.stdout)
 
-        consistency_result = self.run_bundle_script(project_root, "validate_overlay_consistency.py", ".")
+        consistency_result = self.run_bundle_script(
+            project_root,
+            "validate_overlay_consistency.py",
+            ".",
+            vendor_relative_path=vendor_relative_path,
+        )
         self.assertEqual(consistency_result.returncode, 0, consistency_result.stderr)
         self.assertIn("overlay consistency validation passed.", consistency_result.stdout)
 
@@ -130,6 +166,17 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             workspace_root = Path(tmp_dir)
             for language, bootstrap_reference in LANGUAGE_BOOTSTRAP_REFERENCES.items():
                 self.assert_greenfield_bundle_language_flow(workspace_root, language, bootstrap_reference)
+
+    def test_generated_bundle_supports_greenfield_bootstrap_with_localized_vendor_path(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            workspace_root = Path(tmp_dir)
+            self.assert_greenfield_bundle_language_flow(
+                workspace_root,
+                "python",
+                "third_party/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md",
+                vendor_relative_path=Path("third_party/harness-kit"),
+                vendor_path_arg="third_party/harness-kit",
+            )
 
     def test_generated_bundle_supports_brownfield_adopt_dry_run(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
