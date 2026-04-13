@@ -19,6 +19,7 @@
 
 ## Init CLI
 
+- `scripts/bootstrap_init.py`, `scripts/check_first_success_docs.py`, validator 예시는 모두 Python 3 runtime으로 실행한다.
 - `scripts/bootstrap_init.py`는 `docs/project_overlay/*` 템플릿을 source of truth로 삼아, 새 프로젝트 또는 거의 빈 대상 디렉터리에 최소 project overlay 문서 세트를 그대로 복사해 생성한다.
 - 최소 입력은 target path와 `--language`이고, `--force`는 선택적 overwrite 플래그다.
 - 기본 동작은 기존 생성 대상 파일이 하나라도 있으면 fail-fast다.
@@ -27,6 +28,7 @@
 - 현재 MVP는 관리 대상 문서 경로만 검사한다. 즉, unrelated 파일이 있는 비어 있지 않은 저장소라도 생성 대상 경로와 충돌하지 않으면 진행한다.
 - 생성되는 기본 문서 경로는 아래와 같다.
   - `docs/project_entrypoint.md`
+  - `docs/decisions/README.md`
   - `docs/standard/architecture.md`
   - `docs/standard/implementation_order.md`
   - `docs/standard/coding_conventions_project.md`
@@ -36,6 +38,11 @@
 - 선택 언어 convention은 프로젝트 문서 안에 `vendor/harness-kit/bootstrap/language_conventions/...` 참조를 기본값으로 기록한다.
 - 로컬 `docs/project_entrypoint.md`도 기본적으로 `vendor/harness-kit/docs/harness_guide.md`를 참조하는 초안을 생성한다.
 - 따라서 init 결과를 사용하는 프로젝트는 vendored harness-kit 경로를 실제 배치 경로에 맞게 현지화해야 한다.
+
+## First-Success Existence Check
+
+- `scripts/check_first_success_docs.py`는 최소 문서 세트 존재 여부를 가장 얕게 확인하는 helper command다.
+- bootstrap 직후 이 명령을 먼저 실행하고, 그다음 decision/consistency validator로 넘어간다.
 
 ## 사용 예시
 

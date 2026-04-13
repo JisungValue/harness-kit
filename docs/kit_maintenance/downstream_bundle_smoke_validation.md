@@ -27,7 +27,7 @@
 
 ```bash
 python3 vendor/harness-kit/scripts/bootstrap_init.py . --language python
-python3 -c "from pathlib import Path; paths = ['docs/project_entrypoint.md', 'docs/decisions/README.md', 'docs/standard/architecture.md', 'docs/standard/implementation_order.md', 'docs/standard/coding_conventions_project.md', 'docs/standard/quality_gate_profile.md', 'docs/standard/testing_profile.md', 'docs/standard/commit_rule.md']; missing = [p for p in paths if not Path(p).exists()]; print('first success docs are present') if not missing else (_ for _ in ()).throw(SystemExit('missing: ' + ', '.join(missing)))"
+python3 vendor/harness-kit/scripts/check_first_success_docs.py .
 python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ```
