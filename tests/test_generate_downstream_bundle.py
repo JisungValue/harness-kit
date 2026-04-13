@@ -53,6 +53,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             self.assertTrue((output / "docs/harness_guide.md").exists())
             self.assertTrue((output / "docs/examples/sample-task/issue.md").exists())
             self.assertTrue((output / "bootstrap/README.md").exists())
+            self.assertTrue((output / "docs/project_overlay/harness_doc_guard_workflow_template.yml").exists())
             self.assertTrue((output / "scripts/adopt_common.py").exists())
             self.assertTrue((output / "scripts/adopt_dry_run.py").exists())
             self.assertTrue((output / "scripts/adopt_safe_write.py").exists())
@@ -72,6 +73,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             copied_paths = [entry["path"] for entry in manifest["copied_files"]]
             self.assertEqual(copied_paths, sorted(copied_paths))
             self.assertIn("docs/quickstart.md", copied_paths)
+            self.assertIn("docs/project_overlay/harness_doc_guard_workflow_template.yml", copied_paths)
             self.assertIn("scripts/bootstrap_init.py", copied_paths)
             self.assertEqual(manifest["artifact_format"], "directory")
             self.assertEqual(
@@ -80,6 +82,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             )
             self.assertIn("bootstrap/**/*", manifest["source_patterns"])
             self.assertIn("docs/examples/**/*.md", manifest["source_patterns"])
+            self.assertIn("docs/project_overlay/harness_doc_guard_workflow_template.yml", manifest["source_patterns"])
             self.assertIn("docs/kit_maintenance/*", manifest["excluded_patterns"])
             self.assertEqual(manifest["generated_files"][0]["path"], "README.md")
 

@@ -28,15 +28,34 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
         bootstrap_path.write_text("# Python Coding Conventions\n", encoding="utf-8")
 
     def bootstrap_project(self, target: Path) -> None:
+        self.bootstrap_project_with_vendor_path(target)
+
+    def bootstrap_project_with_vendor_path(
+        self,
+        target: Path,
+        vendor_path: str = "vendor/harness-kit",
+    ) -> None:
         result = subprocess.run(
-            [sys.executable, str(BOOTSTRAP_SCRIPT), str(target), "--language", "python"],
+            [
+                sys.executable,
+                str(BOOTSTRAP_SCRIPT),
+                str(target),
+                "--language",
+                "python",
+                "--vendor-path",
+                vendor_path,
+            ],
             cwd=ROOT,
             capture_output=True,
             text=True,
             check=False,
         )
         self.assertEqual(result.returncode, 0, result.stderr)
-        self.create_reference_files(target)
+        self.create_reference_files(
+            target,
+            harness_guide_reference=f"{vendor_path}/docs/harness_guide.md",
+            bootstrap_reference=f"{vendor_path}/bootstrap/language_conventions/python_coding_conventions_template.md",
+        )
 
     def run_checker(self, target: Path) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
@@ -321,6 +340,16 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
                 target,
                 bootstrap_reference="third_party/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md",
             )
+
+            result = self.run_checker(target)
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("overlay consistency validation passed", result.stdout)
+
+    def test_bootstrap_with_vendor_path_passes_without_manual_localization(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project_with_vendor_path(target, vendor_path="third_party/harness-kit")
 
             result = self.run_checker(target)
 

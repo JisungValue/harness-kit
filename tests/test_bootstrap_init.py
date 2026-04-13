@@ -119,6 +119,52 @@ class BootstrapInitCliTest(unittest.TestCase):
             self.assertIn("not writable as a bootstrap tree", result.stderr)
             self.assertIn(str(docs_path), result.stderr)
 
+    def test_localizes_generated_references_for_non_default_vendor_path(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+
+            result = self.run_cli(target, "--vendor-path", "third_party/harness-kit")
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            project_entrypoint = (target / "docs/project_entrypoint.md").read_text(encoding="utf-8")
+            coding_conventions = (target / "docs/standard/coding_conventions_project.md").read_text(
+                encoding="utf-8"
+            )
+
+            self.assertIn("third_party/harness-kit/docs/harness_guide.md", project_entrypoint)
+            self.assertNotIn("vendor/harness-kit/docs/harness_guide.md", project_entrypoint)
+            self.assertIn(
+                "third_party/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md",
+                coding_conventions,
+            )
+
+    def test_rejects_absolute_vendor_path(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+
+            result = self.run_cli(target, "--vendor-path", "/opt/harness-kit")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("vendor path must be project-root relative", result.stderr)
+
+    def test_rejects_windows_absolute_vendor_path(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+
+            result = self.run_cli(target, "--vendor-path", r"C:\harness-kit")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("vendor path must be project-root relative", result.stderr)
+
+    def test_rejects_windows_drive_relative_vendor_path(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+
+            result = self.run_cli(target, "--vendor-path", r"C:harness-kit")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("vendor path must be project-root relative", result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -2,7 +2,7 @@
 
 ## 목적
 
-이 문서는 canonical `dist/harness-kit-project-bundle/`만으로 새 프로젝트 bootstrap 경로와 기존 프로젝트 adopt dry-run 경로가 실제로 동작하는지 확인하는 maintainer용 smoke validation 기준이다.
+이 문서는 canonical `dist/harness-kit-project-bundle/`만으로 새 프로젝트 bootstrap 경로, localized vendoring 경로, future-session CI onboarding 자산, 기존 프로젝트 adopt dry-run 경로가 실제로 동작하는지 확인하는 maintainer용 smoke validation 기준이다.
 
 ## 검증 대상
 
@@ -10,6 +10,7 @@
 - canonical `dist/harness-kit-project-bundle/`
 - generated bundle 안의 `scripts/bootstrap_init.py`
 - generated bundle 안의 `scripts/check_first_success_docs.py`
+- generated bundle 안의 `docs/project_overlay/harness_doc_guard_workflow_template.yml`
 - generated bundle 안의 `scripts/adopt_dry_run.py`
 - generated bundle 안의 `scripts/adopt_safe_write.py`
 - generated bundle 안의 `scripts/validate_overlay_decisions.py`
@@ -41,6 +42,11 @@ python3 /tmp/kotlin-project/vendor/harness-kit/scripts/bootstrap_init.py /tmp/ko
 python3 /tmp/kotlin-project/vendor/harness-kit/scripts/check_first_success_docs.py /tmp/kotlin-project
 python3 /tmp/kotlin-project/vendor/harness-kit/scripts/validate_overlay_decisions.py /tmp/kotlin-project --readiness first-success
 python3 /tmp/kotlin-project/vendor/harness-kit/scripts/validate_overlay_consistency.py /tmp/kotlin-project
+
+python3 /tmp/localized-project/third_party/harness-kit/scripts/bootstrap_init.py /tmp/localized-project --language python --vendor-path third_party/harness-kit
+python3 /tmp/localized-project/third_party/harness-kit/scripts/check_first_success_docs.py /tmp/localized-project
+python3 /tmp/localized-project/third_party/harness-kit/scripts/validate_overlay_decisions.py /tmp/localized-project --readiness first-success
+python3 /tmp/localized-project/third_party/harness-kit/scripts/validate_overlay_consistency.py /tmp/localized-project
 ```
 
 - 기대 결과:
@@ -49,6 +55,8 @@ python3 /tmp/kotlin-project/vendor/harness-kit/scripts/validate_overlay_consiste
   - `docs/decisions/README.md`도 함께 생성된다.
   - `docs/project_entrypoint.md`와 `coding_conventions_project.md`는 vendored bundle 경로를 그대로 참조한다.
   - `coding_conventions_project.md`는 각 언어에 맞는 bootstrap convention template 경로를 가리킨다.
+  - localized vendoring 시나리오는 `--vendor-path third_party/harness-kit`만으로 manual path edit 없이 consistency validator까지 통과한다.
+  - generated bundle 안에 `docs/project_overlay/harness_doc_guard_workflow_template.yml`이 존재하고, consumer project는 이를 `.github/workflows/harness-doc-guard.yml`로 복사한 뒤 `@<pin-tag-or-sha>`를 실제 ref로 치환해 future-session guardrail을 붙일 수 있다.
   - bundle 안에 maintainer 전용 문서나 maintainer용 bundle script가 없어도 greenfield 경로가 막히지 않는다.
 
 ### 시나리오 2. brownfield partial repo adopt dry-run
@@ -110,7 +118,8 @@ python3 -m unittest tests.test_downstream_bundle_smoke
 
 ## 현재 기준 기대 결과
 
-- canonical `dist/harness-kit-project-bundle/`만으로 greenfield `python`/`java`/`kotlin` bootstrap, first-success validator, brownfield adopt dry-run, brownfield create-only safe write, legacy entrypoint migration의 최소 흐름이 재현된다.
+- canonical `dist/harness-kit-project-bundle/`만으로 greenfield `python`/`java`/`kotlin` bootstrap, localized vendoring bootstrap, first-success validator, brownfield adopt dry-run, brownfield create-only safe write, legacy entrypoint migration의 최소 흐름이 재현된다.
+- generated bundle은 consumer-facing workflow template까지 포함해 local first-success 뒤의 future-session CI onboarding 경로도 끊기지 않는다.
 - smoke test는 maintainer 전용 자산 누락 때문에 consumer 경로가 깨지는 문제를 release 전에 조기에 드러낸다.
 
 ## 잔여 리스크

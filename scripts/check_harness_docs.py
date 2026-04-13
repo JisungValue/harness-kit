@@ -177,6 +177,7 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
     diagnostics = read_text("docs/project_overlay/local_diagnostics_and_dry_run.md")
     first_success_example = read_text("docs/examples/bootstrap-first-success/validation_report.md")
     bundle_smoke_doc = read_text("docs/kit_maintenance/downstream_bundle_smoke_validation.md")
+    bundle_boundary = read_text("docs/kit_maintenance/downstream_bundle_boundary.md")
     project_guide_template = read_text("docs/project_overlay/project_entrypoint_template.md")
     harness_guide = read_text("docs/harness_guide.md")
 
@@ -293,9 +294,41 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
         if "scripts/check_first_success_docs.py" not in text:
             errors.append(f"{rel_path}에 canonical first-success helper command가 반영되지 않았습니다.")
 
+    localized_vendoring_surfaces = {
+        "docs/quickstart.md": quickstart,
+        "docs/project_overlay/first_success_guide.md": first_success,
+        "docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
+        "docs/examples/bootstrap-first-success/validation_report.md": first_success_example,
+        "docs/kit_maintenance/downstream_bundle_smoke_validation.md": bundle_smoke_doc,
+    }
+    for rel_path, text in localized_vendoring_surfaces.items():
+        if "--vendor-path" not in text:
+            errors.append(f"{rel_path}에 non-default vendoring `--vendor-path` 경로 설명이 없습니다.")
+
+    workflow_template_surfaces = {
+        "README.md": readme,
+        "docs/quickstart.md": quickstart,
+        "docs/project_overlay/first_success_guide.md": first_success,
+        "docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
+        "docs/examples/bootstrap-first-success/validation_report.md": first_success_example,
+        "docs/kit_maintenance/downstream_bundle_smoke_validation.md": bundle_smoke_doc,
+    }
+    for rel_path, text in workflow_template_surfaces.items():
+        for token in ("docs/project_overlay/harness_doc_guard_workflow_template.yml", "@<pin-tag-or-sha>"):
+            if token not in text:
+                errors.append(f"{rel_path}에 future-session doc guard onboarding 설명이 부족합니다: {token}")
+
+    if "docs/project_overlay/harness_doc_guard_workflow_template.yml" not in bundle_boundary:
+        errors.append(
+            "docs/kit_maintenance/downstream_bundle_boundary.md에 project-facing workflow template 경로가 반영되지 않았습니다."
+        )
+
     for token in tuple(f"`{language}`" for language in LANGUAGE_BOOTSTRAP_PATHS) + (
         "legacy entrypoint migration",
         "--migrate-legacy-entrypoint",
+        "third_party/harness-kit",
+        "docs/project_overlay/harness_doc_guard_workflow_template.yml",
+        "@<pin-tag-or-sha>",
     ):
         if token not in bundle_smoke_doc:
             errors.append(

@@ -28,7 +28,9 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 bootstrap 직후에는 `docs/project_entrypoint.md`와 `docs/decisions/README.md`를 먼저 읽고, 현재 작업에서 바로 중요하게 다뤄야 할 구조/정책/예외 결정이 있는지 확인한다.
 
-`vendor/harness-kit/`가 아닌 다른 경로에 kit를 뒀다면, `validate_overlay_consistency.py` 전에 `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 vendored 경로를 먼저 실제 배치 경로로 맞춘다.
+`vendor/harness-kit/`가 아닌 다른 경로에 kit를 뒀다면, bootstrap 시점부터 `--vendor-path <actual-path>`를 같이 주는 쪽을 우선한다. 그렇게 생성하지 않았다면 `validate_overlay_consistency.py` 전에 `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 vendored 경로를 먼저 실제 배치 경로로 맞춘다.
+
+local validator가 통과하면 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사하고 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꿔 future-session guardrail을 붙인다.
 
 ### 2. 기존 프로젝트 또는 부분 도입 상태
 
@@ -58,6 +60,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - write 여부: write 한다.
 - 기본 동작: fail-fast
 - `--force`: overwrite만 수행한다. merge하지 않는다.
+- `--vendor-path`: generated `docs/project_entrypoint.md`, `docs/standard/coding_conventions_project.md` 안의 vendored reference를 실제 배치 경로로 맞춘다.
 
 성공 신호:
 
@@ -78,6 +81,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - 역할: 최소 문서 세트가 생겼는지만 가장 얕게 확인한다.
 - write 여부: read-only
 - 실행 전제: Python 3 runtime이 필요하다.
+- 이 단계만으로는 next-session readiness나 future-session CI guardrail까지 보장하지 않는다.
 
 성공 신호:
 
@@ -111,6 +115,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - `phase2` 통과는 더 많은 placeholder가 정리되어야 한다.
 - `Still allowed after the blocking items above are fixed:`가 함께 나오면, 현재 readiness에서 허용되는 미결정이 참고용으로 남아 있다는 뜻이다.
 - `required-field`는 먼저 해결해야 하는 canonical 항목이며, 같은 줄의 placeholder가 allowed여도 중복으로 참고 목록에 다시 나오지 않는다.
+- non-default vendoring이면 bootstrap 때 `--vendor-path`를 사용했는지 먼저 확인하면 unnecessary path drift를 줄일 수 있다.
 
 ### validate_overlay_consistency.py
 
@@ -133,6 +138,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - 예: `AGENTS.md`가 `docs/project_entrypoint.md`로 연결되는지, `implementation_order.md`가 `architecture.md`를 기준으로 연결하는지, quality gate와 testing profile이 서로 역할을 나누는지.
 - non-default vendored path라면 common guide 경로나 bootstrap 기준 문서 경로가 실제로 존재하는지도 함께 본다.
 - decisions index가 있으면 project entrypoint와 연결되는지, index에 적힌 decision file이 실제로 존재하는지도 함께 본다.
+- 이 단계가 통과하면 local first-success confidence는 갖췄다고 보고, 이후에는 workflow template로 CI guardrail을 붙인다.
 
 ### adopt_dry_run.py
 
@@ -193,13 +199,15 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 1. 대상 경로에 이미 `docs/project_entrypoint.md`나 `docs/standard/*`가 있는지 본다.
 2. 부모 경로 중 파일이 있는지 본다.
-3. overwrite가 정말 필요한 경우에만 `--force`를 쓴다.
+3. non-default vendoring이면 `--vendor-path <actual-path>`를 같이 줬는지 본다.
+4. overwrite가 정말 필요한 경우에만 `--force`를 쓴다.
 
 ### 문서는 생겼는데 validator가 실패한다
 
 1. `coding_conventions_project.md`의 언어/ bootstrap 기준 문서가 채워졌는지 본다.
 2. `quality_gate_profile.md`, `commit_rule.md`의 placeholder가 현재 readiness에서 허용되는 범위인지 본다.
 3. `phase2` 실패면 `first-success`부터 통과하는지 먼저 본다.
+4. local validator는 통과했는데 이후 세션에서 drift가 반복되면 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 복사했고 `@<pin-tag-or-sha>`를 실제 ref로 바꿨는지 본다.
 
 ### decision validator는 통과하는데 consistency checker가 실패한다
 

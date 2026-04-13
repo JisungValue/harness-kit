@@ -127,12 +127,13 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 3. 로컬 진단 순서와 dry-run 해석은 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 함께 본다.
 4. init CLI 또는 `docs/project_overlay/` 수동 복사로 최소 문서 세트를 만든다.
 5. 생성된 `docs/project_entrypoint.md`, `docs/decisions/README.md`, `docs/standard/coding_conventions_project.md`를 읽고 현재 프로젝트에서 먼저 확정해야 할 구조/정책/예외 결정이 있는지 확인한다.
-6. vendored 경로가 있으면 `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 경로를 실제 배치 경로에 맞게 현지화한다.
-7. 아래 예시는 `vendor/harness-kit/`를 기준으로 한다. 다른 경로를 쓰면 문서 안의 vendored path뿐 아니라 실행 명령의 `vendor/harness-kit/` 부분도 같은 실제 경로로 함께 바꿔야 한다.
+6. `vendor/harness-kit/`가 아닌 경로에 kit를 둘 예정이면 bootstrap 시점부터 `--vendor-path <actual-path>`를 사용해 generated vendored reference를 바로 현지화한다. 그 옵션 없이 생성했다면 이후 `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 경로를 실제 배치 경로에 맞게 수동 현지화한다.
+7. 아래 예시는 `vendor/harness-kit/`를 기준으로 한다. 다른 경로를 쓰면 실행 명령의 `vendor/harness-kit/` 부분도 같은 실제 경로로 함께 바꿔야 한다.
 8. `python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success`로 unresolved decision readiness를 확인한다.
 9. `python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .`로 문서 간 교차 정합성과 runtime instruction entrypoint 연결을 확인한다.
-9. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
-10. 실제 task 몇 개를 돌린 뒤 project overlay와 decisions index를 함께 보강한다.
+10. local validator가 통과하면 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사하고 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꿔 future-session guardrail을 고정한다.
+11. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
+12. 실제 task 몇 개를 돌린 뒤 project overlay와 decisions index를 함께 보강한다.
 
 기존 프로젝트나 부분 도입 상태를 먼저 읽어야 하면 `docs/project_overlay/adopt_dry_run.md`의 read-only adopt 흐름부터 시작한다.
 
