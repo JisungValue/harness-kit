@@ -202,6 +202,26 @@ class ValidateOverlayDecisionsTest(unittest.TestCase):
             self.assertIn("TODO", result.stderr)
             self.assertIn("docs/standard/coding_conventions_project.md:24 TODO", result.stderr)
 
+    def test_decisions_index_placeholder_is_blocking(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            decisions_path = target / "docs/decisions/README.md"
+            decisions_text = decisions_path.read_text(encoding="utf-8")
+            decisions_text = decisions_text.replace(
+                "- 아직 active decision 없음. 새 decision을 추가하면 여기에 기록한다.",
+                "- [프로젝트 결정 필요] current decisions 분류 기준을 확정한다.",
+                1,
+            )
+            decisions_path.write_text(decisions_text, encoding="utf-8")
+
+            result = self.run_validator(target, "first-success")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("docs/decisions/README.md", result.stderr)
+            self.assertIn("[프로젝트 결정 필요]", result.stderr)
+
 
 if __name__ == "__main__":
     unittest.main()
