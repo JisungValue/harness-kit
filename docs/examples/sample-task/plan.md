@@ -26,6 +26,8 @@
 - 프로젝트 로컬 entrypoint를 갱신한다.
 - 필요한 overlay 문서를 추가한다.
 - 현재 작업과 직접 관련 있는 언어별 convention 항목을 project convention 문서에서 식별 가능하게 정리한다.
+- 관련 `docs/decisions/README.md` 또는 `DEC-###-slug.md` 읽기/수정/생성 필요 여부: 해당 없음. 이번 작업은 decision 내용 확정보다 공통 문서 구조 정리에 집중한다.
+- 새 decision이 필요하면 index 갱신 계획: 해당 없음.
 
 ## 비범위
 

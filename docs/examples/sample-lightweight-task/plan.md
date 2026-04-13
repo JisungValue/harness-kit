@@ -21,6 +21,8 @@
 
 - `implementation_notes.md`에 경량 검토 기록과 진행 로그를 남긴다.
 - `validation_report.md`에 수행한 검증과 잔여 리스크를 남긴다.
+- 관련 `docs/decisions/README.md` 또는 `DEC-###-slug.md` 읽기/수정/생성 필요 여부: 해당 없음. 이번 작업은 decision 수준의 구조 변경이 아니다.
+- 새 decision이 필요하면 index 갱신 계획: 해당 없음.
 
 ## 비범위
 

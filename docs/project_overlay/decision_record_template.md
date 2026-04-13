@@ -3,6 +3,8 @@
 - Status: Accepted
 - Type: Policy
 - Date: 2026-04-13
+- Related Decisions:
+  - 해당 없음
 - Related Docs:
   - docs/standard/architecture.md
 - When To Update:
@@ -27,6 +29,10 @@
 ## Related Docs
 
 - docs/standard/architecture.md
+
+## Related Decisions
+
+- 관련 있는 기존 decision이 있으면 적고, 없으면 `해당 없음`으로 둔다.
 
 ## When To Update
 
