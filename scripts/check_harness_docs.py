@@ -6,6 +6,8 @@ import re
 import sys
 from pathlib import Path
 
+from bootstrap_init import LANGUAGE_BOOTSTRAP_PATHS
+
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -290,6 +292,16 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
     for rel_path, text in helper_command_surfaces.items():
         if "scripts/check_first_success_docs.py" not in text:
             errors.append(f"{rel_path}에 canonical first-success helper command가 반영되지 않았습니다.")
+
+    for token in tuple(f"`{language}`" for language in LANGUAGE_BOOTSTRAP_PATHS) + (
+        "legacy entrypoint migration",
+        "--migrate-legacy-entrypoint",
+    ):
+        if token not in bundle_smoke_doc:
+            errors.append(
+                "docs/kit_maintenance/downstream_bundle_smoke_validation.md에 bundle smoke coverage 설명이 부족합니다: "
+                f"{token}"
+            )
 
 
 def check_entrypoint_role_labels(errors: list[str]) -> None:

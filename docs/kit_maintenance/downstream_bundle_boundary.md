@@ -14,6 +14,7 @@
 - downstream bundle은 저장소 안 source-of-truth 자산에서 파생되는 배포용 부분집합이다.
 - maintainer 전용 감사, 릴리스, 기록 자산은 저장소 안에 유지하되 downstream bundle에는 포함하지 않는다.
 - downstream bundle 경계는 repo-local 문서 기준으로 관리하며, 릴리스 직전 임의 판단으로 바꾸지 않는다.
+- bundle 생성은 section 1, 2의 include path를 기본 후보 집합으로 삼고, section 3 maintainer-only path가 겹치면 exclusion을 우선 적용한다.
 
 ## 자산 분류
 
@@ -112,6 +113,7 @@ scripts/
 - `README.md`는 bundle entry artifact로 생성한다.
 - `bundle_manifest.json`은 copied source file 목록과 checksum을 기록한다.
 - validation은 boundary 문서의 include pattern, 실제 copied file 내용, generated `README.md`, `bundle_manifest.json`이 서로 일치하는지 검사해야 한다.
+- validation은 include pattern뿐 아니라 maintainer-only exclusion pattern과 실제 bundle contents의 충돌도 함께 잡아야 한다.
 - smoke validation은 canonical `dist/harness-kit-project-bundle/`를 임시 consumer project에 vendored 한 뒤, bundle 안의 project-facing script만 실행해 greenfield/brownfield 기본 경로가 유지되는지 확인해야 한다.
 - zip/tarball이 필요하면 이 directory artifact에서 파생 생성한다. source-of-truth는 압축본이 아니라 위 디렉터리 구조와 manifest다.
 
@@ -124,7 +126,7 @@ scripts/
 
 ## 후속 이슈와의 연결
 
-- bundle generation은 이 문서의 포함/제외 기준을 그대로 사용해야 한다.
+- bundle generation은 이 문서의 include path와 maintainer-only exclusion 우선순위를 그대로 사용해야 한다.
 - bundle validation은 이 문서의 분류와 기대 구조를 검사 기준으로 사용해야 한다.
 - safe write/update, change classification, upgrade guide, diff review는 repo 전체가 아니라 downstream bundle 경계를 기준으로 판단해야 한다.
 - consumer-facing change classification policy는 `docs/project_overlay/harness_upgrade_impact_policy.md`처럼 downstream bundle에 포함되는 경로에 두는 편을 우선한다.

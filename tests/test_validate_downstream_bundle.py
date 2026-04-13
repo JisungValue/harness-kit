@@ -85,6 +85,21 @@ class ValidateDownstreamBundleTest(unittest.TestCase):
             self.assertEqual(validate_result.returncode, 1)
             self.assertIn("manifest field mismatch for source_patterns", validate_result.stderr)
 
+    def test_manifest_excluded_patterns_mismatch_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            output = Path(tmp_dir) / "bundle"
+            self.assertEqual(self.run_generate(output).returncode, 0)
+
+            manifest_path = output / "bundle_manifest.json"
+            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+            manifest["excluded_patterns"] = ["tests/*"]
+            manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
+
+            validate_result = self.run_validate(output)
+
+            self.assertEqual(validate_result.returncode, 1)
+            self.assertIn("manifest field mismatch for excluded_patterns", validate_result.stderr)
+
     def test_bundle_file_content_drift_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             output = Path(tmp_dir) / "bundle"

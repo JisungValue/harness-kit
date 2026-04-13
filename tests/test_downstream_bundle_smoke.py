@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import importlib.util
 import shutil
 import subprocess
 import sys
@@ -10,13 +11,24 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 GENERATE_SCRIPT = ROOT / "scripts" / "generate_downstream_bundle.py"
+BOOTSTRAP_SCRIPT = ROOT / "scripts" / "bootstrap_init.py"
 CANONICAL_BUNDLE_ROOT = ROOT / "dist" / "harness-kit-project-bundle"
-LANGUAGE = "python"
 DEFAULT_HARNESS_GUIDE_REFERENCE = "vendor/harness-kit/docs/harness_guide.md"
-DEFAULT_BOOTSTRAP_REFERENCE = (
-    "vendor/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md"
-)
 FIRST_SUCCESS_SCRIPT = "check_first_success_docs.py"
+
+
+def load_bootstrap_module():
+    spec = importlib.util.spec_from_file_location("bootstrap_init", BOOTSTRAP_SCRIPT)
+    if spec is None or spec.loader is None:
+        raise RuntimeError("Failed to load bootstrap_init module")
+
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[spec.name] = module
+    spec.loader.exec_module(module)
+    return module
+
+
+LANGUAGE_BOOTSTRAP_REFERENCES = load_bootstrap_module().LANGUAGE_BOOTSTRAP_PATHS
 
 
 class DownstreamBundleSmokeTest(unittest.TestCase):
@@ -29,12 +41,12 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             check=False,
         )
 
-    def vendor_generated_bundle(self, workspace_root: Path) -> tuple[Path, Path]:
+    def vendor_generated_bundle(self, workspace_root: Path, project_name: str = "consumer-project") -> tuple[Path, Path]:
         generate_result = self.run_generate_canonical_bundle()
         self.assertEqual(generate_result.returncode, 0, generate_result.stderr)
         self.assertTrue(CANONICAL_BUNDLE_ROOT.exists())
 
-        project_root = workspace_root / "consumer-project"
+        project_root = workspace_root / project_name
         vendor_root = project_root / "vendor" / "harness-kit"
         vendor_root.parent.mkdir(parents=True, exist_ok=True)
         shutil.copytree(CANONICAL_BUNDLE_ROOT, vendor_root)
@@ -63,56 +75,61 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
         self.assertFalse((vendor_root / "scripts/validate_downstream_bundle.py").exists())
         self.assertFalse((vendor_root / "harness.log").exists())
 
+    def assert_greenfield_bundle_language_flow(self, workspace_root: Path, language: str, bootstrap_reference: str) -> None:
+        project_root, vendor_root = self.vendor_generated_bundle(workspace_root, f"consumer-project-{language}")
+
+        self.assert_maintainer_assets_absent(vendor_root)
+
+        init_result = self.run_bundle_script(
+            project_root,
+            "bootstrap_init.py",
+            ".",
+            "--language",
+            language,
+        )
+        self.assertEqual(init_result.returncode, 0, init_result.stderr)
+        self.assertIn("Created harness bootstrap docs in", init_result.stdout)
+
+        first_success_result = self.run_first_success_command(project_root)
+        self.assertEqual(first_success_result.returncode, 0, first_success_result.stderr)
+        self.assertIn("first success docs are present", first_success_result.stdout)
+
+        harness_guide = (project_root / "docs/project_entrypoint.md").read_text(encoding="utf-8")
+        decisions_index = (project_root / "docs/decisions/README.md").read_text(encoding="utf-8")
+        coding_conventions = (project_root / "docs/standard/coding_conventions_project.md").read_text(
+            encoding="utf-8"
+        )
+        agents = (project_root / "AGENTS.md").read_text(encoding="utf-8")
+        gemini = (project_root / "GEMINI.md").read_text(encoding="utf-8")
+        self.assertIn(DEFAULT_HARNESS_GUIDE_REFERENCE, harness_guide)
+        self.assertIn(bootstrap_reference, coding_conventions)
+        self.assertIn("docs/project_entrypoint.md", agents)
+        self.assertIn("순서대로 모두 읽고 적용", agents)
+        self.assertIn("둘 중 하나만 읽고 멈추지 않는다", harness_guide)
+        self.assertIn("docs/decisions/README.md", harness_guide)
+        self.assertIn("DEC-###-slug.md", decisions_index)
+        self.assertIn("AGENTS.md", gemini)
+        self.assertIn("연결된 문서 체인도 끝까지 따라간다", gemini)
+
+        decisions_result = self.run_bundle_script(
+            project_root,
+            "validate_overlay_decisions.py",
+            ".",
+            "--readiness",
+            "first-success",
+        )
+        self.assertEqual(decisions_result.returncode, 0, decisions_result.stderr)
+        self.assertIn("overlay decision validation passed", decisions_result.stdout)
+
+        consistency_result = self.run_bundle_script(project_root, "validate_overlay_consistency.py", ".")
+        self.assertEqual(consistency_result.returncode, 0, consistency_result.stderr)
+        self.assertIn("overlay consistency validation passed.", consistency_result.stdout)
+
     def test_generated_bundle_supports_greenfield_bootstrap_and_overlay_validation(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
-            project_root, vendor_root = self.vendor_generated_bundle(Path(tmp_dir))
-
-            self.assert_maintainer_assets_absent(vendor_root)
-
-            init_result = self.run_bundle_script(
-                project_root,
-                "bootstrap_init.py",
-                ".",
-                "--language",
-                LANGUAGE,
-            )
-            self.assertEqual(init_result.returncode, 0, init_result.stderr)
-            self.assertIn("Created harness bootstrap docs in", init_result.stdout)
-
-            first_success_result = self.run_first_success_command(project_root)
-            self.assertEqual(first_success_result.returncode, 0, first_success_result.stderr)
-            self.assertIn("first success docs are present", first_success_result.stdout)
-
-            harness_guide = (project_root / "docs/project_entrypoint.md").read_text(encoding="utf-8")
-            decisions_index = (project_root / "docs/decisions/README.md").read_text(encoding="utf-8")
-            coding_conventions = (project_root / "docs/standard/coding_conventions_project.md").read_text(
-                encoding="utf-8"
-            )
-            agents = (project_root / "AGENTS.md").read_text(encoding="utf-8")
-            gemini = (project_root / "GEMINI.md").read_text(encoding="utf-8")
-            self.assertIn(DEFAULT_HARNESS_GUIDE_REFERENCE, harness_guide)
-            self.assertIn(DEFAULT_BOOTSTRAP_REFERENCE, coding_conventions)
-            self.assertIn("docs/project_entrypoint.md", agents)
-            self.assertIn("순서대로 모두 읽고 적용", agents)
-            self.assertIn("둘 중 하나만 읽고 멈추지 않는다", harness_guide)
-            self.assertIn("docs/decisions/README.md", harness_guide)
-            self.assertIn("DEC-###-slug.md", decisions_index)
-            self.assertIn("AGENTS.md", gemini)
-            self.assertIn("연결된 문서 체인도 끝까지 따라간다", gemini)
-
-            decisions_result = self.run_bundle_script(
-                project_root,
-                "validate_overlay_decisions.py",
-                ".",
-                "--readiness",
-                "first-success",
-            )
-            self.assertEqual(decisions_result.returncode, 0, decisions_result.stderr)
-            self.assertIn("overlay decision validation passed", decisions_result.stdout)
-
-            consistency_result = self.run_bundle_script(project_root, "validate_overlay_consistency.py", ".")
-            self.assertEqual(consistency_result.returncode, 0, consistency_result.stderr)
-            self.assertIn("overlay consistency validation passed.", consistency_result.stdout)
+            workspace_root = Path(tmp_dir)
+            for language, bootstrap_reference in LANGUAGE_BOOTSTRAP_REFERENCES.items():
+                self.assert_greenfield_bundle_language_flow(workspace_root, language, bootstrap_reference)
 
     def test_generated_bundle_supports_brownfield_adopt_dry_run(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -137,7 +154,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
                 "adopt_dry_run.py",
                 ".",
                 "--language",
-                LANGUAGE,
+                "python",
             )
             self.assertEqual(adopt_result.returncode, 0, adopt_result.stderr)
             self.assertIn("write mode: disabled (read-only)", adopt_result.stdout)
@@ -173,7 +190,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
                 "adopt_safe_write.py",
                 ".",
                 "--language",
-                LANGUAGE,
+                "python",
             )
             self.assertEqual(safe_write_result.returncode, 0, safe_write_result.stderr)
             self.assertIn("- created files: 10", safe_write_result.stdout)
@@ -225,7 +242,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
                 "adopt_dry_run.py",
                 ".",
                 "--language",
-                LANGUAGE,
+                "python",
             )
             self.assertEqual(dry_run_result.returncode, 0, dry_run_result.stderr)
             self.assertIn("- legacy entrypoint migration candidates: 1", dry_run_result.stdout)
@@ -235,7 +252,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
                 "adopt_safe_write.py",
                 ".",
                 "--language",
-                LANGUAGE,
+                "python",
                 "--migrate-legacy-entrypoint",
             )
             self.assertEqual(migrate_result.returncode, 0, migrate_result.stderr)
