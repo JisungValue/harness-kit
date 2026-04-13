@@ -53,6 +53,7 @@
 - 레이어별 작업 계획
 - 테스트 계획
 - 문서 반영 계획
+- decision 반영 후보면 관련 `docs/decisions/README.md` 또는 `DEC-###-slug.md`의 읽기/수정/생성 계획
 - 비범위
 - 리스크 또는 확인 포인트
 
@@ -70,6 +71,7 @@
 - 실행한 검증
 - 실행하지 못한 검증
 - 결과 요약
+- Phase 5에서 반영할 related decisions/
 - 남은 리스크
 - 후속 조치 필요 사항
 
@@ -78,8 +80,8 @@
 - Phase 1은 `requirements.md`, `plan.md`, 사용자 질의 및 보완 반영 내용, 감사 결과를 남긴다.
 - Phase 2는 실패 후 통과한 테스트, 기능 구현 코드, 필요한 경우 `implementation_notes.md`를 남긴다.
 - Phase 3은 통합 테스트 코드와 연동 검증 결과를 남긴다.
-- Phase 4는 전체 검증 결과와 남은 리스크 또는 미실행 검증 목록을 남긴다.
-- Phase 5는 갱신된 문서와 작업 로그를 남긴다.
+- Phase 4는 전체 검증 결과와 남은 리스크 또는 미실행 검증 목록, Phase 5에서 반영할 related decisions/를 남긴다.
+- Phase 5는 갱신된 문서와 작업 로그를 남기고, 필요하면 `docs/decisions/`를 함께 갱신한다.
 - 각 Phase 내부의 의미 있는 작업 단위가 끝날 때마다 `implementation_notes.md`의 `진행 로그`를 갱신한 뒤 다음 단계로 넘어간다.
 
 ## 위임 책임 기록 규칙
@@ -92,7 +94,7 @@
 
 - `issue.md`는 요청사항과 비범위가 함께 드러나야 한다.
 - `requirements.md`는 구현 가능한 수준의 요구사항과 제약사항이 포함되어야 한다.
-- `plan.md`는 작업 순서, 검증 방식, 비범위가 드러나야 한다.
+- `plan.md`는 작업 순서, 검증 방식, 비범위와 decision 반영 필요 시 관련 `docs/decisions/` 계획이 드러나야 한다.
 - `implementation_notes.md`는 진행 로그, 구현 중 판단, 위임 또는 후속 이슈를 복원 가능하게 남겨야 한다.
 - 경량 운영 예외를 검토했다면 `implementation_notes.md`에 판정 근거, 축소 범위, 유지한 테스트/감사, 남은 리스크, 승격 조건이 복원 가능하게 남아야 한다.
-- `validation_report.md`는 실제 수행한 검증과 미실행 검증을 구분해 남겨야 한다.
+- `validation_report.md`는 실제 수행한 검증과 미실행 검증, Phase 5에서 반영할 related decisions/를 구분해 남겨야 한다.

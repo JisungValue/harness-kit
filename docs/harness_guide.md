@@ -97,6 +97,7 @@
 
 - `requirements.md`가 구현 가능한 수준으로 정리되었는가
 - `plan.md`에 테스트 계획, 문서 반영 계획, 비범위가 포함되었는가
+- decision 반영 후보면 관련 `docs/decisions/` 계획이 `plan.md`에 포함되었는가
 - `issue.md`의 요청사항, 제약사항, 비범위가 `plan.md`에 빠짐없이 반영되었는가
 - 현재 범위 밖 작업이 계획에 섞이지 않았는가
 - requirements 감사, plan 감사, issue 대비 plan 누락 감사가 모두 승인 가능 상태인가
@@ -126,11 +127,13 @@
 - Phase 1의 요청사항, 제약사항, 비범위 대비 결과 정합성이 검증되었는가
 - 불일치가 있으면 `누락` 또는 `범위 확장`으로 기록되었는가
 - 불일치 원인이 이전 Phase 산출물이면 원인 Phase부터 재수행 계획과 사용자 승인 여부가 기록되었는가
+- `validation_report.md`에 Phase 5에서 반영할 related decisions/가 정리되었는가
 - 잔여 리스크가 누락되지 않았는가
 
 ### Phase 5 종료 게이트
 
 - 새 계약, 구조적 결정, 사용법 변경이 관련 문서에 반영되었는가
+- Phase 4가 넘긴 related decisions/가 실제 `docs/decisions/`에 반영되었는가
 - 작업 로그가 변경 목적과 결과를 복원 가능하게 남기는가
 - 범위 밖 개선 사항이 현재 결과가 아니라 후속 후보로 분리되었는가
 
@@ -141,6 +144,7 @@
 - 입력: `issue.md`
 - 출력: `requirements.md`, `plan.md`
 - 목표: 구현 범위, 제약, 비범위, 작업 계획을 확정한다.
+- decision 반영 후보가 있으면 `plan.md`에 관련 `docs/decisions/` 읽기/수정/생성 계획까지 포함한다.
 - 권장 순서: `issue.md` 분석 -> `requirements.md` 작성 -> requirements 감사 -> `plan.md` 작성 -> plan 감사 -> issue 대비 plan 누락 감사
 - 내부 감사: requirements 감사, plan 감사, issue 대비 plan 누락 감사
 - 사용자 승인: 내부 감사가 모두 승인 가능 상태가 된 뒤 Phase 1 종료 시점에 받는다.
@@ -163,10 +167,10 @@
 
 - 입력: 전체 구현 결과
 - 출력: `validation_report.md`
-- 목표: 실행한 검증, 미실행 검증, 잔여 리스크를 정리하고, 필요하면 이전 Phase 산출물을 보완해 재검증 루프를 시작한다.
+- 목표: 실행한 검증, 미실행 검증, 잔여 리스크와 Phase 5에서 반영할 related decisions/를 정리하고, 필요하면 이전 Phase 산출물을 보완해 재검증 루프를 시작한다.
 
 ### Phase 5. Documentation
 
 - 입력: 구현 및 검증 결과
 - 출력: 갱신된 문서와 작업 로그
-- 목표: 구조적 결정, 사용법, 작업 요약을 복원 가능하게 남긴다.
+- 목표: 구조적 결정, 사용법, 작업 요약을 복원 가능하게 남기고, 필요한 `docs/decisions/` 반영을 실제로 닫는다.

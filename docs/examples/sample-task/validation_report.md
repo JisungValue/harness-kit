@@ -82,6 +82,10 @@
 
 - 새 프로젝트가 core와 overlay를 분리해 시작할 수 있는 최소 구조가 준비되었다.
 
+## Phase 5에서 반영할 related decisions/
+
+- 해당 없음. 이번 sample task는 구조 설명 문서 예시를 만드는 작업이라 project-local decision record까지 확정하지 않는다.
+
 ## 남은 리스크
 
 - 실제 프로젝트 적용 시 overlay 문서가 과소 작성될 수 있다.
