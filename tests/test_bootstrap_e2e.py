@@ -29,16 +29,7 @@ DEFAULT_HARNESS_GUIDE_REFERENCE = "vendor/harness-kit/docs/harness_guide.md"
 DEFAULT_BOOTSTRAP_REFERENCE = (
     "vendor/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md"
 )
-FIRST_SUCCESS_COMMAND = (
-    "from pathlib import Path; "
-    "paths = ['docs/project_entrypoint.md', 'docs/decisions/README.md', 'docs/standard/architecture.md', "
-    "'docs/standard/implementation_order.md', 'docs/standard/coding_conventions_project.md', "
-    "'docs/standard/quality_gate_profile.md', 'docs/standard/testing_profile.md', "
-    "'docs/standard/commit_rule.md']; "
-    "missing = [p for p in paths if not Path(p).exists()]; "
-    "print('first success docs are present') if not missing else "
-    "(_ for _ in ()).throw(SystemExit('missing: ' + ', '.join(missing)))"
-)
+FIRST_SUCCESS_SCRIPT = ROOT / "scripts" / "check_first_success_docs.py"
 
 
 class BootstrapEndToEndTest(unittest.TestCase):
@@ -161,7 +152,7 @@ class BootstrapEndToEndTest(unittest.TestCase):
 
     def run_first_success_command(self, project_root: Path) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
-            [sys.executable, "-c", FIRST_SUCCESS_COMMAND],
+            [sys.executable, str(FIRST_SUCCESS_SCRIPT), str(project_root)],
             cwd=project_root,
             capture_output=True,
             text=True,

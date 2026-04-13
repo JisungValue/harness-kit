@@ -51,7 +51,7 @@
 
 - 문서가 있느냐와, 문서가 준비됐느냐와, 문서가 서로 맞느냐를 분리해서 본다.
 - 각각 도구가 다르다.
-  - 존재 확인: first-success one-liner
+  - 존재 확인: `check_first_success_docs.py`
   - readiness 확인: `validate_overlay_decisions.py`
   - 교차 정합성 및 runtime instruction 연결 확인: `validate_overlay_consistency.py`
 
@@ -86,7 +86,7 @@
 
 1. `bootstrap_init.py`로 최소 문서 세트를 만든다.
 2. runtime entrypoint chain을 따라 `AGENTS.md -> docs/project_entrypoint.md -> core guide + docs/standard/*` 순서를 확인한다.
-3. first-success one-liner로 존재를 확인한다.
+3. `check_first_success_docs.py` helper command로 존재를 확인한다.
 4. `validate_overlay_decisions.py --readiness first-success`로 readiness를 확인한다.
 5. `validate_overlay_consistency.py`로 구조적 정합성과 traversal contract를 확인한다.
 6. project overlay를 채우고 실제 task를 시작한다.

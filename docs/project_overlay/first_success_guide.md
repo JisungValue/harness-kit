@@ -8,6 +8,7 @@
 - `harness-kit`가 프로젝트 안에서 참조 가능한 경로에 있어야 한다.
 - 아래 예시는 `vendor/harness-kit/`에 vendored 되어 있다고 가정한다.
 - Python, Java, Kotlin 중 이번 프로젝트의 주 언어를 하나 먼저 정한다.
+- bootstrap과 validator 예시는 모두 Python 3 runtime으로 실행한다.
 - 현재 MVP는 생성 대상 문서 경로만 검사하므로, first success를 빠르게 재현하려면 빈 디렉터리 또는 거의 빈 디렉터리에서 시작하는 편이 안전하다.
 
 ## 목표 성공 상태
@@ -120,13 +121,13 @@ vendor/harness-kit/docs/project_overlay/commit_rule_template.md -> docs/standard
 CLI 경로든 수동 경로든, 아래 명령으로 최소 문서 세트가 실제로 생겼는지 먼저 확인한다.
 
 ```bash
-python3 -c "from pathlib import Path; paths = ['docs/project_entrypoint.md', 'docs/decisions/README.md', 'docs/standard/architecture.md', 'docs/standard/implementation_order.md', 'docs/standard/coding_conventions_project.md', 'docs/standard/quality_gate_profile.md', 'docs/standard/testing_profile.md', 'docs/standard/commit_rule.md']; missing = [p for p in paths if not Path(p).exists()]; print('first success docs are present') if not missing else (_ for _ in ()).throw(SystemExit('missing: ' + ', '.join(missing)))"
+python3 vendor/harness-kit/scripts/check_first_success_docs.py .
 ```
 
 기대 결과:
 
 - 성공이면 `first success docs are present`가 출력된다.
-- 실패면 빠진 문서 경로가 `missing: ...` 형식으로 출력된다.
+- 실패면 빠진 문서 경로가 bullet 목록으로 출력된다.
 
 이 명령은 문서 존재 여부만 확인하는 가장 얕은 체크다.
 runtime instruction entrypoint 연결과 unresolved placeholder readiness까지 보려면 아래 validator를 이어서 실행한다. `vendor/harness-kit/`가 아닌 다른 경로에 kit를 뒀다면, validator보다 먼저 `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 vendored 경로를 실제 배치 경로로 맞춰야 한다.

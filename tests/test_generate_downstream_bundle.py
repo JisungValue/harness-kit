@@ -56,6 +56,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             self.assertTrue((output / "scripts/adopt_common.py").exists())
             self.assertTrue((output / "scripts/adopt_dry_run.py").exists())
             self.assertTrue((output / "scripts/adopt_safe_write.py").exists())
+            self.assertTrue((output / "scripts/check_first_success_docs.py").exists())
 
             self.assertFalse((output / "docs/kit_maintenance/release_process.md").exists())
             self.assertFalse((output / "scripts/check_harness_docs.py").exists())

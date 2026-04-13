@@ -35,6 +35,9 @@
 3. `docs/project_overlay/local_diagnostics_and_dry_run.md`를 같이 본다.
 4. 먼저 bootstrap만 실행한다.
 
+- `bootstrap_init.py`, `check_first_success_docs.py`, validator 예시는 모두 Python 3 runtime이 필요하다.
+- 현재 bootstrap CLI는 `python`, `java`, `kotlin` language profile을 지원하지만, 실행 자체는 Python 3로 한다.
+
 ```bash
 python3 vendor/harness-kit/scripts/bootstrap_init.py . --language python
 ```
@@ -49,7 +52,7 @@ python3 vendor/harness-kit/scripts/bootstrap_init.py . --language python
 7. 그다음 아래 검증 명령을 실행한다.
 
 ```bash
-python3 -c "from pathlib import Path; paths = ['docs/project_entrypoint.md', 'docs/decisions/README.md', 'docs/standard/architecture.md', 'docs/standard/implementation_order.md', 'docs/standard/coding_conventions_project.md', 'docs/standard/quality_gate_profile.md', 'docs/standard/testing_profile.md', 'docs/standard/commit_rule.md']; missing = [p for p in paths if not Path(p).exists()]; print('first success docs are present') if not missing else (_ for _ in ()).throw(SystemExit('missing: ' + ', '.join(missing)))"
+python3 vendor/harness-kit/scripts/check_first_success_docs.py .
 python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ```
@@ -104,6 +107,8 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 - `bootstrap_init.py`
   - 새 프로젝트용 문서 세트를 실제로 생성한다.
+- `check_first_success_docs.py`
+  - 최소 문서 세트 존재 여부만 가장 빠르게 확인한다.
 - `validate_overlay_decisions.py`
   - unresolved placeholder와 readiness 상태를 본다.
 - `validate_overlay_consistency.py`

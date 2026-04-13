@@ -21,7 +21,7 @@
 
 ```bash
 python3 vendor/harness-kit/scripts/bootstrap_init.py . --language python
-python3 -c "from pathlib import Path; paths = ['docs/project_entrypoint.md', 'docs/decisions/README.md', 'docs/standard/architecture.md', 'docs/standard/implementation_order.md', 'docs/standard/coding_conventions_project.md', 'docs/standard/quality_gate_profile.md', 'docs/standard/testing_profile.md', 'docs/standard/commit_rule.md']; missing = [p for p in paths if not Path(p).exists()]; print('first success docs are present') if not missing else (_ for _ in ()).throw(SystemExit('missing: ' + ', '.join(missing)))"
+python3 vendor/harness-kit/scripts/check_first_success_docs.py .
 python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ```
@@ -73,10 +73,11 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
   - target path 자체가 디렉터리가 아니거나, 부모 경로 중 하나가 파일이다.
   - 먼저 경로 shape를 바로잡아야 한다.
 
-### first success 존재 확인 one-liner
+### check_first_success_docs.py
 
 - 역할: 최소 문서 세트가 생겼는지만 가장 얕게 확인한다.
 - write 여부: read-only
+- 실행 전제: Python 3 runtime이 필요하다.
 
 성공 신호:
 
@@ -84,8 +85,8 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 실패 신호:
 
-- `missing: ...`
-  - 빠진 문서 경로를 먼저 채워야 한다.
+- `first-success docs are missing:`
+  - 출력된 bullet 목록의 문서를 먼저 채워야 한다.
 
 ### validate_overlay_decisions.py
 

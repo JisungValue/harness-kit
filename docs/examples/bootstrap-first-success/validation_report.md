@@ -21,13 +21,13 @@
 
 ```bash
 python3 scripts/bootstrap_init.py /tmp/bootstrap-cli-project --language python
-python3 -c "from pathlib import Path; paths = ['docs/project_entrypoint.md', 'docs/decisions/README.md', 'docs/standard/architecture.md', 'docs/standard/implementation_order.md', 'docs/standard/coding_conventions_project.md', 'docs/standard/quality_gate_profile.md', 'docs/standard/testing_profile.md', 'docs/standard/commit_rule.md']; missing = [p for p in paths if not Path(p).exists()]; print('first success docs are present') if not missing else (_ for _ in ()).throw(SystemExit('missing: ' + ', '.join(missing)))"
+python3 scripts/check_first_success_docs.py /tmp/bootstrap-cli-project
 ```
 
 - 기대 결과:
   - `scripts/bootstrap_init.py`가 최소 문서 세트를 생성한다.
   - `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`가 함께 생성된다.
-  - 첫 검증 명령이 `first success docs are present`를 출력한다.
+  - first-success helper command가 `first success docs are present`를 출력한다.
   - `docs/project_entrypoint.md`가 vendored kit guide 경로를 가리키고, `AGENTS.md`가 그 문서로 수렴하며, `coding_conventions_project.md`가 선택 언어와 bootstrap 기준 문서를 함께 보여준다.
 
 ### 시나리오 2. 수동 복사 경로
@@ -127,6 +127,7 @@ python3 -m unittest tests.test_bootstrap_e2e
 ## 해석 메모
 
 - non-default vendored path를 쓰는 프로젝트는 `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`를 먼저 현지화한 뒤 validator를 실행해야 한다.
+- `python3`는 bootstrap CLI, first-success helper, validator를 실행하는 prerequisite runtime이다.
 
 ## 결과 요약
 

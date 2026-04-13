@@ -221,9 +221,32 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
         "docs/kit_maintenance/downstream_bundle_smoke_validation.md": bundle_smoke_doc,
     }
     for rel_path, text in first_success_surfaces.items():
+        if "scripts/check_first_success_docs.py" in text:
+            continue
         for required_path in readme_min:
             if required_path not in text:
                 errors.append(f"{rel_path}에 최소 문서 세트 경로 `{required_path}`가 반영되지 않았습니다.")
+
+    prerequisite_surfaces = {
+        "docs/quickstart.md": quickstart,
+        "docs/project_overlay/first_success_guide.md": first_success,
+        "docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
+        "bootstrap/README.md": read_text("bootstrap/README.md"),
+    }
+    for rel_path, text in prerequisite_surfaces.items():
+        if "Python 3" not in text:
+            errors.append(f"{rel_path}에 Python 3 prerequisite 설명이 없습니다.")
+
+    helper_command_surfaces = {
+        "docs/quickstart.md": quickstart,
+        "docs/project_overlay/first_success_guide.md": first_success,
+        "docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
+        "docs/examples/bootstrap-first-success/validation_report.md": first_success_example,
+        "docs/kit_maintenance/downstream_bundle_smoke_validation.md": bundle_smoke_doc,
+    }
+    for rel_path, text in helper_command_surfaces.items():
+        if "scripts/check_first_success_docs.py" not in text:
+            errors.append(f"{rel_path}에 canonical first-success helper command가 반영되지 않았습니다.")
 
 
 def check_entrypoint_role_labels(errors: list[str]) -> None:
