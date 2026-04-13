@@ -48,6 +48,7 @@ python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python
 ```
 
 ```bash
+python3 vendor/harness-kit/scripts/validate_overlay_consistency.py . --mode incremental
 python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ```
@@ -122,14 +123,17 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - 역할: 문서 간 참조와 책임 경계가 맞는지 본다.
 - 추가로 runtime instruction entrypoint가 같은 공통 진입점으로 수렴하는지도 본다.
 - write 여부: read-only
+- `--mode incremental`: partial adoption 상태의 safe gap과 blocking inconsistency를 분리한다.
 
 성공 신호:
 
 - `overlay consistency validation passed.`
+- `overlay consistency validation passed for mode 'incremental'.`
 
 실패 신호:
 
 - `overlay consistency validation failed.`
+- `overlay consistency validation failed for mode 'incremental'.`
 - 이어서 어떤 문서의 어떤 계약이 깨졌는지 bullet로 출력된다.
 
 해석:
@@ -139,6 +143,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - non-default vendored path라면 common guide 경로나 bootstrap 기준 문서 경로가 실제로 존재하는지도 함께 본다.
 - decisions index가 있으면 project entrypoint와 연결되는지, index에 적힌 decision file이 실제로 존재하는지도 함께 본다.
 - 이 단계가 통과하면 local first-success confidence는 갖췄다고 보고, 이후에는 workflow template로 CI guardrail을 붙인다.
+- brownfield에서 `--mode incremental`은 missing docs/runtime entrypoints를 follow-up으로만 보고, legacy leftover, stale vendored path, broken adapter chain 같은 unsafe state만 먼저 fail 한다.
 
 ### adopt_dry_run.py
 
@@ -214,6 +219,12 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 1. `AGENTS.md`가 `docs/project_entrypoint.md`를 가리키고, `CLAUDE.md`/`GEMINI.md`가 `AGENTS.md`를 다시 가리키는지 본다.
 2. `implementation_order.md`가 `architecture.md`를 기준 문서로 연결하는지 본다.
 3. `quality_gate_profile.md`와 `testing_profile.md`가 서로 책임 경계를 참조하는지 본다.
+
+### 기존 프로젝트인데 full validator는 아직 너무 이르다
+
+1. `adopt_dry_run.py`로 `missing files`, `differing files`, `legacy entrypoint migration candidates`를 먼저 본다.
+2. `validate_overlay_consistency.py --mode incremental`로 current partial state가 structurally safe한지 본다.
+3. incremental mode가 green이어도 missing docs follow-up은 그대로 남아 있으므로, `adopt_safe_write.py` 또는 수동 정리 후 full mode로 올라간다.
 
 ### 기존 프로젝트인데 무엇부터 해야 할지 모르겠다
 

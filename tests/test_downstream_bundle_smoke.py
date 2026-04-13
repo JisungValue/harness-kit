@@ -214,6 +214,37 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
                 adopt_result.stdout,
             )
 
+    def test_generated_bundle_supports_incremental_consistency_mode_for_partial_brownfield_state(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_root, vendor_root = self.vendor_generated_bundle(Path(tmp_dir))
+
+            self.assert_maintainer_assets_absent(vendor_root)
+
+            harness_guide_template = (vendor_root / "docs/project_overlay/project_entrypoint_template.md").read_text(
+                encoding="utf-8"
+            )
+            existing_harness_guide = project_root / "docs/project_entrypoint.md"
+            existing_harness_guide.parent.mkdir(parents=True, exist_ok=True)
+            existing_harness_guide.write_text(harness_guide_template, encoding="utf-8")
+
+            third_party_guide = project_root / DEFAULT_HARNESS_GUIDE_REFERENCE
+            third_party_guide.parent.mkdir(parents=True, exist_ok=True)
+            third_party_guide.write_text("# Harness Core Guide\n", encoding="utf-8")
+
+            incremental_result = self.run_bundle_script(
+                project_root,
+                "validate_overlay_consistency.py",
+                ".",
+                "--mode",
+                "incremental",
+            )
+            self.assertEqual(incremental_result.returncode, 0, incremental_result.stderr)
+            self.assertIn("overlay consistency validation passed for mode 'incremental'.", incremental_result.stdout)
+            self.assertIn("Still missing overlay docs allowed in incremental mode:", incremental_result.stdout)
+            self.assertIn("docs/decisions/README.md", incremental_result.stdout)
+            self.assertIn("Still missing runtime instruction entrypoints allowed in incremental mode:", incremental_result.stdout)
+            self.assertIn("AGENTS.md", incremental_result.stdout)
+
     def test_generated_bundle_supports_brownfield_safe_write_for_missing_files(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             project_root, vendor_root = self.vendor_generated_bundle(Path(tmp_dir))

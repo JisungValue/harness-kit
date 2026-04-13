@@ -79,7 +79,8 @@ python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --mig
 5. exact-match target만 다시 쓰고 싶으면 `--update-unchanged`를 추가한다.
 6. `differing files`나 `conflict candidates`를 자동으로 전체 overwrite하지 않는다.
 7. 정말 필요한 특정 경로만 `--force-overwrite`로 하나씩 명시한다.
-8. write 뒤에는 `validate_overlay_decisions.py`, `validate_overlay_consistency.py`로 상태를 다시 확인한다.
+8. write 전후로 partial adoption 상태가 structurally safe한지 보려면 `validate_overlay_consistency.py --mode incremental`을 먼저 쓴다.
+9. 최소 문서 세트가 충분히 맞춰진 뒤에는 `validate_overlay_decisions.py`, `validate_overlay_consistency.py` full mode로 상태를 다시 확인한다.
 
 ## 주의점
 

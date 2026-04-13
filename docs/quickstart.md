@@ -99,10 +99,12 @@ python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --for
 ```
 
 8. `differing files`와 `conflict candidates`는 기본적으로 수동 비교 대상으로 남긴다.
-9. 최소 문서 세트가 어느 정도 맞춰진 뒤에만 아래 validator로 넘어간다.
-10. 새 bundle 버전을 반영할 때 영향도를 먼저 분류하려면 `docs/project_overlay/harness_upgrade_impact_policy.md`를 함께 본다.
+9. partial adoption 상태가 structurally safe한지 먼저 보려면 아래 incremental validator를 실행한다.
+10. 최소 문서 세트가 어느 정도 맞춰진 뒤에만 full validator로 넘어간다.
+11. 새 bundle 버전을 반영할 때 영향도를 먼저 분류하려면 `docs/project_overlay/harness_upgrade_impact_policy.md`를 함께 본다.
 
 ```bash
+python3 vendor/harness-kit/scripts/validate_overlay_consistency.py . --mode incremental
 python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ```
@@ -120,6 +122,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
   - unresolved placeholder와 readiness 상태를 보고, 먼저 고쳐야 하는 canonical field를 우선순위와 함께 보여 준다.
 - `validate_overlay_consistency.py`
   - 문서 간 참조, decisions index 연결, runtime instruction entrypoint 연결, traversal contract, 책임 경계를 본다.
+  - `--mode incremental`은 partial adoption 상태의 safe gap과 blocker를 먼저 분리한다.
 - `adopt_dry_run.py`
   - 기존 프로젝트 상태를 read-only로 분류한다.
 - `adopt_safe_write.py`

@@ -294,6 +294,20 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
         if "scripts/check_first_success_docs.py" not in text:
             errors.append(f"{rel_path}에 canonical first-success helper command가 반영되지 않았습니다.")
 
+    incremental_surfaces = {
+        "docs/quickstart.md": quickstart,
+        "docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
+        "docs/project_overlay/adopt_dry_run.md": read_text("docs/project_overlay/adopt_dry_run.md"),
+        "docs/project_overlay/adopt_safe_write.md": read_text("docs/project_overlay/adopt_safe_write.md"),
+        "docs/project_overlay/cross_document_consistency_checker.md": read_text(
+            "docs/project_overlay/cross_document_consistency_checker.md"
+        ),
+        "docs/kit_maintenance/downstream_bundle_smoke_validation.md": bundle_smoke_doc,
+    }
+    for rel_path, text in incremental_surfaces.items():
+        if "--mode incremental" not in text:
+            errors.append(f"{rel_path}에 incremental consistency mode command 설명이 없습니다.")
+
     localized_vendoring_surfaces = {
         "docs/quickstart.md": quickstart,
         "docs/project_overlay/first_success_guide.md": first_success,
@@ -476,6 +490,8 @@ def check_validator_explainer_docs(errors: list[str]) -> None:
         "DEC-###-slug.md",
         "listed decision 문서는 기본 record shape",
         "legacy `docs/harness_guide.md`가 남아 있으면",
+        "--mode incremental",
+        "safe gap",
     ):
         if phrase not in consistency:
             errors.append(f"cross_document_consistency_checker에 `{phrase}` 설명이 없습니다.")
