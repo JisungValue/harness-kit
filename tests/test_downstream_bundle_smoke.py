@@ -18,7 +18,7 @@ DEFAULT_BOOTSTRAP_REFERENCE = (
 )
 FIRST_SUCCESS_COMMAND = (
     "from pathlib import Path; "
-    "paths = ['docs/project_entrypoint.md', 'docs/standard/architecture.md', "
+    "paths = ['docs/project_entrypoint.md', 'docs/decisions/README.md', 'docs/standard/architecture.md', "
     "'docs/standard/implementation_order.md', 'docs/standard/coding_conventions_project.md', "
     "'docs/standard/quality_gate_profile.md', 'docs/standard/testing_profile.md', "
     "'docs/standard/commit_rule.md']; "
@@ -99,6 +99,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             self.assertIn("first success docs are present", first_success_result.stdout)
 
             harness_guide = (project_root / "docs/project_entrypoint.md").read_text(encoding="utf-8")
+            decisions_index = (project_root / "docs/decisions/README.md").read_text(encoding="utf-8")
             coding_conventions = (project_root / "docs/standard/coding_conventions_project.md").read_text(
                 encoding="utf-8"
             )
@@ -109,6 +110,8 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             self.assertIn("docs/project_entrypoint.md", agents)
             self.assertIn("순서대로 모두 읽고 적용", agents)
             self.assertIn("둘 중 하나만 읽고 멈추지 않는다", harness_guide)
+            self.assertIn("docs/decisions/README.md", harness_guide)
+            self.assertIn("DEC-###-slug.md", decisions_index)
             self.assertIn("AGENTS.md", gemini)
             self.assertIn("연결된 문서 체인도 끝까지 따라간다", gemini)
 
@@ -153,7 +156,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             )
             self.assertEqual(adopt_result.returncode, 0, adopt_result.stderr)
             self.assertIn("write mode: disabled (read-only)", adopt_result.stdout)
-            self.assertIn("- missing files: 9", adopt_result.stdout)
+            self.assertIn("- missing files: 10", adopt_result.stdout)
             self.assertIn("- differing files: 1", adopt_result.stdout)
             self.assertIn("- conflict candidates: 0", adopt_result.stdout)
             self.assertIn("Differing files (manual review):", adopt_result.stdout)
@@ -188,7 +191,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
                 LANGUAGE,
             )
             self.assertEqual(safe_write_result.returncode, 0, safe_write_result.stderr)
-            self.assertIn("- created files: 9", safe_write_result.stdout)
+            self.assertIn("- created files: 10", safe_write_result.stdout)
             self.assertIn("- remaining missing files: 0", safe_write_result.stdout)
             self.assertIn("- remaining differing files: 1", safe_write_result.stdout)
 

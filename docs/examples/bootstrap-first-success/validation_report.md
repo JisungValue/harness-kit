@@ -21,7 +21,7 @@
 
 ```bash
 python3 scripts/bootstrap_init.py /tmp/bootstrap-cli-project --language python
-python3 -c "from pathlib import Path; paths = ['docs/project_entrypoint.md', 'docs/standard/architecture.md', 'docs/standard/implementation_order.md', 'docs/standard/coding_conventions_project.md', 'docs/standard/quality_gate_profile.md', 'docs/standard/testing_profile.md', 'docs/standard/commit_rule.md']; missing = [p for p in paths if not Path(p).exists()]; print('first success docs are present') if not missing else (_ for _ in ()).throw(SystemExit('missing: ' + ', '.join(missing)))"
+python3 -c "from pathlib import Path; paths = ['docs/project_entrypoint.md', 'docs/decisions/README.md', 'docs/standard/architecture.md', 'docs/standard/implementation_order.md', 'docs/standard/coding_conventions_project.md', 'docs/standard/quality_gate_profile.md', 'docs/standard/testing_profile.md', 'docs/standard/commit_rule.md']; missing = [p for p in paths if not Path(p).exists()]; print('first success docs are present') if not missing else (_ for _ in ()).throw(SystemExit('missing: ' + ', '.join(missing)))"
 ```
 
 - 기대 결과:
@@ -42,6 +42,7 @@ docs/project_overlay/agent_entrypoint_template.md -> AGENTS.md
 docs/project_overlay/claude_entrypoint_template.md -> CLAUDE.md
 docs/project_overlay/gemini_entrypoint_template.md -> GEMINI.md
 docs/project_overlay/project_entrypoint_template.md -> docs/project_entrypoint.md
+docs/project_overlay/decisions_index_template.md -> docs/decisions/README.md
 docs/project_overlay/architecture_template.md -> docs/standard/architecture.md
 docs/project_overlay/implementation_order_template.md -> docs/standard/implementation_order.md
 docs/project_overlay/coding_conventions_project_template.md -> docs/standard/coding_conventions_project.md
@@ -58,6 +59,7 @@ docs/project_overlay/commit_rule_template.md -> docs/standard/commit_rule.md
 ## 확인한 최소 문서 세트
 
 - `docs/project_entrypoint.md`
+- `docs/decisions/README.md`
 - `docs/standard/architecture.md`
 - `docs/standard/implementation_order.md`
 - `docs/standard/coding_conventions_project.md`
@@ -78,7 +80,9 @@ AGENTS.md
 CLAUDE.md
 GEMINI.md
 docs/
-  harness_guide.md
+  project_entrypoint.md
+  decisions/
+    README.md
   standard/
     architecture.md
     implementation_order.md
@@ -93,7 +97,7 @@ docs/
 - 검증 항목: init CLI 경로가 first success 문서 세트를 생성하는지 확인
   - 대조한 입력물: `scripts/bootstrap_init.py`, `docs/project_overlay/first_success_guide.md`
   - 실행 방법 또는 확인 방식: `python3 -m unittest tests.test_bootstrap_e2e`의 CLI 시나리오 실행
-  - 결과: init CLI가 최소 문서 세트와 runtime instruction entrypoint 세트를 만들고 첫 검증 명령이 성공했으며, `docs/project_entrypoint.md`의 vendored guide 경로, `AGENTS.md -> docs/project_entrypoint.md`, `CLAUDE.md`/`GEMINI.md` -> `AGENTS.md` 연결, `coding_conventions_project.md`의 언어/bootstrap 기준 문서도 함께 확인됐다
+  - 결과: init CLI가 최소 문서 세트, decisions index, runtime instruction entrypoint 세트를 만들고 첫 검증 명령이 성공했으며, `docs/project_entrypoint.md`의 vendored guide 경로, `docs/decisions/README.md`의 numbering/index 규칙, `AGENTS.md -> docs/project_entrypoint.md`, `CLAUDE.md`/`GEMINI.md` -> `AGENTS.md` 연결, `coding_conventions_project.md`의 언어/bootstrap 기준 문서도 함께 확인됐다
   - 실패 또는 미실행 사유: 없음
   - 판정: 정합
   - 잔여 리스크: generated 문서의 vendored 경로 현지화는 소비자 프로젝트에서 추가로 확인해야 한다
@@ -127,7 +131,7 @@ python3 -m unittest tests.test_bootstrap_e2e
 ## 결과 요약
 
 - 새 프로젝트 first success 경로는 init CLI와 수동 복사 양쪽 모두에서 재현 가능하다.
-- 최소 문서 세트, runtime instruction entrypoint 세트, 첫 검증 명령은 실제 smoke test로 뒷받침된다.
+- 최소 문서 세트, decisions index, runtime instruction entrypoint 세트, 첫 검증 명령은 실제 smoke test로 뒷받침된다.
 
 ## 남은 리스크
 

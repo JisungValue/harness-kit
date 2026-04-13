@@ -130,8 +130,8 @@ class AdoptSafeWriteTest(unittest.TestCase):
             result = self.run_adopt_safe_write(target, "--update-unchanged")
 
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertIn("- refreshed unchanged targets: 10", result.stdout)
-            self.assertIn("- remaining unchanged targets: 10", result.stdout)
+            self.assertIn("- refreshed unchanged targets: 11", result.stdout)
+            self.assertIn("- remaining unchanged targets: 11", result.stdout)
 
     def test_safe_write_can_migrate_legacy_project_entrypoint(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:

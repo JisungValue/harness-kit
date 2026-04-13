@@ -41,7 +41,7 @@ class AdoptDryRunTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("- missing files: 0", result.stdout)
-            self.assertIn("- existing but unchanged targets: 10", result.stdout)
+            self.assertIn("- existing but unchanged targets: 11", result.stdout)
             self.assertIn("- differing files: 0", result.stdout)
             self.assertIn("- conflict candidates: 0", result.stdout)
 
@@ -116,7 +116,7 @@ class AdoptDryRunTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("- missing files: 3", result.stdout)
-            self.assertIn("- conflict candidates: 7", result.stdout)
+            self.assertIn("- conflict candidates: 8", result.stdout)
             self.assertIn("parent path is not a directory", result.stdout)
 
     def test_legacy_project_entrypoint_is_reported_as_migration_candidate(self) -> None:

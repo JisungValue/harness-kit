@@ -39,20 +39,22 @@
 python3 vendor/harness-kit/scripts/bootstrap_init.py . --language python
 ```
 
-5. `harness-kit`를 `vendor/harness-kit/` 이외의 경로에 두었다면, validator를 돌리기 전에 아래 파일의 vendored 경로를 실제 배치 경로로 먼저 현지화한다.
+5. bootstrap 직후 `docs/project_entrypoint.md`와 `docs/decisions/README.md`를 먼저 읽고, 현재 프로젝트에서 구조/정책/예외/책임 위치 중 바로 확정해야 할 결정이 있는지 확인한다.
+
+6. `harness-kit`를 `vendor/harness-kit/` 이외의 경로에 두었다면, validator를 돌리기 전에 아래 파일의 vendored 경로를 실제 배치 경로로 먼저 현지화한다.
 
 - `docs/project_entrypoint.md`
 - `docs/standard/coding_conventions_project.md`
 
-6. 그다음 아래 검증 명령을 실행한다.
+7. 그다음 아래 검증 명령을 실행한다.
 
 ```bash
-python3 -c "from pathlib import Path; paths = ['docs/project_entrypoint.md', 'docs/standard/architecture.md', 'docs/standard/implementation_order.md', 'docs/standard/coding_conventions_project.md', 'docs/standard/quality_gate_profile.md', 'docs/standard/testing_profile.md', 'docs/standard/commit_rule.md']; missing = [p for p in paths if not Path(p).exists()]; print('first success docs are present') if not missing else (_ for _ in ()).throw(SystemExit('missing: ' + ', '.join(missing)))"
+python3 -c "from pathlib import Path; paths = ['docs/project_entrypoint.md', 'docs/decisions/README.md', 'docs/standard/architecture.md', 'docs/standard/implementation_order.md', 'docs/standard/coding_conventions_project.md', 'docs/standard/quality_gate_profile.md', 'docs/standard/testing_profile.md', 'docs/standard/commit_rule.md']; missing = [p for p in paths if not Path(p).exists()]; print('first success docs are present') if not missing else (_ for _ in ()).throw(SystemExit('missing: ' + ', '.join(missing)))"
 python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ```
 
-7. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
+8. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
 
 ### 기존 프로젝트 또는 부분 도입 상태
 
@@ -105,7 +107,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - `validate_overlay_decisions.py`
   - unresolved placeholder와 readiness 상태를 본다.
 - `validate_overlay_consistency.py`
-  - 문서 간 참조, runtime instruction entrypoint 연결, traversal contract, 책임 경계를 본다.
+  - 문서 간 참조, decisions index 연결, runtime instruction entrypoint 연결, traversal contract, 책임 경계를 본다.
 - `adopt_dry_run.py`
   - 기존 프로젝트 상태를 read-only로 분류한다.
 - `adopt_safe_write.py`
@@ -126,6 +128,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - vendored path를 실제 프로젝트 경로에 맞게 현지화하지 않음
 - non-default vendored path인데 현지화 전에 consistency validator부터 실행해 false confidence 또는 즉시 실패를 만듦
 - agent가 `AGENTS.md`만 읽고 `docs/project_entrypoint.md`, core guide, `docs/standard/*`까지 따라가지 않음
+- 중요한 정책/예외/책임 위치 변경인데 `docs/decisions/README.md`와 관련 decision 문서를 같이 안 봄
 - `--language`를 실제 프로젝트와 다르게 선택함
 - 기존 프로젝트에서 `adopt_dry_run.py` 결과를 보지 않고 validator를 너무 일찍 실행함
 - 기존 프로젝트에서 legacy `docs/harness_guide.md`를 그냥 두고 `docs/project_entrypoint.md`만 새로 생성해 반쪽 migration 상태가 됨

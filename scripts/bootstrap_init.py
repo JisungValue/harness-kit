@@ -15,6 +15,7 @@ TEMPLATE_TARGETS = {
     "docs/project_overlay/claude_entrypoint_template.md": "CLAUDE.md",
     "docs/project_overlay/gemini_entrypoint_template.md": "GEMINI.md",
     "docs/project_overlay/project_entrypoint_template.md": "docs/project_entrypoint.md",
+    "docs/project_overlay/decisions_index_template.md": "docs/decisions/README.md",
     "docs/project_overlay/architecture_template.md": "docs/standard/architecture.md",
     "docs/project_overlay/implementation_order_template.md": "docs/standard/implementation_order.md",
     "docs/project_overlay/coding_conventions_project_template.md": "docs/standard/coding_conventions_project.md",

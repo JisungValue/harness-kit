@@ -22,6 +22,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - `CLAUDE.md`
 - `GEMINI.md`
 - `docs/project_entrypoint.md`
+- `docs/decisions/README.md`
 - `docs/standard/architecture.md`
 - `docs/standard/implementation_order.md`
 - `docs/standard/coding_conventions_project.md`
@@ -37,6 +38,12 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - `CLAUDE.md`, `GEMINI.md`가 `AGENTS.md`를 공통 진입점으로 다시 가리키는지 본다.
 - `AGENTS.md`가 linked document를 순서대로 모두 읽고 적용해야 한다는 traversal contract를 명시하는지 본다.
 - adapter entrypoint도 `AGENTS.md` 이후 연결된 문서 체인을 끝까지 따르라고 설명하는지 본다.
+
+### decisions index 연결
+
+- `docs/project_entrypoint.md`가 `docs/decisions/README.md`를 프로젝트 결정 문서 entrypoint로 연결하는지 본다.
+- `docs/decisions/README.md`가 architecture와 decision 문서의 역할 경계를 설명하는지 본다.
+- index에 적힌 decision 문서가 실제로 존재하는지도 본다.
 
 ### harness guide와 standard 문서 세트
 
