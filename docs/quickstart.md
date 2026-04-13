@@ -29,8 +29,8 @@
 ### 새 프로젝트
 
 1. `harness-kit`를 프로젝트 안의 vendored 경로로 둔다.
-   - 아래 예시는 `vendor/harness-kit/`를 기준으로 한다.
-   - 다른 경로를 쓰면 예시 명령의 `vendor/harness-kit/` 부분을 실제 경로로 바꿔서 실행한다.
+    - 아래 예시는 `vendor/harness-kit/`를 기준으로 한다.
+    - 다른 경로를 쓰면 문서 안의 vendored path와 예시 명령의 `vendor/harness-kit/` 부분을 모두 같은 실제 경로로 바꿔서 실행한다.
 2. `docs/project_overlay/first_success_guide.md`를 본다.
 3. `docs/project_overlay/local_diagnostics_and_dry_run.md`를 같이 본다.
 4. 먼저 bootstrap만 실행한다.

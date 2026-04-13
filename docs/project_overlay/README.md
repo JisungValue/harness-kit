@@ -37,6 +37,10 @@
 
 ## 권장 읽기 순서
 
+- 이 문서는 source repo 안의 project overlay template guide다.
+- 이 저장소에서는 먼저 `docs/project_overlay/first_success_guide.md`, `docs/project_overlay/local_diagnostics_and_dry_run.md`, `docs/how_harness_kit_works.md`를 본다.
+- 아래 순서는 downstream 프로젝트를 bootstrap한 뒤 생성되는 문서 기준이다.
+
 - runtime 시작점: `AGENTS.md`
 - project-local 문서 entrypoint: `docs/project_entrypoint.md`
 - project decision index: `docs/decisions/README.md`
@@ -44,6 +48,12 @@
 - project-specific supporting docs: `docs/standard/*`
 - `AGENTS.md`를 열었으면 `docs/project_entrypoint.md`에서 멈추지 말고, 그 문서가 가리키는 core guide와 supporting docs까지 순서대로 모두 읽고 적용한다.
 - 현재 작업이 중요한 정책/예외/책임 위치를 다루면 `docs/decisions/README.md`에서 관련 decision 문서를 추가로 읽고 적용한다.
+
+## source repo와 downstream 구분
+
+- source repo에는 root `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `docs/project_entrypoint.md`, `docs/decisions/README.md`가 아직 없다.
+- 이 파일들은 downstream 프로젝트를 bootstrap하거나 template를 수동 복사한 뒤에 생성되는 consumer-local 문서다.
+- 따라서 source repo에서 문서를 읽는 단계에서는 `docs/project_overlay/*.md` 가이드와 template를 먼저 보고, downstream 프로젝트에서는 생성된 runtime entrypoint와 project entrypoint를 따른다.
 
 ## 역할 분리
 
