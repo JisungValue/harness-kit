@@ -21,6 +21,7 @@
 ## 필수 문서
 
 - `docs/project_entrypoint.md`
+- `docs/decisions/README.md`
 - `docs/standard/architecture.md`
 - `docs/standard/implementation_order.md`
 - `docs/standard/coding_conventions_project.md`
@@ -38,9 +39,11 @@
 
 - runtime 시작점: `AGENTS.md`
 - project-local 문서 entrypoint: `docs/project_entrypoint.md`
+- project decision index: `docs/decisions/README.md`
 - reusable core guide: `vendor/harness-kit/docs/harness_guide.md`
 - project-specific supporting docs: `docs/standard/*`
 - `AGENTS.md`를 열었으면 `docs/project_entrypoint.md`에서 멈추지 말고, 그 문서가 가리키는 core guide와 supporting docs까지 순서대로 모두 읽고 적용한다.
+- 현재 작업이 중요한 정책/예외/책임 위치를 다루면 `docs/decisions/README.md`에서 관련 decision 문서를 추가로 읽고 적용한다.
 
 ## 역할 분리
 
@@ -51,6 +54,9 @@
   - 프로젝트 로컬 문서 entrypoint다.
   - vendored core guide와 프로젝트 전용 `docs/standard/*`를 함께 연결하는 index 역할만 한다.
   - runtime이나 작업자는 이 문서에 적힌 공통 규칙과 프로젝트 전용 규칙 문서를 함께 읽고 적용해야 한다.
+- `docs/decisions/README.md`
+  - 중요한 프로젝트 결정 문서의 index다.
+  - `architecture.md`와 별도로 장기 유지되는 정책, 예외 처리 규칙, 책임 배치 결정을 찾는 진입점이다.
 - `AGENTS.md`
   - agent runtime이 공통으로 먼저 읽는 canonical instruction entrypoint다.
   - 실제 규칙은 `docs/project_entrypoint.md`로 연결하고, adapter별 파일은 이 파일만 다시 가리킨다.
@@ -105,6 +111,12 @@
 - `docs/standard/quality_gate_profile.md`
 - `docs/standard/testing_profile.md`
 - `docs/standard/commit_rule.md`
+
+## 프로젝트 결정 문서
+
+- `docs/decisions/README.md`
+
+- 현재 작업이 중요한 정책, 예외 처리 규칙, 책임 배치, 운영 결정을 건드리면 이 문서에서 관련 decision을 찾아 함께 읽고 갱신한다.
 ```
 
 ## 권장 CI 템플릿
@@ -144,3 +156,11 @@
 - `bootstrap/`은 선택적 시작 자산이고, `docs/project_overlay/`는 프로젝트 문서의 기본 골격이다.
 - 여러 프로젝트에서 반복되는 규칙은 overlay가 아니라 core로 승격한다.
 - 특정 프로젝트에만 필요한 규칙만 overlay에 남긴다.
+
+## decisions 구조
+
+- `docs/project_overlay/decisions_index_template.md`
+  - downstream 프로젝트의 `docs/decisions/README.md`로 생성하는 기본 index template다.
+- `docs/project_overlay/decision_record_template.md`
+  - 필요한 경우 `DEC-###-slug.md`로 복사해 쓰는 decision record template다.
+- canonical example은 `docs/examples/project-decisions/DEC-001-authorization-validation-location.md`를 본다.

@@ -32,6 +32,7 @@ class BootstrapInitCliTest(unittest.TestCase):
             self.assertTrue((target / "CLAUDE.md").exists())
             self.assertTrue((target / "GEMINI.md").exists())
             self.assertTrue((target / "docs/project_entrypoint.md").exists())
+            self.assertTrue((target / "docs/decisions/README.md").exists())
             self.assertTrue((target / "docs/standard/architecture.md").exists())
             self.assertTrue((target / "docs/standard/implementation_order.md").exists())
             self.assertTrue((target / "docs/standard/coding_conventions_project.md").exists())
@@ -57,7 +58,13 @@ class BootstrapInitCliTest(unittest.TestCase):
             self.assertIn("# Project Harness Entry Point", project_entrypoint)
             self.assertIn("공통 규칙", project_entrypoint)
             self.assertIn("프로젝트 전용 규칙", project_entrypoint)
+            self.assertIn("프로젝트 결정 문서", project_entrypoint)
+            self.assertIn("docs/decisions/README.md", project_entrypoint)
             self.assertIn("둘 중 하나만 읽고 멈추지 않는다", project_entrypoint)
+
+            decisions_index = (target / "docs/decisions/README.md").read_text(encoding="utf-8")
+            self.assertIn("# Project Decision Index", decisions_index)
+            self.assertIn("DEC-###-slug.md", decisions_index)
 
             claude_entrypoint = (target / "CLAUDE.md").read_text(encoding="utf-8")
             self.assertIn("# Claude Adapter Entry Point", claude_entrypoint)

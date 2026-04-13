@@ -83,6 +83,17 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             self.assertEqual(result.returncode, 1)
             self.assertIn("필수 runtime instruction entrypoint가 없습니다: AGENTS.md", result.stderr)
 
+    def test_missing_decisions_index_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+            (target / "docs/decisions/README.md").unlink()
+
+            result = self.run_checker(target)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("필수 overlay 문서가 없습니다: docs/decisions/README.md", result.stderr)
+
     def test_gemini_adapter_without_agents_reference_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
@@ -135,6 +146,40 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("docs/project_entrypoint.md: Missing section: ## 실행 계약", result.stderr)
+
+    def test_project_entrypoint_without_decisions_link_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            guide_path = target / "docs/project_entrypoint.md"
+            guide_text = guide_path.read_text(encoding="utf-8")
+            guide_text = guide_text.replace("## 프로젝트 결정 문서\n\n- `docs/decisions/README.md`\n\n- 현재 작업이 중요한 정책, 예외 처리 규칙, 책임 배치, 운영 결정을 건드리면 이 문서에서 관련 decision을 찾아 함께 읽고 갱신한다.\n", "", 1)
+            guide_path.write_text(guide_text, encoding="utf-8")
+
+            result = self.run_checker(target)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("docs/project_entrypoint.md: Missing section: ## 프로젝트 결정 문서", result.stderr)
+
+    def test_decisions_index_missing_listed_decision_file_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            decisions_index_path = target / "docs/decisions/README.md"
+            decisions_text = decisions_index_path.read_text(encoding="utf-8")
+            decisions_text = decisions_text.replace(
+                "- 아직 active decision 없음. 새 decision을 추가하면 여기에 기록한다.",
+                "- `docs/decisions/DEC-001-authorization-validation-location.md`",
+                1,
+            )
+            decisions_index_path.write_text(decisions_text, encoding="utf-8")
+
+            result = self.run_checker(target)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("index에 적힌 decision 문서가 실제 프로젝트에 없습니다", result.stderr)
 
     def test_self_referencing_common_harness_guide_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:

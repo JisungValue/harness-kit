@@ -170,6 +170,11 @@ def extract_codeblock_paths(lines: list[str], prefix: str | None = None) -> list
 def check_project_doc_path_consistency(errors: list[str]) -> None:
     readme = read_text("README.md")
     overlay_readme = read_text("docs/project_overlay/README.md")
+    quickstart = read_text("docs/quickstart.md")
+    first_success = read_text("docs/project_overlay/first_success_guide.md")
+    diagnostics = read_text("docs/project_overlay/local_diagnostics_and_dry_run.md")
+    first_success_example = read_text("docs/examples/bootstrap-first-success/validation_report.md")
+    bundle_smoke_doc = read_text("docs/kit_maintenance/downstream_bundle_smoke_validation.md")
     project_guide_template = read_text("docs/project_overlay/project_entrypoint_template.md")
     harness_guide = read_text("docs/harness_guide.md")
 
@@ -203,6 +208,22 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
 
     if "프로젝트 `testing_profile.md`" in harness_guide:
         errors.append("harness_guide에 구식 경로 `프로젝트 testing_profile.md` 표현이 남아 있습니다.")
+
+    decisions_lines = extract_h2_section(project_guide_template, "프로젝트 결정 문서")
+    if set(extract_bullet_paths(decisions_lines)) != {"docs/decisions/README.md"}:
+        errors.append("project_entrypoint_template의 프로젝트 결정 문서 목록이 기대값과 다릅니다.")
+
+    first_success_surfaces = {
+        "docs/quickstart.md": quickstart,
+        "docs/project_overlay/first_success_guide.md": first_success,
+        "docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
+        "docs/examples/bootstrap-first-success/validation_report.md": first_success_example,
+        "docs/kit_maintenance/downstream_bundle_smoke_validation.md": bundle_smoke_doc,
+    }
+    for rel_path, text in first_success_surfaces.items():
+        for required_path in readme_min:
+            if required_path not in text:
+                errors.append(f"{rel_path}에 최소 문서 세트 경로 `{required_path}`가 반영되지 않았습니다.")
 
 
 def check_entrypoint_role_labels(errors: list[str]) -> None:
@@ -285,6 +306,46 @@ def check_entrypoint_role_labels(errors: list[str]) -> None:
     ):
         if phrase not in runtime_entrypoint_joined:
             errors.append(f"project_overlay/README의 runtime entrypoint 예시에 traversal contract 문구 `{phrase}`가 없습니다.")
+
+
+def check_decisions_templates(errors: list[str]) -> None:
+    decisions_index = read_text("docs/project_overlay/decisions_index_template.md")
+    required_sections = (
+        "## 문서 역할",
+        "## 여기에 남기는 것",
+        "## 여기에 남기지 않는 것",
+        "## 번호 규칙",
+        "## 읽기 방법",
+        "## Current Decisions",
+        "## Superseded Decisions",
+    )
+    for section in required_sections:
+        if section not in decisions_index:
+            errors.append(f"decisions_index_template에 `{section}` 섹션이 없습니다.")
+    for phrase in (
+        "DEC-###-slug.md",
+        "최대 번호에 1",
+        "renumber하지 않는다",
+        "중요한 결정",
+        "작은 구현 디테일",
+    ):
+        if phrase not in decisions_index:
+            errors.append(f"decisions_index_template에 핵심 문구 `{phrase}`가 없습니다.")
+
+    decision_record = read_text("docs/project_overlay/decision_record_template.md")
+    for phrase in (
+        "- Status:",
+        "- Type:",
+        "- Date:",
+        "## Context",
+        "## Decision",
+        "## Rationale",
+        "## Consequences",
+        "## Related Docs",
+        "## When To Update",
+    ):
+        if phrase not in decision_record:
+            errors.append(f"decision_record_template에 `{phrase}`가 없습니다.")
 
 
 def iter_harness_log_entries(lines: list[str]):
@@ -379,6 +440,7 @@ def main() -> int:
 
     check_project_doc_path_consistency(errors)
     check_entrypoint_role_labels(errors)
+    check_decisions_templates(errors)
     check_harness_log(errors)
     check_language_template_structure(errors)
     check_project_facing_maintainer_leakage(errors)

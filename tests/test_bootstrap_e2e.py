@@ -15,6 +15,7 @@ TEMPLATE_MAPPINGS = {
     "docs/project_overlay/claude_entrypoint_template.md": "CLAUDE.md",
     "docs/project_overlay/gemini_entrypoint_template.md": "GEMINI.md",
     "docs/project_overlay/project_entrypoint_template.md": "docs/project_entrypoint.md",
+    "docs/project_overlay/decisions_index_template.md": "docs/decisions/README.md",
     "docs/project_overlay/architecture_template.md": "docs/standard/architecture.md",
     "docs/project_overlay/implementation_order_template.md": "docs/standard/implementation_order.md",
     "docs/project_overlay/coding_conventions_project_template.md": "docs/standard/coding_conventions_project.md",
@@ -30,7 +31,7 @@ DEFAULT_BOOTSTRAP_REFERENCE = (
 )
 FIRST_SUCCESS_COMMAND = (
     "from pathlib import Path; "
-    "paths = ['docs/project_entrypoint.md', 'docs/standard/architecture.md', "
+    "paths = ['docs/project_entrypoint.md', 'docs/decisions/README.md', 'docs/standard/architecture.md', "
     "'docs/standard/implementation_order.md', 'docs/standard/coding_conventions_project.md', "
     "'docs/standard/quality_gate_profile.md', 'docs/standard/testing_profile.md', "
     "'docs/standard/commit_rule.md']; "
@@ -52,12 +53,15 @@ class BootstrapEndToEndTest(unittest.TestCase):
         bootstrap_reference: str,
     ) -> None:
         harness_guide = (project_root / "docs/project_entrypoint.md").read_text(encoding="utf-8")
+        decisions_index = (project_root / "docs/decisions/README.md").read_text(encoding="utf-8")
         coding_conventions = (
             project_root / "docs/standard/coding_conventions_project.md"
         ).read_text(encoding="utf-8")
 
         self.assertIn(harness_guide_reference, harness_guide)
         self.assertIn("# Project Harness Entry Point", harness_guide)
+        self.assertIn("docs/decisions/README.md", harness_guide)
+        self.assertIn("DEC-###-slug.md", decisions_index)
         for project_doc_path in (
             "docs/standard/architecture.md",
             "docs/standard/implementation_order.md",
@@ -180,6 +184,10 @@ class BootstrapEndToEndTest(unittest.TestCase):
             self.assertIn("Created harness bootstrap docs in", init_result.stdout)
             self.assertIn(
                 "docs/project_entrypoint.md <- docs/project_overlay/project_entrypoint_template.md",
+                init_result.stdout,
+            )
+            self.assertIn(
+                "docs/decisions/README.md <- docs/project_overlay/decisions_index_template.md",
                 init_result.stdout,
             )
             self.assertIn(

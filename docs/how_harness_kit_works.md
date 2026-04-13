@@ -23,6 +23,7 @@
 - 프로젝트마다 달라져야 하는 문서 세트다.
 - 여기서 말하는 문서는 downstream 프로젝트 안에 놓이는 로컬 문서다.
 - 이 문서 세트의 project-local 문서 entrypoint는 `docs/project_entrypoint.md`이고, 이 파일이 vendored core guide와 `docs/standard/*`를 함께 연결한다.
+- 중요한 정책/예외/책임 배치 결정은 `docs/decisions/README.md`와 `DEC-###-slug.md` 문서로 별도 관리한다.
 - 대표적으로 아래 문서가 속한다.
   - `docs/project_entrypoint.md`
   - `docs/standard/architecture.md`
@@ -44,6 +45,7 @@
 - `CLAUDE.md`, `GEMINI.md`는 agent별 기본 파일명 차이를 흡수하는 얇은 adapter다.
 - 이 entrypoint들은 실제 규칙 본문을 중복 복사하지 않고 `docs/project_entrypoint.md`로 수렴한다.
 - 중요한 계약은 link presence만이 아니라 traversal이다. `AGENTS.md`를 열었으면 `docs/project_entrypoint.md`, 그 문서의 core guide, project-specific supporting docs까지 순서대로 모두 읽고 적용해야 한다.
+- 현재 작업이 중요한 프로젝트 결정과 관련 있으면 `docs/decisions/README.md`에서 관련 decision 문서를 찾아 함께 읽고 적용해야 한다.
 
 ### Validation
 

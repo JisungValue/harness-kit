@@ -126,17 +126,19 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 2. 새 프로젝트 first success 경로는 `docs/project_overlay/first_success_guide.md`를 먼저 본다.
 3. 로컬 진단 순서와 dry-run 해석은 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 함께 본다.
 4. init CLI 또는 `docs/project_overlay/` 수동 복사로 최소 문서 세트를 만든다.
-5. 생성된 `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 vendored 경로를 실제 배치 경로에 맞게 현지화한다.
-6. `python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success`로 unresolved decision readiness를 확인한다.
-7. `python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .`로 문서 간 교차 정합성과 runtime instruction entrypoint 연결을 확인한다.
-8. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
-9. 실제 task 몇 개를 돌린 뒤 project overlay만 보강한다.
+5. 생성된 `docs/project_entrypoint.md`, `docs/decisions/README.md`, `docs/standard/coding_conventions_project.md`를 읽고 현재 프로젝트에서 먼저 확정해야 할 구조/정책/예외 결정이 있는지 확인한다.
+6. vendored 경로가 있으면 `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 경로를 실제 배치 경로에 맞게 현지화한다.
+7. `python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success`로 unresolved decision readiness를 확인한다.
+8. `python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .`로 문서 간 교차 정합성과 runtime instruction entrypoint 연결을 확인한다.
+9. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
+10. 실제 task 몇 개를 돌린 뒤 project overlay와 decisions index를 함께 보강한다.
 
 기존 프로젝트나 부분 도입 상태를 먼저 읽어야 하면 `docs/project_overlay/adopt_dry_run.md`의 read-only adopt 흐름부터 시작한다.
 
 ## 최소 프로젝트 문서 세트
 
 - `docs/project_entrypoint.md`
+- `docs/decisions/README.md`
 - `docs/standard/architecture.md`
 - `docs/standard/implementation_order.md`
 - `docs/standard/coding_conventions_project.md`
@@ -154,6 +156,7 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 
 - runtime 시작점: `AGENTS.md`
 - project-local 문서 entrypoint: `docs/project_entrypoint.md`
+- project decision index: `docs/decisions/README.md`
 - reusable core guide: `vendor/harness-kit/docs/harness_guide.md`
 - project-specific supporting docs: `docs/standard/*`
 

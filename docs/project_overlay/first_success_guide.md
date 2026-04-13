@@ -17,10 +17,12 @@ first success의 최소 기준은 아래 둘이다.
 - 프로젝트에 최소 문서 세트가 빠짐없이 생긴다.
 - runtime instruction entrypoint 세트(`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`)가 함께 생긴다.
 - 로컬 `docs/project_entrypoint.md`가 공통 kit 문서와 프로젝트 전용 문서를 함께 가리킨다.
+- 로컬 `docs/decisions/README.md`가 프로젝트 결정 문서 진입점으로 함께 생긴다.
 
 ## 최소 문서 세트
 
 - `docs/project_entrypoint.md`
+- `docs/decisions/README.md`
 - `docs/standard/architecture.md`
 - `docs/standard/implementation_order.md`
 - `docs/standard/coding_conventions_project.md`
@@ -39,8 +41,9 @@ first success의 최소 기준은 아래 둘이다.
 1. 프로젝트 루트에 `harness-kit`를 vendoring 하거나 참조 가능한 경로로 둔다.
 2. 이번 프로젝트의 주 언어를 하나 정한다.
 3. init CLI 또는 수동 복사로 최소 문서 세트를 만든다.
-4. `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md` 안의 vendored 경로를 실제 배치 경로와 맞춘다.
-5. 아래 첫 검증 명령으로 최소 문서 세트 존재 여부를 확인한다.
+4. `docs/project_entrypoint.md`와 `docs/decisions/README.md`를 먼저 읽고, 현재 프로젝트에서 바로 확정할 중요한 결정이 있는지 확인한다.
+5. `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md` 안의 vendored 경로를 실제 배치 경로와 맞춘다.
+6. 아래 첫 검증 명령으로 최소 문서 세트 존재 여부를 확인한다.
 6. 그다음 프로젝트 결정이 필요한 항목을 `architecture.md`, `implementation_order.md`, `coding_conventions_project.md`부터 채운다.
 
 ## 가장 빠른 경로: init CLI
@@ -72,6 +75,7 @@ Created harness bootstrap docs in /path/to/project
 - CLAUDE.md <- docs/project_overlay/claude_entrypoint_template.md
 - GEMINI.md <- docs/project_overlay/gemini_entrypoint_template.md
 - docs/project_entrypoint.md <- docs/project_overlay/project_entrypoint_template.md
+- docs/decisions/README.md <- docs/project_overlay/decisions_index_template.md
 - docs/standard/architecture.md <- docs/project_overlay/architecture_template.md
 - docs/standard/implementation_order.md <- docs/project_overlay/implementation_order_template.md
 - docs/standard/coding_conventions_project.md <- docs/project_overlay/coding_conventions_project_template.md
@@ -92,6 +96,7 @@ vendor/harness-kit/docs/project_overlay/agent_entrypoint_template.md -> AGENTS.m
 vendor/harness-kit/docs/project_overlay/claude_entrypoint_template.md -> CLAUDE.md
 vendor/harness-kit/docs/project_overlay/gemini_entrypoint_template.md -> GEMINI.md
 vendor/harness-kit/docs/project_overlay/project_entrypoint_template.md -> docs/project_entrypoint.md
+vendor/harness-kit/docs/project_overlay/decisions_index_template.md -> docs/decisions/README.md
 vendor/harness-kit/docs/project_overlay/architecture_template.md -> docs/standard/architecture.md
 vendor/harness-kit/docs/project_overlay/implementation_order_template.md -> docs/standard/implementation_order.md
 vendor/harness-kit/docs/project_overlay/coding_conventions_project_template.md -> docs/standard/coding_conventions_project.md
@@ -115,7 +120,7 @@ vendor/harness-kit/docs/project_overlay/commit_rule_template.md -> docs/standard
 CLI 경로든 수동 경로든, 아래 명령으로 최소 문서 세트가 실제로 생겼는지 먼저 확인한다.
 
 ```bash
-python3 -c "from pathlib import Path; paths = ['docs/project_entrypoint.md', 'docs/standard/architecture.md', 'docs/standard/implementation_order.md', 'docs/standard/coding_conventions_project.md', 'docs/standard/quality_gate_profile.md', 'docs/standard/testing_profile.md', 'docs/standard/commit_rule.md']; missing = [p for p in paths if not Path(p).exists()]; print('first success docs are present') if not missing else (_ for _ in ()).throw(SystemExit('missing: ' + ', '.join(missing)))"
+python3 -c "from pathlib import Path; paths = ['docs/project_entrypoint.md', 'docs/decisions/README.md', 'docs/standard/architecture.md', 'docs/standard/implementation_order.md', 'docs/standard/coding_conventions_project.md', 'docs/standard/quality_gate_profile.md', 'docs/standard/testing_profile.md', 'docs/standard/commit_rule.md']; missing = [p for p in paths if not Path(p).exists()]; print('first success docs are present') if not missing else (_ for _ in ()).throw(SystemExit('missing: ' + ', '.join(missing)))"
 ```
 
 기대 결과:
@@ -136,8 +141,10 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 아래 항목이 보이면 first success로 본다.
 
 - `docs/project_entrypoint.md`가 존재한다.
+- `docs/decisions/README.md`가 존재한다.
 - `docs/project_entrypoint.md` 제목이 project-local entrypoint 역할을 드러낸다.
 - `AGENTS.md`가 `docs/project_entrypoint.md`를 우선 읽을 문서로 가리킨다.
+- `docs/project_entrypoint.md`가 `docs/decisions/README.md`를 프로젝트 결정 문서 entrypoint로 연결한다.
 - `AGENTS.md`가 linked document를 순서대로 모두 읽고 적용하라고 명시한다.
 - `docs/project_entrypoint.md`가 `공통 규칙`, `프로젝트 전용 규칙` 문서를 함께 읽고 적용하라고 명시한다.
 - `CLAUDE.md`, `GEMINI.md`가 `AGENTS.md`를 공통 진입점으로 가리킨다.
@@ -157,6 +164,8 @@ CLAUDE.md
 GEMINI.md
 docs/
   project_entrypoint.md
+  decisions/
+    README.md
   standard/
     architecture.md
     implementation_order.md

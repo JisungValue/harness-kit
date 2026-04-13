@@ -24,3 +24,9 @@
 - `docs/standard/quality_gate_profile.md`
 - `docs/standard/testing_profile.md`
 - `docs/standard/commit_rule.md`
+
+## 프로젝트 결정 문서
+
+- `docs/decisions/README.md`
+
+- 현재 작업이 중요한 정책, 예외 처리 규칙, 책임 배치, 운영 결정을 건드리면 이 문서에서 관련 decision을 찾아 함께 읽고 갱신한다.

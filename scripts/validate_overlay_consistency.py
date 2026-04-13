@@ -10,6 +10,7 @@ from pathlib import Path
 
 REQUIRED_DOCS = (
     "docs/project_entrypoint.md",
+    "docs/decisions/README.md",
     "docs/standard/architecture.md",
     "docs/standard/implementation_order.md",
     "docs/standard/coding_conventions_project.md",
@@ -34,6 +35,15 @@ EXPECTED_STANDARD_DOCS = {
     "docs/standard/testing_profile.md",
     "docs/standard/commit_rule.md",
 }
+
+DECISION_RECORD_REQUIRED_HEADINGS = (
+    "Context",
+    "Decision",
+    "Rationale",
+    "Consequences",
+    "Related Docs",
+    "When To Update",
+)
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -108,6 +118,7 @@ def validate_project_entrypoint(project_root: Path, errors: list[str]) -> None:
         traversal_lines = extract_h2_section(guide, "실행 계약")
         common_lines = extract_h2_section(guide, "공통 규칙")
         project_lines = extract_h2_section(guide, "프로젝트 전용 규칙")
+        decisions_lines = extract_h2_section(guide, "프로젝트 결정 문서")
     except ValueError as exc:
         errors.append(f"docs/project_entrypoint.md: {exc}")
         return
@@ -153,6 +164,52 @@ def validate_project_entrypoint(project_root: Path, errors: list[str]) -> None:
         errors.append(
             "docs/project_entrypoint.md: 프로젝트 전용 규칙에서 필수 standard 문서 참조가 누락됐습니다."
         )
+
+    decisions_paths = set(extract_bullet_paths(decisions_lines))
+    if "docs/decisions/README.md" not in decisions_paths:
+        errors.append("docs/project_entrypoint.md: `docs/decisions/README.md`를 프로젝트 결정 문서 진입점으로 연결하지 않습니다.")
+
+
+def validate_decisions_index(project_root: Path, errors: list[str]) -> None:
+    try:
+        decisions_index = read_text(project_root, "docs/decisions/README.md")
+        extract_h2_section(decisions_index, "문서 역할")
+        extract_h2_section(decisions_index, "여기에 남기는 것")
+        extract_h2_section(decisions_index, "여기에 남기지 않는 것")
+        numbering_lines = extract_h2_section(decisions_index, "번호 규칙")
+        extract_h2_section(decisions_index, "읽기 방법")
+        current_lines = extract_h2_section(decisions_index, "Current Decisions")
+        superseded_lines = extract_h2_section(decisions_index, "Superseded Decisions")
+    except ValueError as exc:
+        errors.append(f"docs/decisions/README.md: {exc}")
+        return
+
+    if "DEC-###-slug.md" not in "\n".join(numbering_lines):
+        errors.append("docs/decisions/README.md: 번호 규칙에 `DEC-###-slug.md` 형식이 없습니다.")
+
+    listed_paths = extract_bullet_paths(current_lines) + extract_bullet_paths(superseded_lines)
+    for path in listed_paths:
+        if not (project_root / path).is_file():
+            errors.append(f"docs/decisions/README.md: index에 적힌 decision 문서가 실제 프로젝트에 없습니다: {path}")
+            continue
+        validate_decision_record(project_root, path, errors)
+
+
+def validate_decision_record(project_root: Path, relative_path: str, errors: list[str]) -> None:
+    text = read_text(project_root, relative_path)
+    front_matter_phrases = (
+        "- Status:",
+        "- Type:",
+        "- Date:",
+        "- Related Docs:",
+        "- When To Update:",
+    )
+    for phrase in front_matter_phrases:
+        if phrase not in text:
+            errors.append(f"{relative_path}: `{phrase}` 메타데이터가 없습니다.")
+    for heading in DECISION_RECORD_REQUIRED_HEADINGS:
+        if f"## {heading}" not in text:
+            errors.append(f"{relative_path}: `## {heading}` 섹션이 없습니다.")
 
 
 def validate_runtime_entrypoints(project_root: Path, errors: list[str]) -> None:
@@ -329,6 +386,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     validate_project_entrypoint(project_root, errors)
+    validate_decisions_index(project_root, errors)
     validate_runtime_entrypoints(project_root, errors)
     validate_legacy_project_entrypoint_absence(project_root, errors)
     validate_architecture_and_order(project_root, errors)

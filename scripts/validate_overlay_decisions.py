@@ -11,6 +11,7 @@ from pathlib import Path
 
 REQUIRED_DOCS = (
     "docs/project_entrypoint.md",
+    "docs/decisions/README.md",
     "docs/standard/architecture.md",
     "docs/standard/implementation_order.md",
     "docs/standard/coding_conventions_project.md",
