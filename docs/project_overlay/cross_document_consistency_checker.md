@@ -42,14 +42,17 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ### decisions index 연결
 
 - `docs/project_entrypoint.md`가 `docs/decisions/README.md`를 프로젝트 결정 문서 entrypoint로 연결하는지 본다.
-- `docs/decisions/README.md`가 architecture와 decision 문서의 역할 경계를 설명하는지 본다.
+- `docs/decisions/README.md`에 필수 섹션(`문서 역할`, `여기에 남기는 것`, `여기에 남기지 않는 것`, `번호 규칙`, `읽기 방법`, `Current Decisions`, `Superseded Decisions`)이 있는지 본다.
+- `docs/decisions/README.md`의 번호 규칙에 `DEC-###-slug.md` 형식이 있는지 본다.
 - index에 적힌 decision 문서가 실제로 존재하는지도 본다.
+- listed decision 문서는 기본 record shape(`Status`, `Type`, `Date`, `Related Docs`, `When To Update`, `Context`, `Decision`, `Rationale`, `Consequences`)를 갖췄는지 본다.
 
 ### harness guide와 standard 문서 세트
 
 - `docs/project_entrypoint.md`가 project-local entrypoint 역할을 유지한 채 vendored core guide를 공통 규칙으로 참조하는지 본다.
 - `docs/project_entrypoint.md`가 `공통 규칙`과 `프로젝트 전용 규칙` 문서를 함께 읽고 적용해야 한다는 contract를 명시하는지 본다.
 - vendored core guide 경로가 실제 프로젝트에서 존재하는지도 본다.
+- legacy `docs/harness_guide.md`가 남아 있으면 stale local entrypoint로 보고 hard fail한다.
 - `docs/project_entrypoint.md`의 `프로젝트 전용 규칙` 섹션이 필수 standard 문서 세트를 빠짐없이 참조하는지 본다.
 - `공통 규칙` 섹션이 공통 harness guide 경로를 포함하는지도 본다.
 

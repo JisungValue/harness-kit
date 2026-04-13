@@ -414,6 +414,28 @@ def check_decisions_templates(errors: list[str]) -> None:
             errors.append(f"decision_record_template에 `{phrase}`가 없습니다.")
 
 
+def check_validator_explainer_docs(errors: list[str]) -> None:
+    unresolved = read_text("docs/project_overlay/unresolved_decision_validator.md")
+    for phrase in (
+        "docs/decisions/README.md",
+        "Resolve these required canonical fields first:",
+        "Then resolve these blocking unresolved markers:",
+        "Still allowed after the blocking items above are fixed:",
+    ):
+        if phrase not in unresolved:
+            errors.append(f"unresolved_decision_validator에 `{phrase}` 설명이 없습니다.")
+
+    consistency = read_text("docs/project_overlay/cross_document_consistency_checker.md")
+    for phrase in (
+        "필수 섹션",
+        "DEC-###-slug.md",
+        "listed decision 문서는 기본 record shape",
+        "legacy `docs/harness_guide.md`가 남아 있으면",
+    ):
+        if phrase not in consistency:
+            errors.append(f"cross_document_consistency_checker에 `{phrase}` 설명이 없습니다.")
+
+
 def iter_harness_log_entries(lines: list[str]):
     date_header = None
     idx = 0
@@ -507,6 +529,7 @@ def main() -> int:
     check_project_doc_path_consistency(errors)
     check_entrypoint_role_labels(errors)
     check_decisions_templates(errors)
+    check_validator_explainer_docs(errors)
     check_harness_log(errors)
     check_language_template_structure(errors)
     check_project_facing_maintainer_leakage(errors)
