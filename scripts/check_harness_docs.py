@@ -213,6 +213,49 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
     if set(extract_bullet_paths(decisions_lines)) != {"docs/decisions/README.md"}:
         errors.append("project_entrypoint_template의 프로젝트 결정 문서 목록이 기대값과 다릅니다.")
 
+    for rel_path, text in {
+        "README.md": readme,
+        "docs/project_overlay/README.md": overlay_readme,
+    }.items():
+        if "source repo" not in text or "bootstrap한 뒤" not in text:
+            errors.append(f"{rel_path}에 source repo와 downstream bootstrap 이후 문맥 구분 설명이 없습니다.")
+        if "root `AGENTS.md`" not in text:
+            errors.append(f"{rel_path}에 source repo에는 root `AGENTS.md`가 아직 없다는 설명이 없습니다.")
+
+    if "예시 명령의 `vendor/harness-kit/` 부분을 모두 같은 실제 경로로" not in quickstart:
+        errors.append("docs/quickstart.md에 non-default vendoring command path localize 설명이 충분하지 않습니다.")
+
+    overlay_completion_example = read_text("docs/examples/bootstrap-first-success/overlay_completion_validation_report.md")
+    for required_path in readme_min:
+        if required_path not in overlay_completion_example:
+            errors.append(
+                f"docs/examples/bootstrap-first-success/overlay_completion_validation_report.md에 필수 문서 `{required_path}`가 반영되지 않았습니다."
+            )
+    overlay_completion_targets = set(
+        extract_bullet_paths(
+            extract_h2_section(
+                overlay_completion_example,
+                "판정 대상",
+            )
+        )
+    )
+    expected_explicit_targets = {
+        "AGENTS.md",
+        "CLAUDE.md",
+        "GEMINI.md",
+        "docs/project_entrypoint.md",
+        "docs/decisions/README.md",
+        "validate_overlay_decisions.py",
+        "validate_overlay_consistency.py",
+    }
+    missing_targets = expected_explicit_targets - overlay_completion_targets
+    if missing_targets:
+        joined = ", ".join(sorted(missing_targets))
+        errors.append(
+            "docs/examples/bootstrap-first-success/overlay_completion_validation_report.md의 판정 대상 목록이 현재 계약과 다릅니다: "
+            f"{joined}"
+        )
+
     first_success_surfaces = {
         "docs/quickstart.md": quickstart,
         "docs/project_overlay/first_success_guide.md": first_success,

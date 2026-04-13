@@ -10,6 +10,7 @@
 - `CLAUDE.md`
 - `GEMINI.md`
 - `docs/project_entrypoint.md`
+- `docs/decisions/README.md`
 - `docs/standard/*`
 - `validate_overlay_decisions.py`
 - `validate_overlay_consistency.py`
@@ -27,6 +28,7 @@
 - 판정: 통과
 - 근거:
   - `docs/project_entrypoint.md`
+  - `docs/decisions/README.md`
   - `docs/standard/architecture.md`
   - `docs/standard/implementation_order.md`
   - `docs/standard/coding_conventions_project.md`
@@ -42,14 +44,21 @@
   - `docs/project_entrypoint.md`가 vendored common guide 경로를 가진다.
   - `docs/standard/*` 문서 세트를 모두 연결한다.
 
-### 3. runtime instruction entrypoint 연결
+### 3. 프로젝트 결정 문서 구조
+
+- 판정: 통과
+- 근거:
+  - `docs/decisions/README.md`가 존재한다.
+  - project-local 중요한 결정을 architecture와 별도 index로 찾을 수 있다.
+
+### 4. runtime instruction entrypoint 연결
 
 - 판정: 통과
 - 근거:
   - `AGENTS.md`가 `docs/project_entrypoint.md`를 우선 읽을 문서로 가진다.
   - `CLAUDE.md`, `GEMINI.md`가 `AGENTS.md`를 공통 진입점으로 가진다.
 
-### 4. 프로젝트 결정 필요 항목 해소 여부
+### 5. 프로젝트 결정 필요 항목 해소 여부
 
 - 판정: first-success 기준 통과, phase2 기준 미통과 가능
 - 근거:
@@ -57,7 +66,7 @@
   - `first-success`에서 허용되는 placeholder는 일부 남아 있을 수 있다.
   - `phase2` readiness는 별도 확인 대상이다.
 
-### 5. profile 간 책임 분리
+### 6. profile 간 책임 분리
 
 - 판정: 통과
 - 근거:
@@ -66,14 +75,14 @@
   - 테스트 세부 범위와 환경은 testing profile 쪽에 있다.
   - `commit_rule.md`의 `커밋 전 최소 점검 항목`에 compile / type / build / test 기준이 남아 있다.
 
-### 6. 구조와 진행 순서 연결
+### 7. 구조와 진행 순서 연결
 
 - 판정: 통과
 - 근거:
   - `implementation_order.md`가 `architecture.md`를 기준 문서로 참조한다.
   - Phase 2에서 어떤 레이어부터 진행할지 해석 가능하다.
 
-### 7. 자동 validator 결과
+### 8. 자동 validator 결과
 
 - 판정: first-success ready
 - 근거:
@@ -86,6 +95,7 @@
 - 상태: `first-success ready`
 - 이유:
   - 최소 문서 세트가 갖춰졌고
+  - decisions index도 갖춰졌고
   - runtime entrypoint 연결도 갖춰졌고
   - local harness guide 연결이 맞고
   - first-success validator와 consistency checker가 통과하며
