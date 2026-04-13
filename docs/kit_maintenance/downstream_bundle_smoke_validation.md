@@ -9,6 +9,7 @@
 - `scripts/generate_downstream_bundle.py`
 - canonical `dist/harness-kit-project-bundle/`
 - generated bundle 안의 `scripts/bootstrap_init.py`
+- generated bundle 안의 `scripts/check_first_success_docs.py`
 - generated bundle 안의 `scripts/adopt_dry_run.py`
 - generated bundle 안의 `scripts/adopt_safe_write.py`
 - generated bundle 안의 `scripts/validate_overlay_decisions.py`
@@ -20,23 +21,34 @@
 ### 시나리오 1. greenfield vendored bundle bootstrap
 
 - 입력 조건:
-  - 빈 임시 consumer project
-  - canonical `dist/harness-kit-project-bundle/`를 `vendor/harness-kit/`로 복사
-  - 언어 선택: `python`
+- 빈 임시 consumer project
+- canonical `dist/harness-kit-project-bundle/`를 `vendor/harness-kit/`로 복사
+- 언어 선택: `python`, `java`, `kotlin`
 - 실행 명령:
 
 ```bash
-python3 vendor/harness-kit/scripts/bootstrap_init.py . --language python
-python3 vendor/harness-kit/scripts/check_first_success_docs.py .
-python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
-python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
+python3 /tmp/python-project/vendor/harness-kit/scripts/bootstrap_init.py /tmp/python-project --language python
+python3 /tmp/python-project/vendor/harness-kit/scripts/check_first_success_docs.py /tmp/python-project
+python3 /tmp/python-project/vendor/harness-kit/scripts/validate_overlay_decisions.py /tmp/python-project --readiness first-success
+python3 /tmp/python-project/vendor/harness-kit/scripts/validate_overlay_consistency.py /tmp/python-project
+
+python3 /tmp/java-project/vendor/harness-kit/scripts/bootstrap_init.py /tmp/java-project --language java
+python3 /tmp/java-project/vendor/harness-kit/scripts/check_first_success_docs.py /tmp/java-project
+python3 /tmp/java-project/vendor/harness-kit/scripts/validate_overlay_decisions.py /tmp/java-project --readiness first-success
+python3 /tmp/java-project/vendor/harness-kit/scripts/validate_overlay_consistency.py /tmp/java-project
+
+python3 /tmp/kotlin-project/vendor/harness-kit/scripts/bootstrap_init.py /tmp/kotlin-project --language kotlin
+python3 /tmp/kotlin-project/vendor/harness-kit/scripts/check_first_success_docs.py /tmp/kotlin-project
+python3 /tmp/kotlin-project/vendor/harness-kit/scripts/validate_overlay_decisions.py /tmp/kotlin-project --readiness first-success
+python3 /tmp/kotlin-project/vendor/harness-kit/scripts/validate_overlay_consistency.py /tmp/kotlin-project
 ```
 
 - 기대 결과:
-  - canonical bundle의 project-facing script만으로 최소 문서 세트 생성과 first-success validator 실행이 끝난다.
+  - 각 언어별 fresh consumer project에서 canonical bundle의 project-facing script만으로 최소 문서 세트 생성과 first-success validator 실행이 끝난다.
   - `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`도 함께 생성되고 `AGENTS.md -> docs/project_entrypoint.md` 연결이 성립한다.
   - `docs/decisions/README.md`도 함께 생성된다.
   - `docs/project_entrypoint.md`와 `coding_conventions_project.md`는 vendored bundle 경로를 그대로 참조한다.
+  - `coding_conventions_project.md`는 각 언어에 맞는 bootstrap convention template 경로를 가리킨다.
   - bundle 안에 maintainer 전용 문서나 maintainer용 bundle script가 없어도 greenfield 경로가 막히지 않는다.
 
 ### 시나리오 2. brownfield partial repo adopt dry-run
@@ -72,6 +84,24 @@ python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python
   - 실행 후 first-success 문서 존재 확인과 overlay decision validator가 통과한다.
   - maintainer 전용 자산 없이도 brownfield create-only safe write 경로가 동작한다.
 
+### 시나리오 4. legacy entrypoint migration
+
+- 입력 조건:
+  - canonical `dist/harness-kit-project-bundle/`를 `vendor/harness-kit/`로 복사한 임시 consumer project
+  - 기존 프로젝트 쪽에는 legacy `docs/harness_guide.md`만 있고 `AGENTS.md`도 legacy 경로를 가리킨다.
+- 실행 명령:
+
+```bash
+python3 vendor/harness-kit/scripts/adopt_dry_run.py . --language python
+python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --migrate-legacy-entrypoint
+python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
+```
+
+- 기대 결과:
+  - dry-run이 `legacy entrypoint migration candidates`를 보고한다.
+  - safe write가 legacy entrypoint를 canonical `docs/project_entrypoint.md`로 rename migration 한다.
+  - migration 후 consistency validator가 통과한다.
+
 ## 실행 명령
 
 ```bash
@@ -80,7 +110,7 @@ python3 -m unittest tests.test_downstream_bundle_smoke
 
 ## 현재 기준 기대 결과
 
-- canonical `dist/harness-kit-project-bundle/`만으로 greenfield bootstrap, first-success validator, brownfield adopt dry-run, brownfield create-only safe write의 최소 흐름이 재현된다.
+- canonical `dist/harness-kit-project-bundle/`만으로 greenfield `python`/`java`/`kotlin` bootstrap, first-success validator, brownfield adopt dry-run, brownfield create-only safe write, legacy entrypoint migration의 최소 흐름이 재현된다.
 - smoke test는 maintainer 전용 자산 누락 때문에 consumer 경로가 깨지는 문제를 release 전에 조기에 드러낸다.
 
 ## 잔여 리스크

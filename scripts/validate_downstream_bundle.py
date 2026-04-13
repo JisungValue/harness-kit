@@ -16,6 +16,7 @@ from generate_downstream_bundle import (
     bundle_readme_text,
     existing_output_paths,
     extract_bundle_patterns,
+    extract_maintainer_only_paths,
     owned_bundle_paths,
     sha256_hex,
 )
@@ -42,6 +43,7 @@ def build_expected_manifest(bundle_files) -> dict:
         "artifact_format": "directory",
         "boundary_document": BOUNDARY_DOCUMENT,
         "source_patterns": extract_bundle_patterns(),
+        "excluded_patterns": extract_maintainer_only_paths(),
         "entry_readme": ENTRY_README,
         "manifest_path": MANIFEST_NAME,
         "copied_files": [
@@ -123,6 +125,7 @@ def validate_manifest(bundle_root: Path, bundle_files, manifest: dict | None, er
         "artifact_format",
         "boundary_document",
         "source_patterns",
+        "excluded_patterns",
         "entry_readme",
         "manifest_path",
         "copied_files",

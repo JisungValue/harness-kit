@@ -116,8 +116,13 @@ def extract_maintainer_only_paths() -> list[str]:
     return extract_boundary_paths(BOUNDARY_EXCLUDE_SECTIONS)
 
 
+def matches_any_pattern(relative_path: Path, patterns: list[str]) -> bool:
+    return any(relative_path.match(pattern) for pattern in patterns)
+
+
 def build_bundle_files() -> list[BundleFile]:
     by_path: dict[str, BundleFile] = {}
+    excluded_patterns = extract_maintainer_only_paths()
 
     for pattern in extract_bundle_patterns():
         matched_any = False
@@ -126,6 +131,8 @@ def build_bundle_files() -> list[BundleFile]:
                 continue
             matched_any = True
             relative_path = path.relative_to(ROOT)
+            if matches_any_pattern(relative_path, excluded_patterns):
+                continue
             by_path[relative_path.as_posix()] = BundleFile(
                 source=path,
                 relative_path=relative_path,
@@ -162,6 +169,7 @@ def bundle_readme_text(bundle_files: list[BundleFile]) -> str:
             "",
             "## Not Included",
             "",
+            "- maintainer-only exclusion pattern은 include path와 겹쳐도 downstream bundle에서 우선 제외한다.",
             *[f"- `{path}`" for path in maintainer_only_paths],
             "",
             "## Bundle Facts",
@@ -180,6 +188,7 @@ def manifest_data(bundle_files: list[BundleFile], generated_readme_sha256: str, 
         "artifact_format": "directory",
         "boundary_document": BOUNDARY_DOCUMENT,
         "source_patterns": extract_bundle_patterns(),
+        "excluded_patterns": extract_maintainer_only_paths(),
         "entry_readme": ENTRY_README,
         "manifest_path": MANIFEST_NAME,
         "copied_files": [

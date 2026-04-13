@@ -80,6 +80,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             )
             self.assertIn("bootstrap/**/*", manifest["source_patterns"])
             self.assertIn("docs/examples/**/*.md", manifest["source_patterns"])
+            self.assertIn("docs/kit_maintenance/*", manifest["excluded_patterns"])
             self.assertEqual(manifest["generated_files"][0]["path"], "README.md")
 
     def test_bundle_patterns_are_read_from_boundary_document(self) -> None:
@@ -129,6 +130,27 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
 
         self.assertIn("- `scripts/check_harness_docs.py`", readme_text)
         self.assertIn("- `scripts/validate_downstream_bundle.py`", readme_text)
+
+    def test_maintainer_only_patterns_override_included_paths(self) -> None:
+        module = load_bundle_module()
+        synthetic_boundary = "\n".join(
+            [
+                "### 1) Downstream 필수 자산",
+                "- `scripts/bootstrap_init.py`",
+                "- `docs/examples/**/*.md`",
+                "### 2) Downstream 선택 자산",
+                "- `docs/examples/**/*.md`",
+                "### 3) Maintainer 전용 자산",
+                "- `scripts/bootstrap_init.py`",
+            ]
+        )
+
+        with mock.patch.object(module, "read_boundary_document", return_value=synthetic_boundary):
+            bundle_files = module.build_bundle_files()
+            bundle_paths = [bundle_file.relative_path.as_posix() for bundle_file in bundle_files]
+
+        self.assertNotIn("scripts/bootstrap_init.py", bundle_paths)
+        self.assertTrue(all(path.startswith("docs/examples/") for path in bundle_paths))
 
     def test_manifest_is_deterministic_across_output_locations(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
