@@ -51,17 +51,23 @@ class BootstrapInitCliTest(unittest.TestCase):
             agent_entrypoint = (target / "AGENTS.md").read_text(encoding="utf-8")
             self.assertIn("# Agent Runtime Entry Point", agent_entrypoint)
             self.assertIn("docs/project_entrypoint.md", agent_entrypoint)
+            self.assertIn("순서대로 모두 읽고 적용", agent_entrypoint)
 
             project_entrypoint = (target / "docs/project_entrypoint.md").read_text(encoding="utf-8")
             self.assertIn("# Project Harness Entry Point", project_entrypoint)
+            self.assertIn("공통 규칙", project_entrypoint)
+            self.assertIn("프로젝트 전용 규칙", project_entrypoint)
+            self.assertIn("둘 중 하나만 읽고 멈추지 않는다", project_entrypoint)
 
             claude_entrypoint = (target / "CLAUDE.md").read_text(encoding="utf-8")
             self.assertIn("# Claude Adapter Entry Point", claude_entrypoint)
             self.assertIn("AGENTS.md", claude_entrypoint)
+            self.assertIn("연결된 문서 체인도 끝까지 따라간다", claude_entrypoint)
 
             gemini_entrypoint = (target / "GEMINI.md").read_text(encoding="utf-8")
             self.assertIn("# Gemini Adapter Entry Point", gemini_entrypoint)
             self.assertIn("AGENTS.md", gemini_entrypoint)
+            self.assertIn("연결된 문서 체인도 끝까지 따라간다", gemini_entrypoint)
 
     def test_fails_fast_when_generated_file_exists(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:

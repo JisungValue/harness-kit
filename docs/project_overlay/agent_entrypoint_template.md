@@ -6,6 +6,12 @@
 
 - `docs/project_entrypoint.md`
 
+## 실행 계약
+
+- 이 파일에 연결된 문서는 순서대로 모두 읽고 적용한 뒤에만 다음 작업으로 넘어간다.
+- `docs/project_entrypoint.md`를 열었으면 그 문서의 `공통 규칙`, `프로젝트 전용 규칙`에 연결된 문서까지 끝까지 이어서 읽고 적용한다.
+- 링크만 확인하고 중간 문서에서 멈추지 않는다.
+
 ## 유지 원칙
 
 - 프로젝트 규칙 추가 또는 수정은 `docs/project_entrypoint.md`와 연결된 `docs/standard/*` 문서에서 관리한다.

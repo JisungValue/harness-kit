@@ -98,6 +98,44 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             self.assertEqual(result.returncode, 1)
             self.assertIn("GEMINI.md: `AGENTS.md`를 공통 진입점으로 연결하지 않습니다.", result.stderr)
 
+    def test_agents_without_traversal_contract_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            agents_path = target / "AGENTS.md"
+            agents_text = agents_path.read_text(encoding="utf-8")
+            agents_text = agents_text.replace(
+                "## 실행 계약\n\n- 이 파일에 연결된 문서는 순서대로 모두 읽고 적용한 뒤에만 다음 작업으로 넘어간다.\n- `docs/project_entrypoint.md`를 열었으면 그 문서의 `공통 규칙`, `프로젝트 전용 규칙`에 연결된 문서까지 끝까지 이어서 읽고 적용한다.\n- 링크만 확인하고 중간 문서에서 멈추지 않는다.\n\n",
+                "",
+                1,
+            )
+            agents_path.write_text(agents_text, encoding="utf-8")
+
+            result = self.run_checker(target)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("AGENTS.md: Missing section: ## 실행 계약", result.stderr)
+
+    def test_project_entrypoint_without_traversal_contract_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            guide_path = target / "docs/project_entrypoint.md"
+            guide_text = guide_path.read_text(encoding="utf-8")
+            guide_text = guide_text.replace(
+                "## 실행 계약\n\n- 이 문서에 들어온 runtime 또는 작업자는 `공통 규칙`, `프로젝트 전용 규칙`에 적힌 문서를 순서대로 모두 읽고 적용한 뒤에만 구현 또는 판단을 진행한다.\n- vendored core guide는 공통 규칙 기준을 주고, `docs/standard/*` 문서는 프로젝트 전용 기준을 주므로 둘 중 하나만 읽고 멈추지 않는다.\n\n",
+                "",
+                1,
+            )
+            guide_path.write_text(guide_text, encoding="utf-8")
+
+            result = self.run_checker(target)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("docs/project_entrypoint.md: Missing section: ## 실행 계약", result.stderr)
+
     def test_self_referencing_common_harness_guide_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"

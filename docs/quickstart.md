@@ -105,7 +105,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - `validate_overlay_decisions.py`
   - unresolved placeholder와 readiness 상태를 본다.
 - `validate_overlay_consistency.py`
-  - 문서 간 참조, runtime instruction entrypoint 연결, 책임 경계를 본다.
+  - 문서 간 참조, runtime instruction entrypoint 연결, traversal contract, 책임 경계를 본다.
 - `adopt_dry_run.py`
   - 기존 프로젝트 상태를 read-only로 분류한다.
 - `adopt_safe_write.py`
@@ -125,6 +125,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - init 대상 경로에 이미 생성 대상 문서가 있어 fail-fast가 발생함
 - vendored path를 실제 프로젝트 경로에 맞게 현지화하지 않음
 - non-default vendored path인데 현지화 전에 consistency validator부터 실행해 false confidence 또는 즉시 실패를 만듦
+- agent가 `AGENTS.md`만 읽고 `docs/project_entrypoint.md`, core guide, `docs/standard/*`까지 따라가지 않음
 - `--language`를 실제 프로젝트와 다르게 선택함
 - 기존 프로젝트에서 `adopt_dry_run.py` 결과를 보지 않고 validator를 너무 일찍 실행함
 - 기존 프로젝트에서 legacy `docs/harness_guide.md`를 그냥 두고 `docs/project_entrypoint.md`만 새로 생성해 반쪽 migration 상태가 됨

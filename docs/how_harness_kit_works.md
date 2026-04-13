@@ -43,6 +43,7 @@
 - `AGENTS.md`는 agent runtime이 공통으로 먼저 읽는 canonical instruction entrypoint다.
 - `CLAUDE.md`, `GEMINI.md`는 agent별 기본 파일명 차이를 흡수하는 얇은 adapter다.
 - 이 entrypoint들은 실제 규칙 본문을 중복 복사하지 않고 `docs/project_entrypoint.md`로 수렴한다.
+- 중요한 계약은 link presence만이 아니라 traversal이다. `AGENTS.md`를 열었으면 `docs/project_entrypoint.md`, 그 문서의 core guide, project-specific supporting docs까지 순서대로 모두 읽고 적용해야 한다.
 
 ### Validation
 
@@ -82,10 +83,11 @@
 ### Greenfield
 
 1. `bootstrap_init.py`로 최소 문서 세트를 만든다.
-2. first-success one-liner로 존재를 확인한다.
-3. `validate_overlay_decisions.py --readiness first-success`로 readiness를 확인한다.
-4. `validate_overlay_consistency.py`로 구조적 정합성을 확인한다.
-5. project overlay를 채우고 실제 task를 시작한다.
+2. runtime entrypoint chain을 따라 `AGENTS.md -> docs/project_entrypoint.md -> core guide + docs/standard/*` 순서를 확인한다.
+3. first-success one-liner로 존재를 확인한다.
+4. `validate_overlay_decisions.py --readiness first-success`로 readiness를 확인한다.
+5. `validate_overlay_consistency.py`로 구조적 정합성과 traversal contract를 확인한다.
+6. project overlay를 채우고 실제 task를 시작한다.
 
 ### Brownfield
 

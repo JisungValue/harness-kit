@@ -85,6 +85,12 @@ def extract_bullet_paths(lines: list[str]) -> list[str]:
     return paths
 
 
+def require_phrases(text: str, phrases: tuple[str, ...], error_prefix: str, errors: list[str]) -> None:
+    for phrase in phrases:
+        if phrase not in text:
+            errors.append(f"{error_prefix}: `{phrase}` 설명이 없습니다.")
+
+
 def partition_existing_file_paths(project_root: Path, paths: list[str]) -> tuple[list[str], list[str]]:
     existing: list[str] = []
     missing: list[str] = []
@@ -99,11 +105,24 @@ def partition_existing_file_paths(project_root: Path, paths: list[str]) -> tuple
 def validate_project_entrypoint(project_root: Path, errors: list[str]) -> None:
     try:
         guide = read_text(project_root, "docs/project_entrypoint.md")
+        traversal_lines = extract_h2_section(guide, "실행 계약")
         common_lines = extract_h2_section(guide, "공통 규칙")
         project_lines = extract_h2_section(guide, "프로젝트 전용 규칙")
     except ValueError as exc:
         errors.append(f"docs/project_entrypoint.md: {exc}")
         return
+
+    require_phrases(
+        "\n".join(traversal_lines),
+        (
+            "공통 규칙",
+            "프로젝트 전용 규칙",
+            "순서대로 모두 읽고 적용",
+            "둘 중 하나만 읽고 멈추지 않는다",
+        ),
+        "docs/project_entrypoint.md 실행 계약",
+        errors,
+    )
 
     common_paths = extract_bullet_paths(common_lines)
     candidate_common_paths = [
@@ -140,9 +159,22 @@ def validate_runtime_entrypoints(project_root: Path, errors: list[str]) -> None:
     try:
         agents = read_text(project_root, "AGENTS.md")
         agent_lines = extract_h2_section(agents, "우선 읽을 문서")
+        traversal_lines = extract_h2_section(agents, "실행 계약")
     except ValueError as exc:
         errors.append(f"AGENTS.md: {exc}")
         return
+
+    require_phrases(
+        "\n".join(traversal_lines),
+        (
+            "순서대로 모두 읽고 적용",
+            "공통 규칙",
+            "프로젝트 전용 규칙",
+            "중간 문서에서 멈추지 않는다",
+        ),
+        "AGENTS.md 실행 계약",
+        errors,
+    )
 
     agent_paths = set(extract_bullet_paths(agent_lines))
     if "docs/project_entrypoint.md" not in agent_paths:
@@ -159,6 +191,8 @@ def validate_runtime_entrypoints(project_root: Path, errors: list[str]) -> None:
         adapter_targets = set(extract_bullet_paths(adapter_lines))
         if "AGENTS.md" not in adapter_targets:
             errors.append(f"{adapter_path}: `AGENTS.md`를 공통 진입점으로 연결하지 않습니다.")
+        if "연결된 문서 체인도 끝까지 따라간다" not in adapter:
+            errors.append(f"{adapter_path}: `AGENTS.md` 이후 연결된 문서 체인을 끝까지 따르라는 설명이 없습니다.")
 
 
 def validate_legacy_project_entrypoint_absence(project_root: Path, errors: list[str]) -> None:
