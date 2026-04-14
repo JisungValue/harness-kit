@@ -12,6 +12,7 @@
 
 - 여러 프로젝트에서 공통으로 재사용하는 규칙과 phase 기준이다.
 - 이 저장소의 공통 guide와 phase/policy 문서가 여기에 속한다.
+- core 운영 판단은 현재 repo 안의 `README`, `docs/*`, `docs/decisions/*`, `scripts/*`, `config` 같은 repo-local 근거를 source-of-truth로 우선한다.
 - 대표적으로 아래가 core다.
   - repo의 `docs/harness_guide.md`
   - `docs/harness/common/*`
@@ -24,6 +25,7 @@
 - 여기서 말하는 문서는 downstream 프로젝트 안에 놓이는 로컬 문서다.
 - 이 문서 세트의 project-local 문서 entrypoint는 `docs/project_entrypoint.md`이고, 이 파일이 vendored core guide와 `docs/standard/*`를 함께 연결한다.
 - 중요한 정책/예외/책임 배치 결정은 `docs/decisions/README.md`와 `DEC-###-slug.md` 문서로 별도 관리한다.
+- repo에 아직 없는 프로젝트 전용 결정은 추측으로 메우지 않고 overlay 또는 decision 문서로 남긴다.
 - 대표적으로 아래 문서가 속한다.
   - `docs/project_entrypoint.md`
   - `docs/standard/architecture.md`
@@ -116,6 +118,13 @@
   - bundle 변경이 단순 설명 개선인지, additive update인지, review-required인지, breaking 가능성이 큰지 구분한다.
 
 한 도구가 이 역할을 전부 담당하면, write / validation / inspection의 의미가 섞여서 사용자가 실패 원인을 해석하기 어려워진다.
+
+## Repo-Local Source Of Truth
+
+- 현재 repo 안의 `README`, `docs/*`, `docs/decisions/*`, `scripts/*`, `config`가 작업 기준의 source-of-truth다.
+- 기억, 외부 대화, 다른 프로젝트 관행은 참고할 수 있어도 현재 repo 근거보다 우선하지 않는다.
+- repo에 없는 결정은 추측으로 메우지 않는다.
+- 없는 결정은 project overlay, `docs/decisions/`, `implementation_notes.md`, `validation_report.md` 같은 task workspace 기록으로 handoff하고 필요하면 사용자 승인 대상으로 올린다.
 
 ## first-success 와 phase2
 

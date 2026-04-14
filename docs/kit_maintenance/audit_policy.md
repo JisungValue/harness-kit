@@ -75,6 +75,7 @@ changed-parts는 바뀐 파일과 인접 영향만 본다.
 - "직접 관련 있는", "과도한", "단순한", "충분한"처럼 판단 편차가 큰 표현을 새로 도입했다면, 체크 질문, 승인 불가 예시, 긍정 예시, 결정 규칙 중 하나 이상으로 해석 범위를 좁혔는가
 - 같은 규칙이 불필요하게 중복 추가되지 않았는가
 - 기존 규칙 의미를 우연히 뒤집거나 약화하지 않았는가
+- 현재 판단의 source-of-truth가 repo-local 문서/스크립트/설정인지, repo에 없는 결정을 추측으로 메우지 않았는지 기록상 확인 가능한가
 - maintainer 전용 지침 변경인데 프로젝트 영향 문서 본문에 maintainer 전용 경로, `harness.log` 규칙, drift 대응 절차가 추가되지 않았는가
 - 프로젝트 영향 문서 변경인데 `harness.log` 외의 maintainer 전용 문서 수정이 불필요하게 섞이지 않았는가
 - downstream bundle 포함/제외 경계를 바꾸는 변경이라면 `docs/kit_maintenance/downstream_bundle_boundary.md`, 인접 project-facing 문서, 관련 release 문서가 같은 경계를 가리키는가
@@ -111,6 +112,7 @@ whole-harness는 전체 문서 흐름과 core 일관성을 본다.
 - subagent/제3자가 같은 규칙으로 유사한 감사 결론을 낼 수 있을 만큼 기준이 객관적인가
 - `docs/standard/coding_guidelines_core.md`의 공통 품질 기준과 project convention 참조 구조가 phase 문서, template, example, bootstrap 자산 전반에서 같은 방식으로 유지되는가
 - 여러 구현 에이전트가 같은 입력으로 작업해도 동일한 필수 재참조 문서, 체크리스트, 감사 게이트를 따라 유사한 품질 결론에 수렴할 수 있게 기준이 재현 가능한가
+- 같은 입력에서 서로 다른 session이 기억이나 외부 관행보다 repo-local 근거를 먼저 보게 만드는 운영 원칙이 충분히 명시적인가
 - 새 지침이나 정책이 너무 넓거나 모호해서 서로 다른 session이 같은 입력을 보고 다른 결론에 도달할 위험이 있는지 직접 점검했는가
 - 편차 위험이 있다면 yes/no 질문, 명시적 판정 단위, 승인 불가 예시, 긍정 예시, sample artifact 중 하나 이상으로 해석 범위를 좁혔는가
 - bundle generation, bundle validation, release 절차, upgrade 판단이 생기거나 바뀌면 ad hoc 목록이 아니라 같은 boundary source-of-truth에 묶여 있는가

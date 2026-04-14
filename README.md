@@ -184,6 +184,10 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 
 ## 운영 원칙
 
+- 작업 기준은 현재 repo 안의 `README`, `docs/*`, `docs/decisions/*`, `scripts/*`, `config` 같은 repo-local 근거를 source-of-truth로 우선한다.
+- 기억, 외부 대화, 다른 프로젝트 관행, 다른 저장소의 비슷한 규칙은 참고할 수 있어도 현재 repo 근거보다 우선하지 않는다.
+- 필요한 결정이나 근거가 repo 안에 없으면 추측으로 메우지 않는다.
+- repo에 없는 결정은 project overlay, `docs/decisions/`, `implementation_notes.md`, `validation_report.md` 같은 task workspace 기록으로 넘기고 필요하면 사용자 승인 대상으로 올린다.
 - 공통 Core는 가능한 한 안정적으로 유지한다.
 - 프로젝트별 차이는 overlay에 두고 core를 쉽게 포크하지 않는다.
 - 새 규칙이 여러 프로젝트에서 반복되면 core로 승격한다.

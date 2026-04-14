@@ -497,6 +497,68 @@ def check_validator_explainer_docs(errors: list[str]) -> None:
             errors.append(f"cross_document_consistency_checker에 `{phrase}` 설명이 없습니다.")
 
 
+def check_repo_local_source_of_truth_docs(errors: list[str]) -> None:
+    required_phrases = (
+        "repo-local",
+        "source-of-truth",
+        "기억, 외부 대화, 다른 프로젝트 관행",
+        "추측으로 메우지",
+    )
+
+    for rel_path in (
+        "README.md",
+        "docs/harness_guide.md",
+        "docs/how_harness_kit_works.md",
+        "docs/harness/common/process_policy.md",
+    ):
+        text = read_text(rel_path)
+        for phrase in required_phrases:
+            if phrase not in text:
+                errors.append(f"{rel_path}에 repo-local source-of-truth 핵심 문구 `{phrase}`가 없습니다.")
+        for handoff_phrase in ("project overlay", "docs/decisions/", "implementation_notes.md", "validation_report.md"):
+            if handoff_phrase not in text:
+                errors.append(f"{rel_path}에 누락된 결정 handoff 문구 `{handoff_phrase}`가 없습니다.")
+
+    artifact_policy = read_text("docs/harness/common/artifact_policy.md")
+    for phrase in (
+        "repo-local source-of-truth",
+        "구현 중 결정 사항",
+        "결과 요약",
+        "문서화/승인 대상으로",
+    ):
+        if phrase not in artifact_policy:
+            errors.append(f"artifact_policy에 repo-local 근거 기록 규칙 `{phrase}`가 없습니다.")
+
+    common_audit_policy = read_text("docs/harness/common/audit_policy.md")
+    if "기억/외부 대화/다른 프로젝트 관행" not in common_audit_policy:
+        errors.append("common audit_policy에 repo-local source-of-truth 감사 문구가 없습니다.")
+
+    maintainer_audit_policy = read_text("docs/kit_maintenance/audit_policy.md")
+    for phrase in (
+        "source-of-truth",
+        "repo-local",
+        "추측으로 메우지",
+    ):
+        if phrase not in maintainer_audit_policy:
+            errors.append(f"kit_maintenance audit_policy에 `{phrase}` 문구가 없습니다.")
+
+    implementation_template = read_text("docs/templates/task/implementation_notes.md")
+    for phrase in (
+        "- repo-local 근거:",
+        "- repo에 없어 문서화/승인 대상으로 넘긴 결정:",
+    ):
+        if phrase not in implementation_template:
+            errors.append(f"implementation_notes template에 `{phrase}` 항목이 없습니다.")
+
+    validation_template = read_text("docs/templates/task/validation_report.md")
+    for phrase in (
+        "- 이번 판단의 repo-local 근거:",
+        "- repo에 없어 후속 문서화/승인 대상으로 남긴 결정:",
+    ):
+        if phrase not in validation_template:
+            errors.append(f"validation_report template에 `{phrase}` 항목이 없습니다.")
+
+
 def iter_harness_log_entries(lines: list[str]):
     date_header = None
     idx = 0
@@ -591,6 +653,7 @@ def main() -> int:
     check_entrypoint_role_labels(errors)
     check_decisions_templates(errors)
     check_validator_explainer_docs(errors)
+    check_repo_local_source_of_truth_docs(errors)
     check_harness_log(errors)
     check_language_template_structure(errors)
     check_project_facing_maintainer_leakage(errors)
