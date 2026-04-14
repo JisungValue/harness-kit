@@ -21,6 +21,8 @@
 ## 결과 요약
 
 - 경량 운영 예외를 적용할 수 있는 작은 문서 정렬 작업의 기록 예시가 준비되었다.
+- 이번 판단의 repo-local 근거: `issue.md`, `requirements.md`, `plan.md`, 관련 overlay guide를 기준으로 경량 판정과 영향 범위를 확인했다.
+- repo에 없어 후속 문서화/승인 대상으로 남긴 결정: 없음
 
 ## Phase 5에서 반영할 related decisions/
 

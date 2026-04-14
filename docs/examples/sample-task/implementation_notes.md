@@ -11,6 +11,9 @@
 
 ## 구현 중 결정 사항
 
+- repo-local 근거: `docs/harness/common/design_quality_policy.md`, `docs/harness/common/performance_policy.md`, `docs/examples/sample-task/validation_report.md`를 기준으로 예시 기록 형식을 정리했다.
+- repo에 없어 문서화/승인 대상으로 넘긴 결정: sample task는 실제 프로젝트가 아니므로 project-specific 품질 게이트 명령과 concrete architecture 결정은 실제 도입 프로젝트 overlay에서 확정해야 한다.
+
 - performance 검토 기록 예시:
   - 대상 경로: 대량 사용자 목록을 export용 DTO로 변환하는 배치 함수
   - 입력 규모 또는 제약: 최대 50,000건 배치, 메모리 급증 없이 완료해야 함

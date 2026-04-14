@@ -37,6 +37,16 @@
 - 경량 태스크 예외는 명시적으로 허용된 범위에서만 적용되며, 기본 Phase 원칙을 자동으로 대체하지 않는다.
 - 충돌이 해소되지 않으면 사용자 승인 없이는 예외 적용이나 Phase 변경을 하지 않는다.
 
+## Repo-Local Source-Of-Truth 규칙
+
+- 작업 기준은 현재 repo 안의 `README`, `docs/*`, `docs/decisions/*`, `scripts/*`, `config` 같은 repo-local 근거를 우선한다.
+- 위 규칙은 repo-local `source-of-truth` 우선 원칙으로 본다.
+- 기억, 외부 대화, 다른 프로젝트 관행, 과거 비슷한 프로젝트 경험은 참고할 수 있어도 현재 repo 근거보다 우선하지 않는다.
+- repo 안 근거끼리 충돌하면 위 우선순위 규칙과 더 구체적인 문서를 먼저 적용한다.
+- 그래도 해소되지 않으면 사용자 승인 없이는 예외 적용이나 Phase 변경을 하지 않는다.
+- 필요한 결정이나 근거가 repo에 없으면 추측으로 메우지 않는다.
+- repo에 없는 프로젝트 전용 결정은 project overlay 또는 `docs/decisions/` 반영 후보로 넘기고, 같은 사실을 `implementation_notes.md` 또는 `validation_report.md`에 기록한다.
+
 ## Phase 운영 원칙
 
 - 모든 구현 태스크는 `docs/project_entrypoint.md`에 정의된 Phase 순서를 따른다.

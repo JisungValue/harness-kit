@@ -81,6 +81,8 @@
 ## 결과 요약
 
 - 새 프로젝트가 core와 overlay를 분리해 시작할 수 있는 최소 구조가 준비되었다.
+- 이번 판단의 repo-local 근거: `README.md`, `docs/project_overlay/README.md`, `docs/harness/common/*`, sample task 문서를 교차 기준으로 사용했다.
+- repo에 없어 후속 문서화/승인 대상으로 남긴 결정: 실제 프로젝트 품질 게이트 명령, 실제 architecture 세부 결정, 실제 language-specific convention은 도입 프로젝트 overlay에서 확정해야 한다.
 
 ## Phase 5에서 반영할 related decisions/
 
