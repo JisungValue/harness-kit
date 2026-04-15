@@ -2,6 +2,12 @@
 
 빈 프로젝트 또는 거의 빈 프로젝트에서 `harness-kit`를 처음 붙일 때, 가장 먼저 재현해야 하는 성공 상태를 정리한 가이드다.
 
+## 문서 역할
+
+- 이 문서는 greenfield first-success 상세판이다.
+- canonical 시작 경로를 먼저 고르려면 `docs/quickstart.md`를 보고, 실패 원인과 출력 해석은 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 본다.
+- downstream 구조와 Phase 흐름 전체는 `docs/downstream_harness_flow.md`를 본다.
+
 ## 시작 전 준비물
 
 - 프로젝트 루트가 준비되어 있어야 한다.
@@ -17,7 +23,7 @@
 first success의 최소 기준은 아래 둘이다.
 
 - 프로젝트에 최소 문서 세트가 빠짐없이 생긴다.
-- runtime instruction entrypoint 세트(`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`)가 함께 생긴다.
+- runtime launcher entrypoint 세트(`AGENTS.md`, `CLAUDE.md`, `GEMINI.md`)가 함께 생긴다.
 - 로컬 `docs/project_entrypoint.md`가 공통 kit 문서와 프로젝트 전용 문서를 함께 가리킨다.
 - 로컬 `docs/decisions/README.md`가 프로젝트 결정 문서 진입점으로 함께 생긴다.
 

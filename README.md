@@ -15,17 +15,57 @@
 - downstream 프로젝트에서 bootstrap 또는 brownfield adoption으로 하네스를 도입하는 흐름과, 도입 후 task가 어떤 Phase로 진행되는지는 [`docs/downstream_harness_flow.md`](docs/downstream_harness_flow.md)에서 따로 정리한다.
 - 즉, 상단은 kit 자체 설명, 뒤쪽은 downstream 사용 흐름 설명으로 읽으면 된다.
 
+## 핵심 용어
+
+- `source repo`
+  - 지금 보고 있는 `harness-kit` 저장소 자체다.
+- `downstream project`
+  - `harness-kit`를 vendoring하거나 bootstrap한 실제 사용 프로젝트다.
+- `vendored core`
+  - downstream 프로젝트 안에 들어온 `vendor/harness-kit/docs/harness_guide.md` 같은 공통 규칙 문서다.
+- `runtime launcher entrypoint`
+  - agent runtime이 맨 먼저 여는 `AGENTS.md`다.
+- `documentation/policy entrypoint`
+  - runtime launcher가 진입한 뒤 실제 문서 규칙을 묶어 주는 `docs/project_entrypoint.md`다.
+
+기본 예시는 `source repo`를 downstream 프로젝트 안의 `vendor/harness-kit/`로 vendoring하는 경로를 기준으로 설명한다.
+
+## Source Repo 와 Downstream 관계
+
+| source repo file | downstream generated or vendored file | runtime role |
+| --- | --- | --- |
+| [`docs/project_overlay/agent_entrypoint_template.md`](docs/project_overlay/agent_entrypoint_template.md) | `AGENTS.md` | runtime launcher entrypoint |
+| [`docs/project_overlay/project_entrypoint_template.md`](docs/project_overlay/project_entrypoint_template.md) | `docs/project_entrypoint.md` | documentation/policy entrypoint |
+| [`docs/project_overlay/decisions_index_template.md`](docs/project_overlay/decisions_index_template.md) | `docs/decisions/README.md` | project decision index |
+| [`docs/harness_guide.md`](docs/harness_guide.md) | `vendor/harness-kit/docs/harness_guide.md` | vendored core guide |
+| [`docs/project_overlay/architecture_template.md`](docs/project_overlay/architecture_template.md) | `docs/standard/architecture.md` | project-local supporting doc |
+
+- source repo의 template/guide는 downstream에서 그대로 쓰이거나, bootstrap 결과물로 생성되거나, vendored copy로 들어간다.
+- downstream 사용자는 source repo의 template를 직접 실행하는 것이 아니라, downstream 프로젝트 안에 생긴 `AGENTS.md`, `docs/project_entrypoint.md`, `docs/standard/*`, `docs/decisions/README.md`, `vendor/harness-kit/docs/harness_guide.md`를 따라간다.
+
 ## 시작 문서
 
-- 처음 시작: [`docs/quickstart.md`](docs/quickstart.md)
-- 전체 동작 설명: [`docs/how_harness_kit_works.md`](docs/how_harness_kit_works.md)
-- downstream 하네스 도입/운영 흐름: [`docs/downstream_harness_flow.md`](docs/downstream_harness_flow.md)
-- 새 프로젝트 first success: [`docs/project_overlay/first_success_guide.md`](docs/project_overlay/first_success_guide.md)
-- 로컬 진단과 dry-run: [`docs/project_overlay/local_diagnostics_and_dry_run.md`](docs/project_overlay/local_diagnostics_and_dry_run.md)
-- 기존 프로젝트 read-only adopt: [`docs/project_overlay/adopt_dry_run.md`](docs/project_overlay/adopt_dry_run.md)
-- 기존 프로젝트 bundle upgrade 절차: [`docs/project_overlay/downstream_harness_upgrade_guide.md`](docs/project_overlay/downstream_harness_upgrade_guide.md)
-- 기존 프로젝트 diff review checklist: [`docs/project_overlay/downstream_overlay_diff_review_checklist.md`](docs/project_overlay/downstream_overlay_diff_review_checklist.md)
-- 기존 프로젝트 upgrade impact 분류: [`docs/project_overlay/harness_upgrade_impact_policy.md`](docs/project_overlay/harness_upgrade_impact_policy.md)
+### 새 프로젝트 시작
+
+- canonical 시작 문서: [`docs/quickstart.md`](docs/quickstart.md)
+- greenfield 상세판: [`docs/project_overlay/first_success_guide.md`](docs/project_overlay/first_success_guide.md)
+- 로컬 진단/validator 해석: [`docs/project_overlay/local_diagnostics_and_dry_run.md`](docs/project_overlay/local_diagnostics_and_dry_run.md)
+
+### 기존 프로젝트에 도입
+
+- read-only 현재 상태 파악: [`docs/project_overlay/adopt_dry_run.md`](docs/project_overlay/adopt_dry_run.md)
+- local diagnostics 보조: [`docs/project_overlay/local_diagnostics_and_dry_run.md`](docs/project_overlay/local_diagnostics_and_dry_run.md)
+
+### 이미 도입된 프로젝트 업그레이드
+
+- upgrade 전체 흐름: [`docs/project_overlay/downstream_harness_upgrade_guide.md`](docs/project_overlay/downstream_harness_upgrade_guide.md)
+- diff review checklist: [`docs/project_overlay/downstream_overlay_diff_review_checklist.md`](docs/project_overlay/downstream_overlay_diff_review_checklist.md)
+- impact 분류: [`docs/project_overlay/harness_upgrade_impact_policy.md`](docs/project_overlay/harness_upgrade_impact_policy.md)
+
+### 개념 이해
+
+- 전체 개념 설명: [`docs/how_harness_kit_works.md`](docs/how_harness_kit_works.md)
+- downstream 도입/운영 흐름: [`docs/downstream_harness_flow.md`](docs/downstream_harness_flow.md)
 
 ## 디렉터리 구조
 
@@ -173,8 +213,8 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 - source repo에는 root `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`가 아직 없고, 이 파일들은 downstream 프로젝트를 bootstrap한 뒤에 생긴다.
 - 아래 순서는 downstream 프로젝트를 bootstrap한 뒤 생성되는 문서 기준이다.
 
-- runtime 시작점: `AGENTS.md`
-- project-local 문서 entrypoint: `docs/project_entrypoint.md`
+- runtime launcher entrypoint: `AGENTS.md`
+- documentation/policy entrypoint: `docs/project_entrypoint.md`
 - project decision index: `docs/decisions/README.md`
 - reusable core guide: `vendor/harness-kit/docs/harness_guide.md`
 - project-specific supporting docs: `docs/standard/*`

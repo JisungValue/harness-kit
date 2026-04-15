@@ -2,6 +2,12 @@
 
 이 문서는 `harness-kit`가 `0.1.0`에서 어떤 구조와 개념으로 동작하는지 설명한다.
 
+## 문서 역할
+
+- 이 문서는 개념 설명 문서다.
+- 처음 쓰는 사용자가 실제로 어디서 시작할지는 `README.md`와 `docs/quickstart.md`를 먼저 본다.
+- downstream 프로젝트 구조와 Phase 흐름 상세는 `docs/downstream_harness_flow.md`가 더 직접적으로 설명한다.
+
 ## 한 줄 요약
 
 `harness-kit`는 공통 core 문서와 프로젝트별 overlay 문서를 나누고, bootstrap / validation / dry-run 도구로 안전하게 도입을 돕는 doc-first kit다.
@@ -43,9 +49,9 @@
 
 ### Runtime Instruction Entrypoint
 
-- `AGENTS.md`는 agent runtime이 공통으로 먼저 읽는 canonical instruction entrypoint다.
+- `AGENTS.md`는 agent runtime이 공통으로 먼저 읽는 runtime launcher entrypoint다.
 - `CLAUDE.md`, `GEMINI.md`는 agent별 기본 파일명 차이를 흡수하는 얇은 adapter다.
-- 이 entrypoint들은 실제 규칙 본문을 중복 복사하지 않고 `docs/project_entrypoint.md`로 수렴한다.
+- 이 entrypoint들은 실제 규칙 본문을 중복 복사하지 않고 documentation/policy entrypoint인 `docs/project_entrypoint.md`로 수렴한다.
 - 중요한 계약은 link presence만이 아니라 traversal이다. `AGENTS.md`를 열었으면 `docs/project_entrypoint.md`, 그 문서의 core guide, project-specific supporting docs까지 순서대로 모두 읽고 적용해야 한다.
 - 현재 작업이 중요한 프로젝트 결정과 관련 있으면 `docs/decisions/README.md`에서 관련 decision 문서를 찾아 함께 읽고 적용해야 한다.
 

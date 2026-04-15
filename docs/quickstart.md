@@ -2,6 +2,12 @@
 
 `harness-kit`를 처음 쓰는 사람이 `0.1.0` 범위 안에서 가장 빨리 시작하는 방법을 정리한 문서다.
 
+## 문서 역할
+
+- 이 문서는 canonical happy path를 고르는 빠른 시작 문서다.
+- greenfield 상세판은 `docs/project_overlay/first_success_guide.md`를, 실패 원인과 출력 해석은 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 본다.
+- downstream 구조와 Phase 흐름 전체 설명은 `docs/downstream_harness_flow.md`를 본다.
+
 ## 누구를 위한 문서인가
 
 - 새 프로젝트를 시작하려는 팀

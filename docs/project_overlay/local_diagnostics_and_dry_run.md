@@ -2,6 +2,12 @@
 
 이 문서는 `harness-kit` bootstrap 관련 문제를 CI 전에 로컬에서 먼저 좁히는 방법을 정리한다.
 
+## 문서 역할
+
+- 이 문서는 진단과 출력 해석 전용 문서다.
+- canonical happy path 자체는 `docs/quickstart.md`와 `docs/project_overlay/first_success_guide.md`를 먼저 보고, 이 문서는 실패하거나 출력 의미가 헷갈릴 때 참고한다.
+- downstream 구조와 Phase 흐름 전체는 `docs/downstream_harness_flow.md`를 본다.
+
 ## 목적
 
 - init, validator, adopt dry-run을 어떤 순서로 먼저 돌려야 하는지 한 곳에서 본다.

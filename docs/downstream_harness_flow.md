@@ -2,6 +2,12 @@
 
 이 문서는 `harness-kit`를 bootstrap하거나 vendoring한 뒤, downstream 프로젝트 안에서 하네스가 어떤 순서와 규칙으로 동작하는지 설명한다.
 
+## 문서 역할
+
+- 이 문서는 downstream 사용 흐름 상세판이다.
+- `README.md`가 시작 경로를 고르는 입구라면, 이 문서는 실제 downstream 구조와 Phase 흐름을 이어서 설명한다.
+- source repo 자산과 downstream 생성 문서의 대응 관계가 먼저 필요하면 `README.md`의 `Source Repo 와 Downstream 관계` 표를 함께 본다.
+
 ## 언제 읽는가
 
 - `harness-kit`를 새 프로젝트에 bootstrap하려 할 때
@@ -54,7 +60,8 @@ flowchart TD
     B --> E[프로젝트 결정<br/>docs/decisions/README.md]
 ```
 
-- downstream에서 실제 진입점 역할을 하는 문서는 `docs/project_entrypoint.md`다.
+- `AGENTS.md`는 runtime launcher entrypoint다.
+- downstream에서 실제 문서 규칙을 묶는 documentation/policy entrypoint는 `docs/project_entrypoint.md`다.
 - 이 문서가 vendored core guide와 프로젝트 전용 문서를 함께 묶어서, 지금 프로젝트에서 무엇을 읽고 어떤 규칙으로 움직여야 하는지 정해 준다.
 - 중요한 정책, 예외, 책임 배치 결정이 있으면 `docs/decisions/README.md`와 개별 decision 문서까지 함께 읽는다.
 
