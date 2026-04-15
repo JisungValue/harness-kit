@@ -1,12 +1,13 @@
 # How Harness Kit Works
 
-이 문서는 `harness-kit`가 `0.1.0`에서 어떤 구조와 개념으로 동작하는지 설명한다.
+이 문서는 `harness-kit`가 현재 어떤 구조와 개념으로 동작하는지 설명한다.
 
 ## 문서 역할
 
 - 이 문서는 개념 설명 문서다.
 - 처음 쓰는 사용자가 실제로 어디서 시작할지는 `README.md`와 `docs/quickstart.md`를 먼저 본다.
 - downstream 프로젝트 구조와 Phase 흐름 상세는 `docs/downstream_harness_flow.md`가 더 직접적으로 설명한다.
+- 현재 지원 범위와 최신 릴리스는 `docs/version_support.md`를 기준으로 본다.
 
 ## 한 줄 요약
 
@@ -149,7 +150,7 @@
 - 실제 구현/감사에 들어갈 준비가 됐는지를 뜻한다.
 - first-success보다 더 많은 프로젝트 결정을 요구한다.
 
-## 0.1.0 지원 범위
+## 현재 지원 범위
 
 - 지원한다.
   - 새 프로젝트 문서 세트 생성
@@ -166,7 +167,7 @@
   - interactive onboarding UI
   - repo-aware assisted adoption
 
-source repo maintainer는 별도로 downstream bundle generation, bundle validation, bundle smoke validation 자산을 운영할 수 있지만, 이는 downstream 프로젝트 사용자가 직접 수행하는 기본 경로가 아니라 maintainer-side release 준비 절차에 속한다.
+source repo maintainer는 별도로 downstream bundle generation, bundle validation, bundle smoke validation 자산을 운영할 수 있지만, 이는 downstream 프로젝트 사용자가 직접 수행하는 기본 경로가 아니라 maintainer-side release 준비 절차에 속한다. 최신 릴리스 기준의 canonical 범위는 `docs/version_support.md`를 따른다.
 
 ## 흔한 오해
 

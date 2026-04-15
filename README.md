@@ -45,25 +45,32 @@
 
 ## 시작 문서
 
+- Start here: [`docs/quickstart.md`](docs/quickstart.md)
+- 이 저장소의 `README.md`는 source repo 안내 문서다. 실제 bootstrap, adopt, validate 명령은 `harness-kit` source repo가 아니라 downstream 프로젝트 루트에서 실행한다.
+
 ### 새 프로젝트 시작
 
+- 현재 지원 범위: [`docs/version_support.md`](docs/version_support.md)
 - canonical 시작 문서: [`docs/quickstart.md`](docs/quickstart.md)
 - greenfield 상세판: [`docs/project_overlay/first_success_guide.md`](docs/project_overlay/first_success_guide.md)
 - 로컬 진단/validator 해석: [`docs/project_overlay/local_diagnostics_and_dry_run.md`](docs/project_overlay/local_diagnostics_and_dry_run.md)
 
 ### 기존 프로젝트에 도입
 
+- 아직 `docs/project_entrypoint.md`나 vendored harness 기준 문서가 없거나, legacy `docs/harness_guide.md` 상태라면 이 경로부터 시작한다.
 - read-only 현재 상태 파악: [`docs/project_overlay/adopt_dry_run.md`](docs/project_overlay/adopt_dry_run.md)
 - local diagnostics 보조: [`docs/project_overlay/local_diagnostics_and_dry_run.md`](docs/project_overlay/local_diagnostics_and_dry_run.md)
 
 ### 이미 도입된 프로젝트 업그레이드
 
+- 이미 `docs/project_entrypoint.md`와 vendored harness가 있고, 새 bundle 버전만 반영하려면 이 경로부터 시작한다.
 - upgrade 전체 흐름: [`docs/project_overlay/downstream_harness_upgrade_guide.md`](docs/project_overlay/downstream_harness_upgrade_guide.md)
 - diff review checklist: [`docs/project_overlay/downstream_overlay_diff_review_checklist.md`](docs/project_overlay/downstream_overlay_diff_review_checklist.md)
 - impact 분류: [`docs/project_overlay/harness_upgrade_impact_policy.md`](docs/project_overlay/harness_upgrade_impact_policy.md)
 
 ### 개념 이해
 
+- 현재 버전/지원 범위: [`docs/version_support.md`](docs/version_support.md)
 - 전체 개념 설명: [`docs/how_harness_kit_works.md`](docs/how_harness_kit_works.md)
 - downstream 도입/운영 흐름: [`docs/downstream_harness_flow.md`](docs/downstream_harness_flow.md)
 
@@ -110,7 +117,9 @@
 - [`docs/project_overlay/downstream_overlay_diff_review_checklist.md`](docs/project_overlay/downstream_overlay_diff_review_checklist.md)
   - downstream 프로젝트가 bundle upgrade diff를 사람 기준으로 검토할 때 확인할 항목을 정리한 checklist다.
 - [`docs/quickstart.md`](docs/quickstart.md)
-  - 0.1.0 사용자 관점에서 greenfield/brownfield 시작 절차를 한 번에 보여 주는 상위 입문 문서다.
+  - 현재 지원 범위 기준으로 greenfield/brownfield 시작 절차를 한 번에 보여 주는 상위 입문 문서다.
+- [`docs/version_support.md`](docs/version_support.md)
+  - 현재 최신 릴리스와 지원 범위를 한 곳에서 관리하는 canonical 문서다.
 - [`docs/how_harness_kit_works.md`](docs/how_harness_kit_works.md)
   - core, overlay, bootstrap, validation, adopt dry-run이 어떤 역할로 나뉘는지 설명하는 개념 문서다.
 - [`docs/kit_maintenance/audit_policy.md`](docs/kit_maintenance/audit_policy.md)
@@ -175,18 +184,20 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 
 ## 권장 도입 순서
 
-1. `harness-kit`를 새 프로젝트로 가져온다.
-2. 새 프로젝트 first success 경로는 [`docs/project_overlay/first_success_guide.md`](docs/project_overlay/first_success_guide.md)를 먼저 본다.
-3. 로컬 진단 순서와 dry-run 해석은 [`docs/project_overlay/local_diagnostics_and_dry_run.md`](docs/project_overlay/local_diagnostics_and_dry_run.md)를 함께 본다.
-4. init CLI 또는 `docs/project_overlay/` 수동 복사로 최소 문서 세트를 만든다.
-5. 생성된 `docs/project_entrypoint.md`, `docs/decisions/README.md`, `docs/standard/coding_conventions_project.md`를 읽고 현재 프로젝트에서 먼저 확정해야 할 구조/정책/예외 결정이 있는지 확인한다.
-6. `vendor/harness-kit/`가 아닌 경로에 kit를 둘 예정이면 bootstrap 시점부터 `--vendor-path <actual-path>`를 사용해 generated vendored reference를 바로 현지화한다. 그 옵션 없이 생성했다면 이후 `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 경로를 실제 배치 경로에 맞게 수동 현지화한다.
-7. 아래 예시는 `vendor/harness-kit/`를 기준으로 한다. 다른 경로를 쓰면 실행 명령의 `vendor/harness-kit/` 부분도 같은 실제 경로로 함께 바꿔야 한다.
-8. `python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success`로 unresolved decision readiness를 확인한다.
-9. `python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .`로 문서 간 교차 정합성과 runtime instruction entrypoint 연결을 확인한다.
-10. local validator가 통과하면 [`docs/project_overlay/harness_doc_guard_workflow_template.yml`](docs/project_overlay/harness_doc_guard_workflow_template.yml)을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사하고 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꿔 future-session guardrail을 고정한다.
-11. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
-12. 실제 task 몇 개를 돌린 뒤 project overlay와 decisions index를 함께 보강한다.
+1. 먼저 [`docs/quickstart.md`](docs/quickstart.md)부터 읽는다.
+2. `harness-kit`를 새 프로젝트로 가져온다.
+3. 새 프로젝트라면 [`docs/project_overlay/first_success_guide.md`](docs/project_overlay/first_success_guide.md)를, 기존 프로젝트 첫 도입이라면 [`docs/project_overlay/adopt_dry_run.md`](docs/project_overlay/adopt_dry_run.md)를, 이미 도입된 프로젝트 업그레이드라면 [`docs/project_overlay/downstream_harness_upgrade_guide.md`](docs/project_overlay/downstream_harness_upgrade_guide.md)를 본다.
+4. 로컬 진단 순서와 dry-run 해석은 [`docs/project_overlay/local_diagnostics_and_dry_run.md`](docs/project_overlay/local_diagnostics_and_dry_run.md)를 함께 본다.
+5. init CLI 또는 `docs/project_overlay/` 수동 복사로 최소 문서 세트를 만든다.
+6. 생성된 `docs/project_entrypoint.md`, `docs/decisions/README.md`, `docs/standard/coding_conventions_project.md`를 읽고 현재 프로젝트에서 먼저 확정해야 할 구조/정책/예외 결정이 있는지 확인한다.
+7. `vendor/harness-kit/`가 아닌 경로에 kit를 둘 예정이면 bootstrap 시점부터 `--vendor-path <actual-path>`를 사용해 generated vendored reference를 바로 현지화한다. 그 옵션 없이 생성했다면 이후 `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 경로를 실제 배치 경로에 맞게 수동 현지화한다.
+8. 아래 예시는 `vendor/harness-kit/`를 기준으로 한다. 다른 경로를 쓰면 실행 명령의 `vendor/harness-kit/` 부분도 같은 실제 경로로 함께 바꿔야 한다.
+9. `python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success`로 unresolved decision readiness를 확인한다.
+10. `python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .`로 문서 간 교차 정합성과 runtime instruction entrypoint 연결을 확인한다.
+11. local validator가 통과하면 [`docs/project_overlay/harness_doc_guard_workflow_template.yml`](docs/project_overlay/harness_doc_guard_workflow_template.yml)을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사하고 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꿔 future-session guardrail을 고정한다.
+12. 첫 task를 시작하기 전에 [`docs/downstream_harness_flow.md`](docs/downstream_harness_flow.md)를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
+13. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
+14. 실제 task 몇 개를 돌린 뒤 project overlay와 decisions index를 함께 보강한다.
 
 기존 프로젝트나 부분 도입 상태를 먼저 읽어야 하면 [`docs/project_overlay/adopt_dry_run.md`](docs/project_overlay/adopt_dry_run.md)의 read-only adopt 흐름부터 시작한다.
 
@@ -209,7 +220,9 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 
 ## 권장 읽기 순서
 
-- 이 저장소 source repo를 읽는 중이라면 먼저 [`docs/project_overlay/first_success_guide.md`](docs/project_overlay/first_success_guide.md), [`docs/quickstart.md`](docs/quickstart.md), [`docs/how_harness_kit_works.md`](docs/how_harness_kit_works.md)를 본다.
+- 이 저장소 source repo를 읽는 중이라면 먼저 [`docs/quickstart.md`](docs/quickstart.md)를 본다.
+- 그다음 greenfield면 [`docs/project_overlay/first_success_guide.md`](docs/project_overlay/first_success_guide.md), brownfield first adoption이면 [`docs/project_overlay/adopt_dry_run.md`](docs/project_overlay/adopt_dry_run.md), 이미 도입된 downstream upgrade면 [`docs/project_overlay/downstream_harness_upgrade_guide.md`](docs/project_overlay/downstream_harness_upgrade_guide.md)를 본다.
+- 적용이 끝나면 첫 task 전에 [`docs/downstream_harness_flow.md`](docs/downstream_harness_flow.md)를 읽어 Phase 운영 규칙으로 넘어간다.
 - source repo에는 root `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`가 아직 없고, 이 파일들은 downstream 프로젝트를 bootstrap한 뒤에 생긴다.
 - 아래 순서는 downstream 프로젝트를 bootstrap한 뒤 생성되는 문서 기준이다.
 

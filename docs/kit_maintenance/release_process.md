@@ -58,19 +58,19 @@
 ## Release Note 파일 준비
 
 - release note 초안은 repo를 더럽히지 않도록 임시 파일이나 maintainer 로컬 파일로 준비한다.
-- 예: `/tmp/harness-kit-v0.1.0-notes.md`
+- 예: `/tmp/harness-kit-vX.Y.Z-notes.md`
 - release note 파일을 저장소 안에 두기로 한 별도 운영 규칙이 없다면, 릴리스 준비용 메모 파일을 새 tracked 파일로 커밋하지 않는다.
 
 ## Tag 와 GitHub Release 절차
 
-예시 버전이 `v0.1.0`이고 release note 초안을 `/tmp/harness-kit-v0.1.0-notes.md`에 준비했다면 아래 순서로 진행한다.
+예시 버전이 `vX.Y.Z`이고 release note 초안을 `/tmp/harness-kit-vX.Y.Z-notes.md`에 준비했다면 아래 순서로 진행한다.
 
 ```bash
 git switch main
 git pull --ff-only origin main
-git tag -a v0.1.0 -m "release v0.1.0"
-git push origin v0.1.0
-gh release create v0.1.0 --title "harness-kit v0.1.0" --notes-file "/tmp/harness-kit-v0.1.0-notes.md"
+git tag -a vX.Y.Z -m "release vX.Y.Z"
+git push origin vX.Y.Z
+gh release create vX.Y.Z --title "harness-kit vX.Y.Z" --notes-file "/tmp/harness-kit-vX.Y.Z-notes.md"
 ```
 
 downstream bundle artifact도 함께 배포한다면, canonical directory artifact를 다시 생성한 뒤 파생 archive를 만들어 release asset으로 업로드한다.
@@ -79,8 +79,8 @@ downstream bundle artifact도 함께 배포한다면, canonical directory artifa
 python3 scripts/generate_downstream_bundle.py --force
 python3 scripts/validate_downstream_bundle.py
 python3 -m unittest tests.test_downstream_bundle_smoke
-tar -czf "/tmp/harness-kit-project-bundle-v0.1.0.tar.gz" -C dist harness-kit-project-bundle
-gh release create v0.1.0 --title "harness-kit v0.1.0" --notes-file "/tmp/harness-kit-v0.1.0-notes.md" "/tmp/harness-kit-project-bundle-v0.1.0.tar.gz#harness-kit-project-bundle-v0.1.0.tar.gz"
+tar -czf "/tmp/harness-kit-project-bundle-vX.Y.Z.tar.gz" -C dist harness-kit-project-bundle
+gh release create vX.Y.Z --title "harness-kit vX.Y.Z" --notes-file "/tmp/harness-kit-vX.Y.Z-notes.md" "/tmp/harness-kit-project-bundle-vX.Y.Z.tar.gz#harness-kit-project-bundle-vX.Y.Z.tar.gz"
 ```
 
 ## 권장 실행 순서
@@ -102,7 +102,7 @@ gh release create v0.1.0 --title "harness-kit v0.1.0" --notes-file "/tmp/harness
 
 - 릴리스 전에 release gate와 release note의 지원 범위가 서로 다르면 먼저 문서를 맞춘다.
 - `harness.log` 누락 상태에서 릴리스를 만들지 않는다.
-- release note에서 `0.1.0` 지원 범위와 이후 버전 계획을 구분한다.
+- release note에서 현재 지원 범위와 이후 버전 계획을 구분한다. canonical 기준은 `docs/version_support.md`를 따른다.
 - patch/minor release라도 배포 당시 진입 문서가 실제 현재 동작과 맞는지 다시 확인한다.
 - downstream bundle artifact를 배포하기 시작한 이후에는, bundle 생성 결과가 boundary 문서와 어긋난 상태로 릴리스하지 않는다.
 - downstream bundle artifact를 배포한다면, bundle structure/content validation만 통과한 상태로 바로 릴리스하지 말고 generated bundle consumer smoke test까지 확인한다.
