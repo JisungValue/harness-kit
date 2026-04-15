@@ -2,6 +2,13 @@
 
 이 문서는 `harness-kit` bootstrap 관련 문제를 CI 전에 로컬에서 먼저 좁히는 방법을 정리한다.
 
+## 문서 역할
+
+- 이 문서는 진단과 출력 해석 전용 문서다.
+- canonical happy path 자체는 `docs/quickstart.md`와 `docs/project_overlay/first_success_guide.md`를 먼저 보고, 이 문서는 실패하거나 출력 의미가 헷갈릴 때 참고한다.
+- downstream 구조와 Phase 흐름 전체는 `docs/downstream_harness_flow.md`를 본다.
+- 현재 지원 범위와 최신 릴리스는 `docs/version_support.md`를 기준으로 본다.
+
 ## 목적
 
 - init, validator, adopt dry-run을 어떤 순서로 먼저 돌려야 하는지 한 곳에서 본다.
@@ -12,7 +19,7 @@
 
 - 새 프로젝트 또는 거의 빈 프로젝트면 `first success` 경로를 따른다.
 - 기존 프로젝트나 부분 도입 상태면 `adopt dry-run`부터 시작한다.
-- 현재 `0.1.0` 범위에서 기존 프로젝트 비교는 `adopt_dry_run.py`, 제한적 brownfield write는 `adopt_safe_write.py`가 담당한다.
+- 현재 지원 범위에서 기존 프로젝트 비교는 `adopt_dry_run.py`, 제한적 brownfield write는 `adopt_safe_write.py`가 담당한다.
 - `bootstrap_init.py --force`는 merge가 아니라 overwrite다.
 
 ## 권장 로컬 진단 순서
@@ -194,8 +201,8 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 - fail-fast는 write 전에 멈춘다는 뜻이다.
 - dry-run은 분류와 보고만 하고 파일은 바꾸지 않는다는 뜻이다.
-- 현재 `0.1.0`에서 adopt는 read-only dry-run과 제한적 safe write까지만 있다.
-- 현재 `0.1.0`에서 일반 merge-based update는 없다.
+- 현재 adopt는 read-only dry-run과 제한적 safe write까지만 있다.
+- 현재 일반 merge-based update는 없다.
 - 따라서 `adopt_dry_run.py` 결과를 보고 바로 전체 merge/write가 일어난다고 기대하면 안 된다.
 
 ## 흔한 로컬 진단 순서
