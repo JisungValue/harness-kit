@@ -153,15 +153,14 @@
   - existing-project adopt dry-run
   - existing-project selective safe write/update
   - 로컬 진단 경로
-  - maintainer-managed downstream bundle directory artifact generation
-  - maintainer-managed downstream bundle content validation
-  - maintainer-managed downstream bundle install/adoption smoke validation
 
 - 아직 지원하지 않는다.
   - automatic merge-based adopt update
   - semantic merge
   - interactive onboarding UI
   - repo-aware assisted adoption
+
+source repo maintainer는 별도로 downstream bundle generation, bundle validation, bundle smoke validation 자산을 운영할 수 있지만, 이는 downstream 프로젝트 사용자가 직접 수행하는 기본 경로가 아니라 maintainer-side release 준비 절차에 속한다.
 
 ## 흔한 오해
 

@@ -26,20 +26,24 @@
 먼저 지금 프로젝트가 어떤 `harness-kit` 기준을 따라가고 있는지 확인한다.
 
 - vendored copy를 쓰면 현재 `vendor/harness-kit/` 또는 팀이 정한 실제 vendored 경로의 tag, commit, branch를 확인한다.
-- `harness_doc_guard` workflow를 복사해 썼다면 `.github/workflows/harness-doc-guard.yml`의 `@<pin-tag-or-sha>`가 현재 고정 기준이다.
+- harness doc guard workflow를 복사해 썼다면, 그 workflow 안에 적힌 `@<pin-tag-or-sha>`가 현재 고정 기준이다.
 - release bundle을 수동 복사해 쓰는 프로젝트라면, 마지막 upgrade 작업 기록이나 해당 복사본이 들어온 commit을 현재 기준으로 본다.
 - 현재 기준을 정확히 복원할 수 없으면 provenance가 불명확한 상태로 보고 conservative하게 review-required update로 다룬다.
 
-## 2. 새 bundle 변경 확인
+## 2. 새 기준 입력 확인
 
-새 bundle을 받았으면 먼저 아래만 본다.
+현재 프로젝트가 어떤 방식으로 `harness-kit`를 받아오는지에 따라 먼저 보는 입력이 다르다.
 
-- release note 또는 배포 안내
-- bundle entry `README.md`
-- `bundle_manifest.json`
-- downstream bundle에 실제 포함되는 경로 범위
+- source repo vendored copy를 tag 또는 commit 기준으로 올리는 경우
+  - 새 source tree 안에서 downstream bundle 경계에 포함되는 문서, template, script 경로만 비교 대상으로 남긴다.
+  - 이 경우 generated `README.md`, `bundle_manifest.json`은 없을 수 있으므로 source repo tree를 canonical input으로 본다.
+- release bundle tarball, zip, directory artifact를 받아 반영하는 경우
+  - release note 또는 배포 안내
+  - bundle entry `README.md`
+  - `bundle_manifest.json`
+  - downstream bundle에 실제 포함되는 경로 범위
 
-이 단계에서는 maintainer 전용 문서, 테스트, release script까지 같이 비교하지 않는다. 경계 판단이 애매하면 `docs/kit_maintenance/downstream_bundle_boundary.md`를 기준으로 포함/제외를 먼저 정리한다.
+이 단계에서는 maintainer 전용 문서, 테스트, release script까지 같이 비교하지 않는다. 기본 비교 대상은 현재 프로젝트가 실제로 소비하는 project-facing 문서, overlay template, bootstrap 자산, shipped script, shipped example 문서만 남기고, maintainer release/audit 문서, maintainer change log, test-only 자산, maintainer workflow 같은 자산은 제외한다.
 
 ## 3. 영향도 먼저 분류
 
@@ -56,6 +60,8 @@
 ## 4. Read-Only 비교부터 실행
 
 현재 프로젝트 루트에서 먼저 dry-run을 실행한다.
+
+아래 명령은 `vendor/harness-kit/` 기준 예시다. 다른 vendored 경로를 쓰면 그 부분을 같은 실제 경로로 바꿔 실행한다.
 
 ```bash
 python3 vendor/harness-kit/scripts/adopt_dry_run.py . --language python
@@ -106,6 +112,8 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py . --mode incr
 
 반영이 끝나면 최소한 아래를 다시 확인한다.
 
+아래 명령도 `vendor/harness-kit/` 기준 예시다. 다른 vendored 경로를 쓰면 같은 실제 경로로 바꾼다.
+
 ```bash
 python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
@@ -138,4 +146,3 @@ upgrade 작업을 끝내면 아래를 남긴다.
 - `docs/project_overlay/adopt_dry_run.md`
 - `docs/project_overlay/adopt_safe_write.md`
 - `docs/project_overlay/local_diagnostics_and_dry_run.md`
-- `docs/kit_maintenance/downstream_bundle_boundary.md`
