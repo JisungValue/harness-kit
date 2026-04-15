@@ -9,6 +9,195 @@
 - 프로젝트별 문서는 공통 규칙 위에 얇은 overlay만 추가하도록 한다.
 - 한 번 생성되는 코드의 품질을 높이고, 이후 변경에서도 유지보수성과 지속 가능성을 계속 유지할 수 있는 프로젝트 코드를 만들도록 돕는다.
 
+## 먼저 이해해야 할 점
+
+- 이 저장소는 완성된 consumer project가 아니라, bootstrap 전의 source repo다.
+- 따라서 지금 보이는 문서들은 곧바로 하나의 실행 가능한 project-local 하네스로 맞물리는 상태가 아니라, bootstrap과 vendoring 이후 downstream 프로젝트 안에서 맞물리도록 설계된 재료다.
+- source repo 단계에서는 maintainer 문서, project-facing template/guide, bundle release 자산이 함께 존재하므로 문서 조각이 바로 1:1로 이어지지 않는 것이 정상이다.
+- bootstrap 또는 수동 vendoring이 끝나면 downstream 프로젝트 안에서 `AGENTS.md`, `docs/project_entrypoint.md`, `docs/decisions/README.md`, `docs/standard/*`, `vendor/harness-kit/docs/harness_guide.md`가 하나의 런타임 문서 체인으로 정렬된다.
+
+## Bootstrap 후 어떻게 맞물리는가
+
+```mermaid
+flowchart TD
+    A[harness-kit source repo] --> B[bootstrap_init.py or manual vendoring]
+    B --> C[downstream project]
+
+    C --> D[AGENTS.md]
+    C --> E[docs/project_entrypoint.md]
+    C --> F[docs/decisions/README.md]
+    C --> G[docs/standard/*]
+    C --> H[vendor/harness-kit/docs/harness_guide.md]
+
+    D --> E
+    E --> H
+    E --> G
+    E --> F
+```
+
+- source repo에서는 template, guide, bootstrap 자산이 따로 존재한다.
+- bootstrap 이후에는 downstream 프로젝트 안에서 runtime entrypoint, project entrypoint, vendored core guide, project-local supporting docs가 하나의 읽기 체인으로 바뀐다.
+- 사용자는 source repo 전체를 그대로 읽고 실행하는 것이 아니라, bootstrap 이후 downstream 프로젝트에서 생성된 문서 체인을 따라간다.
+
+## 전체 Harness 흐름
+
+```mermaid
+flowchart TD
+    A[Source repo 이해] --> B{프로젝트 상태}
+    B -->|새 프로젝트| C[bootstrap_init.py]
+    B -->|기존 프로젝트| D[adopt_dry_run.py]
+
+    C --> E[first-success 확인]
+    E --> F[AGENTS.md -> docs/project_entrypoint.md -> core guide + docs/standard/*]
+    F --> G[task workspace 시작]
+
+    D --> H[impact 분류 C0-C4]
+    H --> I{즉시 safe write 가능?}
+    I -->|Yes| J[adopt_safe_write.py]
+    I -->|No| K[manual diff review]
+    J --> L[validator 재검증]
+    K --> L
+    L --> G
+
+    G --> M[Phase 1]
+    M --> N[Phase 2]
+    N --> O[Phase 3]
+    O --> P[Phase 4]
+    P --> Q[Phase 5]
+```
+
+- greenfield는 bootstrap으로 최소 문서 세트를 만든 뒤 validator를 통과시키고 task로 들어간다.
+- brownfield는 먼저 현재 상태를 읽고, impact 분류와 human review 또는 safe write를 거쳐 validator를 다시 통과시킨 뒤 task로 들어간다.
+- task가 시작되면 core harness는 공통 5개 Phase 흐름으로 수렴한다.
+
+## Runtime 문서 체인
+
+```mermaid
+flowchart LR
+    A[AGENTS.md] --> B[docs/project_entrypoint.md]
+    B --> C[vendor/harness-kit/docs/harness_guide.md]
+    B --> D[docs/standard/architecture.md]
+    B --> E[docs/standard/implementation_order.md]
+    B --> F[docs/standard/coding_conventions_project.md]
+    B --> G[docs/standard/quality_gate_profile.md]
+    B --> H[docs/standard/testing_profile.md]
+    B --> I[docs/standard/commit_rule.md]
+    B --> J[docs/decisions/README.md]
+```
+
+- `AGENTS.md`는 시작점일 뿐이고, 실제 규칙은 `docs/project_entrypoint.md`를 통해 core guide와 project-local supporting docs를 함께 읽어야 한다.
+- project-specific 결정이 있으면 `docs/decisions/README.md`와 개별 `DEC-###-slug.md`까지 이어서 읽는다.
+- 따라서 bootstrap 이후 하네스는 단일 파일이 아니라 “entrypoint chain”으로 동작한다.
+
+## Phase 전체 흐름
+
+```mermaid
+flowchart TD
+    A[Phase 1<br/>Requirement And Planning] --> B[internal audits]
+    B --> C[user approval]
+    C --> D[Phase 2<br/>TDD Implementation]
+    D --> E[audit]
+    E --> F[user approval]
+    F --> G[Phase 3<br/>Integration]
+    G --> H[audit]
+    H --> I[user approval]
+    I --> J[Phase 4<br/>Validation]
+    J --> K[audit]
+    K --> L[user approval]
+    L --> M[Phase 5<br/>Documentation]
+    M --> N[audit]
+    N --> O[user approval]
+
+    J --> P{earlier artifact contradiction?}
+    P -->|Yes| A
+    P -->|No| K
+```
+
+- 기본 순서는 `1 -> 2 -> 3 -> 4 -> 5`다.
+- 각 Phase는 `implementation -> audit -> 사용자 승인 -> 다음 Phase` 순서를 따른다.
+- 산출물 변경이나 validation 결과가 더 이른 산출물과 모순되면 원인 Phase까지 되돌아가고, 그렇지 않으면 영향이 걸린 가장 이른 Phase부터만 다시 수행한다.
+
+## Phase별 진행 흐름
+
+### Phase 1. Requirement And Planning
+
+```mermaid
+flowchart LR
+    A[issue.md] --> B[requirements.md 작성]
+    B --> C[requirements 감사]
+    C --> D[plan.md 작성]
+    D --> E[plan 감사]
+    E --> F[issue 대비 plan 누락 감사]
+    F --> G[user approval]
+```
+
+- 입력은 `issue.md`다.
+- 출력은 `requirements.md`, `plan.md`다.
+- 내부 감사 세 개가 모두 승인 가능 상태가 된 뒤에만 사용자 승인 게이트로 간다.
+
+### Phase 2. TDD Implementation
+
+```mermaid
+flowchart LR
+    A[requirements.md + plan.md] --> B[선택 레이어 결정]
+    B --> C[테스트 작성]
+    C --> D[구현]
+    D --> E[레이어 감사]
+    E --> F{남은 레이어?}
+    F -->|Yes| C
+    F -->|No| G[Phase 2 전체 감사]
+    G --> H[user approval]
+```
+
+- 프로젝트별 실제 레이어 순서와 세분화 기준은 `docs/standard/implementation_order.md`가 정한다.
+- 각 선택 레이어는 `테스트 작성 -> 구현 -> 감사` 순서를 따른다.
+
+### Phase 3. Integration
+
+```mermaid
+flowchart LR
+    A[Phase 2 결과물] --> B[연결 책임 식별]
+    B --> C[통합 테스트 또는 구현체 단위 통합 테스트]
+    C --> D[happy path / failure path 검증]
+    D --> E[audit]
+    E --> F[user approval]
+```
+
+- 단위 테스트로 다루기 어려운 연결 책임, 조립 책임, 핵심 happy path와 failure path를 검증한다.
+- 전체 앱 end-to-end만이 아니라 구현체 단위 통합 테스트도 포함될 수 있다.
+
+### Phase 4. Validation
+
+```mermaid
+flowchart TD
+    A[전체 구현 결과] --> B[자동 검증 기록]
+    B --> C[수동 검증 기록]
+    C --> D[issue / requirements / plan / implementation_notes / 실제 결과 교차 검토]
+    D --> E{earlier artifact contradiction?}
+    E -->|Yes| F[원인 Phase부터 재수행]
+    E -->|No| G[validation_report.md 정리]
+    F --> G
+    G --> H[audit]
+    H --> I[user approval]
+```
+
+- `validation_report.md`가 핵심 출력이다.
+- `validation_report.md`만 보완하면 기본적으로 Phase 4부터 다시 수행하지만, 더 이른 산출물과 모순되면 원인 Phase까지 되돌아간다.
+
+### Phase 5. Documentation
+
+```mermaid
+flowchart LR
+    A[구현 + 검증 결과] --> B[관련 문서 반영]
+    B --> C[related decisions 반영]
+    C --> D[작업 로그 정리]
+    D --> E[audit]
+    E --> F[user approval]
+```
+
+- 구조적 결정, 사용법 변경, related decision을 실제 문서에 반영한다.
+- 작업 로그는 이후 세션에서도 결과와 판단 근거를 복원할 수 있게 남긴다.
+
 ## 시작 문서
 
 - 처음 시작: `docs/quickstart.md`
