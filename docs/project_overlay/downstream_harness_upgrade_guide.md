@@ -87,6 +87,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py . --mode incr
 
 - 별도 upgrade task를 만든다.
 - 먼저 수동 review로 반영 순서를 정한다.
+- `docs/project_overlay/downstream_overlay_diff_review_checklist.md`를 함께 보며 diff 검토 결과를 남긴다.
 - safe write는 보조 수단으로만 쓰고, validator 재검증을 함께 계획한다.
 
 ## 6. 수동 개입이 필요한 경우
@@ -132,6 +133,7 @@ upgrade 작업을 끝내면 아래를 남긴다.
 
 ## 함께 볼 문서
 
+- `docs/project_overlay/downstream_overlay_diff_review_checklist.md`
 - `docs/project_overlay/harness_upgrade_impact_policy.md`
 - `docs/project_overlay/adopt_dry_run.md`
 - `docs/project_overlay/adopt_safe_write.md`
