@@ -101,7 +101,7 @@ python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --for
 8. `differing files`와 `conflict candidates`는 기본적으로 수동 비교 대상으로 남긴다.
 9. partial adoption 상태가 structurally safe한지 먼저 보려면 아래 incremental validator를 실행한다.
 10. 최소 문서 세트가 어느 정도 맞춰진 뒤에만 full validator로 넘어간다.
-11. 새 bundle 버전을 반영할 때는 `docs/project_overlay/downstream_harness_upgrade_guide.md`를 먼저 보고, 영향도를 분류하려면 `docs/project_overlay/harness_upgrade_impact_policy.md`를 함께 본다.
+11. 새 bundle 버전을 반영할 때는 `docs/project_overlay/downstream_harness_upgrade_guide.md`를 먼저 보고, 영향도를 분류하려면 `docs/project_overlay/harness_upgrade_impact_policy.md`를, 사람 기준 diff review 항목이 필요하면 `docs/project_overlay/downstream_overlay_diff_review_checklist.md`를 함께 본다.
 
 ```bash
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py . --mode incremental
@@ -158,4 +158,5 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - 로컬 진단: `docs/project_overlay/local_diagnostics_and_dry_run.md`
 - 기존 프로젝트 dry-run: `docs/project_overlay/adopt_dry_run.md`
 - 기존 프로젝트 bundle upgrade 절차: `docs/project_overlay/downstream_harness_upgrade_guide.md`
+- 기존 프로젝트 diff review checklist: `docs/project_overlay/downstream_overlay_diff_review_checklist.md`
 - 기존 프로젝트 upgrade impact 분류: `docs/project_overlay/harness_upgrade_impact_policy.md`

@@ -17,6 +17,7 @@
 - 기존 프로젝트에서 missing file create와 explicit path overwrite만 허용하는 제한적 write 흐름은 `docs/project_overlay/adopt_safe_write.md`를 본다.
 - 새 harness bundle 변경을 얼마나 조심해서 반영해야 하는지 분류하는 기준은 `docs/project_overlay/harness_upgrade_impact_policy.md`를 본다.
 - 새 harness bundle 변경을 실제로 어떤 순서와 기준으로 검토하고 반영할지는 `docs/project_overlay/downstream_harness_upgrade_guide.md`를 본다.
+- 새 harness bundle과 현재 overlay 사이의 사람 중심 diff review 항목은 `docs/project_overlay/downstream_overlay_diff_review_checklist.md`를 본다.
 - 사람이 읽는 overlay 완료 기준은 `docs/project_overlay/overlay_completion_checklist.md`를 보고, sample validation 예시는 `docs/examples/bootstrap-first-success/overlay_completion_validation_report.md`를 본다.
 
 ## 필수 문서

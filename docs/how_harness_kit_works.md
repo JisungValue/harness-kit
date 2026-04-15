@@ -118,6 +118,8 @@
   - bundle 변경이 단순 설명 개선인지, additive update인지, review-required인지, breaking 가능성이 큰지 구분한다.
 - `downstream_harness_upgrade_guide.md`
   - 소비자 프로젝트가 새 bundle 변경을 어떤 순서로 읽고, dry-run과 safe write를 어디에 쓰고, 언제 수동 개입해야 하는지 설명한다.
+- `downstream_overlay_diff_review_checklist.md`
+  - 사람 기준 diff review에서 필수 문서 세트, phase gate, validator, template 영향, safe write 한계를 어떤 순서로 볼지 정리한다.
 
 한 도구가 이 역할을 전부 담당하면, write / validation / inspection의 의미가 섞여서 사용자가 실패 원인을 해석하기 어려워진다.
 
@@ -176,5 +178,6 @@
 - 새 프로젝트라면 `docs/project_overlay/first_success_guide.md`
 - 기존 프로젝트라면 `docs/project_overlay/adopt_dry_run.md`
 - bundle upgrade 절차를 먼저 보려면 `docs/project_overlay/downstream_harness_upgrade_guide.md`
+- 사람 기준 diff review 항목을 보려면 `docs/project_overlay/downstream_overlay_diff_review_checklist.md`
 - upgrade 위험도를 먼저 판단하려면 `docs/project_overlay/harness_upgrade_impact_policy.md`
 - 로컬 진단이 필요하면 `docs/project_overlay/local_diagnostics_and_dry_run.md`
