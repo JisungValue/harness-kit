@@ -130,7 +130,7 @@ flowchart LR
 ### Phase 4. Validation
 
 ```mermaid
-flowchart TD
+flowchart LR
     A[전체 구현 결과] --> B[자동 검증]
     B --> C[수동 검증]
     C --> D[validation_report.md]
