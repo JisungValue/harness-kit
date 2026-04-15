@@ -25,6 +25,8 @@ review를 시작하기 전에 아래를 먼저 고정한다.
 
 이 네 가지가 불명확하면 diff review를 진행하지 말고 먼저 provenance와 bundle boundary부터 정리한다.
 
+여기서 bundle boundary는 현재 프로젝트가 실제로 소비하는 project-facing 문서, overlay template, bootstrap 자산, shipped script, shipped example 문서만 뜻한다. maintainer release/audit 문서, maintainer change log, test-only 자산, maintainer workflow 같은 자산은 diff review 기본 대상에서 제외한다.
+
 ## 기본 review 순서
 
 1. bundle 경계 안의 변경만 비교 대상으로 남긴다.
@@ -118,4 +120,3 @@ task workspace를 함께 운영하면 이 판단을 `implementation_notes.md`, `
 - `docs/project_overlay/harness_upgrade_impact_policy.md`
 - `docs/project_overlay/adopt_dry_run.md`
 - `docs/project_overlay/adopt_safe_write.md`
-- `docs/kit_maintenance/downstream_bundle_boundary.md`

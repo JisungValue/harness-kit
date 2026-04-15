@@ -42,11 +42,12 @@
 - 이 문서는 source repo 안의 project overlay template guide다.
 - 이 저장소에서는 먼저 `docs/project_overlay/first_success_guide.md`, `docs/project_overlay/local_diagnostics_and_dry_run.md`, `docs/how_harness_kit_works.md`를 본다.
 - 아래 순서는 downstream 프로젝트를 bootstrap한 뒤 생성되는 문서 기준이다.
+- 아래 vendored 경로 예시는 `vendor/harness-kit/` 기준이며, 다른 경로를 쓰면 같은 실제 경로로 읽는다.
 
 - runtime 시작점: `AGENTS.md`
 - project-local 문서 entrypoint: `docs/project_entrypoint.md`
 - project decision index: `docs/decisions/README.md`
-- reusable core guide: `vendor/harness-kit/docs/harness_guide.md`
+- reusable core guide: `<vendored-path>/docs/harness_guide.md`
 - project-specific supporting docs: `docs/standard/*`
 - `AGENTS.md`를 열었으면 `docs/project_entrypoint.md`에서 멈추지 말고, 그 문서가 가리키는 core guide와 supporting docs까지 순서대로 모두 읽고 적용한다.
 - 현재 작업이 중요한 정책/예외/책임 위치를 다루면 `docs/decisions/README.md`에서 관련 decision 문서를 추가로 읽고 적용한다.
@@ -97,6 +98,8 @@
   - 템플릿의 `[팀 결정 필요]` 항목을 프로젝트 정책으로 확정해 사용한다.
 
 ## 권장 로컬 `docs/project_entrypoint.md`
+
+아래 예시의 `vendor/harness-kit/`도 non-default vendoring이면 같은 실제 경로로 바꿔 쓴다.
 
 ```md
 # Project Harness Entry Point
