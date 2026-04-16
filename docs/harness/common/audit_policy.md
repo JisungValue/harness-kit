@@ -15,6 +15,7 @@
 감사자는 Phase 전용 입력물 외에도 아래 항목을 함께 확인한다.
 
 - 해당 task의 `issue.md`
+- 해당 task의 `phase_status.md`
 - 해당 task의 `implementation_notes.md`
 - 해당 task의 현재 Phase 산출물
 - 이전 Phase에서 현재 Phase 판단에 영향을 주는 산출물
@@ -39,6 +40,7 @@
 - 재감사는 이전 감사 피드백이 해소되었는지 먼저 확인한 뒤 남은 문제와 신규 문제를 구분해 기록한다.
 - 감사자는 범위 위반, 책임 혼합, 테스트 부족, 검증 부족, 문서 반영 누락, 사용자 승인 누락을 우선적으로 본다.
 - self-healing 이 발생한 task라면 감사자는 가장 이른 영향 Phase 선언, stale 처리 범위, write-set lock, 잠긴 산출물 위반 여부가 `implementation_notes.md`와 실제 변경 파일에 일치하는지 먼저 확인한다.
+- `phase_status.md`가 있는 task라면 감사자는 현재 gate, 허용 write-set, 잠긴 경로, stale 산출물이 실제 변경 파일과 일치하는지 확인하고 필요하면 `scripts/validate_phase_gate.py` 결과를 함께 본다.
 - 감사자는 중요한 알고리즘 선택, 구조 변경, 복잡도 trade-off 결정이 있으면 사용자 승인 여부와 기록 위치를 확인한다.
 - 감사자는 프로젝트 전용 규칙이 필요한 판단이면 overlay 문서를 함께 참조한다.
 - 감사자는 현재 판단이 repo-local 근거를 우선했고, 기억/외부 대화/다른 프로젝트 관행으로 repo 빈칸을 추측 채우지 않았는지 확인한다.
