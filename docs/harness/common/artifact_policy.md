@@ -24,6 +24,7 @@
 모든 Phase의 입력, 진행 메모, 감사 결과, 검증 결과는 기본적으로 해당 task workspace 아래에 기록한다.
 각 Phase 또는 레이어의 한 작업 단위가 끝날 때마다 현재 상태를 `implementation_notes.md`의 `진행 로그` 섹션에 즉시 갱신한다.
 진행 로그에는 최소한 완료한 단계, 핵심 결과, 다음 단계, 보류 또는 리스크를 남겨 세션 유실 후에도 재개 가능해야 한다.
+self-healing 이 발동되면 `진행 로그`에 변경 원인, 가장 이른 영향 Phase, stale 처리한 감사/승인, stale 처리한 산출물, 다시 수행할 내부 감사, 현재 잠긴 문서 범위를 함께 남긴다.
 경량 운영 예외를 검토했다면 결과를 `implementation_notes.md`의 `경량 검토 기록` 섹션에 같은 작업에서 즉시 남긴다.
 
 ## 공통 산출물 최소 템플릿
@@ -83,6 +84,7 @@
 - Phase 4는 전체 검증 결과와 남은 리스크 또는 미실행 검증 목록, Phase 5에서 반영할 related decisions/를 남긴다.
 - Phase 5는 갱신된 문서와 작업 로그를 남기고, 필요하면 `docs/decisions/`를 함께 갱신한다.
 - 각 Phase 내부의 의미 있는 작업 단위가 끝날 때마다 `implementation_notes.md`의 `진행 로그`를 갱신한 뒤 다음 단계로 넘어간다.
+- self-healing 이 발동되면 `implementation_notes.md`의 `진행 로그`에 변경 원인, 가장 이른 영향 Phase, stale 처리한 감사/승인, stale 처리한 산출물, 다시 수행할 내부 감사, 현재 잠긴 문서 범위를 남긴다.
 - `implementation_notes.md`의 `구현 중 결정 사항`에는 현재 판단의 repo-local 근거 또는 repo에 없어 문서화/승인 대상으로 넘긴 결정 여부를 남긴다.
 - `validation_report.md`의 `결과 요약`에는 이번 검증이 어떤 repo-local 근거를 기준으로 했는지, repo에 없어 남긴 결정이 있다면 무엇인지 요약한다.
 

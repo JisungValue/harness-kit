@@ -8,8 +8,11 @@
 
 - 기본 Phase 순서는 `1 -> 2 -> 3 -> 4 -> 5` 이다.
 - 각 Phase는 `implementation -> audit -> 사용자 승인 -> 다음 Phase` 순서로 진행한다.
+- 변경 요청, 범위 수정, close-out 방향 변경이 들어오면 먼저 가장 이른 영향 Phase, stale 처리할 감사/승인, 잠글 산출물을 선언한다.
 - 특정 입력 문서나 산출물이 바뀌어 재수행이 필요할 때도 무조건 Phase 1부터 다시 시작하지 않는다.
 - 재수행은 변경 영향이 걸린 가장 이른 Phase부터 시작하고, 그 이후 영향을 받은 Phase만 순서대로 다시 수행한다.
+- 현재 Phase가 다시 승인되기 전에는 다음 Phase 문서, final task-local 산출물, close-out 문서, canonical 문서를 수정하지 않는다.
+- 어떤 Phase 산출물이 수정되면 그 Phase의 감사 결과는 stale 이 되고, 이미 사용자 승인까지 끝났다면 승인 상태도 stale 이 된다.
 - 현재 Phase 감사가 승인 가능이더라도 사용자 승인 전에는 다음 Phase로 이동하지 않는다.
 - 승인되지 않은 범위 확장은 구현하지 않는다.
 - 현재 TASK와 직접 관련 없는 리팩터링은 현재 작업에 자동 포함하지 않는다.
@@ -54,20 +57,57 @@
 - 모든 구현 태스크는 `docs/project_entrypoint.md`에 정의된 Phase 순서를 따른다.
 - 각 Phase는 해당 `implementation.md`를 기준으로 구현한 뒤 `audit.md`를 기준으로 감사를 수행한다.
 - 현재 Phase는 `implementation -> audit -> 사용자 승인 -> 다음 Phase` 순서를 지킨다.
+- 수정 요청이나 산출물 변경이 생기면 어떤 문서도 수정하기 전에 아래 3가지를 먼저 선언한다.
+  1. 가장 이른 영향 Phase
+  2. stale 처리되는 기존 감사 또는 사용자 승인
+  3. 잠금 상태로 둘 stale 산출물
 - 감사 결과가 승인 불가이면, 피드백을 반영한 뒤 같은 Phase에서 다시 구현과 감사를 반복한다.
 - 특정 입력 문서나 산출물이 변경되면, 그 변경 영향이 걸린 가장 이른 Phase부터 다시 수행한다.
+- 특정 Phase의 입력 문서나 핵심 산출물이 바뀌면 그 Phase의 내부 절차는 최신 산출물을 기준으로 처음부터 다시 맞춘다.
 - 변경이 현재 Phase 또는 더 늦은 Phase 산출물의 정합성 보완에만 머무르면 해당 Phase부터 다시 수행하고, 더 이른 Phase 산출물과 모순될 때만 원인 Phase로 되돌아간다.
 - 현재 Phase에서 발견한 문제의 원인이 이전 Phase 산출물(`requirements.md`, `plan.md`, `implementation_notes.md` 등)에 있으면 원인 Phase로 되돌아가 보완한 뒤 영향받는 Phase들을 순서대로 다시 수행한다.
 - 재감사 시에는 이전 감사 피드백 해소 여부를 먼저 확인한 뒤 남은 문제와 신규 문제를 구분한다.
+- stale 상태가 해소되기 전에는 이후 Phase 산출물을 새로 작성하거나 갱신하지 않는다.
 - 감사 결과가 승인 가능이어도 사용자 승인 전에는 다음 Phase로 이동하지 않는다.
 - Phase 생략, 순서 변경, 예외 처리는 사용자 승인 후에만 가능하다.
 - 운영성 작업은 이 Phase 프로세스의 적용 대상에서 제외한다.
+
+## Self-Healing Runtime 규칙
+
+- self-healing은 승인 없는 자동 self-modify가 아니라, 변경 이후 Phase 순서와 감사 상태를 다시 맞추는 runtime 규칙을 뜻한다.
+- 새 요청을 받거나 기존 판단 근거가 바뀌면 먼저 가장 이른 영향 Phase를 다시 찾는다.
+- 가장 이른 영향 Phase가 확정되기 전에는 임의로 다음 Phase 문서나 close-out 문서를 수정하지 않는다.
+- self-healing 발동 사실과 아래 항목은 `implementation_notes.md`의 `진행 로그`에 남긴다.
+  - 변경 원인
+  - 가장 이른 영향 Phase
+  - stale 처리한 감사와 승인
+  - stale 처리한 산출물
+  - 다시 수행할 내부 감사
+  - 현재 잠긴 문서 범위
+
+## Stale Invalidation 규칙
+
+- 어떤 Phase 산출물이 수정되면 그 Phase의 감사 결과는 자동으로 stale 이 된다.
+- 그 Phase가 이미 사용자 승인까지 받은 상태였다면 승인 상태도 stale 이 된다.
+- 원인 Phase보다 뒤에서 작성된 산출물은 기본적으로 stale 후보로 보고 잠금 상태로 둔다.
+- stale 후보 산출물은 원인 Phase가 다시 승인될 때까지 수정, 갱신, close-out 반영 대상으로 사용하지 않는다.
+- 이전 감사 결과는 참고 기록으로는 남길 수 있지만, 최신 산출물 기준의 승인 상태를 대신하지 못한다.
+
+## Write-Set Lock 규칙
+
+- 재수행을 시작할 때는 현재 Phase에서 수정 가능한 파일 집합을 먼저 정한다.
+- write-set 밖의 파일은 현재 Phase가 다시 승인될 때까지 잠금 상태로 본다.
+- 현재 Phase보다 뒤의 문서, final task-local 산출물, close-out 문서, canonical 문서는 기본적으로 잠금 대상이다.
+- 예를 들어 Phase 1을 다시 수행할 때는 기본적으로 `issue.md`, `requirements.md`, `plan.md`, `implementation_notes.md`만 수정 대상으로 두고, `validation_report.md`, final task-local 산출물, `docs/decisions/*`는 잠근다.
+- 예외적으로 잠금을 풀어야 하면 사용자 승인을 먼저 받는다.
 
 ## Phase 이동 규칙
 
 - 다음 Phase로 이동하려면 현재 Phase 감사가 승인 가능이고 사용자 승인을 받아야 한다.
 - 이전 Phase로 되돌아가 보완한 경우, 보완된 Phase부터 현재 Phase까지 필요한 구현, 감사, 사용자 승인 게이트를 다시 통과해야 한다.
 - 입력 또는 산출물 변경으로 재수행할 때도, 변경 영향이 없는 더 이른 Phase를 자동으로 다시 수행하지 않는다.
+- 현재 Phase의 내부 구현, 내부 감사, 사용자 승인이 끝나기 전에는 다음 Phase 파일을 수정하지 않는다.
+- 사용자의 목표가 close-out 이더라도 현재 Phase가 닫히지 않았으면 close-out 문서를 먼저 수정하지 않는다.
 - 구현 중 새 계약이나 구조적 결정이 생기면 문서 반영 대상을 식별한다.
 - 승인되지 않은 범위 확장은 구현하지 않는다.
 

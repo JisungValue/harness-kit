@@ -22,12 +22,14 @@
 
 - 필요한 문서 반영이 빠지지 않았는가
 - Phase 4가 넘긴 `Phase 5에서 반영할 related decisions/`가 실제 문서에 반영되었는가
+- stale 상태의 Validation 결과나 Phase 5 감사/승인 결과를 재사용하지 않는가
 - 작업 로그가 변경 배경과 결과를 설명할 수 있는가
 - 범위 밖 개선 사항이 후속 후보로 분리되었는가
 
 ## 감사 항목
 
 - 새 계약, 구조적 결정, 사용법 변경이 관련 문서에 반영되었는가
+- 최신 `validation_report.md`와 최신 문서 상태 기준으로만 판정하는가
 - decision 반영 대상이면 `docs/decisions/README.md`와 관련 `DEC-###-slug.md`가 실제로 수정 또는 생성되었는가
 - 새 decision이 생겼다면 index(Current Decisions 또는 Superseded Decisions)도 함께 갱신되었는가
 - 작업 로그가 변경 목적과 결과를 요약하고 있는가
@@ -37,4 +39,5 @@
 
 - 실제 변경에 필요한 문서 반영이 누락됨
 - Phase 4가 명시한 related decisions/ 반영이 누락됨
+- stale 상태의 Validation 결과나 이전 Phase 5 승인 결과를 최신 문서 대신 재사용함
 - 작업 로그가 작업 배경과 결과를 설명하지 못함

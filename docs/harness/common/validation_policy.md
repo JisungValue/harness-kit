@@ -33,6 +33,8 @@
 ## Phase 되돌아가기 및 재수행 규칙
 
 - Validation에서 발견한 불일치의 원인이 이전 Phase 산출물에 있으면 원인 Phase로 되돌아가 산출물을 먼저 보완한다.
+- Validation에서 이전 Phase 산출물 불일치가 확인되면, 해당 원인 Phase의 감사와 사용자 승인 상태는 stale 로 본다.
+- 원인 Phase보다 뒤에서 이미 작성된 `validation_report.md`, final task-local 문서, related decision 반영 초안은 stale 후보로 잠그고 재사용하지 않는다.
 - 원인 Phase를 보완한 뒤에는 해당 Phase부터 현재 Phase까지 영향받는 Phase를 순서대로 다시 수행한다.
 - 되돌아가기가 발생하면 `validation_report.md`에 원인 판단 근거, 되돌아간 Phase, 재수행 범위를 남긴다.
 - 되돌아가기와 재수행에도 각 Phase의 감사와 사용자 승인 게이트를 동일하게 적용한다.
@@ -66,5 +68,6 @@
 - 미실행 검증은 누락하지 말고 사유를 적는다.
 - 추적성 검증에서 불일치가 있으면 `누락` 또는 `범위 확장`으로 명시하고 근거를 남긴다.
 - 불일치 원인이 이전 Phase 산출물 결함이면 되돌아가기와 재수행 계획을 함께 기록한다.
+- stale 상태가 해소되기 전에는 Validation 결과만으로 Phase 5 close-out 판단을 먼저 확정하지 않는다.
 - 구조, 정책, 예외 처리 규칙, 책임 배치, 운영 규칙 변경이면 Phase 5에서 반영할 related decisions/를 빠뜨리지 않는다.
 - 잔여 리스크가 없으면 `없음`으로 명시한다.

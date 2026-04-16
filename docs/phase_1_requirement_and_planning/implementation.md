@@ -21,6 +21,7 @@
 - `requirements.md`를 먼저 구현 가능한 수준으로 구체화했는가
 - `requirements.md` 감사 후 `plan.md`를 작성했는가
 - `plan.md` 감사 후 issue 대비 plan 누락 검토를 수행했는가
+- `issue.md`, `requirements.md`, `plan.md` 중 하나라도 바뀌면 내부 감사 3종을 모두 stale 처리하고 최신본 기준으로 다시 수행하는가
 - 이번 작업이 `docs/decisions/`에 남길 만한 결정인지 판정했는가
 - `docs/decisions/README.md` 또는 관련 `DEC-###-slug.md`의 수정/생성이 필요하면 `plan.md`의 문서 반영 계획에 포함했는가
 - 현재 TASK와 직접 관련 없는 개선 사항을 현재 범위에 넣지 않았는가
@@ -35,6 +36,9 @@
 
 - 요청사항과 비범위를 분리해 정리한다.
 - 요구사항은 구현 가능한 수준으로 구체화한다.
+- `issue.md`, `requirements.md`, `plan.md` 중 하나라도 바뀌면 Phase 1 내부 절차는 `issue.md` 분석부터 다시 맞춘다.
+- 위 세 문서 중 하나라도 수정되면 requirements 감사, plan 감사, issue 대비 plan 누락 감사는 모두 stale 로 본다.
+- Phase 1이 다시 승인되기 전에는 `validation_report.md`, final task-local 문서, `docs/decisions/*`를 수정하지 않는다.
 - 애매한 가정은 문서로 드러내고, 필요한 경우 사용자 확인이 필요한 항목으로 분리한다.
 - 정책 해석이 모호하거나 구현에 필요한 외부 계약, 응답 형식, 에러 계약, 데이터 접근 방식이 정의되지 않았으면 추정으로 닫지 말고 사용자에게 질의한다.
 - 아래 중 하나 이상이면 `docs/decisions/` 반영 후보로 본다.
@@ -77,6 +81,7 @@
 ### 3. `requirements.md` 감사
 
 - 요구사항이 구현 가능한 수준인지 확인한 뒤 다음 단계로 넘어간다.
+- `issue.md`, `requirements.md`, `plan.md`가 바뀐 뒤에는 이전 requirements 감사 결과를 재사용하지 않는다.
 - 요구사항 감사에서 승인 불가가 나오면 `requirements.md`를 먼저 보완한다.
 - 정책 모호점이나 구현 필수 정보 누락이 남아 있으면 사용자 질의 또는 요구사항 보완 후 다시 감사한다.
 
@@ -92,6 +97,7 @@
 ### 5. `plan.md` 감사
 
 - 계획이 요구사항을 구현할 수 있는 수준인지, 범위 확장이 섞이지 않았는지 확인한다.
+- `issue.md`, `requirements.md`, `plan.md`가 바뀐 뒤에는 이전 plan 감사 결과를 재사용하지 않는다.
 - decision 반영 후보인데 관련 `docs/decisions/` 작업이 `plan.md`에 빠졌으면 승인 불가로 본다.
 - 계획 감사에서 승인 불가가 나오면 `plan.md`를 먼저 보완한다.
 
@@ -100,6 +106,7 @@
 - `issue.md`의 요청사항, 제약사항, 비범위가 `plan.md`에 빠짐없이 반영되었는지 확인한다.
 - issue상 구조/정책/예외/책임 위치 변경이 있으면 관련 `docs/decisions/` 반영 계획도 함께 확인한다.
 - 반영되지 않은 항목이 있으면 누락으로 보고 `plan.md`를 수정한 뒤 다시 확인한다.
+- 앞선 산출물 중 하나라도 바뀌면 최신 `issue.md`, `requirements.md`, `plan.md` 조합으로 다시 검토한다.
 
 ## 출력
 
