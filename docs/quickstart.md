@@ -72,6 +72,11 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 9. 첫 task를 시작하기 전에 `docs/downstream_harness_flow.md`를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
 10. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
+11. task를 시작하면 `phase_status.md`에 현재 gate와 허용 write-set을 먼저 적고, 필요할 때 아래 validator로 hard-stop 위반을 점검한다.
+
+```bash
+python3 vendor/harness-kit/scripts/validate_phase_gate.py docs/task/<task_id> --paths docs/task/<task_id>/issue.md docs/task/<task_id>/phase_status.md
+```
 
 ### 기존 프로젝트 첫 도입
 
@@ -142,6 +147,8 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - `validate_overlay_consistency.py`
   - 문서 간 참조, decisions index 연결, runtime instruction entrypoint 연결, traversal contract, 책임 경계를 본다.
   - `--mode incremental`은 partial adoption 상태의 safe gap과 blocker를 먼저 분리한다.
+- `validate_phase_gate.py`
+  - task workspace의 `phase_status.md`와 현재 candidate path 또는 git 변경분을 기준으로 hard-stop gate와 write-set 위반을 검사한다.
 - `adopt_dry_run.py`
   - 기존 프로젝트 상태를 read-only로 분류한다.
 - `adopt_safe_write.py`

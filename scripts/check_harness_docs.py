@@ -550,6 +550,19 @@ def check_repo_local_source_of_truth_docs(errors: list[str]) -> None:
         if phrase not in implementation_template:
             errors.append(f"implementation_notes template에 `{phrase}` 항목이 없습니다.")
 
+    phase_status_template = read_text("docs/templates/task/phase_status.md")
+    for phrase in (
+        "## Current State",
+        "## Allowed Write Set",
+        "## Locked Paths",
+        "## Stale Artifacts",
+        "## Next Action",
+        "## Cleanup",
+        "$TASK/phase_status.md",
+    ):
+        if phrase not in phase_status_template:
+            errors.append(f"phase_status template에 `{phrase}` 항목이 없습니다.")
+
     validation_template = read_text("docs/templates/task/validation_report.md")
     for phrase in (
         "- 이번 판단의 repo-local 근거:",

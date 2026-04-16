@@ -9,6 +9,7 @@
 - 기본 Phase 순서는 `1 -> 2 -> 3 -> 4 -> 5` 이다.
 - 각 Phase는 `implementation -> audit -> 사용자 승인 -> 다음 Phase` 순서로 진행한다.
 - 변경 요청, 범위 수정, close-out 방향 변경이 들어오면 먼저 가장 이른 영향 Phase, stale 처리할 감사/승인, 잠글 산출물을 선언한다.
+- `phase_status.md`가 있으면 현재 task의 gate 상태와 허용 write-set은 그 파일을 기준으로 먼저 확인한다.
 - 특정 입력 문서나 산출물이 바뀌어 재수행이 필요할 때도 무조건 Phase 1부터 다시 시작하지 않는다.
 - 재수행은 변경 영향이 걸린 가장 이른 Phase부터 시작하고, 그 이후 영향을 받은 Phase만 순서대로 다시 수행한다.
 - 현재 Phase가 다시 승인되기 전에는 다음 Phase 문서, final task-local 산출물, close-out 문서, canonical 문서를 수정하지 않는다.
@@ -61,6 +62,7 @@
   1. 가장 이른 영향 Phase
   2. stale 처리되는 기존 감사 또는 사용자 승인
   3. 잠금 상태로 둘 stale 산출물
+- `phase_status.md`를 쓰는 task라면 선언 직후 현재 Phase, 현재 gate, 허용 write-set, 잠긴 경로, stale 산출물을 먼저 갱신한다.
 - 감사 결과가 승인 불가이면, 피드백을 반영한 뒤 같은 Phase에서 다시 구현과 감사를 반복한다.
 - 특정 입력 문서나 산출물이 변경되면, 그 변경 영향이 걸린 가장 이른 Phase부터 다시 수행한다.
 - 특정 Phase의 입력 문서나 핵심 산출물이 바뀌면 그 Phase의 내부 절차는 최신 산출물을 기준으로 처음부터 다시 맞춘다.
@@ -68,6 +70,7 @@
 - 현재 Phase에서 발견한 문제의 원인이 이전 Phase 산출물(`requirements.md`, `plan.md`, `implementation_notes.md` 등)에 있으면 원인 Phase로 되돌아가 보완한 뒤 영향받는 Phase들을 순서대로 다시 수행한다.
 - 재감사 시에는 이전 감사 피드백 해소 여부를 먼저 확인한 뒤 남은 문제와 신규 문제를 구분한다.
 - stale 상태가 해소되기 전에는 이후 Phase 산출물을 새로 작성하거나 갱신하지 않는다.
+- write-set 위반 가능성이 보이면 구현을 계속 진행하지 않고 현재 gate 상태만 보고한 뒤 멈춘다.
 - 감사 결과가 승인 가능이어도 사용자 승인 전에는 다음 Phase로 이동하지 않는다.
 - Phase 생략, 순서 변경, 예외 처리는 사용자 승인 후에만 가능하다.
 - 운영성 작업은 이 Phase 프로세스의 적용 대상에서 제외한다.
@@ -84,6 +87,7 @@
   - stale 처리한 산출물
   - 다시 수행할 내부 감사
   - 현재 잠긴 문서 범위
+- `phase_status.md`가 있으면 같은 사실을 runtime state에도 즉시 반영한다.
 
 ## Stale Invalidation 규칙
 
@@ -98,6 +102,7 @@
 - 재수행을 시작할 때는 현재 Phase에서 수정 가능한 파일 집합을 먼저 정한다.
 - write-set 밖의 파일은 현재 Phase가 다시 승인될 때까지 잠금 상태로 본다.
 - 현재 Phase보다 뒤의 문서, final task-local 산출물, close-out 문서, canonical 문서는 기본적으로 잠금 대상이다.
+- `phase_status.md`를 쓰는 task라면 허용 write-set과 잠긴 경로를 그 파일에 명시하고, `scripts/validate_phase_gate.py`로 위반 여부를 검사할 수 있어야 한다.
 - 예를 들어 Phase 1을 다시 수행할 때는 기본적으로 `issue.md`, `requirements.md`, `plan.md`, `implementation_notes.md`만 수정 대상으로 두고, `validation_report.md`, final task-local 산출물, `docs/decisions/*`는 잠근다.
 - 예외적으로 잠금을 풀어야 하면 사용자 승인을 먼저 받는다.
 

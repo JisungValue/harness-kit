@@ -82,6 +82,7 @@ flowchart LR
 ## 변경 요청이 들어왔을 때
 
 - 수정 요청, 범위 변경, close-out 방향 변경이 들어오면 먼저 가장 이른 영향 Phase를 다시 찾는다.
+- task workspace에 `phase_status.md`가 있으면 그 파일의 현재 gate와 허용 write-set을 먼저 갱신한다.
 - 이때 어떤 문서도 수정하기 전에 아래 3가지를 먼저 선언한다.
   1. 가장 이른 영향 Phase
   2. stale 처리되는 기존 감사 또는 사용자 승인
@@ -89,6 +90,7 @@ flowchart LR
 - 어떤 Phase 산출물이 수정되면 그 Phase의 감사는 stale 이 되고, 이미 승인된 상태였다면 승인도 stale 이 된다.
 - 원인 Phase보다 뒤의 산출물은 stale 후보로 잠그고, 원인 Phase가 다시 승인되기 전에는 다음 Phase 문서, `validation_report.md`, final task-local 문서, close-out 문서, canonical 문서를 수정하지 않는다.
 - 특정 Phase의 입력 문서나 핵심 산출물이 바뀌면 그 Phase 내부 절차는 최신본 기준으로 처음부터 다시 맞춘다.
+- write-set 위반 가능성이 보이면 `scripts/validate_phase_gate.py`로 검사하고, 통과 전에는 다음 단계로 진행하지 않는다.
 
 ## Phase별 진행 흐름
 
