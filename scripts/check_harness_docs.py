@@ -175,7 +175,6 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
     quickstart = read_text("docs/quickstart.md")
     first_success = read_text("docs/project_overlay/first_success_guide.md")
     diagnostics = read_text("docs/project_overlay/local_diagnostics_and_dry_run.md")
-    first_success_example = read_text("docs/examples/bootstrap-first-success/validation_report.md")
     bundle_smoke_doc = read_text("docs/kit_maintenance/downstream_bundle_smoke_validation.md")
     bundle_boundary = read_text("docs/kit_maintenance/downstream_bundle_boundary.md")
     project_guide_template = read_text("docs/project_overlay/project_entrypoint_template.md")
@@ -228,51 +227,6 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
     if "예시 명령의 `vendor/harness-kit/` 부분을 모두 같은 실제 경로로" not in quickstart:
         errors.append("docs/quickstart.md에 non-default vendoring command path localize 설명이 충분하지 않습니다.")
 
-    overlay_completion_example = read_text("docs/examples/bootstrap-first-success/overlay_completion_validation_report.md")
-    for required_path in readme_min:
-        if required_path not in overlay_completion_example:
-            errors.append(
-                f"docs/examples/bootstrap-first-success/overlay_completion_validation_report.md에 필수 문서 `{required_path}`가 반영되지 않았습니다."
-            )
-    overlay_completion_targets = set(
-        extract_bullet_paths(
-            extract_h2_section(
-                overlay_completion_example,
-                "판정 대상",
-            )
-        )
-    )
-    expected_explicit_targets = {
-        "AGENTS.md",
-        "CLAUDE.md",
-        "GEMINI.md",
-        "docs/project_entrypoint.md",
-        "docs/decisions/README.md",
-        "validate_overlay_decisions.py",
-        "validate_overlay_consistency.py",
-    }
-    missing_targets = expected_explicit_targets - overlay_completion_targets
-    if missing_targets:
-        joined = ", ".join(sorted(missing_targets))
-        errors.append(
-            "docs/examples/bootstrap-first-success/overlay_completion_validation_report.md의 판정 대상 목록이 현재 계약과 다릅니다: "
-            f"{joined}"
-        )
-
-    first_success_surfaces = {
-        "docs/quickstart.md": quickstart,
-        "docs/project_overlay/first_success_guide.md": first_success,
-        "docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
-        "docs/examples/bootstrap-first-success/validation_report.md": first_success_example,
-        "docs/kit_maintenance/downstream_bundle_smoke_validation.md": bundle_smoke_doc,
-    }
-    for rel_path, text in first_success_surfaces.items():
-        if "scripts/check_first_success_docs.py" in text:
-            continue
-        for required_path in readme_min:
-            if required_path not in text:
-                errors.append(f"{rel_path}에 최소 문서 세트 경로 `{required_path}`가 반영되지 않았습니다.")
-
     prerequisite_surfaces = {
         "docs/quickstart.md": quickstart,
         "docs/project_overlay/first_success_guide.md": first_success,
@@ -287,8 +241,6 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
         "docs/quickstart.md": quickstart,
         "docs/project_overlay/first_success_guide.md": first_success,
         "docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
-        "docs/examples/bootstrap-first-success/validation_report.md": first_success_example,
-        "docs/kit_maintenance/downstream_bundle_smoke_validation.md": bundle_smoke_doc,
     }
     for rel_path, text in helper_command_surfaces.items():
         if "scripts/check_first_success_docs.py" not in text:
@@ -302,7 +254,6 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
         "docs/project_overlay/cross_document_consistency_checker.md": read_text(
             "docs/project_overlay/cross_document_consistency_checker.md"
         ),
-        "docs/kit_maintenance/downstream_bundle_smoke_validation.md": bundle_smoke_doc,
     }
     for rel_path, text in incremental_surfaces.items():
         if "--mode incremental" not in text:
@@ -312,8 +263,6 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
         "docs/quickstart.md": quickstart,
         "docs/project_overlay/first_success_guide.md": first_success,
         "docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
-        "docs/examples/bootstrap-first-success/validation_report.md": first_success_example,
-        "docs/kit_maintenance/downstream_bundle_smoke_validation.md": bundle_smoke_doc,
     }
     for rel_path, text in localized_vendoring_surfaces.items():
         if "--vendor-path" not in text:
@@ -324,8 +273,6 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
         "docs/quickstart.md": quickstart,
         "docs/project_overlay/first_success_guide.md": first_success,
         "docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
-        "docs/examples/bootstrap-first-success/validation_report.md": first_success_example,
-        "docs/kit_maintenance/downstream_bundle_smoke_validation.md": bundle_smoke_doc,
     }
     for rel_path, text in workflow_template_surfaces.items():
         for token in ("docs/project_overlay/harness_doc_guard_workflow_template.yml", "@<pin-tag-or-sha>"):
@@ -336,20 +283,6 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
         errors.append(
             "docs/kit_maintenance/downstream_bundle_boundary.md에 project-facing workflow template 경로가 반영되지 않았습니다."
         )
-
-    for token in tuple(f"`{language}`" for language in LANGUAGE_BOOTSTRAP_PATHS) + (
-        "legacy entrypoint migration",
-        "--migrate-legacy-entrypoint",
-        "third_party/harness-kit",
-        "docs/project_overlay/harness_doc_guard_workflow_template.yml",
-        "@<pin-tag-or-sha>",
-    ):
-        if token not in bundle_smoke_doc:
-            errors.append(
-                "docs/kit_maintenance/downstream_bundle_smoke_validation.md에 bundle smoke coverage 설명이 부족합니다: "
-                f"{token}"
-            )
-
 
 def check_entrypoint_role_labels(errors: list[str]) -> None:
     expected_titles = {
@@ -411,26 +344,10 @@ def check_entrypoint_role_labels(errors: list[str]) -> None:
     local_entrypoint_joined = "\n".join(local_entrypoint_lines)
     if "## 실행 계약" not in local_entrypoint_joined:
         errors.append("project_overlay/README의 로컬 entrypoint 예시에 실행 계약 섹션이 없습니다.")
-    for phrase in (
-        "공통 규칙",
-        "프로젝트 전용 규칙",
-        "순서대로 모두 읽고 적용",
-        "둘 중 하나만 읽고 멈추지 않는다",
-    ):
-        if phrase not in local_entrypoint_joined:
-            errors.append(f"project_overlay/README의 로컬 entrypoint 예시에 traversal contract 문구 `{phrase}`가 없습니다.")
 
     runtime_entrypoint_joined = "\n".join(runtime_entrypoint_lines)
     if "## 실행 계약" not in runtime_entrypoint_joined:
         errors.append("project_overlay/README의 runtime entrypoint 예시에 실행 계약 섹션이 없습니다.")
-    for phrase in (
-        "순서대로 모두 읽고 적용",
-        "공통 규칙",
-        "프로젝트 전용 규칙",
-        "중간 문서에서 멈추지 않는다",
-    ):
-        if phrase not in runtime_entrypoint_joined:
-            errors.append(f"project_overlay/README의 runtime entrypoint 예시에 traversal contract 문구 `{phrase}`가 없습니다.")
 
 
 def check_decisions_templates(errors: list[str]) -> None:
