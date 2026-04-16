@@ -79,6 +79,17 @@ flowchart LR
 - 각 Phase는 `implementation -> audit -> 사용자 승인 -> 다음 Phase` 순서를 따른다.
 - validation에서 더 이른 산출물과 모순이 발견되면 원인 Phase까지 되돌아가고, 그렇지 않으면 영향이 걸린 가장 이른 Phase부터만 다시 수행한다.
 
+## 변경 요청이 들어왔을 때
+
+- 수정 요청, 범위 변경, close-out 방향 변경이 들어오면 먼저 가장 이른 영향 Phase를 다시 찾는다.
+- 이때 어떤 문서도 수정하기 전에 아래 3가지를 먼저 선언한다.
+  1. 가장 이른 영향 Phase
+  2. stale 처리되는 기존 감사 또는 사용자 승인
+  3. 잠금 상태로 둘 stale 산출물
+- 어떤 Phase 산출물이 수정되면 그 Phase의 감사는 stale 이 되고, 이미 승인된 상태였다면 승인도 stale 이 된다.
+- 원인 Phase보다 뒤의 산출물은 stale 후보로 잠그고, 원인 Phase가 다시 승인되기 전에는 다음 Phase 문서, `validation_report.md`, final task-local 문서, close-out 문서, canonical 문서를 수정하지 않는다.
+- 특정 Phase의 입력 문서나 핵심 산출물이 바뀌면 그 Phase 내부 절차는 최신본 기준으로 처음부터 다시 맞춘다.
+
 ## Phase별 진행 흐름
 
 ### Phase 1. Requirement And Planning
@@ -98,6 +109,8 @@ flowchart LR
 - 실제 권장 순서는 `issue.md` 분석 -> `requirements.md` 작성 -> requirements 감사 -> `plan.md` 작성 -> plan 감사 -> issue 대비 plan 누락 감사다.
 - 즉, 내부 감사 세 가지를 한 번에 몰아서 하는 것이 아니라, 각 산출물이 닫히는 시점마다 순서대로 수행한다.
 - 세 내부 감사가 모두 승인 가능 상태가 된 뒤에만 사용자 승인으로 간다.
+- `issue.md`, `requirements.md`, `plan.md` 중 하나라도 바뀌면 Phase 1 내부 감사 3종은 모두 stale 이 되며, 최신본 기준으로 다시 수행한다.
+- Phase 1이 다시 승인되기 전에는 `validation_report.md`, final task-local 문서, `docs/decisions/*`를 수정하지 않는다.
 
 ### Phase 2. TDD Implementation
 
@@ -119,6 +132,7 @@ flowchart LR
 - 각 선택 레이어는 `테스트 작성 -> 구현 -> 현재 레이어 감사` 순서를 따른다.
 - 한 레이어 감사가 끝나면 다음 선택 레이어로 넘어가 같은 TDD 루프를 반복한다.
 - 모든 선택 레이어가 끝난 뒤에야 `Phase 2 전체 감사`를 수행하고, 그 결과가 승인 가능 상태여야 사용자 승인 게이트로 간다.
+- 승인된 `requirements.md` 또는 `plan.md`가 바뀌거나, 특정 레이어의 테스트/구현/경계가 바뀌면 그 레이어부터 `테스트 -> 구현 -> 감사`를 다시 수행하고, 이후 `Phase 2 전체 감사`도 최신본 기준으로 다시 수행한다.
 
 ### Phase 3. Integration
 
@@ -133,6 +147,7 @@ flowchart LR
 
 - 단위 테스트로 다루기 어려운 연결 책임, 조립 책임, 핵심 happy path와 failure path를 검증한다.
 - 전체 앱 end-to-end만이 아니라 구현체 단위 통합 테스트도 포함될 수 있다.
+- 통합 대상, 위임 책임, 연결 경계가 바뀌면 `연결 책임 식별 -> 통합 검증 -> happy path / failure path 확인 -> 감사` 순서를 최신본 기준으로 다시 수행한다.
 
 ### Phase 4. Validation
 
@@ -150,6 +165,7 @@ flowchart LR
 
 - `validation_report.md`가 핵심 출력이다.
 - `validation_report.md`만 보완하면 기본적으로 Phase 4부터 다시 수행하지만, 더 이른 산출물과 모순되면 원인 Phase까지 되돌아간다.
+- 검증 기준, 입력 산출물, 미실행 사유, 잔여 리스크가 바뀌면 자동/수동 검증과 감사는 모두 stale 로 보고 다시 수행한다.
 
 ### Phase 5. Documentation
 
@@ -164,3 +180,4 @@ flowchart LR
 
 - 구조적 결정, 사용법 변경, related decision을 실제 문서에 반영한다.
 - 작업 로그는 이후 세션에서도 결과와 판단 근거를 복원할 수 있게 남긴다.
+- 문서 반영 대상, canonical 역할 분담, close-out 결과가 바뀌면 문서 반영과 감사는 최신 Validation 결과 기준으로 다시 수행한다.
