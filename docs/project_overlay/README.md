@@ -4,9 +4,9 @@
 
 ## 첫 도입 가이드
 
-- 새 프로젝트 또는 거의 빈 프로젝트에서 first success를 빠르게 재현하려면 `docs/project_overlay/first_success_guide.md`를 먼저 본다.
-- init CLI를 쓰든 수동 복사를 쓰든, 이 가이드의 최소 문서 세트와 성공 상태를 기준으로 맞춘다.
-- 로컬에서 어떤 명령을 먼저 돌리고 dry-run 출력을 어떻게 읽을지는 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 본다.
+- 기본 시작 문서는 `docs/quickstart.md`다.
+- 새 프로젝트 또는 거의 빈 프로젝트에서 greenfield 상세 설명이 더 필요할 때만 `docs/project_overlay/first_success_guide.md`를 본다.
+- 로컬에서 어떤 명령을 먼저 돌리고 dry-run 출력을 어떻게 읽을지 막힐 때만 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 본다.
 
 ## Overlay Validator
 
@@ -18,7 +18,7 @@
 - 새 harness bundle 변경을 얼마나 조심해서 반영해야 하는지 분류하는 기준은 `docs/project_overlay/harness_upgrade_impact_policy.md`를 본다.
 - 새 harness bundle 변경을 실제로 어떤 순서와 기준으로 검토하고 반영할지는 `docs/project_overlay/downstream_harness_upgrade_guide.md`를 본다.
 - 새 harness bundle과 현재 overlay 사이의 사람 중심 diff review 항목은 `docs/project_overlay/downstream_overlay_diff_review_checklist.md`를 본다.
-- 사람이 읽는 overlay 완료 기준은 `docs/project_overlay/overlay_completion_checklist.md`를 보고, sample validation 예시는 `docs/examples/bootstrap-first-success/overlay_completion_validation_report.md`를 본다.
+- 사람이 읽는 overlay 완료 기준은 `docs/project_overlay/overlay_completion_checklist.md`를 보고, sample validation 예시는 필요할 때만 `docs/examples/bootstrap-first-success/overlay_completion_validation_report.md`를 참고한다.
 
 ## 필수 문서
 
@@ -40,7 +40,7 @@
 ## 권장 읽기 순서
 
 - 이 문서는 source repo 안의 project overlay template guide다.
-- 이 저장소에서는 먼저 `docs/project_overlay/first_success_guide.md`, `docs/project_overlay/local_diagnostics_and_dry_run.md`, `docs/how_harness_kit_works.md`를 본다.
+- 이 저장소에서는 먼저 `docs/quickstart.md`를 보고, 필요할 때만 `docs/project_overlay/first_success_guide.md`, `docs/project_overlay/local_diagnostics_and_dry_run.md`, `docs/how_harness_kit_works.md`로 이어진다.
 - 아래 순서는 downstream 프로젝트를 bootstrap한 뒤 생성되는 문서 기준이다.
 - 아래 vendored 경로 예시는 `vendor/harness-kit/` 기준이며, 다른 경로를 쓰면 같은 실제 경로로 읽는다.
 

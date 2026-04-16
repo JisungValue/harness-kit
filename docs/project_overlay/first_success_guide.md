@@ -5,7 +5,9 @@
 ## 문서 역할
 
 - 이 문서는 greenfield first-success 상세판이다.
-- canonical 시작 경로를 먼저 고르려면 `docs/quickstart.md`를 보고, 실패 원인과 출력 해석은 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 본다.
+- canonical 시작 경로는 항상 `docs/quickstart.md`를 먼저 본다.
+- 이 문서는 quickstart의 greenfield 경로를 더 자세히 풀어 쓴 reference다.
+- 실패 원인과 출력 해석은 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 본다.
 - downstream 구조와 Phase 흐름 전체는 `docs/downstream_harness_flow.md`를 본다.
 - 새 서브에이전트가 가장 먼저 여는 onboarding 문서는 아니고, `docs/quickstart.md`에서 greenfield 경로를 고른 뒤에 읽는 문서다.
 
@@ -255,9 +257,9 @@ docs/
 
 ## 참고 검증 자산
 
-- 실제 end-to-end smoke validation 예시는 `docs/examples/bootstrap-first-success/validation_report.md`를 본다.
+- 실제 end-to-end smoke validation 예시는 필요할 때만 `docs/examples/bootstrap-first-success/validation_report.md`를 본다.
 - init, validator, adopt dry-run의 로컬 진단 순서는 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 본다.
 - 사람이 읽는 overlay 완료 기준은 `docs/project_overlay/overlay_completion_checklist.md`를 본다.
-- overlay 완료 상태 sample validation 예시는 `docs/examples/bootstrap-first-success/overlay_completion_validation_report.md`를 본다.
+- overlay 완료 상태 sample validation 예시는 필요할 때만 `docs/examples/bootstrap-first-success/overlay_completion_validation_report.md`를 본다.
 - first success 이후 unresolved placeholder를 점검하려면 `docs/project_overlay/unresolved_decision_validator.md`를 본다.
 - 문서 간 교차 정합성을 점검하려면 `docs/project_overlay/cross_document_consistency_checker.md`를 본다.

@@ -5,10 +5,10 @@
 ## 문서 역할
 
 - 이 문서는 canonical happy path를 고르는 빠른 시작 문서다.
-- greenfield 상세판은 `docs/project_overlay/first_success_guide.md`를, 실패 원인과 출력 해석은 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 본다.
+- greenfield 상세 설명이 더 필요할 때만 `docs/project_overlay/first_success_guide.md`를, 실패 원인과 출력 해석이 필요할 때만 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 본다.
 - downstream 구조와 Phase 흐름 전체 설명은 `docs/downstream_harness_flow.md`를 본다.
 - 현재 지원 범위와 최신 릴리스는 `docs/version_support.md`를 기준으로 본다.
-- 새 서브에이전트라면 이 문서를 첫 문서로 본다. 다른 onboarding 문서는 이 문서에서 경로를 고른 뒤에만 이어서 읽는다.
+- 새 서브에이전트와 새 사용자는 이 문서를 첫 문서로 본다. 다른 onboarding 문서는 이 문서에서 경로를 고른 뒤 필요할 때만 이어서 읽는다.
 
 ## 누구를 위한 문서인가
 
@@ -40,9 +40,7 @@
 1. `harness-kit`를 프로젝트 안의 vendored 경로로 둔다.
     - 아래 예시는 `vendor/harness-kit/`를 기준으로 한다.
     - 다른 경로를 쓰면 문서 안의 vendored path와 예시 명령의 `vendor/harness-kit/` 부분을 모두 같은 실제 경로로 바꿔서 실행한다.
-2. `docs/project_overlay/first_success_guide.md`를 본다.
-3. `docs/project_overlay/local_diagnostics_and_dry_run.md`를 같이 본다.
-4. 먼저 bootstrap만 실행한다.
+2. 먼저 bootstrap만 실행한다.
 
 - `bootstrap_init.py`, `check_first_success_docs.py`, validator 예시는 모두 Python 3 runtime이 필요하다.
 - 현재 bootstrap CLI는 `python`, `java`, `kotlin` language profile을 지원하지만, 실행 자체는 Python 3로 한다.
@@ -53,14 +51,14 @@
 python3 vendor/harness-kit/scripts/bootstrap_init.py . --language python
 ```
 
-5. bootstrap 직후 `docs/project_entrypoint.md`와 `docs/decisions/README.md`를 먼저 읽고, 현재 프로젝트에서 구조/정책/예외/책임 위치 중 바로 확정해야 할 결정이 있는지 확인한다.
+3. bootstrap 직후 `docs/project_entrypoint.md`와 `docs/decisions/README.md`를 먼저 읽고, 현재 프로젝트에서 구조/정책/예외/책임 위치 중 바로 확정해야 할 결정이 있는지 확인한다.
 
-6. `harness-kit`를 `vendor/harness-kit/` 이외의 경로에 두었다면, bootstrap 때 `--vendor-path`를 이미 준 경우 generated reference는 바로 맞는다. 그 옵션 없이 생성했다면 validator를 돌리기 전에 아래 파일의 vendored 경로를 실제 배치 경로로 먼저 현지화한다.
+4. `harness-kit`를 `vendor/harness-kit/` 이외의 경로에 두었다면, bootstrap 때 `--vendor-path`를 이미 준 경우 generated reference는 바로 맞는다. 그 옵션 없이 생성했다면 validator를 돌리기 전에 아래 파일의 vendored 경로를 실제 배치 경로로 먼저 현지화한다.
 
 - `docs/project_entrypoint.md`
 - `docs/standard/coding_conventions_project.md`
 
-7. 그다음 아래 검증 명령을 실행한다.
+5. 그다음 아래 검증 명령을 실행한다.
 
 ```bash
 python3 vendor/harness-kit/scripts/check_first_success_docs.py .
@@ -68,23 +66,27 @@ python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness f
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ```
 
-8. local validator가 통과하면 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사하고 workflow 안의 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꾼다.
+6. local validator가 통과하면 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사하고 workflow 안의 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꾼다.
 
-9. 첫 task를 시작하기 전에 `docs/downstream_harness_flow.md`를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
-10. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
-11. task를 시작하면 `phase_status.md`에 현재 gate와 허용 write-set을 먼저 적고, 필요할 때 아래 validator로 hard-stop 위반을 점검한다.
+7. 첫 task를 시작하기 전에 `docs/downstream_harness_flow.md`를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
+8. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
+9. task를 시작하면 `phase_status.md`에 현재 gate와 허용 write-set을 먼저 적고, 필요할 때 아래 validator로 hard-stop 위반을 점검한다.
 
 ```bash
 python3 vendor/harness-kit/scripts/validate_phase_gate.py docs/task/<task_id> --paths docs/task/<task_id>/issue.md docs/task/<task_id>/phase_status.md
 ```
+
+상세 설명이 더 필요하면 아래 reference로 이어서 읽는다.
+
+- greenfield 상세판: `docs/project_overlay/first_success_guide.md`
+- 로컬 진단/출력 해석: `docs/project_overlay/local_diagnostics_and_dry_run.md`
 
 ### 기존 프로젝트 첫 도입
 
 - 아직 `docs/project_entrypoint.md`가 없거나, legacy `docs/harness_guide.md`만 남아 있거나, 최소 overlay 문서 세트가 아직 맞춰지지 않았다면 이 경로를 따른다.
 
 1. `docs/project_overlay/adopt_dry_run.md`를 본다.
-2. `docs/project_overlay/local_diagnostics_and_dry_run.md`를 같이 본다.
-3. 아래 명령을 실행한다.
+2. 아래 명령을 실행한다.
 
 - 아래 명령도 downstream 프로젝트 루트에서 실행한다.
 
@@ -92,41 +94,43 @@ python3 vendor/harness-kit/scripts/validate_phase_gate.py docs/task/<task_id> --
 python3 vendor/harness-kit/scripts/adopt_dry_run.py . --language python
 ```
 
-4. 결과를 아래처럼 읽는다.
+3. 결과를 아래처럼 읽는다.
     - `missing files`: 안전하게 생성 가능한 후보
     - `existing but unchanged targets`: baseline과 동일
     - `differing files`: 수동 검토 대상
     - `conflict candidates`: 수동 판단 우선 대상
     - `legacy entrypoint migration candidates`: 예전 `docs/harness_guide.md`를 새 canonical `docs/project_entrypoint.md`로 옮겨야 하는 상태
-5. `legacy entrypoint migration candidates`가 보이면 아래 rename migration부터 먼저 검토한다.
+4. `legacy entrypoint migration candidates`가 보이면 아래 rename migration부터 먼저 검토한다.
 
 ```bash
 python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --migrate-legacy-entrypoint
 ```
 
-6. legacy migration candidate가 없고 `missing files`를 먼저 안전하게 반영하려면 아래 명령을 실행한다.
+5. legacy migration candidate가 없고 `missing files`를 먼저 안전하게 반영하려면 아래 명령을 실행한다.
 
 ```bash
 python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python
 ```
 
-7. exact-match target만 다시 쓰거나 특정 경로만 명시적으로 덮어쓰려면 아래처럼 범위를 좁힌다.
+6. exact-match target만 다시 쓰거나 특정 경로만 명시적으로 덮어쓰려면 아래처럼 범위를 좁힌다.
 
 ```bash
 python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --update-unchanged
 python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --force-overwrite docs/project_entrypoint.md
 ```
 
-8. `differing files`와 `conflict candidates`는 기본적으로 수동 비교 대상으로 남긴다.
-9. partial adoption 상태가 structurally safe한지 먼저 보려면 아래 incremental validator를 실행한다.
-10. 최소 문서 세트가 어느 정도 맞춰진 뒤에만 full validator로 넘어간다.
-11. 첫 task를 시작하기 전에 `docs/downstream_harness_flow.md`를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
+7. `differing files`와 `conflict candidates`는 기본적으로 수동 비교 대상으로 남긴다.
+8. partial adoption 상태가 structurally safe한지 먼저 보려면 아래 incremental validator를 실행한다.
+9. 최소 문서 세트가 어느 정도 맞춰진 뒤에만 full validator로 넘어간다.
+10. 첫 task를 시작하기 전에 `docs/downstream_harness_flow.md`를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
 
 ```bash
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py . --mode incremental
 python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ```
+
+출력 해석과 로컬 진단 순서가 더 필요하면 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 reference로 본다.
 
 ### 이미 도입된 downstream 업그레이드
 
@@ -180,8 +184,8 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ## 다음에 읽을 문서
 
 - 전체 동작 설명: `docs/how_harness_kit_works.md`
-- 새 프로젝트 시작: `docs/project_overlay/first_success_guide.md`
-- 로컬 진단: `docs/project_overlay/local_diagnostics_and_dry_run.md`
+- greenfield 상세 reference: `docs/project_overlay/first_success_guide.md`
+- diagnostics reference: `docs/project_overlay/local_diagnostics_and_dry_run.md`
 - 기존 프로젝트 dry-run: `docs/project_overlay/adopt_dry_run.md`
 - 기존 프로젝트 bundle upgrade 절차: `docs/project_overlay/downstream_harness_upgrade_guide.md`
 - 기존 프로젝트 diff review checklist: `docs/project_overlay/downstream_overlay_diff_review_checklist.md`

@@ -52,14 +52,14 @@
 
 - 현재 지원 범위: [`docs/version_support.md`](docs/version_support.md)
 - canonical 시작 문서: [`docs/quickstart.md`](docs/quickstart.md)
-- greenfield 상세판: [`docs/project_overlay/first_success_guide.md`](docs/project_overlay/first_success_guide.md)
-- 로컬 진단/validator 해석: [`docs/project_overlay/local_diagnostics_and_dry_run.md`](docs/project_overlay/local_diagnostics_and_dry_run.md)
+- greenfield 상세 reference: [`docs/project_overlay/first_success_guide.md`](docs/project_overlay/first_success_guide.md)
+- diagnostics reference: [`docs/project_overlay/local_diagnostics_and_dry_run.md`](docs/project_overlay/local_diagnostics_and_dry_run.md)
 
 ### 기존 프로젝트에 도입
 
 - 아직 `docs/project_entrypoint.md`나 vendored harness 기준 문서가 없거나, legacy `docs/harness_guide.md` 상태라면 이 경로부터 시작한다.
 - read-only 현재 상태 파악: [`docs/project_overlay/adopt_dry_run.md`](docs/project_overlay/adopt_dry_run.md)
-- local diagnostics 보조: [`docs/project_overlay/local_diagnostics_and_dry_run.md`](docs/project_overlay/local_diagnostics_and_dry_run.md)
+- diagnostics reference: [`docs/project_overlay/local_diagnostics_and_dry_run.md`](docs/project_overlay/local_diagnostics_and_dry_run.md)
 
 ### 이미 도입된 프로젝트 업그레이드
 
@@ -87,7 +87,7 @@
 - `docs/templates/task/`
   - 새 task를 시작할 때 복사해서 쓸 기본 산출물 템플릿을 둔다.
 - `docs/examples/`
-  - 기대 산출물 밀도를 보여 주는 예시 task들을 둔다.
+  - 기본 시작 경로가 아니라 필요할 때 보는 advanced/reference 예시 task들을 둔다.
 - `bootstrap/`
   - 프로젝트 스캐폴딩 또는 수동 복사에 쓰는 bootstrap 자산을 둔다.
 - [`scripts/bootstrap_init.py`](scripts/bootstrap_init.py)
@@ -186,8 +186,8 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 
 1. 먼저 [`docs/quickstart.md`](docs/quickstart.md)부터 읽는다.
 2. `harness-kit`를 새 프로젝트로 가져온다.
-3. 새 프로젝트라면 [`docs/project_overlay/first_success_guide.md`](docs/project_overlay/first_success_guide.md)를, 기존 프로젝트 첫 도입이라면 [`docs/project_overlay/adopt_dry_run.md`](docs/project_overlay/adopt_dry_run.md)를, 이미 도입된 프로젝트 업그레이드라면 [`docs/project_overlay/downstream_harness_upgrade_guide.md`](docs/project_overlay/downstream_harness_upgrade_guide.md)를 본다.
-4. 로컬 진단 순서와 dry-run 해석은 [`docs/project_overlay/local_diagnostics_and_dry_run.md`](docs/project_overlay/local_diagnostics_and_dry_run.md)를 함께 본다.
+3. 새 프로젝트면 `quickstart`의 greenfield 경로를, 기존 프로젝트 첫 도입이면 brownfield 경로를, 이미 도입된 프로젝트 업그레이드면 upgrade 경로를 먼저 따른다.
+4. 상세 설명이 더 필요할 때만 greenfield는 [`docs/project_overlay/first_success_guide.md`](docs/project_overlay/first_success_guide.md)를, 기존 프로젝트 진단은 [`docs/project_overlay/local_diagnostics_and_dry_run.md`](docs/project_overlay/local_diagnostics_and_dry_run.md)를 reference로 본다.
 5. init CLI 또는 `docs/project_overlay/` 수동 복사로 최소 문서 세트를 만든다.
 6. 생성된 `docs/project_entrypoint.md`, `docs/decisions/README.md`, `docs/standard/coding_conventions_project.md`를 읽고 현재 프로젝트에서 먼저 확정해야 할 구조/정책/예외 결정이 있는지 확인한다.
 7. `vendor/harness-kit/`가 아닌 경로에 kit를 둘 예정이면 bootstrap 시점부터 `--vendor-path <actual-path>`를 사용해 generated vendored reference를 바로 현지화한다. 그 옵션 없이 생성했다면 이후 `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 경로를 실제 배치 경로에 맞게 수동 현지화한다.
