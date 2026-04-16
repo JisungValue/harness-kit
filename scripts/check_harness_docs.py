@@ -79,13 +79,17 @@ LANGUAGE_TEMPLATE_REQUIRED_HEADINGS = {
 
 PROJECT_FACING_MD_GLOBS = [
     "bootstrap/**/*.md",
+    "docs/downstream_harness_flow.md",
     "docs/examples/**/*.md",
     "docs/harness/common/**/*.md",
     "docs/harness_guide.md",
+    "docs/how_harness_kit_works.md",
     "docs/phase_*/*.md",
     "docs/project_overlay/**/*.md",
+    "docs/quickstart.md",
     "docs/standard/coding_guidelines_core.md",
     "docs/templates/task/**/*.md",
+    "docs/version_support.md",
 ]
 
 PROJECT_FACING_LEAKAGE_EXCLUDES: set[str] = set()
