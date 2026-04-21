@@ -48,6 +48,18 @@
 - Start here: [`docs/quickstart.md`](docs/quickstart.md)
 - 이 저장소의 `README.md`는 source repo 안내 문서다. 실제 bootstrap, adopt, validate 명령은 `harness-kit` source repo가 아니라 downstream 프로젝트 루트에서 실행한다.
 
+### Source Repo Shortcut
+
+- source repo에서 downstream 프로젝트로 첫 설치를 바로 시작하려면 `scripts/install_downstream_bundle.py`를 쓸 수 있다.
+- 이 helper는 canonical bundle 재생성, target 프로젝트 vendoring, vendored `bootstrap_init.py` 실행을 한 번에 묶는다.
+- 기본 vendored 경로는 `vendor/harness-kit`이고, 다른 경로를 쓰려면 `--vendor-path third_party/harness-kit`처럼 project-root relative path를 준다.
+- vendored path는 downstream `docs/` 트리 밖에 두는 것을 전제로 하며, 이미 vendored bundle이 있으면 `--force-vendor`, bootstrap 결과물이 이미 있으면 `--force-bootstrap`을 사용한다.
+
+```bash
+python3 scripts/install_downstream_bundle.py /path/to/downstream-project --language java
+python3 scripts/install_downstream_bundle.py /path/to/downstream-project --language java --vendor-path third_party/harness-kit
+```
+
 ### 새 프로젝트 시작
 
 - 현재 지원 범위: [`docs/version_support.md`](docs/version_support.md)

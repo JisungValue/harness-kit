@@ -64,6 +64,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
 
             self.assertFalse((output / "docs/kit_maintenance/release_process.md").exists())
             self.assertFalse((output / "scripts/check_harness_docs.py").exists())
+            self.assertFalse((output / "scripts/install_downstream_bundle.py").exists())
             self.assertFalse((output / "tests/test_bootstrap_init.py").exists())
             self.assertFalse((output / "harness.log").exists())
 
