@@ -3,7 +3,7 @@
 ## 실행한 검증
 
 - 검증 항목: 공통 policy와 phase 문서의 self-healing runtime contract 정렬 검토
-  - 대조한 입력물: `docs/harness/common/process_policy.md`, `docs/harness/common/validation_policy.md`, `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`, `docs/harness/common/lightweight_task_policy.md`, `docs/harness_guide.md`, `docs/downstream_harness_flow.md`, `docs/quickstart.md`, `docs/project_overlay/project_entrypoint_template.md`, `docs/phase_1_requirement_and_planning/*`, `docs/phase_2_tdd_implementation/*`, `docs/phase_3_integration/*`, `docs/phase_4_validation/*`, `docs/phase_5_documentation/*`
+  - 대조한 입력물: `docs/harness/common/process_policy.md`, `docs/harness/common/validation_policy.md`, `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`, `docs/harness/common/lightweight_task_policy.md`, `docs/harness_guide.md`, `docs/downstream_harness_flow.md`, `bootstrap/docs/quickstart.md`, `docs/project_overlay/project_entrypoint_template.md`, `docs/phase_1_requirement_and_planning/*`, `docs/phase_2_tdd_implementation/*`, `docs/phase_3_integration/*`, `docs/phase_4_validation/*`, `docs/phase_5_documentation/*`
   - 실행 방법 또는 확인 방식: 공통 규칙, phase별 재수행 규칙, stale 승인 금지, close-out 잠금 문구와 추가 감사한 인접 지침의 교차 참조 규칙이 같은 계약을 가리키는지 수동 교차 검토했다.
   - 결과: process policy의 공통 self-healing 규칙, common audit policy의 stale 재사용 금지와 인접 지침 교차 검토 규칙, lightweight policy의 stale/full 전환 규칙, phase-local rerun 규칙, guide/flow 요약 문안이 같은 방향으로 정렬됐다.
   - 판정: `정합`
@@ -21,7 +21,7 @@
 
 ## 결과 요약
 
-- 이번 판단의 repo-local 근거: `docs/harness/common/process_policy.md`, `docs/harness/common/validation_policy.md`, `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`, `docs/harness/common/lightweight_task_policy.md`, `docs/harness_guide.md`, `docs/downstream_harness_flow.md`, `docs/quickstart.md`, `docs/project_overlay/project_entrypoint_template.md`, 각 `docs/phase_*/*`, `docs/templates/task/implementation_notes.md`
+- 이번 판단의 repo-local 근거: `docs/harness/common/process_policy.md`, `docs/harness/common/validation_policy.md`, `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`, `docs/harness/common/lightweight_task_policy.md`, `docs/harness_guide.md`, `docs/downstream_harness_flow.md`, `bootstrap/docs/quickstart.md`, `docs/project_overlay/project_entrypoint_template.md`, 각 `docs/phase_*/*`, `docs/templates/task/implementation_notes.md`
 - repo에 없어 후속 문서화/승인 대상으로 남긴 결정: 없음
 
 ## Phase 5에서 반영할 related decisions/

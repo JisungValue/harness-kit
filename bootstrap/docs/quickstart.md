@@ -7,7 +7,7 @@
 - 이 문서는 canonical happy path를 고르는 빠른 시작 문서다.
 - greenfield 상세 설명이 더 필요할 때만 `docs/project_overlay/first_success_guide.md`를, 실패 원인과 출력 해석이 필요할 때만 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 본다.
 - downstream 구조와 Phase 흐름 전체 설명은 `docs/downstream_harness_flow.md`를 본다.
-- 현재 지원 범위와 최신 릴리스는 `docs/version_support.md`를 기준으로 본다.
+- 현재 지원 범위와 최신 릴리스는 `bootstrap/docs/version_support.md`를 기준으로 본다.
 - 새 서브에이전트와 새 사용자는 이 문서를 첫 문서로 본다. 다른 onboarding 문서는 이 문서에서 경로를 고른 뒤 필요할 때만 이어서 읽는다.
 
 ## 누구를 위한 문서인가
@@ -183,7 +183,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 ## 다음에 읽을 문서
 
-- 전체 동작 설명: `docs/how_harness_kit_works.md`
+- 전체 동작 설명: `bootstrap/docs/how_harness_kit_works.md`
 - greenfield 상세 reference: `docs/project_overlay/first_success_guide.md`
 - diagnostics reference: `docs/project_overlay/local_diagnostics_and_dry_run.md`
 - 기존 프로젝트 dry-run: `docs/project_overlay/adopt_dry_run.md`

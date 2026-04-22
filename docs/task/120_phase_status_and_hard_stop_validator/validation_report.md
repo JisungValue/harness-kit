@@ -3,7 +3,7 @@
 ## 실행한 검증
 
 - 검증 항목: phase status template와 공통 policy 정렬 검토
-  - 대조한 입력물: `docs/templates/task/phase_status.md`, `docs/harness/common/artifact_policy.md`, `docs/harness/common/process_policy.md`, `docs/harness/common/audit_policy.md`, `docs/harness_guide.md`, `docs/downstream_harness_flow.md`, `docs/quickstart.md`
+  - 대조한 입력물: `docs/templates/task/phase_status.md`, `docs/harness/common/artifact_policy.md`, `docs/harness/common/process_policy.md`, `docs/harness/common/audit_policy.md`, `docs/harness_guide.md`, `docs/downstream_harness_flow.md`, `bootstrap/docs/quickstart.md`
   - 실행 방법 또는 확인 방식: `phase_status.md`의 lifecycle, gate state, write-set, locked path, cleanup 규칙이 문서 전반에 일관되게 반영됐는지 수동 교차 검토한다.
   - 결과: 정렬됨
   - 판정: `정합`
@@ -21,7 +21,7 @@
 
 ## 결과 요약
 
-- 이번 판단의 repo-local 근거: `docs/harness/common/process_policy.md`, `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`, `docs/harness_guide.md`, `docs/downstream_harness_flow.md`, `docs/quickstart.md`, `maintainer/docs/downstream_bundle_boundary.md`, `scripts/validate_phase_gate.py`
+- 이번 판단의 repo-local 근거: `docs/harness/common/process_policy.md`, `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`, `docs/harness_guide.md`, `docs/downstream_harness_flow.md`, `bootstrap/docs/quickstart.md`, `maintainer/docs/downstream_bundle_boundary.md`, `scripts/validate_phase_gate.py`
 - repo에 없어 후속 문서화/승인 대상으로 남긴 결정: 없음
 
 ## Phase 5에서 반영할 related decisions/

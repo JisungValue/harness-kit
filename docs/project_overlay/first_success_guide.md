@@ -5,11 +5,11 @@
 ## 문서 역할
 
 - 이 문서는 greenfield first-success 상세판이다.
-- canonical 시작 경로는 항상 `docs/quickstart.md`를 먼저 본다.
+- canonical 시작 경로는 항상 `bootstrap/docs/quickstart.md`를 먼저 본다.
 - 이 문서는 quickstart의 greenfield 경로를 더 자세히 풀어 쓴 reference다.
 - 실패 원인과 출력 해석은 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 본다.
 - downstream 구조와 Phase 흐름 전체는 `docs/downstream_harness_flow.md`를 본다.
-- 새 서브에이전트가 가장 먼저 여는 onboarding 문서는 아니고, `docs/quickstart.md`에서 greenfield 경로를 고른 뒤에 읽는 문서다.
+- 새 서브에이전트가 가장 먼저 여는 onboarding 문서는 아니고, `bootstrap/docs/quickstart.md`에서 greenfield 경로를 고른 뒤에 읽는 문서다.
 
 ## 시작 전 준비물
 

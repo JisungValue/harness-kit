@@ -3,7 +3,7 @@
 ## 실행한 검증
 
 - 검증 항목: onboarding 문서 역할 분리 정렬 확인
-  - 대조한 입력물: `README.md`, `docs/quickstart.md`, `docs/project_overlay/README.md`, `docs/project_overlay/first_success_guide.md`, `docs/project_overlay/local_diagnostics_and_dry_run.md`
+  - 대조한 입력물: `README.md`, `bootstrap/docs/quickstart.md`, `docs/project_overlay/README.md`, `docs/project_overlay/first_success_guide.md`, `docs/project_overlay/local_diagnostics_and_dry_run.md`
   - 실행 방법 또는 확인 방식: quickstart 우선, 세부 reference 후순위 구조가 각 문서 역할 설명과 시작 경로에서 일관되게 읽히는지 수동 교차 검토했다.
   - 결과: quickstart가 기본 진입점으로 더 분명해졌고, first-success/local diagnostics는 detailed reference 역할이 더 분명해졌다.
   - 판정: `정합`
@@ -21,7 +21,7 @@
 
 ## 결과 요약
 
-- 이번 판단의 repo-local 근거: `README.md`, `docs/quickstart.md`, `docs/project_overlay/README.md`, `docs/project_overlay/first_success_guide.md`, `docs/project_overlay/local_diagnostics_and_dry_run.md`, `scripts/check_harness_docs.py`
+- 이번 판단의 repo-local 근거: `README.md`, `bootstrap/docs/quickstart.md`, `docs/project_overlay/README.md`, `docs/project_overlay/first_success_guide.md`, `docs/project_overlay/local_diagnostics_and_dry_run.md`, `scripts/check_harness_docs.py`
 - repo에 없어 후속 문서화/승인 대상으로 남긴 결정: 없음
 
 ## Phase 5에서 반영할 related decisions/
@@ -34,4 +34,4 @@
 
 ## 후속 조치 필요 사항
 
-- 필요하면 README와 `docs/how_harness_kit_works.md`의 링크 계층도 더 축약한다.
+- 필요하면 README와 `bootstrap/docs/how_harness_kit_works.md`의 링크 계층도 더 축약한다.

@@ -4,7 +4,7 @@
 
 ## 첫 도입 가이드
 
-- 기본 시작 문서는 `docs/quickstart.md`다.
+- 기본 시작 문서는 `bootstrap/docs/quickstart.md`다.
 - 새 프로젝트 또는 거의 빈 프로젝트에서 greenfield 상세 설명이 더 필요할 때만 `docs/project_overlay/first_success_guide.md`를 본다.
 - 로컬에서 어떤 명령을 먼저 돌리고 dry-run 출력을 어떻게 읽을지 막힐 때만 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 본다.
 
@@ -40,7 +40,7 @@
 ## 권장 읽기 순서
 
 - 이 문서는 source repo 안의 project overlay template guide다.
-- 이 저장소에서는 먼저 `docs/quickstart.md`를 보고, 필요할 때만 `docs/project_overlay/first_success_guide.md`, `docs/project_overlay/local_diagnostics_and_dry_run.md`, `docs/how_harness_kit_works.md`로 이어진다.
+- 이 저장소에서는 먼저 `bootstrap/docs/quickstart.md`를 보고, 필요할 때만 `docs/project_overlay/first_success_guide.md`, `docs/project_overlay/local_diagnostics_and_dry_run.md`, `bootstrap/docs/how_harness_kit_works.md`로 이어진다.
 - 아래 순서는 downstream 프로젝트를 bootstrap한 뒤 생성되는 문서 기준이다.
 - 아래 vendored 경로 예시는 `vendor/harness-kit/` 기준이며, 다른 경로를 쓰면 같은 실제 경로로 읽는다.
 

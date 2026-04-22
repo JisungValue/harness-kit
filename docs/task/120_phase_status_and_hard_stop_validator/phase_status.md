@@ -18,7 +18,7 @@
 - `docs/harness/**`
 - `docs/phase_*/*`
 - `docs/decisions/*`
-- `docs/quickstart.md`
+- `bootstrap/docs/quickstart.md`
 - `docs/downstream_harness_flow.md`
 - `docs/harness_guide.md`
 - `docs/templates/task/phase_status.md`

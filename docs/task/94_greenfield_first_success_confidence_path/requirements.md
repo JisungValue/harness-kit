@@ -19,7 +19,7 @@
 - 입력:
   - `scripts/bootstrap_init.py`
   - `docs/project_overlay/first_success_guide.md`
-  - `docs/quickstart.md`
+  - `bootstrap/docs/quickstart.md`
   - `docs/project_overlay/local_diagnostics_and_dry_run.md`
   - `docs/examples/bootstrap-first-success/validation_report.md`
   - `maintainer/docs/downstream_bundle_boundary.md`

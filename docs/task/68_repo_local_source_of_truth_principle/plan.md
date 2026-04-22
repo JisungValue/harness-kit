@@ -4,7 +4,7 @@
 
 - `README.md`
 - `docs/harness_guide.md`
-- `docs/how_harness_kit_works.md`
+- `bootstrap/docs/how_harness_kit_works.md`
 - `docs/harness/common/process_policy.md`
 - `docs/harness/common/artifact_policy.md`
 - `docs/harness/common/audit_policy.md`
@@ -26,7 +26,7 @@
 
 ## 문서 반영 계획
 
-- `README.md`, `docs/harness_guide.md`, `docs/how_harness_kit_works.md`, `docs/harness/common/process_policy.md`, `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`에 원칙과 책임 경계를 반영한다.
+- `README.md`, `docs/harness_guide.md`, `bootstrap/docs/how_harness_kit_works.md`, `docs/harness/common/process_policy.md`, `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`에 원칙과 책임 경계를 반영한다.
 - `docs/templates/task/implementation_notes.md`, `docs/templates/task/validation_report.md`에 근거 기록 위치를 반영한다.
 - 관련 `docs/decisions/README.md` 또는 `DEC-###-slug.md` 읽기/수정/생성 필요 여부: 해당 없음. 이번 작업은 project-local decision 내용이 아니라 core 운영 원칙과 기록 규칙 정렬 범위다.
 - 새 decision이 필요하면 index 갱신 계획: 해당 없음.

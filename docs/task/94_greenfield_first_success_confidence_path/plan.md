@@ -4,7 +4,7 @@
 
 - `scripts/bootstrap_init.py`
 - `docs/project_overlay/first_success_guide.md`
-- `docs/quickstart.md`
+- `bootstrap/docs/quickstart.md`
 - `docs/project_overlay/local_diagnostics_and_dry_run.md`
 - `docs/examples/bootstrap-first-success/validation_report.md`
 - `maintainer/docs/downstream_bundle_boundary.md`
@@ -33,7 +33,7 @@
 
 ## 문서 반영 계획
 
-- `docs/project_overlay/first_success_guide.md`, `docs/quickstart.md`, `docs/project_overlay/local_diagnostics_and_dry_run.md`, `docs/examples/bootstrap-first-success/validation_report.md`에 같은 confidence path와 remaining manual checks를 반영한다.
+- `docs/project_overlay/first_success_guide.md`, `bootstrap/docs/quickstart.md`, `docs/project_overlay/local_diagnostics_and_dry_run.md`, `docs/examples/bootstrap-first-success/validation_report.md`에 같은 confidence path와 remaining manual checks를 반영한다.
 - `maintainer/docs/downstream_bundle_boundary.md`, `maintainer/docs/downstream_bundle_smoke_validation.md`에 workflow-template shipping과 localized vendoring smoke coverage를 반영한다.
 - 관련 `docs/decisions/README.md` 또는 `DEC-###-slug.md` 읽기/수정/생성 필요 여부: 해당 없음. 이번 작업은 downstream project-local decision 내용이 아니라 greenfield bootstrap confidence path와 shipped surface 정렬 범위다.
 - 새 decision이 필요하면 index 갱신 계획: 해당 없음.

@@ -45,7 +45,7 @@
 
 ## 시작 문서
 
-- Start here: [`docs/quickstart.md`](docs/quickstart.md)
+- Start here: [`bootstrap/docs/quickstart.md`](bootstrap/docs/quickstart.md)
 - 이 저장소의 `README.md`는 source repo 안내 문서다. 실제 bootstrap, adopt, validate 명령은 `harness-kit` source repo가 아니라 downstream 프로젝트 루트에서 실행한다.
 
 ### Source Repo Shortcut
@@ -62,8 +62,8 @@ python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-proj
 
 ### 새 프로젝트 시작
 
-- 현재 지원 범위: [`docs/version_support.md`](docs/version_support.md)
-- canonical 시작 문서: [`docs/quickstart.md`](docs/quickstart.md)
+- 현재 지원 범위: [`bootstrap/docs/version_support.md`](bootstrap/docs/version_support.md)
+- canonical 시작 문서: [`bootstrap/docs/quickstart.md`](bootstrap/docs/quickstart.md)
 - greenfield 상세 reference: [`docs/project_overlay/first_success_guide.md`](docs/project_overlay/first_success_guide.md)
 - diagnostics reference: [`docs/project_overlay/local_diagnostics_and_dry_run.md`](docs/project_overlay/local_diagnostics_and_dry_run.md)
 
@@ -82,8 +82,8 @@ python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-proj
 
 ### 개념 이해
 
-- 현재 버전/지원 범위: [`docs/version_support.md`](docs/version_support.md)
-- 전체 개념 설명: [`docs/how_harness_kit_works.md`](docs/how_harness_kit_works.md)
+- 현재 버전/지원 범위: [`bootstrap/docs/version_support.md`](bootstrap/docs/version_support.md)
+- 전체 개념 설명: [`bootstrap/docs/how_harness_kit_works.md`](bootstrap/docs/how_harness_kit_works.md)
 - downstream 도입/운영 흐름: [`docs/downstream_harness_flow.md`](docs/downstream_harness_flow.md)
 
 ## 디렉터리 구조
@@ -128,11 +128,11 @@ python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-proj
   - downstream 프로젝트가 새 bundle 변경을 어떤 순서와 기준으로 검토하고 반영할지 설명하는 consumer-facing upgrade guide다.
 - [`docs/project_overlay/downstream_overlay_diff_review_checklist.md`](docs/project_overlay/downstream_overlay_diff_review_checklist.md)
   - downstream 프로젝트가 bundle upgrade diff를 사람 기준으로 검토할 때 확인할 항목을 정리한 checklist다.
-- [`docs/quickstart.md`](docs/quickstart.md)
+- [`bootstrap/docs/quickstart.md`](bootstrap/docs/quickstart.md)
   - 현재 지원 범위 기준으로 greenfield/brownfield 시작 절차를 한 번에 보여 주는 상위 입문 문서다.
-- [`docs/version_support.md`](docs/version_support.md)
+- [`bootstrap/docs/version_support.md`](bootstrap/docs/version_support.md)
   - 현재 최신 릴리스와 지원 범위를 한 곳에서 관리하는 canonical 문서다.
-- [`docs/how_harness_kit_works.md`](docs/how_harness_kit_works.md)
+- [`bootstrap/docs/how_harness_kit_works.md`](bootstrap/docs/how_harness_kit_works.md)
   - core, overlay, bootstrap, validation, adopt dry-run이 어떤 역할로 나뉘는지 설명하는 개념 문서다.
 - [`maintainer/docs/audit_policy.md`](maintainer/docs/audit_policy.md)
   - harness-kit core 수정 시 maintainer가 따르는 전용 감사 기준이다.
@@ -196,7 +196,7 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 
 ## 권장 도입 순서
 
-1. 먼저 [`docs/quickstart.md`](docs/quickstart.md)부터 읽는다.
+1. 먼저 [`bootstrap/docs/quickstart.md`](bootstrap/docs/quickstart.md)부터 읽는다.
 2. `harness-kit`를 새 프로젝트로 가져온다.
 3. 새 프로젝트면 `quickstart`의 greenfield 경로를, 기존 프로젝트 첫 도입이면 brownfield 경로를, 이미 도입된 프로젝트 업그레이드면 upgrade 경로를 먼저 따른다.
 4. 상세 설명이 더 필요할 때만 greenfield는 [`docs/project_overlay/first_success_guide.md`](docs/project_overlay/first_success_guide.md)를, 기존 프로젝트 진단은 [`docs/project_overlay/local_diagnostics_and_dry_run.md`](docs/project_overlay/local_diagnostics_and_dry_run.md)를 reference로 본다.
@@ -232,7 +232,7 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 
 ## 권장 읽기 순서
 
-- 이 저장소 source repo를 읽는 중이라면 먼저 [`docs/quickstart.md`](docs/quickstart.md)를 본다.
+- 이 저장소 source repo를 읽는 중이라면 먼저 [`bootstrap/docs/quickstart.md`](bootstrap/docs/quickstart.md)를 본다.
 - 그다음 greenfield면 [`docs/project_overlay/first_success_guide.md`](docs/project_overlay/first_success_guide.md), brownfield first adoption이면 [`docs/project_overlay/adopt_dry_run.md`](docs/project_overlay/adopt_dry_run.md), 이미 도입된 downstream upgrade면 [`docs/project_overlay/downstream_harness_upgrade_guide.md`](docs/project_overlay/downstream_harness_upgrade_guide.md)를 본다.
 - 적용이 끝나면 첫 task 전에 [`docs/downstream_harness_flow.md`](docs/downstream_harness_flow.md)를 읽어 Phase 운영 규칙으로 넘어간다.
 - source repo에는 root `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`가 아직 없고, 이 파일들은 downstream 프로젝트를 bootstrap한 뒤에 생긴다.

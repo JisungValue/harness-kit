@@ -22,7 +22,7 @@
   - `docs/harness/common/audit_policy.md`
   - `docs/harness_guide.md`
   - `docs/downstream_harness_flow.md`
-  - `docs/quickstart.md`
+  - `bootstrap/docs/quickstart.md`
   - `docs/templates/task/*`
   - `maintainer/docs/downstream_bundle_boundary.md`
   - `tests/*bundle*`, `scripts/check_harness_docs.py`

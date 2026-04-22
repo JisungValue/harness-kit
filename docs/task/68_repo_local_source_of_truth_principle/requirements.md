@@ -19,7 +19,7 @@
 - 입력:
   - `README.md`
   - `docs/harness_guide.md`
-  - `docs/how_harness_kit_works.md`
+  - `bootstrap/docs/how_harness_kit_works.md`
   - `docs/harness/common/process_policy.md`
   - `docs/harness/common/artifact_policy.md`
   - `docs/harness/common/audit_policy.md`

@@ -2,7 +2,7 @@
 
 ## 기능 요구사항
 
-- `docs/quickstart.md`는 downstream 사용자가 가장 먼저 보는 canonical 시작 문서로 읽혀야 한다.
+- `bootstrap/docs/quickstart.md`는 downstream 사용자가 가장 먼저 보는 canonical 시작 문서로 읽혀야 한다.
 - `README.md`와 `docs/project_overlay/README.md`는 quickstart를 먼저 가리키고, 세부 온보딩 문서는 reference 역할이 더 분명해야 한다.
 - `docs/project_overlay/first_success_guide.md`와 `docs/project_overlay/local_diagnostics_and_dry_run.md`는 quickstart의 상세 reference로 읽히도록 표현을 정리해야 한다.
 - `scripts/check_harness_docs.py`는 example 문서의 세부 표현과 sample validation 내용을 강하게 결합하지 않고, 구조/경로/핵심 섹션 위주로 검사해야 한다.
@@ -18,7 +18,7 @@
 
 - 입력:
   - `README.md`
-  - `docs/quickstart.md`
+  - `bootstrap/docs/quickstart.md`
   - `docs/project_overlay/README.md`
   - `docs/project_overlay/first_success_guide.md`
   - `docs/project_overlay/local_diagnostics_and_dry_run.md`
