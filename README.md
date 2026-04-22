@@ -134,15 +134,15 @@ python3 scripts/install_downstream_bundle.py /path/to/downstream-project --langu
   - 현재 최신 릴리스와 지원 범위를 한 곳에서 관리하는 canonical 문서다.
 - [`docs/how_harness_kit_works.md`](docs/how_harness_kit_works.md)
   - core, overlay, bootstrap, validation, adopt dry-run이 어떤 역할로 나뉘는지 설명하는 개념 문서다.
-- [`docs/kit_maintenance/audit_policy.md`](docs/kit_maintenance/audit_policy.md)
+- [`maintainer/docs/audit_policy.md`](maintainer/docs/audit_policy.md)
   - harness-kit core 수정 시 maintainer가 따르는 전용 감사 기준이다.
-- [`docs/kit_maintenance/drift_response_guide.md`](docs/kit_maintenance/drift_response_guide.md)
+- [`maintainer/docs/drift_response_guide.md`](maintainer/docs/drift_response_guide.md)
   - Harness Doc Guard CI 실패 시 maintainer 대응 순서를 정의한다.
-- [`docs/kit_maintenance/release_process.md`](docs/kit_maintenance/release_process.md)
+- [`maintainer/docs/release_process.md`](maintainer/docs/release_process.md)
   - maintainer가 release gate 점검, release note 작성, tag, GitHub Release 생성을 어떤 순서로 수행할지 정의한다.
-- [`docs/kit_maintenance/downstream_bundle_smoke_validation.md`](docs/kit_maintenance/downstream_bundle_smoke_validation.md)
+- [`maintainer/docs/downstream_bundle_smoke_validation.md`](maintainer/docs/downstream_bundle_smoke_validation.md)
   - generated bundle을 vendored dependency처럼 써서 greenfield/brownfield 기본 경로가 실제로 동작하는지 점검하는 maintainer용 smoke validation 기준이다.
-- [`docs/kit_maintenance/downstream_bundle_boundary.md`](docs/kit_maintenance/downstream_bundle_boundary.md)
+- [`maintainer/docs/downstream_bundle_boundary.md`](maintainer/docs/downstream_bundle_boundary.md)
   - maintainer가 downstream bundle에 포함할 자산과 제외할 자산의 경계를 정의한다.
 - [`scripts/check_harness_docs.py`](scripts/check_harness_docs.py)
   - core/overlay 경로 정합성과 `harness.log` 기록 규칙을 자동 검사한다.
@@ -183,12 +183,12 @@ python3 scripts/install_downstream_bundle.py /path/to/downstream-project --langu
   - `docs/project_overlay/*`는 downstream 프로젝트 문서를 시작할 때 복사하거나 참조하는 template/guide다.
 - harness-kit maintainer용 문서
   - 목적: `harness-kit` core 규칙, template, example, 문서 구조 자체를 수정할 때의 감사와 기록
-  - 주 문서: [`docs/kit_maintenance/audit_policy.md`](docs/kit_maintenance/audit_policy.md), [`docs/kit_maintenance/drift_response_guide.md`](docs/kit_maintenance/drift_response_guide.md), [`docs/kit_maintenance/release_process.md`](docs/kit_maintenance/release_process.md), [`docs/kit_maintenance/downstream_bundle_smoke_validation.md`](docs/kit_maintenance/downstream_bundle_smoke_validation.md), [`harness.log`](harness.log)
+  - 주 문서: [`maintainer/docs/audit_policy.md`](maintainer/docs/audit_policy.md), [`maintainer/docs/drift_response_guide.md`](maintainer/docs/drift_response_guide.md), [`maintainer/docs/release_process.md`](maintainer/docs/release_process.md), [`maintainer/docs/downstream_bundle_smoke_validation.md`](maintainer/docs/downstream_bundle_smoke_validation.md), [`harness.log`](harness.log)
 
-이 경계와 별도로, downstream에 실제로 배포할 자산은 저장소 전체가 아니라 project-facing 문서/스크립트/예시/bootstrapping 자산 중심의 부분집합으로 본다. downstream bundle 경계의 정본은 [`docs/kit_maintenance/downstream_bundle_boundary.md`](docs/kit_maintenance/downstream_bundle_boundary.md)를 따른다.
+이 경계와 별도로, downstream에 실제로 배포할 자산은 저장소 전체가 아니라 project-facing 문서/스크립트/예시/bootstrapping 자산 중심의 부분집합으로 본다. downstream bundle 경계의 정본은 [`maintainer/docs/downstream_bundle_boundary.md`](maintainer/docs/downstream_bundle_boundary.md)를 따른다.
 
 개별 서비스 프로젝트의 task 수행자는 maintainer 문서를 기본 운영 규칙으로 사용하지 않는다.
-`docs/kit_maintenance/*`는 downstream 프로젝트가 가져가야 하는 최소 프로젝트 문서 세트에 포함되지 않는다.
+`maintainer/docs/*`는 downstream 프로젝트가 가져가야 하는 최소 프로젝트 문서 세트에 포함되지 않는다.
 maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한다.
 
 - 프로젝트 task를 수행하면 사용 프로젝트용 문서를 따른다.
@@ -246,8 +246,8 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 
 ## Kit 유지보수 기록 규칙
 
-- maintainer 감사 기준의 정본은 [`docs/kit_maintenance/audit_policy.md`](docs/kit_maintenance/audit_policy.md)를 따른다.
-- maintainer 감사는 [`docs/kit_maintenance/audit_policy.md`](docs/kit_maintenance/audit_policy.md)의 Strict Mode 체크포인트를 기준으로 수행한다.
+- maintainer 감사 기준의 정본은 [`maintainer/docs/audit_policy.md`](maintainer/docs/audit_policy.md)를 따른다.
+- maintainer 감사는 [`maintainer/docs/audit_policy.md`](maintainer/docs/audit_policy.md)의 Strict Mode 체크포인트를 기준으로 수행한다.
 - maintainer가 GitHub issue를 해결하기 위해 `harness-kit` core를 수정할 때는 issue마다 전용 브랜치를 따로 잡아 진행하고, 이름은 `{issue_num}_{title}` 형식을 사용한다.
 - `harness-kit` core에 의미 있는 변경이 있으면 같은 변경에서 루트 [`harness.log`](harness.log)를 반드시 함께 갱신한다.
 - [`harness.log`](harness.log) 항목마다 `변경`과 `이유`를 모두 적는다. 둘 중 하나라도 빠지면 기록으로 인정하지 않는다.

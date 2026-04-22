@@ -11,7 +11,7 @@
   - 잔여 리스크: mixed partial state에서 일부 standard doc만 존재하고 그중 일부가 malformed인 조합은 현재 focused test보다 더 세밀하게 확장할 여지가 있다.
 
 - 검증 항목: downstream bundle intermediate brownfield smoke
-  - 대조한 입력물: `docs/kit_maintenance/downstream_bundle_smoke_validation.md`, `tests/test_downstream_bundle_smoke.py`
+  - 대조한 입력물: `maintainer/docs/downstream_bundle_smoke_validation.md`, `tests/test_downstream_bundle_smoke.py`
   - 실행 방법 또는 확인 방식: `python3 -m unittest tests.test_downstream_bundle_smoke`
   - 결과: canonical bundle 기준 partial brownfield project에서 `validate_overlay_consistency.py --mode incremental`이 missing docs/runtime entrypoints를 follow-up으로 보고하고, brownfield dry-run/create-only/migration 시나리오도 회귀 없이 통과했다.
   - 실패 또는 미실행 사유: 없음
@@ -27,7 +27,7 @@
   - 잔여 리스크: 없음
 
 - 검증 항목: project-facing docs와 doc guard 정합성
-  - 대조한 입력물: `docs/project_overlay/cross_document_consistency_checker.md`, `docs/project_overlay/adopt_dry_run.md`, `docs/project_overlay/adopt_safe_write.md`, `docs/project_overlay/local_diagnostics_and_dry_run.md`, `docs/quickstart.md`, `docs/kit_maintenance/downstream_bundle_smoke_validation.md`, `scripts/check_harness_docs.py`
+  - 대조한 입력물: `docs/project_overlay/cross_document_consistency_checker.md`, `docs/project_overlay/adopt_dry_run.md`, `docs/project_overlay/adopt_safe_write.md`, `docs/project_overlay/local_diagnostics_and_dry_run.md`, `docs/quickstart.md`, `maintainer/docs/downstream_bundle_smoke_validation.md`, `scripts/check_harness_docs.py`
   - 실행 방법 또는 확인 방식: `python3 scripts/check_harness_docs.py`
   - 결과: incremental mode command, safe gap 설명, brownfield docs/maintainer smoke alignment가 doc guard 기준으로 통과했다.
   - 실패 또는 미실행 사유: 없음

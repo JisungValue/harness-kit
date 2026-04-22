@@ -19,7 +19,7 @@
   - 잔여 리스크: workflow template를 실제 consumer repo에 복사한 뒤 GitHub Actions에서 end-to-end 실행하는 단계는 문서 안내와 shipped asset 수준까지만 확인했다.
 
 - 검증 항목: downstream bundle의 workflow template shipping과 localized greenfield smoke
-  - 대조한 입력물: `docs/kit_maintenance/downstream_bundle_boundary.md`, `docs/kit_maintenance/downstream_bundle_smoke_validation.md`, `scripts/generate_downstream_bundle.py`, `tests/test_generate_downstream_bundle.py`, `tests/test_validate_downstream_bundle.py`, `tests/test_downstream_bundle_smoke.py`
+  - 대조한 입력물: `maintainer/docs/downstream_bundle_boundary.md`, `maintainer/docs/downstream_bundle_smoke_validation.md`, `scripts/generate_downstream_bundle.py`, `tests/test_generate_downstream_bundle.py`, `tests/test_validate_downstream_bundle.py`, `tests/test_downstream_bundle_smoke.py`
   - 실행 방법 또는 확인 방식: `python3 -m unittest tests.test_generate_downstream_bundle tests.test_validate_downstream_bundle tests.test_downstream_bundle_smoke`
   - 결과: bundle이 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 실제 포함하고, generated README/manifest가 새 shipped asset을 반영하며, canonical bundle 기준 `python`/`java`/`kotlin` greenfield 경로와 `third_party/harness-kit` localized vendoring 경로가 모두 통과했다.
   - 실패 또는 미실행 사유: 없음

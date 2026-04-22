@@ -62,7 +62,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             self.assertTrue((output / "scripts/check_first_success_docs.py").exists())
             self.assertTrue((output / "scripts/validate_phase_gate.py").exists())
 
-            self.assertFalse((output / "docs/kit_maintenance/release_process.md").exists())
+            self.assertFalse((output / "maintainer/docs/release_process.md").exists())
             self.assertFalse((output / "scripts/check_harness_docs.py").exists())
             self.assertFalse((output / "scripts/install_downstream_bundle.py").exists())
             self.assertFalse((output / "tests/test_bootstrap_init.py").exists())
@@ -70,7 +70,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
 
             bundle_readme = (output / "README.md").read_text(encoding="utf-8")
             self.assertIn("# Harness Kit Project Bundle", bundle_readme)
-            self.assertNotIn("docs/kit_maintenance/downstream_bundle_boundary.md", bundle_readme)
+            self.assertNotIn("maintainer/docs/downstream_bundle_boundary.md", bundle_readme)
             self.assertIn("- `.git*`", bundle_readme)
 
             manifest = json.loads((output / "bundle_manifest.json").read_text(encoding="utf-8"))
@@ -85,12 +85,12 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             self.assertEqual(manifest["artifact_format"], "directory")
             self.assertEqual(
                 manifest["boundary_document"],
-                "docs/kit_maintenance/downstream_bundle_boundary.md",
+                "maintainer/docs/downstream_bundle_boundary.md",
             )
             self.assertIn("bootstrap/**/*", manifest["source_patterns"])
             self.assertIn("docs/examples/**/*.md", manifest["source_patterns"])
             self.assertIn("docs/project_overlay/harness_doc_guard_workflow_template.yml", manifest["source_patterns"])
-            self.assertIn("docs/kit_maintenance/*", manifest["excluded_patterns"])
+            self.assertIn("maintainer/docs/*", manifest["excluded_patterns"])
             self.assertEqual(manifest["generated_files"][0]["path"], "README.md")
 
     def test_bundle_patterns_are_read_from_boundary_document(self) -> None:
@@ -264,7 +264,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             output = Path(tmp_dir) / "bundle"
             output.mkdir()
             (output / "bundle_manifest.json").write_text(
-                '{"boundary_document": "docs/kit_maintenance/downstream_bundle_boundary.md", "entry_readme": "README.md", "manifest_path": "bundle_manifest.json"}\n',
+                '{"boundary_document": "maintainer/docs/downstream_bundle_boundary.md", "entry_readme": "README.md", "manifest_path": "bundle_manifest.json"}\n',
                 encoding="utf-8",
             )
             (output / "old.txt").write_text("stale\n", encoding="utf-8")

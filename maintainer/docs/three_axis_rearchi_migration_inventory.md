@@ -87,6 +87,7 @@
 | `docs/kit_maintenance/release_process.md` | `maintainer/docs/release_process.md` | 릴리스 절차 |
 | `docs/kit_maintenance/downstream_bundle_boundary.md` | `maintainer/docs/downstream_bundle_boundary.md` | bundle 경계 정본 |
 | `docs/kit_maintenance/downstream_bundle_smoke_validation.md` | `maintainer/docs/downstream_bundle_smoke_validation.md` | maintainer smoke 기준 |
+| `docs/kit_maintenance/three_axis_rearchi_migration_inventory.md` | `maintainer/docs/three_axis_rearchi_migration_inventory.md` | maintainer migration source-of-truth |
 | `scripts/check_harness_docs.py` | `maintainer/scripts/check_harness_docs.py` | maintainer 전용 문서 검사 |
 | `scripts/generate_downstream_bundle.py` | `maintainer/scripts/generate_downstream_bundle.py` | bundle 생성 |
 | `scripts/validate_downstream_bundle.py` | `maintainer/scripts/validate_downstream_bundle.py` | bundle 검증 |
@@ -290,6 +291,7 @@
 - `docs/kit_maintenance/release_process.md`
 - `docs/kit_maintenance/downstream_bundle_boundary.md`
 - `docs/kit_maintenance/downstream_bundle_smoke_validation.md`
+- `docs/kit_maintenance/three_axis_rearchi_migration_inventory.md`
 - `docs/project_overlay/`
 - `docs/quickstart.md`
 - `docs/how_harness_kit_works.md`

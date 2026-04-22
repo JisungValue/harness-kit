@@ -3,7 +3,7 @@
 ## 실행한 검증
 
 - 검증 항목: repo-local source-of-truth 원칙의 core 문서 정렬
-  - 대조한 입력물: `README.md`, `docs/harness_guide.md`, `docs/how_harness_kit_works.md`, `docs/harness/common/process_policy.md`, `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`, `docs/kit_maintenance/audit_policy.md`
+  - 대조한 입력물: `README.md`, `docs/harness_guide.md`, `docs/how_harness_kit_works.md`, `docs/harness/common/process_policy.md`, `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`, `maintainer/docs/audit_policy.md`
   - 실행 방법 또는 확인 방식: source-of-truth 선언, 외부 관행 비우선, 추측 금지, project overlay / `docs/decisions/` / task artifact handoff 문구를 수동 교차 검토했다.
   - 결과: repo-local 근거 우선 원칙과 누락된 결정 handoff 경로가 core 운영 문서와 maintainer audit 기준에 함께 반영됐다.
   - 실패 또는 미실행 사유: 없음

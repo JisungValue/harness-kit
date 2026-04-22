@@ -3,7 +3,7 @@
 ## 실행한 검증
 
 - 검증 항목: bundle boundary include/exclude semantics 정합성 확인
-  - 대조한 입력물: `docs/kit_maintenance/downstream_bundle_boundary.md`, `scripts/generate_downstream_bundle.py`, `scripts/validate_downstream_bundle.py`
+  - 대조한 입력물: `maintainer/docs/downstream_bundle_boundary.md`, `scripts/generate_downstream_bundle.py`, `scripts/validate_downstream_bundle.py`
   - 실행 방법 또는 확인 방식: boundary 문서의 include path와 maintainer-only exclusion 우선 규칙이 generator, manifest, validator에 같은 의미로 반영됐는지 코드와 focused test를 함께 검토
   - 결과: generator가 include 후보에 exclusion 우선순위를 적용하고, manifest/validator가 `excluded_patterns`까지 같은 계약으로 검증하도록 정렬됐다.
   - 실패 또는 미실행 사유: 없음
@@ -19,7 +19,7 @@
   - 잔여 리스크: 없음
 
 - 검증 항목: multi-language downstream bundle smoke
-  - 대조한 입력물: `docs/kit_maintenance/downstream_bundle_smoke_validation.md`, `tests/test_downstream_bundle_smoke.py`, `scripts/bootstrap_init.py`
+  - 대조한 입력물: `maintainer/docs/downstream_bundle_smoke_validation.md`, `tests/test_downstream_bundle_smoke.py`, `scripts/bootstrap_init.py`
   - 실행 방법 또는 확인 방식: `python3 -m unittest tests.test_downstream_bundle_smoke`
   - 결과: canonical bundle 기준 greenfield `python`/`java`/`kotlin` bootstrap + first-success/overlay validation, brownfield dry-run, create-only safe write, legacy entrypoint migration 시나리오가 통과했다.
   - 실패 또는 미실행 사유: 없음
@@ -27,7 +27,7 @@
   - 잔여 리스크: Java/Kotlin smoke는 여전히 Python runtime 위에서 bundle script를 실행하는 수준이므로, 언어별 깊은 ecosystem integration까지 보장하지는 않는다.
 
 - 검증 항목: maintainer doc guard 및 canonical bundle validation
-  - 대조한 입력물: `scripts/check_harness_docs.py`, `docs/kit_maintenance/downstream_bundle_smoke_validation.md`, generated `dist/harness-kit-project-bundle/`
+  - 대조한 입력물: `scripts/check_harness_docs.py`, `maintainer/docs/downstream_bundle_smoke_validation.md`, generated `dist/harness-kit-project-bundle/`
   - 실행 방법 또는 확인 방식: `python3 scripts/check_harness_docs.py`, `python3 scripts/generate_downstream_bundle.py --force`, `python3 scripts/validate_downstream_bundle.py`
   - 결과: doc guard가 multi-language smoke/legacy migration 설명을 포함한 current contract를 통과했고, canonical generated bundle validation도 통과했다.
   - 실패 또는 미실행 사유: 없음

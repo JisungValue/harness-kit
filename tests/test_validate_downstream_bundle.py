@@ -61,7 +61,7 @@ class ValidateDownstreamBundleTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             output = Path(tmp_dir) / "bundle"
             self.assertEqual(self.run_generate(output).returncode, 0)
-            extra_path = output / "docs/kit_maintenance/release_process.md"
+            extra_path = output / "maintainer/docs/release_process.md"
             extra_path.parent.mkdir(parents=True, exist_ok=True)
             extra_path.write_text("maintainer only\n", encoding="utf-8")
 
@@ -69,7 +69,7 @@ class ValidateDownstreamBundleTest(unittest.TestCase):
 
             self.assertEqual(validate_result.returncode, 1)
             self.assertIn(
-                "unexpected path outside downstream bundle boundary: docs/kit_maintenance/release_process.md",
+                "unexpected path outside downstream bundle boundary: maintainer/docs/release_process.md",
                 validate_result.stderr,
             )
 

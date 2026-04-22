@@ -20,6 +20,6 @@
 
 ## 3) 수정 우선순위
 
-- 먼저 기준 문서(`README.md`, `docs/kit_maintenance/audit_policy.md`)를 확인한다.
+- 먼저 기준 문서(`README.md`, `maintainer/docs/audit_policy.md`)를 확인한다.
 - 다음으로 파생 문서(`docs/project_overlay/README.md`, 템플릿, `harness.log`)를 기준에 맞춘다.
 - 마지막으로 CI를 재실행해 재현 가능하게 통과 여부를 확인한다.

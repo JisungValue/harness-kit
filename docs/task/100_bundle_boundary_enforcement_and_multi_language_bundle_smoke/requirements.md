@@ -17,8 +17,8 @@
 ## 입력/출력
 
 - 입력:
-  - `docs/kit_maintenance/downstream_bundle_boundary.md`
-  - `docs/kit_maintenance/downstream_bundle_smoke_validation.md`
+  - `maintainer/docs/downstream_bundle_boundary.md`
+  - `maintainer/docs/downstream_bundle_smoke_validation.md`
   - `scripts/generate_downstream_bundle.py`
   - `scripts/validate_downstream_bundle.py`
   - `scripts/check_harness_docs.py`
@@ -45,5 +45,5 @@
 
 - boundary 문서 설명과 generator/validator 동작이 include/exclude 책임 경계에서 더 이상 모순되지 않는다.
 - downstream bundle smoke가 Java/Kotlin greenfield bootstrap surface까지 확인하거나, project-facing docs가 그보다 좁은 support boundary로 명시적으로 조정된다.
-- `docs/kit_maintenance/downstream_bundle_smoke_validation.md`가 실제 tested helper/migration/support surface를 설명한다.
+- `maintainer/docs/downstream_bundle_smoke_validation.md`가 실제 tested helper/migration/support surface를 설명한다.
 - focused test와 doc guard가 새 계약을 고정하고 관련 검증이 통과한다.
