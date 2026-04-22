@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "scripts" / "install_downstream_bundle.py"
+SCRIPT = ROOT / "maintainer" / "scripts" / "install_downstream_bundle.py"
 
 
 class InstallDownstreamBundleTest(unittest.TestCase):

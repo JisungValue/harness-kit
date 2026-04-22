@@ -76,8 +76,8 @@ gh release create vX.Y.Z --title "harness-kit vX.Y.Z" --notes-file "/tmp/harness
 downstream bundle artifact도 함께 배포한다면, canonical directory artifact를 다시 생성한 뒤 파생 archive를 만들어 release asset으로 업로드한다.
 
 ```bash
-python3 scripts/generate_downstream_bundle.py --force
-python3 scripts/validate_downstream_bundle.py
+python3 maintainer/scripts/generate_downstream_bundle.py --force
+python3 maintainer/scripts/validate_downstream_bundle.py
 python3 -m unittest tests.test_downstream_bundle_smoke
 tar -czf "/tmp/harness-kit-project-bundle-vX.Y.Z.tar.gz" -C dist harness-kit-project-bundle
 gh release create vX.Y.Z --title "harness-kit vX.Y.Z" --notes-file "/tmp/harness-kit-vX.Y.Z-notes.md" "/tmp/harness-kit-project-bundle-vX.Y.Z.tar.gz#harness-kit-project-bundle-vX.Y.Z.tar.gz"
@@ -88,8 +88,8 @@ gh release create vX.Y.Z --title "harness-kit vX.Y.Z" --notes-file "/tmp/harness
 1. release gate issue를 운영 중이면 최신화한다.
 2. release note 초안을 작성한다.
 3. `main` 최신화와 worktree clean 상태를 확인한다.
-4. downstream bundle artifact를 함께 배포하는 릴리스라면 `python3 scripts/generate_downstream_bundle.py --force`로 canonical directory artifact를 다시 생성한다.
-5. `python3 scripts/validate_downstream_bundle.py`로 bundle의 `README.md`, `bundle_manifest.json`, 포함/제외 경계, copied file 내용이 `maintainer/docs/downstream_bundle_boundary.md`와 일치하는지 확인한다.
+4. downstream bundle artifact를 함께 배포하는 릴리스라면 `python3 maintainer/scripts/generate_downstream_bundle.py --force`로 canonical directory artifact를 다시 생성한다.
+5. `python3 maintainer/scripts/validate_downstream_bundle.py`로 bundle의 `README.md`, `bundle_manifest.json`, 포함/제외 경계, copied file 내용이 `maintainer/docs/downstream_bundle_boundary.md`와 일치하는지 확인한다.
 6. bundle artifact를 함께 배포한다면 `python3 -m unittest tests.test_downstream_bundle_smoke`로 generated bundle을 vendored dependency처럼 사용했을 때 greenfield/brownfield 기본 경로가 실제로 동작하는지 확인한다.
    관련 시나리오와 기대 결과 예시는 `maintainer/docs/downstream_bundle_smoke_validation.md`를 따른다.
 7. bundle artifact를 함께 배포한다면 `dist/harness-kit-project-bundle/`에서 release asset용 archive를 만든다.

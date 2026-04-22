@@ -9,8 +9,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-GENERATE_SCRIPT = ROOT / "scripts" / "generate_downstream_bundle.py"
-VALIDATE_SCRIPT = ROOT / "scripts" / "validate_downstream_bundle.py"
+GENERATE_SCRIPT = ROOT / "maintainer" / "scripts" / "generate_downstream_bundle.py"
+VALIDATE_SCRIPT = ROOT / "maintainer" / "scripts" / "validate_downstream_bundle.py"
 
 
 class ValidateDownstreamBundleTest(unittest.TestCase):

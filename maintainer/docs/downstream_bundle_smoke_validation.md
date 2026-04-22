@@ -6,7 +6,7 @@
 
 ## 검증 대상
 
-- `scripts/generate_downstream_bundle.py`
+- `maintainer/scripts/generate_downstream_bundle.py`
 - canonical `dist/harness-kit-project-bundle/`
 - generated bundle 안의 `scripts/bootstrap_init.py`
 - generated bundle 안의 `scripts/check_first_success_docs.py`

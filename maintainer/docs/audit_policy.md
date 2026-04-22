@@ -26,14 +26,14 @@
 ## 프로젝트 문서 변경과 Kit 변경의 판별 기준
 
 - 비대상: downstream 프로젝트 로컬 `docs/project_entrypoint.md`, `docs/standard/*`, 프로젝트 저장소 안의 task 산출물 변경
-- 대상: 이 저장소의 `docs/harness_guide.md`, `docs/harness/common/*`, `docs/phase_*`, `docs/project_overlay/*` template, `bootstrap/*`, `README.md`, `scripts/check_harness_docs.py`, `scripts/bootstrap_init.py`, `harness.log` 변경
+- 대상: 이 저장소의 `docs/harness_guide.md`, `docs/harness/common/*`, `docs/phase_*`, `docs/project_overlay/*` template, `bootstrap/*`, `README.md`, `maintainer/scripts/check_harness_docs.py`, `scripts/bootstrap_init.py`, `harness.log` 변경
 - downstream 프로젝트에서 복사해 간 overlay 문서를 수정하는 일은 프로젝트 문서 변경이지 `harness-kit` 유지보수가 아니다.
 - 반대로 이 저장소의 overlay template를 수정해 모든 프로젝트의 기본값을 바꾸는 일은 `harness-kit` 유지보수다.
 
 ## 문서 집합 경계
 
 - 프로젝트 영향 문서: `docs/harness_guide.md`, `docs/harness/common/*`, `docs/phase_*`, `docs/project_overlay/*`, `docs/standard/coding_guidelines_core.md`, `docs/templates/task/*`, `docs/examples/*`, `bootstrap/*`, `scripts/bootstrap_init.py`
-- maintainer 전용 문서: `maintainer/docs/*`, `harness.log`, `scripts/check_harness_docs.py`, `.github/workflows/harness-doc-guard.yml`
+- maintainer 전용 문서: `maintainer/docs/*`, `maintainer/scripts/*`, `harness.log`, `.github/workflows/harness-doc-guard.yml`
 - maintainer 전용 지침을 수정하는 작업은 maintainer 전용 문서 집합 안에서만 끝나야 한다.
 - 예외: 모든 감사에 공통으로 적용할 audit 운영 규칙을 바꾸는 경우 `docs/harness/common/audit_policy.md`를 함께 수정할 수 있다. 이때도 maintainer 전용 경로, `harness.log` 규칙, drift 대응 절차는 프로젝트 영향 문서 본문으로 복제하지 않는다.
 - 프로젝트 영향 문서와 overlay template를 수정하는 작업은 프로젝트 영향 문서 집합 안에서만 끝나야 하며, maintainer 전용 문서는 `harness.log` 기록 외에는 함께 수정하지 않는다.
@@ -171,6 +171,6 @@ whole-harness는 전체 문서 흐름과 core 일관성을 본다.
 
 ## 자동검사 실행 기준
 
-- 기본 검사 스크립트는 `scripts/check_harness_docs.py`를 사용한다.
+- 기본 검사 스크립트는 `maintainer/scripts/check_harness_docs.py`를 사용한다.
 - 기본 워크플로우는 `.github/workflows/harness-doc-guard.yml`을 사용한다.
 - downsteam 프로젝트는 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 복사해 재사용 워크플로우를 호출한다.

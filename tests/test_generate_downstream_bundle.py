@@ -11,7 +11,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "scripts" / "generate_downstream_bundle.py"
+SCRIPT = ROOT / "maintainer" / "scripts" / "generate_downstream_bundle.py"
 
 
 def load_bundle_module():
@@ -130,16 +130,16 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
                 "### 2) Downstream 선택 자산",
                 "- `docs/examples/**/*.md`",
                 "### 3) Maintainer 전용 자산",
-                "- `scripts/check_harness_docs.py`",
-                "- `scripts/validate_downstream_bundle.py`",
+                "- `maintainer/scripts/check_harness_docs.py`",
+                "- `maintainer/scripts/validate_downstream_bundle.py`",
             ]
         )
 
         with mock.patch.object(module, "read_boundary_document", return_value=synthetic_boundary):
             readme_text = module.bundle_readme_text([])
 
-        self.assertIn("- `scripts/check_harness_docs.py`", readme_text)
-        self.assertIn("- `scripts/validate_downstream_bundle.py`", readme_text)
+        self.assertIn("- `maintainer/scripts/check_harness_docs.py`", readme_text)
+        self.assertIn("- `maintainer/scripts/validate_downstream_bundle.py`", readme_text)
 
     def test_maintainer_only_patterns_override_included_paths(self) -> None:
         module = load_bundle_module()

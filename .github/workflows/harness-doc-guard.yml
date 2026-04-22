@@ -20,4 +20,4 @@ jobs:
           python-version: "3.11"
 
       - name: Run harness documentation guard
-        run: python scripts/check_harness_docs.py
+        run: python maintainer/scripts/check_harness_docs.py

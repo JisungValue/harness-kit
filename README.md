@@ -50,14 +50,14 @@
 
 ### Source Repo Shortcut
 
-- source repo에서 downstream 프로젝트로 첫 설치를 바로 시작하려면 `scripts/install_downstream_bundle.py`를 쓸 수 있다.
+- source repo에서 downstream 프로젝트로 첫 설치를 바로 시작하려면 `maintainer/scripts/install_downstream_bundle.py`를 쓸 수 있다.
 - 이 helper는 canonical bundle 재생성, target 프로젝트 vendoring, vendored `bootstrap_init.py` 실행을 한 번에 묶는다.
 - 기본 vendored 경로는 `vendor/harness-kit`이고, 다른 경로를 쓰려면 `--vendor-path third_party/harness-kit`처럼 project-root relative path를 준다.
 - vendored path는 downstream `docs/` 트리 밖에 두는 것을 전제로 하며, 이미 vendored bundle이 있으면 `--force-vendor`, bootstrap 결과물이 이미 있으면 `--force-bootstrap`을 사용한다.
 
 ```bash
-python3 scripts/install_downstream_bundle.py /path/to/downstream-project --language java
-python3 scripts/install_downstream_bundle.py /path/to/downstream-project --language java --vendor-path third_party/harness-kit
+python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-project --language java
+python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-project --language java --vendor-path third_party/harness-kit
 ```
 
 ### 새 프로젝트 시작
@@ -112,9 +112,9 @@ python3 scripts/install_downstream_bundle.py /path/to/downstream-project --langu
   - 기존 프로젝트의 현재 overlay 상태를 bootstrap baseline과 비교해 missing, unchanged, differing, conflict candidate를 read-only로 분류하는 adopt dry-run이다.
 - [`scripts/adopt_safe_write.py`](scripts/adopt_safe_write.py)
   - 기존 프로젝트에 대해 `adopt_dry_run.py`와 같은 판정 규칙을 사용해 missing file create, unchanged refresh, explicit path force overwrite만 허용하는 제한적 safe write/update 도구다.
-- [`scripts/generate_downstream_bundle.py`](scripts/generate_downstream_bundle.py)
+- [`maintainer/scripts/generate_downstream_bundle.py`](maintainer/scripts/generate_downstream_bundle.py)
   - downstream 배포 경계 기준으로 project-facing 자산만 모아 `dist/harness-kit-project-bundle/` directory artifact와 `bundle_manifest.json`을 생성하는 maintainer용 bundle generation command다.
-- [`scripts/validate_downstream_bundle.py`](scripts/validate_downstream_bundle.py)
+- [`maintainer/scripts/validate_downstream_bundle.py`](maintainer/scripts/validate_downstream_bundle.py)
   - generated downstream bundle이 boundary 문서, manifest, 실제 copied file 내용과 일치하는지 검사하는 maintainer용 bundle validation command다.
 - `docs/project_overlay/`
   - 프로젝트별로 추가 작성해야 하는 문서와 템플릿을 둔다.
@@ -144,7 +144,7 @@ python3 scripts/install_downstream_bundle.py /path/to/downstream-project --langu
   - generated bundle을 vendored dependency처럼 써서 greenfield/brownfield 기본 경로가 실제로 동작하는지 점검하는 maintainer용 smoke validation 기준이다.
 - [`maintainer/docs/downstream_bundle_boundary.md`](maintainer/docs/downstream_bundle_boundary.md)
   - maintainer가 downstream bundle에 포함할 자산과 제외할 자산의 경계를 정의한다.
-- [`scripts/check_harness_docs.py`](scripts/check_harness_docs.py)
+- [`maintainer/scripts/check_harness_docs.py`](maintainer/scripts/check_harness_docs.py)
   - core/overlay 경로 정합성과 `harness.log` 기록 규칙을 자동 검사한다.
 - [`.github/workflows/harness-doc-guard.yml`](.github/workflows/harness-doc-guard.yml)
   - 문서 정합성 검사를 PR/merge 전에 자동 실행한다.
