@@ -21,7 +21,7 @@
 
 ## 결과 요약
 
-- 이번 판단의 repo-local 근거: `docs/harness/common/process_policy.md`, `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`, `docs/harness_guide.md`, `docs/downstream_harness_flow.md`, `docs/quickstart.md`, `docs/kit_maintenance/downstream_bundle_boundary.md`, `scripts/validate_phase_gate.py`
+- 이번 판단의 repo-local 근거: `docs/harness/common/process_policy.md`, `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`, `docs/harness_guide.md`, `docs/downstream_harness_flow.md`, `docs/quickstart.md`, `maintainer/docs/downstream_bundle_boundary.md`, `scripts/validate_phase_gate.py`
 - repo에 없어 후속 문서화/승인 대상으로 남긴 결정: 없음
 
 ## Phase 5에서 반영할 related decisions/

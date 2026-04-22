@@ -96,7 +96,7 @@ PROJECT_FACING_LEAKAGE_EXCLUDES: set[str] = set()
 
 MAINTAINER_ONLY_REFERENCES = [
     "harness.log",
-    "docs/kit_maintenance/",
+    "maintainer/docs/",
     "scripts/check_harness_docs.py",
     ".github/workflows/harness-doc-guard.yml",
 ]
@@ -179,8 +179,8 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
     quickstart = read_text("docs/quickstart.md")
     first_success = read_text("docs/project_overlay/first_success_guide.md")
     diagnostics = read_text("docs/project_overlay/local_diagnostics_and_dry_run.md")
-    bundle_smoke_doc = read_text("docs/kit_maintenance/downstream_bundle_smoke_validation.md")
-    bundle_boundary = read_text("docs/kit_maintenance/downstream_bundle_boundary.md")
+    bundle_smoke_doc = read_text("maintainer/docs/downstream_bundle_smoke_validation.md")
+    bundle_boundary = read_text("maintainer/docs/downstream_bundle_boundary.md")
     project_guide_template = read_text("docs/project_overlay/project_entrypoint_template.md")
     harness_guide = read_text("docs/harness_guide.md")
 
@@ -285,7 +285,7 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
 
     if "docs/project_overlay/harness_doc_guard_workflow_template.yml" not in bundle_boundary:
         errors.append(
-            "docs/kit_maintenance/downstream_bundle_boundary.md에 project-facing workflow template 경로가 반영되지 않았습니다."
+            "maintainer/docs/downstream_bundle_boundary.md에 project-facing workflow template 경로가 반영되지 않았습니다."
         )
 
 def check_entrypoint_role_labels(errors: list[str]) -> None:
@@ -454,7 +454,7 @@ def check_repo_local_source_of_truth_docs(errors: list[str]) -> None:
     if "기억/외부 대화/다른 프로젝트 관행" not in common_audit_policy:
         errors.append("common audit_policy에 repo-local source-of-truth 감사 문구가 없습니다.")
 
-    maintainer_audit_policy = read_text("docs/kit_maintenance/audit_policy.md")
+    maintainer_audit_policy = read_text("maintainer/docs/audit_policy.md")
     for phrase in (
         "source-of-truth",
         "repo-local",

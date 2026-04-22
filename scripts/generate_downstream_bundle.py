@@ -15,7 +15,7 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 DIST_ROOT = ROOT / "dist"
 DEFAULT_OUTPUT = ROOT / "dist" / "harness-kit-project-bundle"
-BOUNDARY_DOCUMENT = "docs/kit_maintenance/downstream_bundle_boundary.md"
+BOUNDARY_DOCUMENT = "maintainer/docs/downstream_bundle_boundary.md"
 ENTRY_README = "README.md"
 MANIFEST_NAME = "bundle_manifest.json"
 BOUNDARY_INCLUDE_SECTIONS = (

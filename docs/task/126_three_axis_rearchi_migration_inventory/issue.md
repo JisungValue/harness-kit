@@ -28,4 +28,4 @@
 - inventory는 현재 저장소 구조를 기준으로 작성한다.
 - 하위 이슈가 재사용할 수 있도록 source path와 target canonical path를 함께 남긴다.
 - `docs/task/*`는 이번 이슈에서 이동 대상이 아니라 작업 산출물 저장 위치로 계속 사용한다.
-- canonical migration inventory는 maintainer 문서 `docs/kit_maintenance/three_axis_rearchi_migration_inventory.md`에 둔다.
+- canonical migration inventory는 maintainer 문서 `maintainer/docs/three_axis_rearchi_migration_inventory.md`에 둔다.

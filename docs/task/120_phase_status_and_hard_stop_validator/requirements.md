@@ -24,7 +24,7 @@
   - `docs/downstream_harness_flow.md`
   - `docs/quickstart.md`
   - `docs/templates/task/*`
-  - `docs/kit_maintenance/downstream_bundle_boundary.md`
+  - `maintainer/docs/downstream_bundle_boundary.md`
   - `tests/*bundle*`, `scripts/check_harness_docs.py`
 - 출력:
   - `phase_status.md` template와 sample

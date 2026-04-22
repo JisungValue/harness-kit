@@ -5,7 +5,7 @@
 - `docs/task/126_three_axis_rearchi_migration_inventory/issue.md`
 - `docs/task/126_three_axis_rearchi_migration_inventory/requirements.md`
 - `docs/task/126_three_axis_rearchi_migration_inventory/plan.md`
-- `docs/kit_maintenance/three_axis_rearchi_migration_inventory.md`
+- `maintainer/docs/three_axis_rearchi_migration_inventory.md`
 - `docs/task/126_three_axis_rearchi_migration_inventory/implementation_notes.md`
 - `harness.log`
 
@@ -23,7 +23,7 @@
 
 ## 문서 반영 계획
 
-- canonical migration inventory는 `docs/kit_maintenance/three_axis_rearchi_migration_inventory.md`로 유지한다.
+- canonical migration inventory는 `maintainer/docs/three_axis_rearchi_migration_inventory.md`로 유지한다.
 - `docs/task/126_three_axis_rearchi_migration_inventory/`는 issue 산출물과 작업 맥락 기록만 유지한다.
 - 관련 `docs/decisions/README.md` 또는 `DEC-###-slug.md` 읽기/수정/생성 필요 여부: 해당 없음
 - 새 decision이 필요하면 index 갱신 계획: 해당 없음

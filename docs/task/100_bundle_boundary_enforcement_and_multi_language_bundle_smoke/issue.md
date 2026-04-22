@@ -3,9 +3,9 @@
 ## 배경
 
 - strict audit에서 downstream bundle boundary 문서, generator 실제 동작, bundle smoke coverage 사이에 drift가 남아 있다.
-- `docs/kit_maintenance/downstream_bundle_boundary.md`는 maintainer-only exclusion을 강한 경계 규칙처럼 설명하지만 `scripts/generate_downstream_bundle.py`는 include pattern만으로 bundle 파일을 계산한다.
+- `maintainer/docs/downstream_bundle_boundary.md`는 maintainer-only exclusion을 강한 경계 규칙처럼 설명하지만 `scripts/generate_downstream_bundle.py`는 include pattern만으로 bundle 파일을 계산한다.
 - downstream bundle smoke는 현재 Python flow만 확인하고 있어, project-facing docs가 지원한다고 설명하는 Java/Kotlin bootstrap surface와 tested surface가 어긋난다.
-- `docs/kit_maintenance/downstream_bundle_smoke_validation.md`도 실제 smoke가 다루는 helper/migration/support surface를 충분히 설명하지 못할 수 있다.
+- `maintainer/docs/downstream_bundle_smoke_validation.md`도 실제 smoke가 다루는 helper/migration/support surface를 충분히 설명하지 못할 수 있다.
 
 ## 요청사항
 

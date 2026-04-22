@@ -9,7 +9,7 @@
 - `docs/harness_guide.md`
 - `docs/downstream_harness_flow.md`
 - `docs/quickstart.md`
-- `docs/kit_maintenance/downstream_bundle_boundary.md`
+- `maintainer/docs/downstream_bundle_boundary.md`
 - `scripts/validate_phase_gate.py`
 - `scripts/check_harness_docs.py`
 - `tests/test_validate_phase_gate.py`

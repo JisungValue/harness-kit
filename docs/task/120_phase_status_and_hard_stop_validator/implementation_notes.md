@@ -14,7 +14,7 @@
 
 ## 구현 중 결정 사항
 
-- repo-local 근거: `docs/harness/common/process_policy.md`, `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`, `docs/harness_guide.md`, `docs/downstream_harness_flow.md`, `docs/quickstart.md`, `docs/kit_maintenance/downstream_bundle_boundary.md`, `tests/test_generate_downstream_bundle.py`를 기준으로 `phase_status.md` lifecycle과 downstream-facing validator 범위를 정했다.
+- repo-local 근거: `docs/harness/common/process_policy.md`, `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`, `docs/harness_guide.md`, `docs/downstream_harness_flow.md`, `docs/quickstart.md`, `maintainer/docs/downstream_bundle_boundary.md`, `tests/test_generate_downstream_bundle.py`를 기준으로 `phase_status.md` lifecycle과 downstream-facing validator 범위를 정했다.
 - repo에 없어 문서화/승인 대상으로 넘긴 결정: 없음
 
 ## 위임된 책임

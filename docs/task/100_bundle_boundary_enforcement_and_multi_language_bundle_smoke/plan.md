@@ -2,8 +2,8 @@
 
 ## 변경 대상 파일 또는 모듈
 
-- `docs/kit_maintenance/downstream_bundle_boundary.md`
-- `docs/kit_maintenance/downstream_bundle_smoke_validation.md`
+- `maintainer/docs/downstream_bundle_boundary.md`
+- `maintainer/docs/downstream_bundle_smoke_validation.md`
 - `scripts/generate_downstream_bundle.py`
 - `scripts/validate_downstream_bundle.py`
 - `scripts/check_harness_docs.py`
@@ -27,8 +27,8 @@
 
 ## 문서 반영 계획
 
-- `docs/kit_maintenance/downstream_bundle_boundary.md`에 generator가 따르는 include/exclude 책임 경계를 실제 구현과 맞춘다.
-- `docs/kit_maintenance/downstream_bundle_smoke_validation.md`에 multi-language greenfield coverage와 legacy migration surface를 반영한다.
+- `maintainer/docs/downstream_bundle_boundary.md`에 generator가 따르는 include/exclude 책임 경계를 실제 구현과 맞춘다.
+- `maintainer/docs/downstream_bundle_smoke_validation.md`에 multi-language greenfield coverage와 legacy migration surface를 반영한다.
 - 관련 `docs/decisions/README.md` 또는 `DEC-###-slug.md` 읽기/수정/생성 필요 여부: 해당 없음. 이번 작업은 downstream project-local decision registry가 아니라 harness core bundle boundary와 maintainer validation 흐름 정합화 범위다.
 - 새 decision이 필요하면 index 갱신 계획: 해당 없음.
 

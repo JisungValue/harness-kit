@@ -22,8 +22,8 @@
   - `docs/quickstart.md`
   - `docs/project_overlay/local_diagnostics_and_dry_run.md`
   - `docs/examples/bootstrap-first-success/validation_report.md`
-  - `docs/kit_maintenance/downstream_bundle_boundary.md`
-  - `docs/kit_maintenance/downstream_bundle_smoke_validation.md`
+  - `maintainer/docs/downstream_bundle_boundary.md`
+  - `maintainer/docs/downstream_bundle_smoke_validation.md`
   - 관련 bundle/bootstrap/consistency/doc-guard 테스트
 - 출력:
   - localized vendoring을 직접 지원하는 bootstrap CLI

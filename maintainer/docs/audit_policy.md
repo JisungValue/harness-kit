@@ -33,7 +33,7 @@
 ## 문서 집합 경계
 
 - 프로젝트 영향 문서: `docs/harness_guide.md`, `docs/harness/common/*`, `docs/phase_*`, `docs/project_overlay/*`, `docs/standard/coding_guidelines_core.md`, `docs/templates/task/*`, `docs/examples/*`, `bootstrap/*`, `scripts/bootstrap_init.py`
-- maintainer 전용 문서: `docs/kit_maintenance/*`, `harness.log`, `scripts/check_harness_docs.py`, `.github/workflows/harness-doc-guard.yml`
+- maintainer 전용 문서: `maintainer/docs/*`, `harness.log`, `scripts/check_harness_docs.py`, `.github/workflows/harness-doc-guard.yml`
 - maintainer 전용 지침을 수정하는 작업은 maintainer 전용 문서 집합 안에서만 끝나야 한다.
 - 예외: 모든 감사에 공통으로 적용할 audit 운영 규칙을 바꾸는 경우 `docs/harness/common/audit_policy.md`를 함께 수정할 수 있다. 이때도 maintainer 전용 경로, `harness.log` 규칙, drift 대응 절차는 프로젝트 영향 문서 본문으로 복제하지 않는다.
 - 프로젝트 영향 문서와 overlay template를 수정하는 작업은 프로젝트 영향 문서 집합 안에서만 끝나야 하며, maintainer 전용 문서는 `harness.log` 기록 외에는 함께 수정하지 않는다.
@@ -54,7 +54,7 @@
 - `changed-parts`와 `whole-harness`는 각각 독립된 subagent 세션으로 수행하고 self-audit만으로 대체하지 않는다.
 - 최종 판정은 두 audit가 모두 승인 가능일 때만 승인 가능으로 본다.
 - 새 운영 경계, 승인 기준, 배포 단위, validator 판정 규칙처럼 이후 maintainer audit의 판정 기준 자체를 바꿀 수 있는 변경이라면, 이번 작업에서 기존 audit 체크포인트 보강이 필요한지도 명시적으로 판단한다.
-- audit 체크포인트 보강이 필요하면 같은 작업에서 `docs/kit_maintenance/audit_policy.md`를 함께 갱신하는 것을 기본으로 하고, 범위를 분리해야 하면 follow-up issue와 분리 이유를 남긴다.
+- audit 체크포인트 보강이 필요하면 같은 작업에서 `maintainer/docs/audit_policy.md`를 함께 갱신하는 것을 기본으로 하고, 범위를 분리해야 하면 follow-up issue와 분리 이유를 남긴다.
 
 ## Changed-Parts 감사 기준
 
@@ -78,7 +78,7 @@ changed-parts는 바뀐 파일과 인접 영향만 본다.
 - 현재 판단의 source-of-truth가 repo-local 문서/스크립트/설정인지, repo에 없는 결정을 추측으로 메우지 않았는지 기록상 확인 가능한가
 - maintainer 전용 지침 변경인데 프로젝트 영향 문서 본문에 maintainer 전용 경로, `harness.log` 규칙, drift 대응 절차가 추가되지 않았는가
 - 프로젝트 영향 문서 변경인데 `harness.log` 외의 maintainer 전용 문서 수정이 불필요하게 섞이지 않았는가
-- downstream bundle 포함/제외 경계를 바꾸는 변경이라면 `docs/kit_maintenance/downstream_bundle_boundary.md`, 인접 project-facing 문서, 관련 release 문서가 같은 경계를 가리키는가
+- downstream bundle 포함/제외 경계를 바꾸는 변경이라면 `maintainer/docs/downstream_bundle_boundary.md`, 인접 project-facing 문서, 관련 release 문서가 같은 경계를 가리키는가
 - downstream bundle에 포함될 자산이 배포 후 존재하지 않을 maintainer 전용 문서를 canonical reference로 요구하지 않는가
 - downstream canonical path rename 또는 migration 경로를 바꾸는 변경이라면 legacy-only 상태, stale coexistence 상태, canonical target 상태를 dry-run, write 경로, validator, project-facing 문서가 같은 계약으로 설명하는가
 - 새 project-facing migration flag 또는 upgrade 자동화 경로를 추가했다면 source-tree unit test만이 아니라 vendored downstream bundle smoke까지 같은 경로를 실제로 검증하는가
@@ -163,11 +163,11 @@ whole-harness는 전체 문서 흐름과 core 일관성을 본다.
 
 ## 자동검사 실패 대응
 
-- Harness Doc Guard CI가 실패하면 `docs/kit_maintenance/drift_response_guide.md` 순서로 보완한다.
+- Harness Doc Guard CI가 실패하면 `maintainer/docs/drift_response_guide.md` 순서로 보완한다.
 
 ## 릴리스 절차
 
-- 버전 릴리스 준비와 tag / GitHub Release 생성 순서는 `docs/kit_maintenance/release_process.md`를 따른다.
+- 버전 릴리스 준비와 tag / GitHub Release 생성 순서는 `maintainer/docs/release_process.md`를 따른다.
 
 ## 자동검사 실행 기준
 
