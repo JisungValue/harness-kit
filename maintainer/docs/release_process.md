@@ -102,7 +102,7 @@ gh release create vX.Y.Z --title "harness-kit vX.Y.Z" --notes-file "/tmp/harness
 
 - 릴리스 전에 release gate와 release note의 지원 범위가 서로 다르면 먼저 문서를 맞춘다.
 - `harness.log` 누락 상태에서 릴리스를 만들지 않는다.
-- release note에서 현재 지원 범위와 이후 버전 계획을 구분한다. canonical 기준은 `docs/version_support.md`를 따른다.
+- release note에서 현재 지원 범위와 이후 버전 계획을 구분한다. canonical 기준은 `bootstrap/docs/version_support.md`를 따른다.
 - patch/minor release라도 배포 당시 진입 문서가 실제 현재 동작과 맞는지 다시 확인한다.
 - downstream bundle artifact를 배포하기 시작한 이후에는, bundle 생성 결과가 boundary 문서와 어긋난 상태로 릴리스하지 않는다.
 - downstream bundle artifact를 배포한다면, bundle structure/content validation만 통과한 상태로 바로 릴리스하지 말고 generated bundle consumer smoke test까지 확인한다.

@@ -11,7 +11,7 @@
   - 잔여 리스크: bootstrap 이후 vendored 경로를 다시 옮기는 경우 path update는 여전히 수동 작업이다.
 
 - 검증 항목: first-success confidence path 문서/예시 정렬
-  - 대조한 입력물: `docs/project_overlay/first_success_guide.md`, `docs/quickstart.md`, `docs/project_overlay/local_diagnostics_and_dry_run.md`, `docs/examples/bootstrap-first-success/validation_report.md`, `README.md`
+  - 대조한 입력물: `docs/project_overlay/first_success_guide.md`, `bootstrap/docs/quickstart.md`, `docs/project_overlay/local_diagnostics_and_dry_run.md`, `docs/examples/bootstrap-first-success/validation_report.md`, `README.md`
   - 실행 방법 또는 확인 방식: 문서 surface를 교차 검토하고 `python3 scripts/check_harness_docs.py`로 `--vendor-path`, workflow template onboarding, bundle smoke 설명 drift를 자동 검사했다.
   - 결과: greenfield confidence path가 bootstrap output -> first-success helper -> readiness/consistency validator -> workflow template onboarding 단계로 정렬됐고, remaining manual checks도 같은 문맥으로 정리됐다.
   - 실패 또는 미실행 사유: 없음

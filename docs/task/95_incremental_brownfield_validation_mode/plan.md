@@ -7,7 +7,7 @@
 - `docs/project_overlay/adopt_dry_run.md`
 - `docs/project_overlay/adopt_safe_write.md`
 - `docs/project_overlay/local_diagnostics_and_dry_run.md`
-- `docs/quickstart.md`
+- `bootstrap/docs/quickstart.md`
 - `maintainer/docs/downstream_bundle_smoke_validation.md`
 - `tests/test_validate_overlay_consistency.py`
 - `tests/test_downstream_bundle_smoke.py`

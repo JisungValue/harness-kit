@@ -5,10 +5,10 @@
 ## 문서 역할
 
 - 이 문서는 진단과 출력 해석 전용 문서다.
-- canonical happy path 자체는 `docs/quickstart.md`를 먼저 보고, greenfield 상세 설명이 더 필요할 때만 `docs/project_overlay/first_success_guide.md`를 본다.
+- canonical happy path 자체는 `bootstrap/docs/quickstart.md`를 먼저 보고, greenfield 상세 설명이 더 필요할 때만 `docs/project_overlay/first_success_guide.md`를 본다.
 - 이 문서는 실패하거나 출력 의미가 헷갈릴 때 참고하는 diagnostics reference다.
 - downstream 구조와 Phase 흐름 전체는 `docs/downstream_harness_flow.md`를 본다.
-- 현재 지원 범위와 최신 릴리스는 `docs/version_support.md`를 기준으로 본다.
+- 현재 지원 범위와 최신 릴리스는 `bootstrap/docs/version_support.md`를 기준으로 본다.
 
 ## 목적
 
@@ -244,7 +244,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 ## 관련 문서
 
-- canonical 시작 문서: `docs/quickstart.md`
+- canonical 시작 문서: `bootstrap/docs/quickstart.md`
 - 새 프로젝트 first-success 상세판: `docs/project_overlay/first_success_guide.md`
 - 기존 프로젝트 read-only 비교: `docs/project_overlay/adopt_dry_run.md`
 - 기존 프로젝트 제한적 write: `docs/project_overlay/adopt_safe_write.md`

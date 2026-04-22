@@ -16,7 +16,7 @@
 ## Locked Paths
 
 - `README.md`
-- `docs/quickstart.md`
+- `bootstrap/docs/quickstart.md`
 - `docs/project_overlay/README.md`
 - `docs/project_overlay/first_success_guide.md`
 - `docs/project_overlay/local_diagnostics_and_dry_run.md`

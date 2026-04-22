@@ -7,7 +7,7 @@
 
 ## 요청사항
 
-- `docs/quickstart.md`를 canonical 시작 문서로 더 분명히 고정한다.
+- `bootstrap/docs/quickstart.md`를 canonical 시작 문서로 더 분명히 고정한다.
 - `README.md`, `docs/project_overlay/README.md`, `first_success_guide.md`, `local_diagnostics_and_dry_run.md`의 온보딩 중복을 완화한다.
 - `scripts/check_harness_docs.py`에서 example/phrase-level 결합을 줄이고 구조 중심 검증으로 완화한다.
 - examples는 기본 소비 경로보다 reference/advanced 위치로 조정한다.

@@ -16,7 +16,7 @@
 
 ## 구현 중 결정 사항
 
-- repo-local 근거: `docs/harness/common/process_policy.md`, `docs/harness/common/validation_policy.md`, `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`, `docs/harness/common/lightweight_task_policy.md`, `docs/harness_guide.md`, `docs/downstream_harness_flow.md`, `docs/quickstart.md`, `docs/project_overlay/project_entrypoint_template.md`, 각 `docs/phase_*/*` 문서를 기준으로 공통 규칙과 phase-local 규칙의 책임을 나눴다.
+- repo-local 근거: `docs/harness/common/process_policy.md`, `docs/harness/common/validation_policy.md`, `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`, `docs/harness/common/lightweight_task_policy.md`, `docs/harness_guide.md`, `docs/downstream_harness_flow.md`, `bootstrap/docs/quickstart.md`, `docs/project_overlay/project_entrypoint_template.md`, 각 `docs/phase_*/*` 문서를 기준으로 공통 규칙과 phase-local 규칙의 책임을 나눴다.
 - repo에 없어 문서화/승인 대상으로 넘긴 결정: 없음
 
 ## 위임된 책임

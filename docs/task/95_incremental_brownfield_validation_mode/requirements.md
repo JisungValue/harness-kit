@@ -22,7 +22,7 @@
   - `docs/project_overlay/adopt_dry_run.md`
   - `docs/project_overlay/adopt_safe_write.md`
   - `docs/project_overlay/local_diagnostics_and_dry_run.md`
-  - `docs/quickstart.md`
+  - `bootstrap/docs/quickstart.md`
   - `tests/test_validate_overlay_consistency.py`
   - `tests/test_downstream_bundle_smoke.py`
   - 필요 시 `scripts/check_harness_docs.py`

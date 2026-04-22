@@ -26,6 +26,12 @@ BOUNDARY_EXCLUDE_SECTIONS = ("### 3) Maintainer 전용 자산",)
 
 SOURCE_ROOTS = (ROOT / "bootstrap", ROOT / "docs", ROOT / "scripts")
 
+BUNDLE_RELATIVE_PATH_REWRITES = {
+    "bootstrap/docs/quickstart.md": Path("docs/quickstart.md"),
+    "bootstrap/docs/how_harness_kit_works.md": Path("docs/how_harness_kit_works.md"),
+    "bootstrap/docs/version_support.md": Path("docs/version_support.md"),
+}
+
 
 @dataclass(frozen=True)
 class BundleFile:
@@ -120,6 +126,10 @@ def matches_any_pattern(relative_path: Path, patterns: list[str]) -> bool:
     return any(relative_path.match(pattern) for pattern in patterns)
 
 
+def bundle_relative_path_for_source(relative_path: Path) -> Path:
+    return BUNDLE_RELATIVE_PATH_REWRITES.get(relative_path.as_posix(), relative_path)
+
+
 def build_bundle_files() -> list[BundleFile]:
     by_path: dict[str, BundleFile] = {}
     excluded_patterns = extract_maintainer_only_paths()
@@ -133,9 +143,10 @@ def build_bundle_files() -> list[BundleFile]:
             relative_path = path.relative_to(ROOT)
             if matches_any_pattern(relative_path, excluded_patterns):
                 continue
-            by_path[relative_path.as_posix()] = BundleFile(
+            bundle_relative_path = bundle_relative_path_for_source(relative_path)
+            by_path[bundle_relative_path.as_posix()] = BundleFile(
                 source=path,
-                relative_path=relative_path,
+                relative_path=bundle_relative_path,
                 sha256=sha256_hex(path),
                 size_bytes=path.stat().st_size,
             )

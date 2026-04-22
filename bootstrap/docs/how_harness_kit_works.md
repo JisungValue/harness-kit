@@ -5,9 +5,9 @@
 ## 문서 역할
 
 - 이 문서는 개념 설명 문서다.
-- 처음 쓰는 사용자가 실제로 어디서 시작할지는 `README.md`와 `docs/quickstart.md`를 먼저 본다.
+- 처음 쓰는 사용자가 실제로 어디서 시작할지는 `README.md`와 `bootstrap/docs/quickstart.md`를 먼저 본다.
 - downstream 프로젝트 구조와 Phase 흐름 상세는 `docs/downstream_harness_flow.md`가 더 직접적으로 설명한다.
-- 현재 지원 범위와 최신 릴리스는 `docs/version_support.md`를 기준으로 본다.
+- 현재 지원 범위와 최신 릴리스는 `bootstrap/docs/version_support.md`를 기준으로 본다.
 
 ## 한 줄 요약
 
@@ -167,7 +167,7 @@
   - interactive onboarding UI
   - repo-aware assisted adoption
 
-source repo maintainer는 별도로 downstream bundle generation, bundle validation, bundle smoke validation 자산을 운영할 수 있지만, 이는 downstream 프로젝트 사용자가 직접 수행하는 기본 경로가 아니라 maintainer-side release 준비 절차에 속한다. 최신 릴리스 기준의 canonical 범위는 `docs/version_support.md`를 따른다.
+source repo maintainer는 별도로 downstream bundle generation, bundle validation, bundle smoke validation 자산을 운영할 수 있지만, 이는 downstream 프로젝트 사용자가 직접 수행하는 기본 경로가 아니라 maintainer-side release 준비 절차에 속한다. 최신 릴리스 기준의 canonical 범위는 `bootstrap/docs/version_support.md`를 따른다.
 
 ## 흔한 오해
 
@@ -180,7 +180,7 @@ source repo maintainer는 별도로 downstream bundle generation, bundle validat
 
 ## 어디서 시작하면 되나
 
-- 처음 쓰는 사용자라면 `docs/quickstart.md`
+- 처음 쓰는 사용자라면 `bootstrap/docs/quickstart.md`
 - 새 프로젝트라면 `docs/project_overlay/first_success_guide.md`
 - 기존 프로젝트라면 `docs/project_overlay/adopt_dry_run.md`
 - bundle upgrade 절차를 먼저 보려면 `docs/project_overlay/downstream_harness_upgrade_guide.md`

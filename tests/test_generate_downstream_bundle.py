@@ -88,6 +88,8 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
                 "maintainer/docs/downstream_bundle_boundary.md",
             )
             self.assertIn("bootstrap/**/*", manifest["source_patterns"])
+            self.assertIn("bootstrap/docs/quickstart.md", manifest["source_patterns"])
+            self.assertIn("bootstrap/docs/version_support.md", manifest["source_patterns"])
             self.assertIn("docs/examples/**/*.md", manifest["source_patterns"])
             self.assertIn("docs/project_overlay/harness_doc_guard_workflow_template.yml", manifest["source_patterns"])
             self.assertIn("maintainer/docs/*", manifest["excluded_patterns"])

@@ -28,7 +28,7 @@
 - 현재 작업이 runtime contract, phase gate, entrypoint chain, downstream 사용 흐름을 바꿨다면 아래 인접 문서도 함께 교차 검토한다.
   - `docs/harness_guide.md`
   - `docs/downstream_harness_flow.md`
-  - `docs/quickstart.md`
+  - `bootstrap/docs/quickstart.md`
   - `docs/project_overlay/project_entrypoint_template.md`
 
 ## 공통 감사 운영 규칙

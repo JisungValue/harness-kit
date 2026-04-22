@@ -3,7 +3,7 @@
 ## 실행한 검증
 
 - 검증 항목: repo-local source-of-truth 원칙의 core 문서 정렬
-  - 대조한 입력물: `README.md`, `docs/harness_guide.md`, `docs/how_harness_kit_works.md`, `docs/harness/common/process_policy.md`, `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`, `maintainer/docs/audit_policy.md`
+  - 대조한 입력물: `README.md`, `docs/harness_guide.md`, `bootstrap/docs/how_harness_kit_works.md`, `docs/harness/common/process_policy.md`, `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`, `maintainer/docs/audit_policy.md`
   - 실행 방법 또는 확인 방식: source-of-truth 선언, 외부 관행 비우선, 추측 금지, project overlay / `docs/decisions/` / task artifact handoff 문구를 수동 교차 검토했다.
   - 결과: repo-local 근거 우선 원칙과 누락된 결정 handoff 경로가 core 운영 문서와 maintainer audit 기준에 함께 반영됐다.
   - 실패 또는 미실행 사유: 없음
@@ -40,7 +40,7 @@
 
 ## 결과 요약
 
-- 이번 판단의 repo-local 근거: `README.md`, `docs/harness_guide.md`, `docs/how_harness_kit_works.md`, process/artifact/common audit policy, maintainer audit policy, task templates, sample examples를 기준으로 정렬했다.
+- 이번 판단의 repo-local 근거: `README.md`, `docs/harness_guide.md`, `bootstrap/docs/how_harness_kit_works.md`, process/artifact/common audit policy, maintainer audit policy, task templates, sample examples를 기준으로 정렬했다.
 - repo에 없어 후속 문서화/승인 대상으로 남긴 결정: 특정 프로젝트에서 어떤 문서가 canonical source-of-truth인지의 세부 목록은 각 project overlay 또는 `docs/decisions/`에서 별도로 확정해야 한다.
 
 ## Phase 5에서 반영할 related decisions/

@@ -86,13 +86,13 @@ PROJECT_FACING_MD_GLOBS = [
     "docs/examples/**/*.md",
     "docs/harness/common/**/*.md",
     "docs/harness_guide.md",
-    "docs/how_harness_kit_works.md",
     "docs/phase_*/*.md",
     "docs/project_overlay/**/*.md",
-    "docs/quickstart.md",
     "docs/standard/coding_guidelines_core.md",
     "docs/templates/task/**/*.md",
-    "docs/version_support.md",
+    "bootstrap/docs/how_harness_kit_works.md",
+    "bootstrap/docs/quickstart.md",
+    "bootstrap/docs/version_support.md",
 ]
 
 PROJECT_FACING_LEAKAGE_EXCLUDES: set[str] = set()
@@ -179,7 +179,7 @@ def extract_codeblock_paths(lines: list[str], prefix: str | None = None) -> list
 def check_project_doc_path_consistency(errors: list[str]) -> None:
     readme = read_text("README.md")
     overlay_readme = read_text("docs/project_overlay/README.md")
-    quickstart = read_text("docs/quickstart.md")
+    quickstart = read_text("bootstrap/docs/quickstart.md")
     first_success = read_text("docs/project_overlay/first_success_guide.md")
     diagnostics = read_text("docs/project_overlay/local_diagnostics_and_dry_run.md")
     bundle_smoke_doc = read_text("maintainer/docs/downstream_bundle_smoke_validation.md")
@@ -232,10 +232,10 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
             errors.append(f"{rel_path}에 source repo에는 root `AGENTS.md`가 아직 없다는 설명이 없습니다.")
 
     if "예시 명령의 `vendor/harness-kit/` 부분을 모두 같은 실제 경로로" not in quickstart:
-        errors.append("docs/quickstart.md에 non-default vendoring command path localize 설명이 충분하지 않습니다.")
+        errors.append("bootstrap/docs/quickstart.md에 non-default vendoring command path localize 설명이 충분하지 않습니다.")
 
     prerequisite_surfaces = {
-        "docs/quickstart.md": quickstart,
+        "bootstrap/docs/quickstart.md": quickstart,
         "docs/project_overlay/first_success_guide.md": first_success,
         "docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
         "bootstrap/README.md": read_text("bootstrap/README.md"),
@@ -245,7 +245,7 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
             errors.append(f"{rel_path}에 Python 3 prerequisite 설명이 없습니다.")
 
     helper_command_surfaces = {
-        "docs/quickstart.md": quickstart,
+        "bootstrap/docs/quickstart.md": quickstart,
         "docs/project_overlay/first_success_guide.md": first_success,
         "docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
     }
@@ -254,7 +254,7 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
             errors.append(f"{rel_path}에 canonical first-success helper command가 반영되지 않았습니다.")
 
     incremental_surfaces = {
-        "docs/quickstart.md": quickstart,
+        "bootstrap/docs/quickstart.md": quickstart,
         "docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
         "docs/project_overlay/adopt_dry_run.md": read_text("docs/project_overlay/adopt_dry_run.md"),
         "docs/project_overlay/adopt_safe_write.md": read_text("docs/project_overlay/adopt_safe_write.md"),
@@ -267,7 +267,7 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
             errors.append(f"{rel_path}에 incremental consistency mode command 설명이 없습니다.")
 
     localized_vendoring_surfaces = {
-        "docs/quickstart.md": quickstart,
+        "bootstrap/docs/quickstart.md": quickstart,
         "docs/project_overlay/first_success_guide.md": first_success,
         "docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
     }
@@ -277,7 +277,7 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
 
     workflow_template_surfaces = {
         "README.md": readme,
-        "docs/quickstart.md": quickstart,
+        "bootstrap/docs/quickstart.md": quickstart,
         "docs/project_overlay/first_success_guide.md": first_success,
         "docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
     }
@@ -432,7 +432,7 @@ def check_repo_local_source_of_truth_docs(errors: list[str]) -> None:
     for rel_path in (
         "README.md",
         "docs/harness_guide.md",
-        "docs/how_harness_kit_works.md",
+        "bootstrap/docs/how_harness_kit_works.md",
         "docs/harness/common/process_policy.md",
     ):
         text = read_text(rel_path)
