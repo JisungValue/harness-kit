@@ -64,21 +64,21 @@ python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-proj
 
 - 현재 지원 범위: [`bootstrap/docs/version_support.md`](bootstrap/docs/version_support.md)
 - canonical 시작 문서: [`bootstrap/docs/quickstart.md`](bootstrap/docs/quickstart.md)
-- greenfield 상세 reference: [`docs/project_overlay/first_success_guide.md`](docs/project_overlay/first_success_guide.md)
-- diagnostics reference: [`docs/project_overlay/local_diagnostics_and_dry_run.md`](docs/project_overlay/local_diagnostics_and_dry_run.md)
+- greenfield 상세 reference: [`bootstrap/docs/project_overlay/first_success_guide.md`](bootstrap/docs/project_overlay/first_success_guide.md)
+- diagnostics reference: [`bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md`](bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md)
 
 ### 기존 프로젝트에 도입
 
 - 아직 `docs/project_entrypoint.md`나 vendored harness 기준 문서가 없거나, legacy `docs/harness_guide.md` 상태라면 이 경로부터 시작한다.
-- read-only 현재 상태 파악: [`docs/project_overlay/adopt_dry_run.md`](docs/project_overlay/adopt_dry_run.md)
-- diagnostics reference: [`docs/project_overlay/local_diagnostics_and_dry_run.md`](docs/project_overlay/local_diagnostics_and_dry_run.md)
+- read-only 현재 상태 파악: [`bootstrap/docs/project_overlay/adopt_dry_run.md`](bootstrap/docs/project_overlay/adopt_dry_run.md)
+- diagnostics reference: [`bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md`](bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md)
 
 ### 이미 도입된 프로젝트 업그레이드
 
 - 이미 `docs/project_entrypoint.md`와 vendored harness가 있고, 새 bundle 버전만 반영하려면 이 경로부터 시작한다.
-- upgrade 전체 흐름: [`docs/project_overlay/downstream_harness_upgrade_guide.md`](docs/project_overlay/downstream_harness_upgrade_guide.md)
-- diff review checklist: [`docs/project_overlay/downstream_overlay_diff_review_checklist.md`](docs/project_overlay/downstream_overlay_diff_review_checklist.md)
-- impact 분류: [`docs/project_overlay/harness_upgrade_impact_policy.md`](docs/project_overlay/harness_upgrade_impact_policy.md)
+- upgrade 전체 흐름: [`bootstrap/docs/project_overlay/downstream_harness_upgrade_guide.md`](bootstrap/docs/project_overlay/downstream_harness_upgrade_guide.md)
+- diff review checklist: [`bootstrap/docs/project_overlay/downstream_overlay_diff_review_checklist.md`](bootstrap/docs/project_overlay/downstream_overlay_diff_review_checklist.md)
+- impact 분류: [`bootstrap/docs/project_overlay/harness_upgrade_impact_policy.md`](bootstrap/docs/project_overlay/harness_upgrade_impact_policy.md)
 
 ### 개념 이해
 
@@ -102,6 +102,8 @@ python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-proj
   - 기본 시작 경로가 아니라 필요할 때 보는 advanced/reference 예시 task들을 둔다.
 - `bootstrap/`
   - 프로젝트 스캐폴딩 또는 수동 복사에 쓰는 bootstrap 자산을 둔다.
+- `bootstrap/docs/project_overlay/`
+  - bootstrap/adoption 가이드와 project overlay policy 문서를 둔다.
 - [`scripts/bootstrap_init.py`](scripts/bootstrap_init.py)
   - 새 프로젝트 또는 거의 빈 디렉터리에 최소 project overlay 문서 세트와 runtime instruction entrypoint 파일을 deterministic하게 생성하는 init CLI다. 현재 MVP는 관리 대상 파일 경로만 검사하고 생성한다.
 - [`scripts/validate_overlay_decisions.py`](scripts/validate_overlay_decisions.py)
@@ -117,16 +119,16 @@ python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-proj
 - [`maintainer/scripts/validate_downstream_bundle.py`](maintainer/scripts/validate_downstream_bundle.py)
   - generated downstream bundle이 boundary 문서, manifest, 실제 copied file 내용과 일치하는지 검사하는 maintainer용 bundle validation command다.
 - `docs/project_overlay/`
-  - 프로젝트별로 추가 작성해야 하는 문서와 템플릿을 둔다.
-- [`docs/project_overlay/first_success_guide.md`](docs/project_overlay/first_success_guide.md)
+  - bootstrap init이 복사하는 project overlay 템플릿과 workflow template을 둔다.
+- [`bootstrap/docs/project_overlay/first_success_guide.md`](bootstrap/docs/project_overlay/first_success_guide.md)
   - 새 프로젝트 또는 거의 빈 프로젝트에서 최소 문서 세트와 첫 성공 상태를 빠르게 재현하는 가이드다.
-- [`docs/project_overlay/local_diagnostics_and_dry_run.md`](docs/project_overlay/local_diagnostics_and_dry_run.md)
+- [`bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md`](bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md)
   - init, validator, adopt dry-run을 로컬에서 어떤 순서로 실행하고 출력을 어떻게 해석할지 정리한 진단 가이드다.
-- [`docs/project_overlay/harness_upgrade_impact_policy.md`](docs/project_overlay/harness_upgrade_impact_policy.md)
+- [`bootstrap/docs/project_overlay/harness_upgrade_impact_policy.md`](bootstrap/docs/project_overlay/harness_upgrade_impact_policy.md)
   - downstream bundle 변경을 consumer 관점의 impact category로 분류해 adoption timing, manual intervention 필요성, breaking 가능성을 판단하는 정책 문서다.
-- [`docs/project_overlay/downstream_harness_upgrade_guide.md`](docs/project_overlay/downstream_harness_upgrade_guide.md)
+- [`bootstrap/docs/project_overlay/downstream_harness_upgrade_guide.md`](bootstrap/docs/project_overlay/downstream_harness_upgrade_guide.md)
   - downstream 프로젝트가 새 bundle 변경을 어떤 순서와 기준으로 검토하고 반영할지 설명하는 consumer-facing upgrade guide다.
-- [`docs/project_overlay/downstream_overlay_diff_review_checklist.md`](docs/project_overlay/downstream_overlay_diff_review_checklist.md)
+- [`bootstrap/docs/project_overlay/downstream_overlay_diff_review_checklist.md`](bootstrap/docs/project_overlay/downstream_overlay_diff_review_checklist.md)
   - downstream 프로젝트가 bundle upgrade diff를 사람 기준으로 검토할 때 확인할 항목을 정리한 checklist다.
 - [`bootstrap/docs/quickstart.md`](bootstrap/docs/quickstart.md)
   - 현재 지원 범위 기준으로 greenfield/brownfield 시작 절차를 한 번에 보여 주는 상위 입문 문서다.
@@ -180,7 +182,8 @@ python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-proj
 - 사용 프로젝트용 문서
   - 목적: `harness-kit`를 가져다 쓰는 프로젝트의 task 수행, phase 진행, project overlay 작성
   - 주 문서: [`docs/harness_guide.md`](docs/harness_guide.md), `docs/harness/common/*`, `docs/phase_*`
-  - `docs/project_overlay/*`는 downstream 프로젝트 문서를 시작할 때 복사하거나 참조하는 template/guide다.
+- `bootstrap/docs/project_overlay/*`는 source repo 기준 bootstrap/adoption guide와 project overlay policy 정본이다.
+- `docs/project_overlay/*`는 downstream 프로젝트 문서를 시작할 때 복사하는 template source다.
 - harness-kit maintainer용 문서
   - 목적: `harness-kit` core 규칙, template, example, 문서 구조 자체를 수정할 때의 감사와 기록
   - 주 문서: [`maintainer/docs/audit_policy.md`](maintainer/docs/audit_policy.md), [`maintainer/docs/drift_response_guide.md`](maintainer/docs/drift_response_guide.md), [`maintainer/docs/release_process.md`](maintainer/docs/release_process.md), [`maintainer/docs/downstream_bundle_smoke_validation.md`](maintainer/docs/downstream_bundle_smoke_validation.md), [`harness.log`](harness.log)
@@ -199,7 +202,7 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 1. 먼저 [`bootstrap/docs/quickstart.md`](bootstrap/docs/quickstart.md)부터 읽는다.
 2. `harness-kit`를 새 프로젝트로 가져온다.
 3. 새 프로젝트면 `quickstart`의 greenfield 경로를, 기존 프로젝트 첫 도입이면 brownfield 경로를, 이미 도입된 프로젝트 업그레이드면 upgrade 경로를 먼저 따른다.
-4. 상세 설명이 더 필요할 때만 greenfield는 [`docs/project_overlay/first_success_guide.md`](docs/project_overlay/first_success_guide.md)를, 기존 프로젝트 진단은 [`docs/project_overlay/local_diagnostics_and_dry_run.md`](docs/project_overlay/local_diagnostics_and_dry_run.md)를 reference로 본다.
+4. 상세 설명이 더 필요할 때만 greenfield는 [`bootstrap/docs/project_overlay/first_success_guide.md`](bootstrap/docs/project_overlay/first_success_guide.md)를, 기존 프로젝트 진단은 [`bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md`](bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md)를 reference로 본다.
 5. init CLI 또는 `docs/project_overlay/` 수동 복사로 최소 문서 세트를 만든다.
 6. 생성된 `docs/project_entrypoint.md`, `docs/decisions/README.md`, `docs/standard/coding_conventions_project.md`를 읽고 현재 프로젝트에서 먼저 확정해야 할 구조/정책/예외 결정이 있는지 확인한다.
 7. `vendor/harness-kit/`가 아닌 경로에 kit를 둘 예정이면 bootstrap 시점부터 `--vendor-path <actual-path>`를 사용해 generated vendored reference를 바로 현지화한다. 그 옵션 없이 생성했다면 이후 `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 경로를 실제 배치 경로에 맞게 수동 현지화한다.
@@ -211,7 +214,7 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 13. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
 14. 실제 task 몇 개를 돌린 뒤 project overlay와 decisions index를 함께 보강한다.
 
-기존 프로젝트나 부분 도입 상태를 먼저 읽어야 하면 [`docs/project_overlay/adopt_dry_run.md`](docs/project_overlay/adopt_dry_run.md)의 read-only adopt 흐름부터 시작한다.
+기존 프로젝트나 부분 도입 상태를 먼저 읽어야 하면 [`bootstrap/docs/project_overlay/adopt_dry_run.md`](bootstrap/docs/project_overlay/adopt_dry_run.md)의 read-only adopt 흐름부터 시작한다.
 
 ## 최소 프로젝트 문서 세트
 
@@ -233,7 +236,7 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 ## 권장 읽기 순서
 
 - 이 저장소 source repo를 읽는 중이라면 먼저 [`bootstrap/docs/quickstart.md`](bootstrap/docs/quickstart.md)를 본다.
-- 그다음 greenfield면 [`docs/project_overlay/first_success_guide.md`](docs/project_overlay/first_success_guide.md), brownfield first adoption이면 [`docs/project_overlay/adopt_dry_run.md`](docs/project_overlay/adopt_dry_run.md), 이미 도입된 downstream upgrade면 [`docs/project_overlay/downstream_harness_upgrade_guide.md`](docs/project_overlay/downstream_harness_upgrade_guide.md)를 본다.
+- 그다음 greenfield면 [`bootstrap/docs/project_overlay/first_success_guide.md`](bootstrap/docs/project_overlay/first_success_guide.md), brownfield first adoption이면 [`bootstrap/docs/project_overlay/adopt_dry_run.md`](bootstrap/docs/project_overlay/adopt_dry_run.md), 이미 도입된 downstream upgrade면 [`bootstrap/docs/project_overlay/downstream_harness_upgrade_guide.md`](bootstrap/docs/project_overlay/downstream_harness_upgrade_guide.md)를 본다.
 - 적용이 끝나면 첫 task 전에 [`docs/downstream_harness_flow.md`](docs/downstream_harness_flow.md)를 읽어 Phase 운영 규칙으로 넘어간다.
 - source repo에는 root `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`가 아직 없고, 이 파일들은 downstream 프로젝트를 bootstrap한 뒤에 생긴다.
 - 아래 순서는 downstream 프로젝트를 bootstrap한 뒤 생성되는 문서 기준이다.

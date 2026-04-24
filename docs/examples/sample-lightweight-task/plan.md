@@ -2,7 +2,7 @@
 
 ## 변경 대상 파일 또는 모듈
 
-- `docs/project_overlay/README.md`
+- `bootstrap/docs/project_overlay/README.md`
 - `docs/examples/sample-lightweight-task/implementation_notes.md`
 - `docs/examples/sample-lightweight-task/validation_report.md`
 

@@ -6,7 +6,7 @@
 
 ## 요청사항
 
-- `docs/project_overlay/README.md`의 문장 하나를 더 명확한 표현으로 정리한다.
+- `bootstrap/docs/project_overlay/README.md`의 문장 하나를 더 명확한 표현으로 정리한다.
 - 경량 운영 예외를 적용한 판단 근거와 유지한 절차를 작업 산출물에 남긴다.
 
 ## 비범위

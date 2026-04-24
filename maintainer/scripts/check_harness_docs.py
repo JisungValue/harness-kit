@@ -178,10 +178,10 @@ def extract_codeblock_paths(lines: list[str], prefix: str | None = None) -> list
 
 def check_project_doc_path_consistency(errors: list[str]) -> None:
     readme = read_text("README.md")
-    overlay_readme = read_text("docs/project_overlay/README.md")
+    overlay_readme = read_text("bootstrap/docs/project_overlay/README.md")
     quickstart = read_text("bootstrap/docs/quickstart.md")
-    first_success = read_text("docs/project_overlay/first_success_guide.md")
-    diagnostics = read_text("docs/project_overlay/local_diagnostics_and_dry_run.md")
+    first_success = read_text("bootstrap/docs/project_overlay/first_success_guide.md")
+    diagnostics = read_text("bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md")
     bundle_smoke_doc = read_text("maintainer/docs/downstream_bundle_smoke_validation.md")
     bundle_boundary = read_text("maintainer/docs/downstream_bundle_boundary.md")
     project_guide_template = read_text("docs/project_overlay/project_entrypoint_template.md")
@@ -224,7 +224,7 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
 
     for rel_path, text in {
         "README.md": readme,
-        "docs/project_overlay/README.md": overlay_readme,
+        "bootstrap/docs/project_overlay/README.md": overlay_readme,
     }.items():
         if "source repo" not in text or "bootstrap한 뒤" not in text:
             errors.append(f"{rel_path}에 source repo와 downstream bootstrap 이후 문맥 구분 설명이 없습니다.")
@@ -236,8 +236,8 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
 
     prerequisite_surfaces = {
         "bootstrap/docs/quickstart.md": quickstart,
-        "docs/project_overlay/first_success_guide.md": first_success,
-        "docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
+        "bootstrap/docs/project_overlay/first_success_guide.md": first_success,
+        "bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
         "bootstrap/README.md": read_text("bootstrap/README.md"),
     }
     for rel_path, text in prerequisite_surfaces.items():
@@ -246,8 +246,8 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
 
     helper_command_surfaces = {
         "bootstrap/docs/quickstart.md": quickstart,
-        "docs/project_overlay/first_success_guide.md": first_success,
-        "docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
+        "bootstrap/docs/project_overlay/first_success_guide.md": first_success,
+        "bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
     }
     for rel_path, text in helper_command_surfaces.items():
         if "scripts/check_first_success_docs.py" not in text:
@@ -255,11 +255,11 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
 
     incremental_surfaces = {
         "bootstrap/docs/quickstart.md": quickstart,
-        "docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
-        "docs/project_overlay/adopt_dry_run.md": read_text("docs/project_overlay/adopt_dry_run.md"),
-        "docs/project_overlay/adopt_safe_write.md": read_text("docs/project_overlay/adopt_safe_write.md"),
-        "docs/project_overlay/cross_document_consistency_checker.md": read_text(
-            "docs/project_overlay/cross_document_consistency_checker.md"
+        "bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
+        "bootstrap/docs/project_overlay/adopt_dry_run.md": read_text("bootstrap/docs/project_overlay/adopt_dry_run.md"),
+        "bootstrap/docs/project_overlay/adopt_safe_write.md": read_text("bootstrap/docs/project_overlay/adopt_safe_write.md"),
+        "bootstrap/docs/project_overlay/cross_document_consistency_checker.md": read_text(
+            "bootstrap/docs/project_overlay/cross_document_consistency_checker.md"
         ),
     }
     for rel_path, text in incremental_surfaces.items():
@@ -268,8 +268,8 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
 
     localized_vendoring_surfaces = {
         "bootstrap/docs/quickstart.md": quickstart,
-        "docs/project_overlay/first_success_guide.md": first_success,
-        "docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
+        "bootstrap/docs/project_overlay/first_success_guide.md": first_success,
+        "bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
     }
     for rel_path, text in localized_vendoring_surfaces.items():
         if "--vendor-path" not in text:
@@ -278,8 +278,8 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
     workflow_template_surfaces = {
         "README.md": readme,
         "bootstrap/docs/quickstart.md": quickstart,
-        "docs/project_overlay/first_success_guide.md": first_success,
-        "docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
+        "bootstrap/docs/project_overlay/first_success_guide.md": first_success,
+        "bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
     }
     for rel_path, text in workflow_template_surfaces.items():
         for token in ("docs/project_overlay/harness_doc_guard_workflow_template.yml", "@<pin-tag-or-sha>"):
@@ -305,7 +305,7 @@ def check_entrypoint_role_labels(errors: list[str]) -> None:
         if first_line != expected_title:
             errors.append(f"{rel_path}의 제목은 `{expected_title}`여야 합니다.")
 
-    overlay_readme = read_text("docs/project_overlay/README.md")
+    overlay_readme = read_text("bootstrap/docs/project_overlay/README.md")
     local_entrypoint_lines = extract_h2_section(overlay_readme, "권장 로컬 `docs/project_entrypoint.md`")
     if "# Project Harness Entry Point" not in "\n".join(local_entrypoint_lines):
         errors.append("project_overlay/README의 로컬 entrypoint 예시 제목이 최신 구조와 다릅니다.")
@@ -398,7 +398,7 @@ def check_decisions_templates(errors: list[str]) -> None:
 
 
 def check_validator_explainer_docs(errors: list[str]) -> None:
-    unresolved = read_text("docs/project_overlay/unresolved_decision_validator.md")
+    unresolved = read_text("bootstrap/docs/project_overlay/unresolved_decision_validator.md")
     for phrase in (
         "docs/decisions/README.md",
         "Resolve these required canonical fields first:",
@@ -408,7 +408,7 @@ def check_validator_explainer_docs(errors: list[str]) -> None:
         if phrase not in unresolved:
             errors.append(f"unresolved_decision_validator에 `{phrase}` 설명이 없습니다.")
 
-    consistency = read_text("docs/project_overlay/cross_document_consistency_checker.md")
+    consistency = read_text("bootstrap/docs/project_overlay/cross_document_consistency_checker.md")
     for phrase in (
         "필수 섹션",
         "DEC-###-slug.md",

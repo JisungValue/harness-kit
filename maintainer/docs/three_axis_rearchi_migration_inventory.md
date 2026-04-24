@@ -120,23 +120,23 @@
 
 현재 확인된 파일:
 
-- `docs/project_overlay/README.md`
-- `docs/project_overlay/local_diagnostics_and_dry_run.md`
-- `docs/project_overlay/first_success_guide.md`
-- `docs/project_overlay/downstream_overlay_diff_review_checklist.md`
-- `docs/project_overlay/downstream_harness_upgrade_guide.md`
-- `docs/project_overlay/adopt_dry_run.md`
-- `docs/project_overlay/adopt_safe_write.md`
-- `docs/project_overlay/cross_document_consistency_checker.md`
+- `bootstrap/docs/project_overlay/README.md`
+- `bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md`
+- `bootstrap/docs/project_overlay/first_success_guide.md`
+- `bootstrap/docs/project_overlay/downstream_overlay_diff_review_checklist.md`
+- `bootstrap/docs/project_overlay/downstream_harness_upgrade_guide.md`
+- `bootstrap/docs/project_overlay/adopt_dry_run.md`
+- `bootstrap/docs/project_overlay/adopt_safe_write.md`
+- `bootstrap/docs/project_overlay/cross_document_consistency_checker.md`
+- `bootstrap/docs/project_overlay/unresolved_decision_validator.md`
+- `bootstrap/docs/project_overlay/overlay_completion_checklist.md`
+- `bootstrap/docs/project_overlay/harness_upgrade_impact_policy.md`
 - `docs/project_overlay/decision_record_template.md`
 - `docs/project_overlay/decisions_index_template.md`
-- `docs/project_overlay/unresolved_decision_validator.md`
 - `docs/project_overlay/project_entrypoint_template.md`
-- `docs/project_overlay/overlay_completion_checklist.md`
 - `docs/project_overlay/claude_entrypoint_template.md`
 - `docs/project_overlay/agent_entrypoint_template.md`
 - `docs/project_overlay/gemini_entrypoint_template.md`
-- `docs/project_overlay/harness_upgrade_impact_policy.md`
 - `docs/project_overlay/implementation_order_template.md`
 - `docs/project_overlay/architecture_template.md`
 - `docs/project_overlay/quality_gate_profile_template.md`

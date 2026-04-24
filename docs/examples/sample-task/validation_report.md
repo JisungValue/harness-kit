@@ -3,7 +3,7 @@
 ## 실행한 검증
 
 - 검증 항목: 공통 guide 참조 구조 확인
-  - 대조한 입력물: `docs/project_entrypoint.md`, `docs/project_overlay/README.md`
+- 대조한 입력물: `docs/project_entrypoint.md`, `bootstrap/docs/project_overlay/README.md`
   - 실행 방법 또는 확인 방식: 문서 경로와 역할을 수동 검토
   - 결과: 공통 guide와 project overlay 문서가 분리되어 있음
   - 실패 또는 미실행 사유: 없음
@@ -11,7 +11,7 @@
   - 잔여 리스크: 없음
 
 - 검증 항목: overlay 최소 문서 세트 확인
-  - 대조한 입력물: `README.md`, `docs/project_overlay/README.md`, `docs/project_overlay/project_entrypoint_template.md`
+- 대조한 입력물: `README.md`, `bootstrap/docs/project_overlay/README.md`, `docs/project_overlay/project_entrypoint_template.md`
   - 실행 방법 또는 확인 방식: `docs/project_entrypoint.md`, `docs/standard/architecture.md`, `docs/standard/implementation_order.md`, `docs/standard/coding_conventions_project.md`, `docs/standard/quality_gate_profile.md`, `docs/standard/testing_profile.md`, `docs/standard/commit_rule.md` 존재 여부 확인
   - 결과: 최소 세트 정의 완료
   - 실패 또는 미실행 사유: 없음
@@ -81,7 +81,7 @@
 ## 결과 요약
 
 - 새 프로젝트가 core와 overlay를 분리해 시작할 수 있는 최소 구조가 준비되었다.
-- 이번 판단의 repo-local 근거: `README.md`, `docs/project_overlay/README.md`, `docs/harness/common/*`, sample task 문서를 교차 기준으로 사용했다.
+- 이번 판단의 repo-local 근거: `README.md`, `bootstrap/docs/project_overlay/README.md`, `docs/harness/common/*`, sample task 문서를 교차 기준으로 사용했다.
 - repo에 없어 후속 문서화/승인 대상으로 남긴 결정: 실제 프로젝트 품질 게이트 명령, 실제 architecture 세부 결정, 실제 language-specific convention은 도입 프로젝트 overlay에서 확정해야 한다.
 
 ## Phase 5에서 반영할 related decisions/

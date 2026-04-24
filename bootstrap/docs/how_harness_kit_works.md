@@ -80,7 +80,7 @@
 ### Upgrade Impact Classification
 
 - downstream bundle 변경은 모두 같은 위험도로 반영하지 않는다.
-- `docs/project_overlay/harness_upgrade_impact_policy.md`는 bundle 경계 안의 변경을 C0~C4 impact category로 분류한다.
+- `bootstrap/docs/project_overlay/harness_upgrade_impact_policy.md`는 bundle 경계 안의 변경을 C0~C4 impact category로 분류한다.
 - 이 분류는 adoption timing, manual review 필요성, breaking 가능성을 소비자 관점에서 해석하기 위한 기준이다.
 
 ### Repository 와 Downstream Bundle
@@ -181,9 +181,9 @@ source repo maintainer는 별도로 downstream bundle generation, bundle validat
 ## 어디서 시작하면 되나
 
 - 처음 쓰는 사용자라면 `bootstrap/docs/quickstart.md`
-- 새 프로젝트라면 `docs/project_overlay/first_success_guide.md`
-- 기존 프로젝트라면 `docs/project_overlay/adopt_dry_run.md`
-- bundle upgrade 절차를 먼저 보려면 `docs/project_overlay/downstream_harness_upgrade_guide.md`
-- 사람 기준 diff review 항목을 보려면 `docs/project_overlay/downstream_overlay_diff_review_checklist.md`
-- upgrade 위험도를 먼저 판단하려면 `docs/project_overlay/harness_upgrade_impact_policy.md`
-- 로컬 진단이 필요하면 `docs/project_overlay/local_diagnostics_and_dry_run.md`
+- 새 프로젝트라면 `bootstrap/docs/project_overlay/first_success_guide.md`
+- 기존 프로젝트라면 `bootstrap/docs/project_overlay/adopt_dry_run.md`
+- bundle upgrade 절차를 먼저 보려면 `bootstrap/docs/project_overlay/downstream_harness_upgrade_guide.md`
+- 사람 기준 diff review 항목을 보려면 `bootstrap/docs/project_overlay/downstream_overlay_diff_review_checklist.md`
+- upgrade 위험도를 먼저 판단하려면 `bootstrap/docs/project_overlay/harness_upgrade_impact_policy.md`
+- 로컬 진단이 필요하면 `bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md`

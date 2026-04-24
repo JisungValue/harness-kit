@@ -50,5 +50,5 @@
 ## 읽는 방법
 
 - `README.md`에서 현재 지원 범위가 궁금하면 이 문서를 본다.
-- `bootstrap/docs/quickstart.md`, `bootstrap/docs/how_harness_kit_works.md`, `docs/project_overlay/local_diagnostics_and_dry_run.md`는 버전 고정 설명 대신 이 문서를 기준으로 현재 범위를 해석한다.
+- `bootstrap/docs/quickstart.md`, `bootstrap/docs/how_harness_kit_works.md`, `bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md`는 버전 고정 설명 대신 이 문서를 기준으로 현재 범위를 해석한다.
 - maintainer release note와 release gate도 이 문서의 `현재 지원 범위`, `현재 아직 지원하지 않는 범위`와 어긋나지 않아야 한다.

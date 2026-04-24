@@ -5,7 +5,7 @@
 ## 문서 역할
 
 - 이 문서는 canonical happy path를 고르는 빠른 시작 문서다.
-- greenfield 상세 설명이 더 필요할 때만 `docs/project_overlay/first_success_guide.md`를, 실패 원인과 출력 해석이 필요할 때만 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 본다.
+- greenfield 상세 설명이 더 필요할 때만 `bootstrap/docs/project_overlay/first_success_guide.md`를, 실패 원인과 출력 해석이 필요할 때만 `bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md`를 본다.
 - downstream 구조와 Phase 흐름 전체 설명은 `docs/downstream_harness_flow.md`를 본다.
 - 현재 지원 범위와 최신 릴리스는 `bootstrap/docs/version_support.md`를 기준으로 본다.
 - 새 서브에이전트와 새 사용자는 이 문서를 첫 문서로 본다. 다른 onboarding 문서는 이 문서에서 경로를 고른 뒤 필요할 때만 이어서 읽는다.
@@ -78,14 +78,14 @@ python3 vendor/harness-kit/scripts/validate_phase_gate.py docs/task/<task_id> --
 
 상세 설명이 더 필요하면 아래 reference로 이어서 읽는다.
 
-- greenfield 상세판: `docs/project_overlay/first_success_guide.md`
-- 로컬 진단/출력 해석: `docs/project_overlay/local_diagnostics_and_dry_run.md`
+- greenfield 상세판: `bootstrap/docs/project_overlay/first_success_guide.md`
+- 로컬 진단/출력 해석: `bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md`
 
 ### 기존 프로젝트 첫 도입
 
 - 아직 `docs/project_entrypoint.md`가 없거나, legacy `docs/harness_guide.md`만 남아 있거나, 최소 overlay 문서 세트가 아직 맞춰지지 않았다면 이 경로를 따른다.
 
-1. `docs/project_overlay/adopt_dry_run.md`를 본다.
+1. `bootstrap/docs/project_overlay/adopt_dry_run.md`를 본다.
 2. 아래 명령을 실행한다.
 
 - 아래 명령도 downstream 프로젝트 루트에서 실행한다.
@@ -130,12 +130,12 @@ python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness f
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ```
 
-출력 해석과 로컬 진단 순서가 더 필요하면 `docs/project_overlay/local_diagnostics_and_dry_run.md`를 reference로 본다.
+출력 해석과 로컬 진단 순서가 더 필요하면 `bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md`를 reference로 본다.
 
 ### 이미 도입된 downstream 업그레이드
 
 - 이미 `docs/project_entrypoint.md`와 vendored harness가 있고, 새 bundle 버전만 반영하려면 adoption이 아니라 upgrade 경로를 따른다.
-- 이 경우에는 `docs/project_overlay/downstream_harness_upgrade_guide.md`를 먼저 보고, 영향도를 분류하려면 `docs/project_overlay/harness_upgrade_impact_policy.md`를, 사람 기준 diff review 항목이 필요하면 `docs/project_overlay/downstream_overlay_diff_review_checklist.md`를 함께 본다.
+- 이 경우에는 `bootstrap/docs/project_overlay/downstream_harness_upgrade_guide.md`를 먼저 보고, 영향도를 분류하려면 `bootstrap/docs/project_overlay/harness_upgrade_impact_policy.md`를, 사람 기준 diff review 항목이 필요하면 `bootstrap/docs/project_overlay/downstream_overlay_diff_review_checklist.md`를 함께 본다.
 
 ## 핵심 도구 역할
 
@@ -184,9 +184,9 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ## 다음에 읽을 문서
 
 - 전체 동작 설명: `bootstrap/docs/how_harness_kit_works.md`
-- greenfield 상세 reference: `docs/project_overlay/first_success_guide.md`
-- diagnostics reference: `docs/project_overlay/local_diagnostics_and_dry_run.md`
-- 기존 프로젝트 dry-run: `docs/project_overlay/adopt_dry_run.md`
-- 기존 프로젝트 bundle upgrade 절차: `docs/project_overlay/downstream_harness_upgrade_guide.md`
-- 기존 프로젝트 diff review checklist: `docs/project_overlay/downstream_overlay_diff_review_checklist.md`
-- 기존 프로젝트 upgrade impact 분류: `docs/project_overlay/harness_upgrade_impact_policy.md`
+- greenfield 상세 reference: `bootstrap/docs/project_overlay/first_success_guide.md`
+- diagnostics reference: `bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md`
+- 기존 프로젝트 dry-run: `bootstrap/docs/project_overlay/adopt_dry_run.md`
+- 기존 프로젝트 bundle upgrade 절차: `bootstrap/docs/project_overlay/downstream_harness_upgrade_guide.md`
+- 기존 프로젝트 diff review checklist: `bootstrap/docs/project_overlay/downstream_overlay_diff_review_checklist.md`
+- 기존 프로젝트 upgrade impact 분류: `bootstrap/docs/project_overlay/harness_upgrade_impact_policy.md`

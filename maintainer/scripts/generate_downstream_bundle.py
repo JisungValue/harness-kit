@@ -127,7 +127,10 @@ def matches_any_pattern(relative_path: Path, patterns: list[str]) -> bool:
 
 
 def bundle_relative_path_for_source(relative_path: Path) -> Path:
-    return BUNDLE_RELATIVE_PATH_REWRITES.get(relative_path.as_posix(), relative_path)
+    relative_posix = relative_path.as_posix()
+    if relative_posix.startswith("bootstrap/docs/project_overlay/"):
+        return Path("docs/project_overlay") / relative_path.name
+    return BUNDLE_RELATIVE_PATH_REWRITES.get(relative_posix, relative_path)
 
 
 def build_bundle_files() -> list[BundleFile]:

@@ -108,6 +108,6 @@
 
 ## 관련 문서
 
-- `docs/project_overlay/overlay_completion_checklist.md`
-- `docs/project_overlay/unresolved_decision_validator.md`
-- `docs/project_overlay/cross_document_consistency_checker.md`
+- `bootstrap/docs/project_overlay/overlay_completion_checklist.md`
+- `bootstrap/docs/project_overlay/unresolved_decision_validator.md`
+- `bootstrap/docs/project_overlay/cross_document_consistency_checker.md`

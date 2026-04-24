@@ -6,10 +6,10 @@
 
 - `bootstrap/`은 maintainer 전용 문서가 아니다.
 - 여기 있는 파일은 downstream 프로젝트로 복사될 수 있는 project-facing 시작 자산이다.
-- `bootstrap/`은 프로젝트 문서 골격 자체를 대체하지 않고, `docs/project_overlay/` 문서 안에 언어별 세부 내용을 채워 넣을 때만 사용한다.
+- `bootstrap/`은 프로젝트 문서 골격 자체를 대체하지 않고, `docs/project_overlay/` 템플릿 안에 언어별 세부 내용을 채워 넣을 때만 사용한다.
 - 복사 후에는 프로젝트 저장소에서 팀 규칙에 맞게 수정한다.
 - bootstrap 자산의 정본은 이 저장소에 유지한다.
-- 새 프로젝트 first success 경로는 `docs/project_overlay/first_success_guide.md`를 기준으로 본다.
+- 새 프로젝트 first success 경로는 `bootstrap/docs/project_overlay/first_success_guide.md`를 기준으로 본다.
 
 ## 현재 자산
 

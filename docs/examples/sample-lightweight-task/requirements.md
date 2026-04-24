@@ -12,7 +12,7 @@
 
 ## 입력/출력
 
-- 입력: 기존 `docs/project_overlay/README.md` 문장
+- 입력: 기존 `bootstrap/docs/project_overlay/README.md` 문장
 - 출력: 명확해진 문장과 경량 검토 기록
 
 ## 제약사항

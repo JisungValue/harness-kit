@@ -7,7 +7,7 @@
 ## 검증 대상
 
 - `scripts/bootstrap_init.py`
-- `docs/project_overlay/first_success_guide.md`
+- `bootstrap/docs/project_overlay/first_success_guide.md`
 - `docs/project_overlay/*` template
 
 ## 검증 시나리오
@@ -113,7 +113,7 @@ docs/
 ## 실행한 검증
 
 - 검증 항목: init CLI 경로가 first success 문서 세트를 생성하는지 확인
-  - 대조한 입력물: `scripts/bootstrap_init.py`, `docs/project_overlay/first_success_guide.md`
+- 대조한 입력물: `scripts/bootstrap_init.py`, `bootstrap/docs/project_overlay/first_success_guide.md`
   - 실행 방법 또는 확인 방식: `python3 -m unittest tests.test_bootstrap_e2e`의 default vendoring CLI 시나리오 실행
   - 결과: init CLI가 최소 문서 세트, decisions index, runtime instruction entrypoint 세트를 만들고 첫 검증 명령이 성공했으며, `docs/project_entrypoint.md`의 vendored guide 경로, `docs/decisions/README.md`의 numbering/index 규칙, `AGENTS.md -> docs/project_entrypoint.md`, `CLAUDE.md`/`GEMINI.md` -> `AGENTS.md` 연결, `coding_conventions_project.md`의 언어/bootstrap 기준 문서도 함께 확인됐다
   - 실패 또는 미실행 사유: 없음
@@ -121,7 +121,7 @@ docs/
   - 잔여 리스크: generated 문서의 vendored 경로 현지화는 소비자 프로젝트에서 추가로 확인해야 한다
 
 - 검증 항목: init CLI가 non-default vendoring 경로를 bootstrap 시점에 바로 현지화하는지 확인
-  - 대조한 입력물: `scripts/bootstrap_init.py`, `docs/project_overlay/first_success_guide.md`
+- 대조한 입력물: `scripts/bootstrap_init.py`, `bootstrap/docs/project_overlay/first_success_guide.md`
   - 실행 방법 또는 확인 방식: `python3 -m unittest tests.test_bootstrap_e2e`의 localized vendoring CLI 시나리오 실행
   - 결과: `--vendor-path third_party/harness-kit`로 생성한 `docs/project_entrypoint.md`, `coding_conventions_project.md`가 같은 vendored 경로를 가리켰고, first-success helper와 consistency validator도 추가 수동 수정 없이 통과했다
   - 실패 또는 미실행 사유: 없음
@@ -129,7 +129,7 @@ docs/
   - 잔여 리스크: vendored 경로를 bootstrap 이후에 다시 옮기면 path update는 별도 수동 작업이 필요하다
 
 - 검증 항목: 수동 복사 경로가 같은 최소 문서 세트로 수렴하는지 확인
-  - 대조한 입력물: `docs/project_overlay/*`, `docs/project_overlay/first_success_guide.md`
+- 대조한 입력물: `docs/project_overlay/*`, `bootstrap/docs/project_overlay/first_success_guide.md`
   - 실행 방법 또는 확인 방식: `python3 -m unittest tests.test_bootstrap_e2e`의 수동 복사 시나리오에서 template 복사 후 non-default vendored path를 `docs/project_entrypoint.md`에 반영하고, `bootstrap/language_conventions/python_coding_conventions_template.md` 발췌 내용을 `coding_conventions_project.md`에 수동 병합해 검증
   - 결과: 수동 경로도 최소 문서 세트와 runtime instruction entrypoint 세트, 첫 검증 명령 결과, vendored path 현지화, entrypoint 연결, 선택 언어와 bootstrap 기준 문서, 핵심 규칙 범주 식별 신호가 함께 확인됐다
   - 실패 또는 미실행 사유: 없음
@@ -137,7 +137,7 @@ docs/
   - 잔여 리스크: 실제 프로젝트 언어에 맞는 convention 현지화는 여전히 수동 결정이 필요하다
 
 - 검증 항목: first success 가이드의 검증 명령과 expected success 상태 일치 여부 확인
-  - 대조한 입력물: `docs/project_overlay/first_success_guide.md`, `tests/test_bootstrap_e2e.py`
+- 대조한 입력물: `bootstrap/docs/project_overlay/first_success_guide.md`, `tests/test_bootstrap_e2e.py`
   - 실행 방법 또는 확인 방식: 가이드의 검증 명령을 테스트 상수와 동일한 내용으로 실행하고, 같은 테스트에서 vendored guide 경로, `AGENTS.md -> docs/project_entrypoint.md`, `CLAUDE.md`/`GEMINI.md` -> `AGENTS.md`, `docs/standard/*` project 문서 링크, 선택 언어, bootstrap 기준 문서, 핵심 규칙 범주, profile 문서 비어 있지 않음, quality gate/commit rule의 미해결 decision marker 존재를 함께 확인
   - 결과: 가이드의 첫 검증 명령과 실제 smoke test가 같은 성공 신호를 사용하고, 가이드가 말하는 핵심 first-success content signal과 runtime entrypoint 연결도 smoke test 범위 안에 포함됐다
   - 실패 또는 미실행 사유: 없음

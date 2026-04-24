@@ -13,13 +13,13 @@
 - 실제 축소한 범위: Phase 1 산출물은 핵심 근거만 기록하고, Phase 5 문서화는 변경 파일과 작업 로그 중심으로 남겼다.
 - 유지한 테스트: 문장 수정 전후 책임 경계와 경로 유지 여부를 수동 검토했다.
 - 유지한 감사: 변경 부분 중심 감사 1회 수행, 전체 흐름 영향 요약 1회 기록.
-- 전체 흐름 영향 요약: `docs/project_overlay/README.md` 단일 문장 수정이라 core/overlay 경계, phase 게이트, maintainer 문서에는 영향이 없다.
+- 전체 흐름 영향 요약: `bootstrap/docs/project_overlay/README.md` 단일 문장 수정이라 core/overlay 경계, phase 게이트, maintainer 문서에는 영향이 없다.
 - 남은 리스크: 표현 선호도 차이로 추가 문장 다듬기 의견이 나올 수 있다.
 - Full 전환 조건 또는 승격 조건: 다른 overlay 문서까지 함께 고쳐야 하거나 규칙 의미 변경이 필요해지면 즉시 표준 Phase 흐름으로 전환한다.
 
 ## 구현 중 결정 사항
 
-- repo-local 근거: `docs/project_overlay/README.md`와 경량 태스크 예외 정책 문서를 기준으로 단일 문장 정렬 범위를 유지했다.
+- repo-local 근거: `bootstrap/docs/project_overlay/README.md`와 경량 태스크 예외 정책 문서를 기준으로 단일 문장 정렬 범위를 유지했다.
 - repo에 없어 문서화/승인 대상으로 넘긴 결정: 없음
 
 - 경량 운영 예외를 써도 테스트와 감사 기록은 유지한다.

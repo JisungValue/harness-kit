@@ -48,7 +48,7 @@ flowchart TD
 
 - 이 저장소는 bootstrap 전 source repo이고, 실제로 동작하는 하네스는 downstream 프로젝트 안에서 맞물린다.
 - bootstrap 또는 vendoring이 끝나면 downstream 프로젝트 안에서 `AGENTS.md`, `docs/project_entrypoint.md`, `docs/standard/*`, `docs/decisions/README.md`, `vendor/harness-kit/docs/harness_guide.md`를 함께 읽는 구조가 된다.
-- 자세한 bootstrap/adoption 절차는 `bootstrap/docs/quickstart.md`, `docs/project_overlay/first_success_guide.md`, `docs/project_overlay/adopt_dry_run.md`를 기준으로 본다.
+- 자세한 bootstrap/adoption 절차는 `bootstrap/docs/quickstart.md`, `bootstrap/docs/project_overlay/first_success_guide.md`, `bootstrap/docs/project_overlay/adopt_dry_run.md`를 기준으로 본다.
 
 ## 프로젝트 진입점은 무엇을 하나
 
