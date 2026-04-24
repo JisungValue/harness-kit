@@ -2,50 +2,20 @@
 
 from __future__ import annotations
 
-import argparse
+import runpy
 import sys
 from pathlib import Path
 
 
-REQUIRED_DOCS = (
-    "docs/project_entrypoint.md",
-    "docs/decisions/README.md",
-    "docs/standard/architecture.md",
-    "docs/standard/implementation_order.md",
-    "docs/standard/coding_conventions_project.md",
-    "docs/standard/quality_gate_profile.md",
-    "docs/standard/testing_profile.md",
-    "docs/standard/commit_rule.md",
-)
+TARGET = Path(__file__).resolve().parents[1] / "bootstrap" / "scripts" / "check_first_success_docs.py"
 
-
-def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
-    parser = argparse.ArgumentParser(
-        description="Check that the first-success document set exists in a target project.",
-    )
-    parser.add_argument(
-        "target",
-        nargs="?",
-        default=Path.cwd(),
-        type=Path,
-        help="Target project root. Defaults to the current directory.",
-    )
-    return parser.parse_args(argv)
-
-
-def main(argv: list[str] | None = None) -> int:
-    args = parse_args(argv)
-    project_root = args.target.expanduser().resolve()
-    missing = [path for path in REQUIRED_DOCS if not (project_root / path).exists()]
-    if missing:
-        print("first-success docs are missing:", file=sys.stderr)
-        for path in missing:
-            print(f"- {path}", file=sys.stderr)
-        return 1
-
-    print("first success docs are present")
-    return 0
-
+if str(TARGET.parent) not in sys.path:
+    sys.path.insert(0, str(TARGET.parent))
 
 if __name__ == "__main__":
-    raise SystemExit(main())
+    runpy.run_path(str(TARGET), run_name="__main__")
+else:
+    module_globals = runpy.run_path(str(TARGET))
+    for key in ("__name__", "__file__", "__cached__", "__package__", "__spec__"):
+        module_globals.pop(key, None)
+    globals().update(module_globals)

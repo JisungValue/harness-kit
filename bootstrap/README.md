@@ -19,8 +19,8 @@
 
 ## Init CLI
 
-- `scripts/bootstrap_init.py`, `scripts/check_first_success_docs.py`, validator 예시는 모두 Python 3 runtime으로 실행한다.
-- `scripts/bootstrap_init.py`는 `bootstrap/docs/project_overlay/*` 템플릿을 source of truth로 삼고, generated bundle에서는 같은 자산을 `docs/project_overlay/*`로 materialize 한 뒤 새 프로젝트 또는 거의 빈 대상 디렉터리에 최소 project overlay 문서 세트를 그대로 복사해 생성한다.
+- source repo canonical CLI는 `bootstrap/scripts/bootstrap_init.py`, `bootstrap/scripts/check_first_success_docs.py`, `bootstrap/scripts/validate_overlay_decisions.py`, `bootstrap/scripts/validate_overlay_consistency.py`이며 모두 Python 3 runtime으로 실행한다.
+- `bootstrap/scripts/bootstrap_init.py`는 `bootstrap/docs/project_overlay/*` 템플릿을 source of truth로 삼고, generated bundle에서는 같은 자산을 `docs/project_overlay/*`와 `scripts/*`로 materialize 한 뒤 새 프로젝트 또는 거의 빈 대상 디렉터리에 최소 project overlay 문서 세트를 그대로 복사해 생성한다.
 - 최소 입력은 target path와 `--language`이고, `--force`는 선택적 overwrite 플래그다.
 - 기본 동작은 기존 생성 대상 파일이 하나라도 있으면 fail-fast다.
 - `--force`는 overwrite 의미로만 사용하며 merge는 하지 않는다.
@@ -41,12 +41,12 @@
 
 ## First-Success Existence Check
 
-- `scripts/check_first_success_docs.py`는 최소 문서 세트 존재 여부를 가장 얕게 확인하는 helper command다.
+- `bootstrap/scripts/check_first_success_docs.py`는 source repo canonical helper command다. generated bundle에서는 `scripts/check_first_success_docs.py`로 materialize 된다.
 - bootstrap 직후 이 명령을 먼저 실행하고, 그다음 decision/consistency validator로 넘어간다.
 
 ## 사용 예시
 
 ```bash
-python3 scripts/bootstrap_init.py ../sample-project --language python
-python3 scripts/bootstrap_init.py ../sample-project --language kotlin --force
+python3 bootstrap/scripts/bootstrap_init.py ../sample-project --language python
+python3 bootstrap/scripts/bootstrap_init.py ../sample-project --language kotlin --force
 ```

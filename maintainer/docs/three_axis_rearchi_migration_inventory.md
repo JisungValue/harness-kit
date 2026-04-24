@@ -149,13 +149,17 @@
 
 | 현재 경로 | 목표 canonical path |
 | --- | --- |
-| `scripts/bootstrap_init.py` | `bootstrap/scripts/bootstrap_init.py` |
-| `scripts/check_first_success_docs.py` | `bootstrap/scripts/check_first_success_docs.py` |
-| `scripts/validate_overlay_decisions.py` | `bootstrap/scripts/validate_overlay_decisions.py` |
-| `scripts/validate_overlay_consistency.py` | `bootstrap/scripts/validate_overlay_consistency.py` |
-| `scripts/adopt_common.py` | `bootstrap/scripts/adopt_common.py` |
-| `scripts/adopt_dry_run.py` | `bootstrap/scripts/adopt_dry_run.py` |
-| `scripts/adopt_safe_write.py` | `bootstrap/scripts/adopt_safe_write.py` |
+| `bootstrap/scripts/bootstrap_init.py` | `bootstrap/scripts/bootstrap_init.py` |
+| `bootstrap/scripts/check_first_success_docs.py` | `bootstrap/scripts/check_first_success_docs.py` |
+| `bootstrap/scripts/validate_overlay_decisions.py` | `bootstrap/scripts/validate_overlay_decisions.py` |
+| `bootstrap/scripts/validate_overlay_consistency.py` | `bootstrap/scripts/validate_overlay_consistency.py` |
+| `bootstrap/scripts/adopt_common.py` | `bootstrap/scripts/adopt_common.py` |
+| `bootstrap/scripts/adopt_dry_run.py` | `bootstrap/scripts/adopt_dry_run.py` |
+| `bootstrap/scripts/adopt_safe_write.py` | `bootstrap/scripts/adopt_safe_write.py` |
+
+루트 `scripts/*.py` wrapper는 transition entry path이며 source-of-truth가 아니다.
+
+- 제거 조건: `#146` 단계에서 tests/CI와 source repo 안내 문서가 canonical `bootstrap/scripts/*` 또는 downstream materialized `scripts/*`만으로 안정 동작하는지 확인한 뒤 정리한다.
 
 #### bootstrap/language_conventions
 

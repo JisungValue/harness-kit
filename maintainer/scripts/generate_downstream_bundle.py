@@ -130,6 +130,8 @@ def bundle_relative_path_for_source(relative_path: Path) -> Path:
     relative_posix = relative_path.as_posix()
     if relative_posix.startswith("bootstrap/docs/project_overlay/"):
         return Path("docs/project_overlay") / relative_path.name
+    if relative_posix.startswith("bootstrap/scripts/"):
+        return Path("scripts") / relative_path.name
     return BUNDLE_RELATIVE_PATH_REWRITES.get(relative_posix, relative_path)
 
 

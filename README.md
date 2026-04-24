@@ -104,15 +104,15 @@ python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-proj
   - 프로젝트 스캐폴딩 또는 수동 복사에 쓰는 bootstrap 자산을 둔다.
 - `bootstrap/docs/project_overlay/`
   - bootstrap/adoption 가이드와 project overlay policy 문서를 둔다.
-- [`scripts/bootstrap_init.py`](scripts/bootstrap_init.py)
+- [`bootstrap/scripts/bootstrap_init.py`](bootstrap/scripts/bootstrap_init.py)
   - 새 프로젝트 또는 거의 빈 디렉터리에 최소 project overlay 문서 세트와 runtime instruction entrypoint 파일을 deterministic하게 생성하는 init CLI다. 현재 MVP는 관리 대상 파일 경로만 검사하고 생성한다.
-- [`scripts/validate_overlay_decisions.py`](scripts/validate_overlay_decisions.py)
+- [`bootstrap/scripts/validate_overlay_decisions.py`](bootstrap/scripts/validate_overlay_decisions.py)
   - project overlay 문서의 unresolved placeholder를 `first-success` 또는 `phase2` readiness 기준으로 검사하는 validator다.
-- [`scripts/validate_overlay_consistency.py`](scripts/validate_overlay_consistency.py)
+- [`bootstrap/scripts/validate_overlay_consistency.py`](bootstrap/scripts/validate_overlay_consistency.py)
   - project overlay 문서 간 참조, runtime instruction entrypoint 연결, 책임 경계 불일치를 검사하는 cross-document consistency checker다. `--mode incremental`은 brownfield partial adoption의 safe gap과 blocker를 구분하는 intermediate mode다.
-- [`scripts/adopt_dry_run.py`](scripts/adopt_dry_run.py)
+- [`bootstrap/scripts/adopt_dry_run.py`](bootstrap/scripts/adopt_dry_run.py)
   - 기존 프로젝트의 현재 overlay 상태를 bootstrap baseline과 비교해 missing, unchanged, differing, conflict candidate를 read-only로 분류하는 adopt dry-run이다.
-- [`scripts/adopt_safe_write.py`](scripts/adopt_safe_write.py)
+- [`bootstrap/scripts/adopt_safe_write.py`](bootstrap/scripts/adopt_safe_write.py)
   - 기존 프로젝트에 대해 `adopt_dry_run.py`와 같은 판정 규칙을 사용해 missing file create, unchanged refresh, explicit path force overwrite만 허용하는 제한적 safe write/update 도구다.
 - [`maintainer/scripts/generate_downstream_bundle.py`](maintainer/scripts/generate_downstream_bundle.py)
   - downstream 배포 경계 기준으로 project-facing 자산만 모아 `dist/harness-kit-project-bundle/` directory artifact와 `bundle_manifest.json`을 생성하는 maintainer용 bundle generation command다.
