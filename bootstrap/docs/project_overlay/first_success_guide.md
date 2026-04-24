@@ -114,17 +114,17 @@ python3 third_party/harness-kit/scripts/bootstrap_init.py . --language python --
 
 ```text
 Created harness bootstrap docs in /path/to/project
-- AGENTS.md <- docs/project_overlay/agent_entrypoint_template.md
-- CLAUDE.md <- docs/project_overlay/claude_entrypoint_template.md
-- GEMINI.md <- docs/project_overlay/gemini_entrypoint_template.md
-- docs/project_entrypoint.md <- docs/project_overlay/project_entrypoint_template.md
-- docs/decisions/README.md <- docs/project_overlay/decisions_index_template.md
-- docs/standard/architecture.md <- docs/project_overlay/architecture_template.md
-- docs/standard/implementation_order.md <- docs/project_overlay/implementation_order_template.md
-- docs/standard/coding_conventions_project.md <- docs/project_overlay/coding_conventions_project_template.md
-- docs/standard/quality_gate_profile.md <- docs/project_overlay/quality_gate_profile_template.md
-- docs/standard/testing_profile.md <- docs/project_overlay/testing_profile_template.md
-- docs/standard/commit_rule.md <- docs/project_overlay/commit_rule_template.md
+- AGENTS.md <- bootstrap/docs/project_overlay/agent_entrypoint_template.md
+- CLAUDE.md <- bootstrap/docs/project_overlay/claude_entrypoint_template.md
+- GEMINI.md <- bootstrap/docs/project_overlay/gemini_entrypoint_template.md
+- docs/project_entrypoint.md <- bootstrap/docs/project_overlay/project_entrypoint_template.md
+- docs/decisions/README.md <- bootstrap/docs/project_overlay/decisions_index_template.md
+- docs/standard/architecture.md <- bootstrap/docs/project_overlay/architecture_template.md
+- docs/standard/implementation_order.md <- bootstrap/docs/project_overlay/implementation_order_template.md
+- docs/standard/coding_conventions_project.md <- bootstrap/docs/project_overlay/coding_conventions_project_template.md
+- docs/standard/quality_gate_profile.md <- bootstrap/docs/project_overlay/quality_gate_profile_template.md
+- docs/standard/testing_profile.md <- bootstrap/docs/project_overlay/testing_profile_template.md
+- docs/standard/commit_rule.md <- bootstrap/docs/project_overlay/commit_rule_template.md
 ```
 
 ## 수동 경로
@@ -153,7 +153,7 @@ vendor/harness-kit/docs/project_overlay/commit_rule_template.md -> docs/standard
 
 ## 자동 경로와 수동 경로의 관계
 
-- init CLI는 `docs/project_overlay/*` template를 source of truth로 사용하는 얇은 copier다.
+- init CLI는 `bootstrap/docs/project_overlay/*` template를 source of truth로 사용하는 얇은 copier다.
 - 수동 경로는 CLI가 하는 일을 사람이 직접 수행하는 fallback이다.
 - 따라서 자동 경로와 수동 경로는 같은 최소 문서 세트와 같은 문서 책임 경계로 수렴해야 한다.
 - CLI가 있어도 수동 기준 경로는 유지한다. 이후 CLI 동작이 바뀌어도 비교 기준은 template와 최소 문서 세트다.

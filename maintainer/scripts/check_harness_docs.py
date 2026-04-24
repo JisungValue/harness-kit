@@ -87,7 +87,7 @@ PROJECT_FACING_MD_GLOBS = [
     "docs/harness/common/**/*.md",
     "docs/harness_guide.md",
     "docs/phase_*/*.md",
-    "docs/project_overlay/**/*.md",
+    "bootstrap/docs/project_overlay/**/*.md",
     "docs/standard/coding_guidelines_core.md",
     "docs/templates/task/**/*.md",
     "bootstrap/docs/how_harness_kit_works.md",
@@ -184,7 +184,7 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
     diagnostics = read_text("bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md")
     bundle_smoke_doc = read_text("maintainer/docs/downstream_bundle_smoke_validation.md")
     bundle_boundary = read_text("maintainer/docs/downstream_bundle_boundary.md")
-    project_guide_template = read_text("docs/project_overlay/project_entrypoint_template.md")
+    project_guide_template = read_text("bootstrap/docs/project_overlay/project_entrypoint_template.md")
     harness_guide = read_text("docs/harness_guide.md")
 
     readme_min = set(extract_bullet_paths(extract_h2_section(readme, "최소 프로젝트 문서 세트")))
@@ -294,10 +294,10 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
 def check_entrypoint_role_labels(errors: list[str]) -> None:
     expected_titles = {
         "docs/harness_guide.md": "# Harness Core Guide",
-        "docs/project_overlay/project_entrypoint_template.md": "# Project Harness Entry Point",
-        "docs/project_overlay/agent_entrypoint_template.md": "# Agent Runtime Entry Point",
-        "docs/project_overlay/claude_entrypoint_template.md": "# Claude Adapter Entry Point",
-        "docs/project_overlay/gemini_entrypoint_template.md": "# Gemini Adapter Entry Point",
+        "bootstrap/docs/project_overlay/project_entrypoint_template.md": "# Project Harness Entry Point",
+        "bootstrap/docs/project_overlay/agent_entrypoint_template.md": "# Agent Runtime Entry Point",
+        "bootstrap/docs/project_overlay/claude_entrypoint_template.md": "# Claude Adapter Entry Point",
+        "bootstrap/docs/project_overlay/gemini_entrypoint_template.md": "# Gemini Adapter Entry Point",
     }
 
     for rel_path, expected_title in expected_titles.items():
@@ -315,30 +315,30 @@ def check_entrypoint_role_labels(errors: list[str]) -> None:
         errors.append("project_overlay/README의 runtime entrypoint 예시 제목이 최신 구조와 다릅니다.")
 
     expected_sections = {
-        "docs/project_overlay/agent_entrypoint_template.md": "## 실행 계약",
-        "docs/project_overlay/project_entrypoint_template.md": "## 실행 계약",
+        "bootstrap/docs/project_overlay/agent_entrypoint_template.md": "## 실행 계약",
+        "bootstrap/docs/project_overlay/project_entrypoint_template.md": "## 실행 계약",
     }
     for rel_path, section in expected_sections.items():
         if section not in read_text(rel_path):
             errors.append(f"{rel_path}에 `{section}` 섹션이 없습니다.")
 
     traversal_phrase_sets = {
-        "docs/project_overlay/agent_entrypoint_template.md": (
+        "bootstrap/docs/project_overlay/agent_entrypoint_template.md": (
             "순서대로 모두 읽고 적용",
             "공통 규칙",
             "프로젝트 전용 규칙",
             "중간 문서에서 멈추지 않는다",
         ),
-        "docs/project_overlay/project_entrypoint_template.md": (
+        "bootstrap/docs/project_overlay/project_entrypoint_template.md": (
             "공통 규칙",
             "프로젝트 전용 규칙",
             "순서대로 모두 읽고 적용",
             "둘 중 하나만 읽고 멈추지 않는다",
         ),
-        "docs/project_overlay/claude_entrypoint_template.md": (
+        "bootstrap/docs/project_overlay/claude_entrypoint_template.md": (
             "연결된 문서 체인도 끝까지 따라간다",
         ),
-        "docs/project_overlay/gemini_entrypoint_template.md": (
+        "bootstrap/docs/project_overlay/gemini_entrypoint_template.md": (
             "연결된 문서 체인도 끝까지 따라간다",
         ),
     }
@@ -358,7 +358,7 @@ def check_entrypoint_role_labels(errors: list[str]) -> None:
 
 
 def check_decisions_templates(errors: list[str]) -> None:
-    decisions_index = read_text("docs/project_overlay/decisions_index_template.md")
+    decisions_index = read_text("bootstrap/docs/project_overlay/decisions_index_template.md")
     required_sections = (
         "## 문서 역할",
         "## 여기에 남기는 것",
@@ -381,7 +381,7 @@ def check_decisions_templates(errors: list[str]) -> None:
         if phrase not in decisions_index:
             errors.append(f"decisions_index_template에 핵심 문구 `{phrase}`가 없습니다.")
 
-    decision_record = read_text("docs/project_overlay/decision_record_template.md")
+    decision_record = read_text("bootstrap/docs/project_overlay/decision_record_template.md")
     for phrase in (
         "- Status:",
         "- Type:",

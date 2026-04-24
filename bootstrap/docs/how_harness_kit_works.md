@@ -45,7 +45,7 @@
 ### Bootstrap
 
 - overlay 문서를 시작하기 위한 초기 자산과 copier다.
-- `bootstrap_init.py`는 `docs/project_overlay/*` template를 source of truth로 사용해 최소 문서 세트와 runtime instruction entrypoint 파일을 생성한다.
+- `bootstrap_init.py`는 source repo 기준 `bootstrap/docs/project_overlay/*` template를 source of truth로 사용하고, generated bundle에서는 이를 `docs/project_overlay/*`로 materialize 해 최소 문서 세트와 runtime instruction entrypoint 파일을 생성한다.
 - 언어별 convention 초안은 `bootstrap/language_conventions/*`에 있고, 프로젝트 문서로 병합해 쓴다.
 
 ### Runtime Instruction Entrypoint

@@ -95,7 +95,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             self.assertIn("bootstrap/docs/quickstart.md", manifest["source_patterns"])
             self.assertIn("bootstrap/docs/version_support.md", manifest["source_patterns"])
             self.assertIn("docs/examples/**/*.md", manifest["source_patterns"])
-            self.assertIn("docs/project_overlay/harness_doc_guard_workflow_template.yml", manifest["source_patterns"])
+            self.assertIn("bootstrap/docs/project_overlay/harness_doc_guard_workflow_template.yml", manifest["source_patterns"])
             self.assertIn("maintainer/docs/*", manifest["excluded_patterns"])
             self.assertEqual(manifest["generated_files"][0]["path"], "README.md")
 

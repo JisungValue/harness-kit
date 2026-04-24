@@ -20,7 +20,7 @@
 ## Init CLI
 
 - `scripts/bootstrap_init.py`, `scripts/check_first_success_docs.py`, validator 예시는 모두 Python 3 runtime으로 실행한다.
-- `scripts/bootstrap_init.py`는 `docs/project_overlay/*` 템플릿을 source of truth로 삼아, 새 프로젝트 또는 거의 빈 대상 디렉터리에 최소 project overlay 문서 세트를 그대로 복사해 생성한다.
+- `scripts/bootstrap_init.py`는 `bootstrap/docs/project_overlay/*` 템플릿을 source of truth로 삼고, generated bundle에서는 같은 자산을 `docs/project_overlay/*`로 materialize 한 뒤 새 프로젝트 또는 거의 빈 대상 디렉터리에 최소 project overlay 문서 세트를 그대로 복사해 생성한다.
 - 최소 입력은 target path와 `--language`이고, `--force`는 선택적 overwrite 플래그다.
 - 기본 동작은 기존 생성 대상 파일이 하나라도 있으면 fail-fast다.
 - `--force`는 overwrite 의미로만 사용하며 merge는 하지 않는다.

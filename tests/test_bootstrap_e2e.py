@@ -12,17 +12,17 @@ ROOT = Path(__file__).resolve().parents[1]
 BOOTSTRAP_SCRIPT = ROOT / "scripts" / "bootstrap_init.py"
 CONSISTENCY_SCRIPT = ROOT / "scripts" / "validate_overlay_consistency.py"
 TEMPLATE_MAPPINGS = {
-    "docs/project_overlay/agent_entrypoint_template.md": "AGENTS.md",
-    "docs/project_overlay/claude_entrypoint_template.md": "CLAUDE.md",
-    "docs/project_overlay/gemini_entrypoint_template.md": "GEMINI.md",
-    "docs/project_overlay/project_entrypoint_template.md": "docs/project_entrypoint.md",
-    "docs/project_overlay/decisions_index_template.md": "docs/decisions/README.md",
-    "docs/project_overlay/architecture_template.md": "docs/standard/architecture.md",
-    "docs/project_overlay/implementation_order_template.md": "docs/standard/implementation_order.md",
-    "docs/project_overlay/coding_conventions_project_template.md": "docs/standard/coding_conventions_project.md",
-    "docs/project_overlay/quality_gate_profile_template.md": "docs/standard/quality_gate_profile.md",
-    "docs/project_overlay/testing_profile_template.md": "docs/standard/testing_profile.md",
-    "docs/project_overlay/commit_rule_template.md": "docs/standard/commit_rule.md",
+    "bootstrap/docs/project_overlay/agent_entrypoint_template.md": "AGENTS.md",
+    "bootstrap/docs/project_overlay/claude_entrypoint_template.md": "CLAUDE.md",
+    "bootstrap/docs/project_overlay/gemini_entrypoint_template.md": "GEMINI.md",
+    "bootstrap/docs/project_overlay/project_entrypoint_template.md": "docs/project_entrypoint.md",
+    "bootstrap/docs/project_overlay/decisions_index_template.md": "docs/decisions/README.md",
+    "bootstrap/docs/project_overlay/architecture_template.md": "docs/standard/architecture.md",
+    "bootstrap/docs/project_overlay/implementation_order_template.md": "docs/standard/implementation_order.md",
+    "bootstrap/docs/project_overlay/coding_conventions_project_template.md": "docs/standard/coding_conventions_project.md",
+    "bootstrap/docs/project_overlay/quality_gate_profile_template.md": "docs/standard/quality_gate_profile.md",
+    "bootstrap/docs/project_overlay/testing_profile_template.md": "docs/standard/testing_profile.md",
+    "bootstrap/docs/project_overlay/commit_rule_template.md": "docs/standard/commit_rule.md",
 }
 EXPECTED_FILES = tuple(TEMPLATE_MAPPINGS.values())
 LANGUAGE = "python"
@@ -198,15 +198,15 @@ class BootstrapEndToEndTest(unittest.TestCase):
             self.assertEqual(init_result.returncode, 0, init_result.stderr)
             self.assertIn("Created harness bootstrap docs in", init_result.stdout)
             self.assertIn(
-                "docs/project_entrypoint.md <- docs/project_overlay/project_entrypoint_template.md",
+                "docs/project_entrypoint.md <- bootstrap/docs/project_overlay/project_entrypoint_template.md",
                 init_result.stdout,
             )
             self.assertIn(
-                "docs/decisions/README.md <- docs/project_overlay/decisions_index_template.md",
+                "docs/decisions/README.md <- bootstrap/docs/project_overlay/decisions_index_template.md",
                 init_result.stdout,
             )
             self.assertIn(
-                "docs/standard/coding_conventions_project.md <- docs/project_overlay/coding_conventions_project_template.md",
+                "docs/standard/coding_conventions_project.md <- bootstrap/docs/project_overlay/coding_conventions_project_template.md",
                 init_result.stdout,
             )
             self.assert_expected_files_exist(project_root)

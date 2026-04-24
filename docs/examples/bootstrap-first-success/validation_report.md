@@ -8,7 +8,7 @@
 
 - `scripts/bootstrap_init.py`
 - `bootstrap/docs/project_overlay/first_success_guide.md`
-- `docs/project_overlay/*` template
+- `bootstrap/docs/project_overlay/*` template
 
 ## 검증 시나리오
 
@@ -52,7 +52,7 @@ python3 scripts/validate_overlay_consistency.py /tmp/bootstrap-cli-localized-pro
 
 - 입력 조건:
   - 빈 임시 프로젝트 디렉터리
-  - `docs/project_overlay/*` template를 수동 복사
+  - `bootstrap/docs/project_overlay/*` template를 source repo canonical 기준으로 수동 복사
 - 수동 복사 매핑:
 
 ```text
@@ -129,7 +129,7 @@ docs/
   - 잔여 리스크: vendored 경로를 bootstrap 이후에 다시 옮기면 path update는 별도 수동 작업이 필요하다
 
 - 검증 항목: 수동 복사 경로가 같은 최소 문서 세트로 수렴하는지 확인
-- 대조한 입력물: `docs/project_overlay/*`, `bootstrap/docs/project_overlay/first_success_guide.md`
+- 대조한 입력물: `bootstrap/docs/project_overlay/*`, `bootstrap/docs/project_overlay/first_success_guide.md`
   - 실행 방법 또는 확인 방식: `python3 -m unittest tests.test_bootstrap_e2e`의 수동 복사 시나리오에서 template 복사 후 non-default vendored path를 `docs/project_entrypoint.md`에 반영하고, `bootstrap/language_conventions/python_coding_conventions_template.md` 발췌 내용을 `coding_conventions_project.md`에 수동 병합해 검증
   - 결과: 수동 경로도 최소 문서 세트와 runtime instruction entrypoint 세트, 첫 검증 명령 결과, vendored path 현지화, entrypoint 연결, 선택 언어와 bootstrap 기준 문서, 핵심 규칙 범주 식별 신호가 함께 확인됐다
   - 실패 또는 미실행 사유: 없음

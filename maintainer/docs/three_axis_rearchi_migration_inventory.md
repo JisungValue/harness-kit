@@ -131,19 +131,19 @@
 - `bootstrap/docs/project_overlay/unresolved_decision_validator.md`
 - `bootstrap/docs/project_overlay/overlay_completion_checklist.md`
 - `bootstrap/docs/project_overlay/harness_upgrade_impact_policy.md`
-- `docs/project_overlay/decision_record_template.md`
-- `docs/project_overlay/decisions_index_template.md`
-- `docs/project_overlay/project_entrypoint_template.md`
-- `docs/project_overlay/claude_entrypoint_template.md`
-- `docs/project_overlay/agent_entrypoint_template.md`
-- `docs/project_overlay/gemini_entrypoint_template.md`
-- `docs/project_overlay/implementation_order_template.md`
-- `docs/project_overlay/architecture_template.md`
-- `docs/project_overlay/quality_gate_profile_template.md`
-- `docs/project_overlay/coding_conventions_project_template.md`
-- `docs/project_overlay/testing_profile_template.md`
-- `docs/project_overlay/harness_doc_guard_workflow_template.yml`
-- `docs/project_overlay/commit_rule_template.md`
+- `bootstrap/docs/project_overlay/decision_record_template.md`
+- `bootstrap/docs/project_overlay/decisions_index_template.md`
+- `bootstrap/docs/project_overlay/project_entrypoint_template.md`
+- `bootstrap/docs/project_overlay/claude_entrypoint_template.md`
+- `bootstrap/docs/project_overlay/agent_entrypoint_template.md`
+- `bootstrap/docs/project_overlay/gemini_entrypoint_template.md`
+- `bootstrap/docs/project_overlay/implementation_order_template.md`
+- `bootstrap/docs/project_overlay/architecture_template.md`
+- `bootstrap/docs/project_overlay/quality_gate_profile_template.md`
+- `bootstrap/docs/project_overlay/coding_conventions_project_template.md`
+- `bootstrap/docs/project_overlay/testing_profile_template.md`
+- `bootstrap/docs/project_overlay/harness_doc_guard_workflow_template.yml`
+- `bootstrap/docs/project_overlay/commit_rule_template.md`
 
 #### bootstrap/scripts
 

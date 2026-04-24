@@ -34,11 +34,11 @@
 
 | source repo file | downstream generated or vendored file | runtime role |
 | --- | --- | --- |
-| [`docs/project_overlay/agent_entrypoint_template.md`](docs/project_overlay/agent_entrypoint_template.md) | `AGENTS.md` | runtime launcher entrypoint |
-| [`docs/project_overlay/project_entrypoint_template.md`](docs/project_overlay/project_entrypoint_template.md) | `docs/project_entrypoint.md` | documentation/policy entrypoint |
-| [`docs/project_overlay/decisions_index_template.md`](docs/project_overlay/decisions_index_template.md) | `docs/decisions/README.md` | project decision index |
+| [`bootstrap/docs/project_overlay/agent_entrypoint_template.md`](bootstrap/docs/project_overlay/agent_entrypoint_template.md) | `AGENTS.md` | runtime launcher entrypoint |
+| [`bootstrap/docs/project_overlay/project_entrypoint_template.md`](bootstrap/docs/project_overlay/project_entrypoint_template.md) | `docs/project_entrypoint.md` | documentation/policy entrypoint |
+| [`bootstrap/docs/project_overlay/decisions_index_template.md`](bootstrap/docs/project_overlay/decisions_index_template.md) | `docs/decisions/README.md` | project decision index |
 | [`docs/harness_guide.md`](docs/harness_guide.md) | `vendor/harness-kit/docs/harness_guide.md` | vendored core guide |
-| [`docs/project_overlay/architecture_template.md`](docs/project_overlay/architecture_template.md) | `docs/standard/architecture.md` | project-local supporting doc |
+| [`bootstrap/docs/project_overlay/architecture_template.md`](bootstrap/docs/project_overlay/architecture_template.md) | `docs/standard/architecture.md` | project-local supporting doc |
 
 - source repo의 template/guide는 downstream에서 그대로 쓰이거나, bootstrap 결과물로 생성되거나, vendored copy로 들어간다.
 - downstream 사용자는 source repo의 template를 직접 실행하는 것이 아니라, downstream 프로젝트 안에 생긴 `AGENTS.md`, `docs/project_entrypoint.md`, `docs/standard/*`, `docs/decisions/README.md`, `vendor/harness-kit/docs/harness_guide.md`를 따라간다.
@@ -118,8 +118,8 @@ python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-proj
   - downstream 배포 경계 기준으로 project-facing 자산만 모아 `dist/harness-kit-project-bundle/` directory artifact와 `bundle_manifest.json`을 생성하는 maintainer용 bundle generation command다.
 - [`maintainer/scripts/validate_downstream_bundle.py`](maintainer/scripts/validate_downstream_bundle.py)
   - generated downstream bundle이 boundary 문서, manifest, 실제 copied file 내용과 일치하는지 검사하는 maintainer용 bundle validation command다.
-- `docs/project_overlay/`
-  - bootstrap init이 복사하는 project overlay 템플릿과 workflow template을 둔다.
+- `bootstrap/docs/project_overlay/`
+  - bootstrap/adoption guide, project overlay 템플릿, workflow template의 canonical source를 둔다.
 - [`bootstrap/docs/project_overlay/first_success_guide.md`](bootstrap/docs/project_overlay/first_success_guide.md)
   - 새 프로젝트 또는 거의 빈 프로젝트에서 최소 문서 세트와 첫 성공 상태를 빠르게 재현하는 가이드다.
 - [`bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md`](bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md)
@@ -182,8 +182,8 @@ python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-proj
 - 사용 프로젝트용 문서
   - 목적: `harness-kit`를 가져다 쓰는 프로젝트의 task 수행, phase 진행, project overlay 작성
   - 주 문서: [`docs/harness_guide.md`](docs/harness_guide.md), `docs/harness/common/*`, `docs/phase_*`
-- `bootstrap/docs/project_overlay/*`는 source repo 기준 bootstrap/adoption guide와 project overlay policy 정본이다.
-- `docs/project_overlay/*`는 downstream 프로젝트 문서를 시작할 때 복사하는 template source다.
+- `bootstrap/docs/project_overlay/*`는 source repo 기준 bootstrap/adoption guide, project overlay template, workflow template의 정본이다.
+- generated downstream bundle은 이 자산을 `docs/project_overlay/*`로 materialize 해 consumer-facing 경로를 유지한다.
 - harness-kit maintainer용 문서
   - 목적: `harness-kit` core 규칙, template, example, 문서 구조 자체를 수정할 때의 감사와 기록
   - 주 문서: [`maintainer/docs/audit_policy.md`](maintainer/docs/audit_policy.md), [`maintainer/docs/drift_response_guide.md`](maintainer/docs/drift_response_guide.md), [`maintainer/docs/release_process.md`](maintainer/docs/release_process.md), [`maintainer/docs/downstream_bundle_smoke_validation.md`](maintainer/docs/downstream_bundle_smoke_validation.md), [`harness.log`](harness.log)
@@ -209,7 +209,7 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 8. 아래 예시는 `vendor/harness-kit/`를 기준으로 한다. 다른 경로를 쓰면 실행 명령의 `vendor/harness-kit/` 부분도 같은 실제 경로로 함께 바꿔야 한다.
 9. `python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success`로 unresolved decision readiness를 확인한다.
 10. `python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .`로 문서 간 교차 정합성과 runtime instruction entrypoint 연결을 확인한다.
-11. local validator가 통과하면 [`docs/project_overlay/harness_doc_guard_workflow_template.yml`](docs/project_overlay/harness_doc_guard_workflow_template.yml)을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사하고 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꿔 future-session guardrail을 고정한다.
+11. local validator가 통과하면 [`bootstrap/docs/project_overlay/harness_doc_guard_workflow_template.yml`](bootstrap/docs/project_overlay/harness_doc_guard_workflow_template.yml)을 source repo canonical template로 보고, downstream vendored bundle에서는 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사한 뒤 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꿔 future-session guardrail을 고정한다.
 12. 첫 task를 시작하기 전에 [`docs/downstream_harness_flow.md`](docs/downstream_harness_flow.md)를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
 13. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
 14. 실제 task 몇 개를 돌린 뒤 project overlay와 decisions index를 함께 보강한다.

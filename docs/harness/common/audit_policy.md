@@ -29,7 +29,7 @@
   - `docs/harness_guide.md`
   - `docs/downstream_harness_flow.md`
   - `bootstrap/docs/quickstart.md`
-  - `docs/project_overlay/project_entrypoint_template.md`
+  - `bootstrap/docs/project_overlay/project_entrypoint_template.md`
 
 ## 공통 감사 운영 규칙
 

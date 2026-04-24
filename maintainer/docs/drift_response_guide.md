@@ -7,7 +7,7 @@
 - 우선 비교 문서
   - `README.md`의 `최소 프로젝트 문서 세트`
   - `bootstrap/docs/project_overlay/README.md`의 `필수 문서`
-  - `docs/project_overlay/project_entrypoint_template.md`
+  - `bootstrap/docs/project_overlay/project_entrypoint_template.md`
 - 기준
   - 세 문서의 `docs/standard/*` 문서 목록은 동일해야 한다.
   - `docs/harness_guide.md` core guide에 구식 경로(`프로젝트 testing_profile.md`)가 있으면 수정한다.

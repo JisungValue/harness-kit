@@ -14,18 +14,20 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_VENDOR_PATH = "vendor/harness-kit"
 
 TEMPLATE_TARGETS = {
-    "docs/project_overlay/agent_entrypoint_template.md": "AGENTS.md",
-    "docs/project_overlay/claude_entrypoint_template.md": "CLAUDE.md",
-    "docs/project_overlay/gemini_entrypoint_template.md": "GEMINI.md",
-    "docs/project_overlay/project_entrypoint_template.md": "docs/project_entrypoint.md",
-    "docs/project_overlay/decisions_index_template.md": "docs/decisions/README.md",
-    "docs/project_overlay/architecture_template.md": "docs/standard/architecture.md",
-    "docs/project_overlay/implementation_order_template.md": "docs/standard/implementation_order.md",
-    "docs/project_overlay/coding_conventions_project_template.md": "docs/standard/coding_conventions_project.md",
-    "docs/project_overlay/quality_gate_profile_template.md": "docs/standard/quality_gate_profile.md",
-    "docs/project_overlay/testing_profile_template.md": "docs/standard/testing_profile.md",
-    "docs/project_overlay/commit_rule_template.md": "docs/standard/commit_rule.md",
+    "bootstrap/docs/project_overlay/agent_entrypoint_template.md": "AGENTS.md",
+    "bootstrap/docs/project_overlay/claude_entrypoint_template.md": "CLAUDE.md",
+    "bootstrap/docs/project_overlay/gemini_entrypoint_template.md": "GEMINI.md",
+    "bootstrap/docs/project_overlay/project_entrypoint_template.md": "docs/project_entrypoint.md",
+    "bootstrap/docs/project_overlay/decisions_index_template.md": "docs/decisions/README.md",
+    "bootstrap/docs/project_overlay/architecture_template.md": "docs/standard/architecture.md",
+    "bootstrap/docs/project_overlay/implementation_order_template.md": "docs/standard/implementation_order.md",
+    "bootstrap/docs/project_overlay/coding_conventions_project_template.md": "docs/standard/coding_conventions_project.md",
+    "bootstrap/docs/project_overlay/quality_gate_profile_template.md": "docs/standard/quality_gate_profile.md",
+    "bootstrap/docs/project_overlay/testing_profile_template.md": "docs/standard/testing_profile.md",
+    "bootstrap/docs/project_overlay/commit_rule_template.md": "docs/standard/commit_rule.md",
 }
+
+MATERIALIZED_PROJECT_OVERLAY_ROOT = "docs/project_overlay"
 
 LANGUAGE_BOOTSTRAP_PATHS = {
     "python": "vendor/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md",
@@ -92,13 +94,27 @@ def normalize_vendor_path(raw_path: str) -> str:
     return vendor_path.as_posix()
 
 
+def resolve_template_source(source_rel: str) -> Path:
+    source = ROOT / source_rel
+    if source.exists():
+        return source
+
+    canonical_prefix = "bootstrap/docs/project_overlay/"
+    if source_rel.startswith(canonical_prefix):
+        materialized_source = ROOT / MATERIALIZED_PROJECT_OVERLAY_ROOT / source_rel.removeprefix(canonical_prefix)
+        if materialized_source.exists():
+            return materialized_source
+
+    raise FileNotFoundError(f"Bootstrap template not found: {source_rel}")
+
+
 def build_plan(target_root: Path, language: str, vendor_path: str = DEFAULT_VENDOR_PATH) -> list[PlannedFile]:
     plan: list[PlannedFile] = []
     bootstrap_ref = f"{vendor_path}/bootstrap/language_conventions/{Path(LANGUAGE_BOOTSTRAP_PATHS[language]).name}"
     harness_guide_ref = f"{vendor_path}/docs/harness_guide.md"
 
     for source_rel, destination_rel in TEMPLATE_TARGETS.items():
-        source = ROOT / source_rel
+        source = resolve_template_source(source_rel)
         destination = target_root / destination_rel
         content = source.read_text(encoding="utf-8")
         if destination_rel == "docs/project_entrypoint.md":

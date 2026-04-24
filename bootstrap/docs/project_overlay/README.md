@@ -56,7 +56,7 @@
 
 - source repo에는 root `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `docs/project_entrypoint.md`, `docs/decisions/README.md`가 아직 없다.
 - 이 파일들은 downstream 프로젝트를 bootstrap하거나 template를 수동 복사한 뒤에 생성되는 consumer-local 문서다.
-- 따라서 source repo에서 문서를 읽는 단계에서는 `bootstrap/docs/project_overlay/*.md` guide와 `docs/project_overlay/*.md` template를 먼저 보고, downstream 프로젝트에서는 생성된 runtime entrypoint와 project entrypoint를 따른다.
+- 따라서 source repo에서 문서를 읽는 단계에서는 `bootstrap/docs/project_overlay/*` canonical source를 먼저 보고, downstream 프로젝트에서는 generated bundle의 `docs/project_overlay/*`와 생성된 runtime entrypoint, project entrypoint를 따른다.
 
 ## 역할 분리
 
@@ -136,8 +136,9 @@
 
 ## 권장 CI 템플릿
 
-- `docs/project_overlay/harness_doc_guard_workflow_template.yml`
-  - 프로젝트 `.github/workflows/`로 복사해 harness-kit 문서 정합성 검사를 자동 실행한다.
+- `bootstrap/docs/project_overlay/harness_doc_guard_workflow_template.yml`
+  - source repo canonical workflow template이다.
+  - generated bundle에서는 `docs/project_overlay/harness_doc_guard_workflow_template.yml`로 materialize 되고, 프로젝트 `.github/workflows/`로 복사해 harness-kit 문서 정합성 검사를 자동 실행한다.
   - 템플릿의 `@<pin-tag-or-sha>`를 릴리스 태그 또는 고정 커밋 SHA로 치환해 재현 가능성을 유지한다.
 
 ## 권장 runtime entrypoint
@@ -168,14 +169,15 @@
 - project overlay는 core를 다시 설명하지 않는다.
 - project overlay 템플릿은 프로젝트에 반드시 있어야 할 문서 골격을 정의한다.
 - 언어별 convention이 필요할 때만 `bootstrap/` 자산을 선택해 project overlay 문서 안으로 복사 또는 병합한다.
-- `bootstrap/docs/project_overlay/`는 guide/policy 정본이고, `docs/project_overlay/`는 프로젝트 문서의 기본 골격을 만드는 template source다.
+- `bootstrap/docs/project_overlay/`는 guide, template, workflow의 canonical source다.
+- generated downstream bundle은 이 자산을 `docs/project_overlay/` 아래로 materialize 해 consumer-facing 경로를 유지한다.
 - 여러 프로젝트에서 반복되는 규칙은 overlay가 아니라 core로 승격한다.
 - 특정 프로젝트에만 필요한 규칙만 overlay에 남긴다.
 
 ## decisions 구조
 
-- `docs/project_overlay/decisions_index_template.md`
+- `bootstrap/docs/project_overlay/decisions_index_template.md`
   - downstream 프로젝트의 `docs/decisions/README.md`로 생성하는 기본 index template다.
-- `docs/project_overlay/decision_record_template.md`
+- `bootstrap/docs/project_overlay/decision_record_template.md`
   - 필요한 경우 `DEC-###-slug.md`로 복사해 쓰는 decision record template다.
 - canonical example은 `docs/examples/project-decisions/DEC-001-authorization-validation-location.md`를 본다.
