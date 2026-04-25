@@ -82,14 +82,14 @@ LANGUAGE_TEMPLATE_REQUIRED_HEADINGS = {
 
 PROJECT_FACING_MD_GLOBS = [
     "bootstrap/**/*.md",
-    "docs/downstream_harness_flow.md",
+    "downstream/docs/downstream_harness_flow.md",
     "docs/examples/**/*.md",
-    "docs/harness/common/**/*.md",
-    "docs/harness_guide.md",
-    "docs/phase_*/*.md",
+    "downstream/docs/harness/common/**/*.md",
+    "downstream/docs/harness_guide.md",
+    "downstream/docs/phase_*/*.md",
     "bootstrap/docs/project_overlay/**/*.md",
-    "docs/standard/coding_guidelines_core.md",
-    "docs/templates/task/**/*.md",
+    "downstream/docs/standard/coding_guidelines_core.md",
+    "downstream/docs/templates/task/**/*.md",
     "bootstrap/docs/how_harness_kit_works.md",
     "bootstrap/docs/quickstart.md",
     "bootstrap/docs/version_support.md",
@@ -185,7 +185,7 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
     bundle_smoke_doc = read_text("maintainer/docs/downstream_bundle_smoke_validation.md")
     bundle_boundary = read_text("maintainer/docs/downstream_bundle_boundary.md")
     project_guide_template = read_text("bootstrap/docs/project_overlay/project_entrypoint_template.md")
-    harness_guide = read_text("docs/harness_guide.md")
+    harness_guide = read_text("downstream/docs/harness_guide.md")
 
     readme_min = set(extract_bullet_paths(extract_h2_section(readme, "최소 프로젝트 문서 세트")))
     overlay_required = set(
@@ -293,7 +293,7 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
 
 def check_entrypoint_role_labels(errors: list[str]) -> None:
     expected_titles = {
-        "docs/harness_guide.md": "# Harness Core Guide",
+        "downstream/docs/harness_guide.md": "# Harness Core Guide",
         "bootstrap/docs/project_overlay/project_entrypoint_template.md": "# Project Harness Entry Point",
         "bootstrap/docs/project_overlay/agent_entrypoint_template.md": "# Agent Runtime Entry Point",
         "bootstrap/docs/project_overlay/claude_entrypoint_template.md": "# Claude Adapter Entry Point",
@@ -431,9 +431,9 @@ def check_repo_local_source_of_truth_docs(errors: list[str]) -> None:
 
     for rel_path in (
         "README.md",
-        "docs/harness_guide.md",
+        "downstream/docs/harness_guide.md",
         "bootstrap/docs/how_harness_kit_works.md",
-        "docs/harness/common/process_policy.md",
+        "downstream/docs/harness/common/process_policy.md",
     ):
         text = read_text(rel_path)
         for phrase in required_phrases:
@@ -443,7 +443,7 @@ def check_repo_local_source_of_truth_docs(errors: list[str]) -> None:
             if handoff_phrase not in text:
                 errors.append(f"{rel_path}에 누락된 결정 handoff 문구 `{handoff_phrase}`가 없습니다.")
 
-    artifact_policy = read_text("docs/harness/common/artifact_policy.md")
+    artifact_policy = read_text("downstream/docs/harness/common/artifact_policy.md")
     for phrase in (
         "repo-local source-of-truth",
         "구현 중 결정 사항",
@@ -453,7 +453,7 @@ def check_repo_local_source_of_truth_docs(errors: list[str]) -> None:
         if phrase not in artifact_policy:
             errors.append(f"artifact_policy에 repo-local 근거 기록 규칙 `{phrase}`가 없습니다.")
 
-    common_audit_policy = read_text("docs/harness/common/audit_policy.md")
+    common_audit_policy = read_text("downstream/docs/harness/common/audit_policy.md")
     if "기억/외부 대화/다른 프로젝트 관행" not in common_audit_policy:
         errors.append("common audit_policy에 repo-local source-of-truth 감사 문구가 없습니다.")
 
@@ -466,7 +466,7 @@ def check_repo_local_source_of_truth_docs(errors: list[str]) -> None:
         if phrase not in maintainer_audit_policy:
             errors.append(f"kit_maintenance audit_policy에 `{phrase}` 문구가 없습니다.")
 
-    implementation_template = read_text("docs/templates/task/implementation_notes.md")
+    implementation_template = read_text("downstream/docs/templates/task/implementation_notes.md")
     for phrase in (
         "- repo-local 근거:",
         "- repo에 없어 문서화/승인 대상으로 넘긴 결정:",
@@ -474,7 +474,7 @@ def check_repo_local_source_of_truth_docs(errors: list[str]) -> None:
         if phrase not in implementation_template:
             errors.append(f"implementation_notes template에 `{phrase}` 항목이 없습니다.")
 
-    phase_status_template = read_text("docs/templates/task/phase_status.md")
+    phase_status_template = read_text("downstream/docs/templates/task/phase_status.md")
     for phrase in (
         "## Current State",
         "## Allowed Write Set",
@@ -487,7 +487,7 @@ def check_repo_local_source_of_truth_docs(errors: list[str]) -> None:
         if phrase not in phase_status_template:
             errors.append(f"phase_status template에 `{phrase}` 항목이 없습니다.")
 
-    validation_template = read_text("docs/templates/task/validation_report.md")
+    validation_template = read_text("downstream/docs/templates/task/validation_report.md")
     for phrase in (
         "- 이번 판단의 repo-local 근거:",
         "- repo에 없어 후속 문서화/승인 대상으로 남긴 결정:",

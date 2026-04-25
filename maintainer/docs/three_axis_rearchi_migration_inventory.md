@@ -179,56 +179,56 @@
 
 | 현재 경로 | 목표 canonical path |
 | --- | --- |
-| `docs/harness_guide.md` | `downstream/docs/harness_guide.md` |
-| `docs/downstream_harness_flow.md` | `downstream/docs/downstream_harness_flow.md` |
-| `docs/standard/coding_guidelines_core.md` | `downstream/docs/standard/coding_guidelines_core.md` |
+| `downstream/docs/harness_guide.md` | `downstream/docs/harness_guide.md` |
+| `downstream/docs/downstream_harness_flow.md` | `downstream/docs/downstream_harness_flow.md` |
+| `downstream/docs/standard/coding_guidelines_core.md` | `downstream/docs/standard/coding_guidelines_core.md` |
 
 #### downstream/docs common policy docs
 
-`docs/harness/common/*`는 `downstream/docs/harness/common/*`로 이동한다.
+`downstream/docs/harness/common/*`는 downstream common policy의 canonical path다.
 
 현재 확인된 파일:
 
-- `docs/harness/common/audit_policy.md`
-- `docs/harness/common/process_policy.md`
-- `docs/harness/common/artifact_policy.md`
-- `docs/harness/common/validation_policy.md`
-- `docs/harness/common/lightweight_task_policy.md`
-- `docs/harness/common/design_quality_policy.md`
-- `docs/harness/common/performance_policy.md`
-- `docs/harness/common/code_hygiene_policy.md`
-- `docs/harness/common/testing_policy.md`
-- `docs/harness/common/test_double_policy.md`
+- `downstream/docs/harness/common/audit_policy.md`
+- `downstream/docs/harness/common/process_policy.md`
+- `downstream/docs/harness/common/artifact_policy.md`
+- `downstream/docs/harness/common/validation_policy.md`
+- `downstream/docs/harness/common/lightweight_task_policy.md`
+- `downstream/docs/harness/common/design_quality_policy.md`
+- `downstream/docs/harness/common/performance_policy.md`
+- `downstream/docs/harness/common/code_hygiene_policy.md`
+- `downstream/docs/harness/common/testing_policy.md`
+- `downstream/docs/harness/common/test_double_policy.md`
 
 #### downstream/docs phase docs
 
-`docs/phase_*/*`는 `downstream/docs/phase_*/*`로 이동한다.
+`downstream/docs/phase_*/*`는 downstream phase docs의 canonical path다.
 
 현재 확인된 파일:
 
-- `docs/phase_1_requirement_and_planning/implementation.md`
-- `docs/phase_1_requirement_and_planning/audit.md`
-- `docs/phase_2_tdd_implementation/implementation.md`
-- `docs/phase_2_tdd_implementation/audit.md`
-- `docs/phase_3_integration/implementation.md`
-- `docs/phase_3_integration/audit.md`
-- `docs/phase_4_validation/implementation.md`
-- `docs/phase_4_validation/audit.md`
-- `docs/phase_5_documentation/implementation.md`
-- `docs/phase_5_documentation/audit.md`
+- `downstream/docs/phase_1_requirement_and_planning/implementation.md`
+- `downstream/docs/phase_1_requirement_and_planning/audit.md`
+- `downstream/docs/phase_2_tdd_implementation/implementation.md`
+- `downstream/docs/phase_2_tdd_implementation/audit.md`
+- `downstream/docs/phase_3_integration/implementation.md`
+- `downstream/docs/phase_3_integration/audit.md`
+- `downstream/docs/phase_4_validation/implementation.md`
+- `downstream/docs/phase_4_validation/audit.md`
+- `downstream/docs/phase_5_documentation/implementation.md`
+- `downstream/docs/phase_5_documentation/audit.md`
 
 #### downstream/docs task templates
 
-`docs/templates/task/*`는 `downstream/docs/templates/task/*`로 이동한다.
+`downstream/docs/templates/task/*`는 downstream task template의 canonical path다.
 
 현재 확인된 파일:
 
-- `docs/templates/task/phase_status.md`
-- `docs/templates/task/implementation_notes.md`
-- `docs/templates/task/validation_report.md`
-- `docs/templates/task/plan.md`
-- `docs/templates/task/issue.md`
-- `docs/templates/task/requirements.md`
+- `downstream/docs/templates/task/phase_status.md`
+- `downstream/docs/templates/task/implementation_notes.md`
+- `downstream/docs/templates/task/validation_report.md`
+- `downstream/docs/templates/task/plan.md`
+- `downstream/docs/templates/task/issue.md`
+- `downstream/docs/templates/task/requirements.md`
 
 #### downstream/docs examples
 

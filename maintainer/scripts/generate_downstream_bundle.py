@@ -24,13 +24,7 @@ BOUNDARY_INCLUDE_SECTIONS = (
 )
 BOUNDARY_EXCLUDE_SECTIONS = ("### 3) Maintainer 전용 자산",)
 
-SOURCE_ROOTS = (ROOT / "bootstrap", ROOT / "docs", ROOT / "scripts")
-
-BUNDLE_RELATIVE_PATH_REWRITES = {
-    "bootstrap/docs/quickstart.md": Path("docs/quickstart.md"),
-    "bootstrap/docs/how_harness_kit_works.md": Path("docs/how_harness_kit_works.md"),
-    "bootstrap/docs/version_support.md": Path("docs/version_support.md"),
-}
+SOURCE_ROOTS = (ROOT / "bootstrap", ROOT / "docs", ROOT / "downstream", ROOT / "scripts")
 
 
 @dataclass(frozen=True)
@@ -128,11 +122,13 @@ def matches_any_pattern(relative_path: Path, patterns: list[str]) -> bool:
 
 def bundle_relative_path_for_source(relative_path: Path) -> Path:
     relative_posix = relative_path.as_posix()
-    if relative_posix.startswith("bootstrap/docs/project_overlay/"):
-        return Path("docs/project_overlay") / relative_path.name
+    if relative_posix.startswith("bootstrap/docs/"):
+        return Path("docs") / relative_path.relative_to("bootstrap/docs")
     if relative_posix.startswith("bootstrap/scripts/"):
         return Path("scripts") / relative_path.name
-    return BUNDLE_RELATIVE_PATH_REWRITES.get(relative_posix, relative_path)
+    if relative_posix.startswith("downstream/docs/"):
+        return Path("docs") / relative_path.relative_to("downstream/docs")
+    return relative_path
 
 
 def build_bundle_files() -> list[BundleFile]:

@@ -26,16 +26,16 @@
 ## 프로젝트 문서 변경과 Kit 변경의 판별 기준
 
 - 비대상: downstream 프로젝트 로컬 `docs/project_entrypoint.md`, `docs/standard/*`, 프로젝트 저장소 안의 task 산출물 변경
-- 대상: 이 저장소의 `docs/harness_guide.md`, `docs/harness/common/*`, `docs/phase_*`, `bootstrap/docs/project_overlay/*` template, `bootstrap/*`, `README.md`, `maintainer/scripts/check_harness_docs.py`, `bootstrap/scripts/bootstrap_init.py`, `harness.log` 변경
+- 대상: 이 저장소의 `downstream/docs/harness_guide.md`, `downstream/docs/harness/common/*`, `docs/phase_*`, `bootstrap/docs/project_overlay/*` template, `bootstrap/*`, `README.md`, `maintainer/scripts/check_harness_docs.py`, `bootstrap/scripts/bootstrap_init.py`, `harness.log` 변경
 - downstream 프로젝트에서 복사해 간 overlay 문서를 수정하는 일은 프로젝트 문서 변경이지 `harness-kit` 유지보수가 아니다.
 - 반대로 이 저장소의 overlay template를 수정해 모든 프로젝트의 기본값을 바꾸는 일은 `harness-kit` 유지보수다.
 
 ## 문서 집합 경계
 
-- 프로젝트 영향 문서: `docs/harness_guide.md`, `docs/harness/common/*`, `docs/phase_*`, `bootstrap/docs/project_overlay/*`, `docs/standard/coding_guidelines_core.md`, `docs/templates/task/*`, `docs/examples/*`, `bootstrap/*`, `bootstrap/scripts/bootstrap_init.py`
+- 프로젝트 영향 문서: `downstream/docs/harness_guide.md`, `downstream/docs/harness/common/*`, `downstream/docs/phase_*`, `bootstrap/docs/project_overlay/*`, `downstream/docs/standard/coding_guidelines_core.md`, `downstream/docs/templates/task/*`, `docs/examples/*`, `bootstrap/*`, `bootstrap/scripts/bootstrap_init.py`
 - maintainer 전용 문서: `maintainer/docs/*`, `maintainer/scripts/*`, `harness.log`, `.github/workflows/harness-doc-guard.yml`
 - maintainer 전용 지침을 수정하는 작업은 maintainer 전용 문서 집합 안에서만 끝나야 한다.
-- 예외: 모든 감사에 공통으로 적용할 audit 운영 규칙을 바꾸는 경우 `docs/harness/common/audit_policy.md`를 함께 수정할 수 있다. 이때도 maintainer 전용 경로, `harness.log` 규칙, drift 대응 절차는 프로젝트 영향 문서 본문으로 복제하지 않는다.
+- 예외: 모든 감사에 공통으로 적용할 audit 운영 규칙을 바꾸는 경우 `downstream/docs/harness/common/audit_policy.md`를 함께 수정할 수 있다. 이때도 maintainer 전용 경로, `harness.log` 규칙, drift 대응 절차는 프로젝트 영향 문서 본문으로 복제하지 않는다.
 - 프로젝트 영향 문서와 overlay template를 수정하는 작업은 프로젝트 영향 문서 집합 안에서만 끝나야 하며, maintainer 전용 문서는 `harness.log` 기록 외에는 함께 수정하지 않는다.
 - `README.md`는 저장소 진입 문서라 project-facing 안내와 maintainer 안내가 함께 존재할 수 있으므로, maintainer 전용 경로 substring 자동 누수 검사는 기본적으로 `README.md`를 제외하고 whole-harness 수동 감사로 확인한다.
 
@@ -89,7 +89,7 @@ whole-harness는 전체 문서 흐름과 core 일관성을 본다.
 
 ### 1) 아키텍처 및 경계 검사
 
-- `README.md`, `docs/harness_guide.md`, downstream `docs/project_entrypoint.md` 설명, phase-local 문서 사이에 충돌이 없는가
+- `README.md`, `downstream/docs/harness_guide.md`, downstream `docs/project_entrypoint.md` 설명, phase-local 문서 사이에 충돌이 없는가
 - core와 project overlay의 책임 경계가 흐려지지 않았는가
 - repo source-of-truth 자산, downstream bundle 자산, maintainer 전용 자산의 경계가 서로 충돌하지 않는가
 - maintainer 전용 규칙이 프로젝트 영향 문서 본문으로 새어 들어가지 않았는가
@@ -110,7 +110,7 @@ whole-harness는 전체 문서 흐름과 core 일관성을 본다.
 
 - 규칙 변경으로 sample task 기대 산출물 또는 수행 방식이 바뀌면 `docs/examples/` 아래 관련 예시를 함께 현행화했는가
 - subagent/제3자가 같은 규칙으로 유사한 감사 결론을 낼 수 있을 만큼 기준이 객관적인가
-- `docs/standard/coding_guidelines_core.md`의 공통 품질 기준과 project convention 참조 구조가 phase 문서, template, example, bootstrap 자산 전반에서 같은 방식으로 유지되는가
+- `downstream/docs/standard/coding_guidelines_core.md`의 공통 품질 기준과 project convention 참조 구조가 phase 문서, template, example, bootstrap 자산 전반에서 같은 방식으로 유지되는가
 - 여러 구현 에이전트가 같은 입력으로 작업해도 동일한 필수 재참조 문서, 체크리스트, 감사 게이트를 따라 유사한 품질 결론에 수렴할 수 있게 기준이 재현 가능한가
 - 같은 입력에서 서로 다른 session이 기억이나 외부 관행보다 repo-local 근거를 먼저 보게 만드는 운영 원칙이 충분히 명시적인가
 - 새 지침이나 정책이 너무 넓거나 모호해서 서로 다른 session이 같은 입력을 보고 다른 결론에 도달할 위험이 있는지 직접 점검했는가
@@ -132,7 +132,7 @@ whole-harness는 전체 문서 흐름과 core 일관성을 본다.
 - core/overlay 책임 경계가 바뀌었는데 의도와 근거가 없음
 - maintainer 전용 경로, `harness.log` 규칙, drift 대응 절차가 프로젝트 영향 문서 본문에 추가됨
 - 프로젝트 영향 문서 변경과 무관한 maintainer 전용 문서 수정이 `harness.log` 외에 섞임
-- 공통 품질 기준(`docs/standard/coding_guidelines_core.md`) 또는 project convention 참조 구조가 phase 문서, template, example, bootstrap 자산 사이에서 불일치함
+- 공통 품질 기준(`downstream/docs/standard/coding_guidelines_core.md`) 또는 project convention 참조 구조가 phase 문서, template, example, bootstrap 자산 사이에서 불일치함
 - 규칙 변경으로 여러 에이전트가 따라야 할 필수 재참조 문서, 체크리스트, 감사 게이트가 달라져 산출물 품질 편차가 커질 가능성이 높은데 완화 기준이나 근거가 없음
 - 새 지침이 넓거나 모호해 서로 다른 session/agent가 같은 입력으로도 다른 판정에 도달할 가능성이 높은데, 해석 범위를 좁히는 질문/예시/결정 규칙이 없음
 - 책임 혼합, 과도한 추상화, 테스트 없는 핵심 변경, 원시 외부 에러 유입 같은 금지 패턴을 새 기본값처럼 허용하거나 묵인함
