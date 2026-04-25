@@ -232,33 +232,33 @@
 
 #### downstream/docs examples
 
-`docs/examples/**/*`는 `downstream/docs/examples/**/*`로 이동한다.
+`downstream/docs/examples/**/*`는 downstream example docs의 canonical path다.
 
 현재 저장소 기준 전체 범위는 아래 4개 subtree 전부다.
 
-- `docs/examples/sample-task/*`
-- `docs/examples/sample-lightweight-task/*`
-- `docs/examples/bootstrap-first-success/*`
-- `docs/examples/project-decisions/*`
+- `downstream/docs/examples/sample-task/*`
+- `downstream/docs/examples/sample-lightweight-task/*`
+- `downstream/docs/examples/bootstrap-first-success/*`
+- `downstream/docs/examples/project-decisions/*`
 
 현재 확인된 파일 전체 목록:
 
-- `docs/examples/sample-task/phase_status.md`
-- `docs/examples/sample-task/validation_report.md`
-- `docs/examples/sample-task/implementation_notes.md`
-- `docs/examples/sample-task/plan.md`
-- `docs/examples/sample-task/issue.md`
-- `docs/examples/sample-task/requirements.md`
-- `docs/examples/sample-task/coding_conventions_project_example.md`
-- `docs/examples/sample-lightweight-task/phase_status.md`
-- `docs/examples/sample-lightweight-task/validation_report.md`
-- `docs/examples/sample-lightweight-task/implementation_notes.md`
-- `docs/examples/sample-lightweight-task/plan.md`
-- `docs/examples/sample-lightweight-task/issue.md`
-- `docs/examples/sample-lightweight-task/requirements.md`
-- `docs/examples/bootstrap-first-success/validation_report.md`
-- `docs/examples/bootstrap-first-success/overlay_completion_validation_report.md`
-- `docs/examples/project-decisions/DEC-001-authorization-validation-location.md`
+- `downstream/docs/examples/sample-task/phase_status.md`
+- `downstream/docs/examples/sample-task/validation_report.md`
+- `downstream/docs/examples/sample-task/implementation_notes.md`
+- `downstream/docs/examples/sample-task/plan.md`
+- `downstream/docs/examples/sample-task/issue.md`
+- `downstream/docs/examples/sample-task/requirements.md`
+- `downstream/docs/examples/sample-task/coding_conventions_project_example.md`
+- `downstream/docs/examples/sample-lightweight-task/phase_status.md`
+- `downstream/docs/examples/sample-lightweight-task/validation_report.md`
+- `downstream/docs/examples/sample-lightweight-task/implementation_notes.md`
+- `downstream/docs/examples/sample-lightweight-task/plan.md`
+- `downstream/docs/examples/sample-lightweight-task/issue.md`
+- `downstream/docs/examples/sample-lightweight-task/requirements.md`
+- `downstream/docs/examples/bootstrap-first-success/validation_report.md`
+- `downstream/docs/examples/bootstrap-first-success/overlay_completion_validation_report.md`
+- `downstream/docs/examples/project-decisions/DEC-001-authorization-validation-location.md`
 
 #### downstream/scripts
 

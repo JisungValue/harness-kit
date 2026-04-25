@@ -18,7 +18,7 @@
 - 새 harness bundle 변경을 얼마나 조심해서 반영해야 하는지 분류하는 기준은 `bootstrap/docs/project_overlay/harness_upgrade_impact_policy.md`를 본다.
 - 새 harness bundle 변경을 실제로 어떤 순서와 기준으로 검토하고 반영할지는 `bootstrap/docs/project_overlay/downstream_harness_upgrade_guide.md`를 본다.
 - 새 harness bundle과 현재 overlay 사이의 사람 중심 diff review 항목은 `bootstrap/docs/project_overlay/downstream_overlay_diff_review_checklist.md`를 본다.
-- 사람이 읽는 overlay 완료 기준은 `bootstrap/docs/project_overlay/overlay_completion_checklist.md`를 보고, sample validation 예시는 필요할 때만 `docs/examples/bootstrap-first-success/overlay_completion_validation_report.md`를 참고한다.
+- 사람이 읽는 overlay 완료 기준은 `bootstrap/docs/project_overlay/overlay_completion_checklist.md`를 보고, sample validation 예시는 필요할 때만 `downstream/docs/examples/bootstrap-first-success/overlay_completion_validation_report.md`를 참고한다.
 
 ## 필수 문서
 
@@ -180,4 +180,4 @@
   - downstream 프로젝트의 `docs/decisions/README.md`로 생성하는 기본 index template다.
 - `bootstrap/docs/project_overlay/decision_record_template.md`
   - 필요한 경우 `DEC-###-slug.md`로 복사해 쓰는 decision record template다.
-- canonical example은 `docs/examples/project-decisions/DEC-001-authorization-validation-location.md`를 본다.
+- canonical example은 `downstream/docs/examples/project-decisions/DEC-001-authorization-validation-location.md`를 본다.

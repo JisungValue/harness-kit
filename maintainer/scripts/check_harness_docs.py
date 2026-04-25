@@ -83,7 +83,7 @@ LANGUAGE_TEMPLATE_REQUIRED_HEADINGS = {
 PROJECT_FACING_MD_GLOBS = [
     "bootstrap/**/*.md",
     "downstream/docs/downstream_harness_flow.md",
-    "docs/examples/**/*.md",
+    "downstream/docs/examples/**/*.md",
     "downstream/docs/harness/common/**/*.md",
     "downstream/docs/harness_guide.md",
     "downstream/docs/phase_*/*.md",

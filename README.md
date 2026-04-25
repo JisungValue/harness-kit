@@ -98,7 +98,7 @@ python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-proj
   - 여러 프로젝트에서 공통으로 재사용할 수 있는 코드 품질 규칙을 둔다.
 - `downstream/docs/templates/task/`
   - 새 task를 시작할 때 복사해서 쓸 기본 산출물 템플릿을 둔다.
-- `docs/examples/`
+- `downstream/docs/examples/`
   - 기본 시작 경로가 아니라 필요할 때 보는 advanced/reference 예시 task들을 둔다.
 - `bootstrap/`
   - 프로젝트 스캐폴딩 또는 수동 복사에 쓰는 bootstrap 자산을 둔다.

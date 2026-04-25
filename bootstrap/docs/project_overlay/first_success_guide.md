@@ -257,9 +257,9 @@ docs/
 
 ## 참고 검증 자산
 
-- 실제 end-to-end smoke validation 예시는 필요할 때만 `docs/examples/bootstrap-first-success/validation_report.md`를 본다.
+- 실제 end-to-end smoke validation 예시는 필요할 때만 `downstream/docs/examples/bootstrap-first-success/validation_report.md`를 본다.
 - init, validator, adopt dry-run의 로컬 진단 순서는 `bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md`를 본다.
 - 사람이 읽는 overlay 완료 기준은 `bootstrap/docs/project_overlay/overlay_completion_checklist.md`를 본다.
-- overlay 완료 상태 sample validation 예시는 필요할 때만 `docs/examples/bootstrap-first-success/overlay_completion_validation_report.md`를 본다.
+- overlay 완료 상태 sample validation 예시는 필요할 때만 `downstream/docs/examples/bootstrap-first-success/overlay_completion_validation_report.md`를 본다.
 - first success 이후 unresolved placeholder를 점검하려면 `bootstrap/docs/project_overlay/unresolved_decision_validator.md`를 본다.
 - 문서 간 교차 정합성을 점검하려면 `bootstrap/docs/project_overlay/cross_document_consistency_checker.md`를 본다.

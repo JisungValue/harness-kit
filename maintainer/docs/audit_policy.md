@@ -32,7 +32,7 @@
 
 ## 문서 집합 경계
 
-- 프로젝트 영향 문서: `downstream/docs/harness_guide.md`, `downstream/docs/harness/common/*`, `downstream/docs/phase_*`, `bootstrap/docs/project_overlay/*`, `downstream/docs/standard/coding_guidelines_core.md`, `downstream/docs/templates/task/*`, `docs/examples/*`, `bootstrap/*`, `bootstrap/scripts/bootstrap_init.py`
+- 프로젝트 영향 문서: `downstream/docs/harness_guide.md`, `downstream/docs/harness/common/*`, `downstream/docs/phase_*`, `bootstrap/docs/project_overlay/*`, `downstream/docs/standard/coding_guidelines_core.md`, `downstream/docs/templates/task/*`, `downstream/docs/examples/*`, `bootstrap/*`, `bootstrap/scripts/bootstrap_init.py`
 - maintainer 전용 문서: `maintainer/docs/*`, `maintainer/scripts/*`, `harness.log`, `.github/workflows/harness-doc-guard.yml`
 - maintainer 전용 지침을 수정하는 작업은 maintainer 전용 문서 집합 안에서만 끝나야 한다.
 - 예외: 모든 감사에 공통으로 적용할 audit 운영 규칙을 바꾸는 경우 `downstream/docs/harness/common/audit_policy.md`를 함께 수정할 수 있다. 이때도 maintainer 전용 경로, `harness.log` 규칙, drift 대응 절차는 프로젝트 영향 문서 본문으로 복제하지 않는다.
@@ -108,7 +108,7 @@ whole-harness는 전체 문서 흐름과 core 일관성을 본다.
 
 ### 3) 실무 정합성
 
-- 규칙 변경으로 sample task 기대 산출물 또는 수행 방식이 바뀌면 `docs/examples/` 아래 관련 예시를 함께 현행화했는가
+- 규칙 변경으로 sample task 기대 산출물 또는 수행 방식이 바뀌면 `downstream/docs/examples/` 아래 관련 예시를 함께 현행화했는가
 - subagent/제3자가 같은 규칙으로 유사한 감사 결론을 낼 수 있을 만큼 기준이 객관적인가
 - `downstream/docs/standard/coding_guidelines_core.md`의 공통 품질 기준과 project convention 참조 구조가 phase 문서, template, example, bootstrap 자산 전반에서 같은 방식으로 유지되는가
 - 여러 구현 에이전트가 같은 입력으로 작업해도 동일한 필수 재참조 문서, 체크리스트, 감사 게이트를 따라 유사한 품질 결론에 수렴할 수 있게 기준이 재현 가능한가

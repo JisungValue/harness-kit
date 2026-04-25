@@ -101,7 +101,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             self.assertIn("downstream/docs/phase_*/*.md", manifest["source_patterns"])
             self.assertIn("downstream/docs/standard/coding_guidelines_core.md", manifest["source_patterns"])
             self.assertIn("downstream/docs/templates/task/**/*.md", manifest["source_patterns"])
-            self.assertIn("docs/examples/**/*.md", manifest["source_patterns"])
+            self.assertIn("downstream/docs/examples/**/*.md", manifest["source_patterns"])
             self.assertIn("bootstrap/docs/project_overlay/harness_doc_guard_workflow_template.yml", manifest["source_patterns"])
             self.assertIn("maintainer/docs/*", manifest["excluded_patterns"])
             self.assertEqual(manifest["generated_files"][0]["path"], "README.md")
@@ -113,7 +113,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
                 "### 1) Downstream 필수 자산",
                 "- `bootstrap/scripts/bootstrap_init.py`",
                 "### 2) Downstream 선택 자산",
-                "- `docs/examples/**/*.md`",
+                "- `downstream/docs/examples/**/*.md`",
                 "### 3) Maintainer 전용 자산",
                 "- `scripts/validate_downstream_bundle.py`",
             ]
@@ -122,7 +122,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
         with mock.patch.object(module, "read_boundary_document", return_value=synthetic_boundary):
             self.assertEqual(
                 module.extract_bundle_patterns(),
-                ["bootstrap/scripts/bootstrap_init.py", "docs/examples/**/*.md"],
+                ["bootstrap/scripts/bootstrap_init.py", "downstream/docs/examples/**/*.md"],
             )
 
             bundle_files = module.build_bundle_files()
@@ -141,7 +141,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
                 "### 1) Downstream 필수 자산",
                 "- `bootstrap/scripts/bootstrap_init.py`",
                 "### 2) Downstream 선택 자산",
-                "- `docs/examples/**/*.md`",
+                "- `downstream/docs/examples/**/*.md`",
                 "### 3) Maintainer 전용 자산",
                 "- `maintainer/scripts/check_harness_docs.py`",
                 "- `maintainer/scripts/validate_downstream_bundle.py`",
@@ -160,9 +160,9 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             [
                 "### 1) Downstream 필수 자산",
                 "- `bootstrap/scripts/bootstrap_init.py`",
-                "- `docs/examples/**/*.md`",
+                "- `downstream/docs/examples/**/*.md`",
                 "### 2) Downstream 선택 자산",
-                "- `docs/examples/**/*.md`",
+                "- `downstream/docs/examples/**/*.md`",
                 "### 3) Maintainer 전용 자산",
                 "- `bootstrap/scripts/bootstrap_init.py`",
             ]
