@@ -73,7 +73,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 9. task를 시작하면 `phase_status.md`에 현재 gate와 허용 write-set을 먼저 적고, 필요할 때 아래 validator로 hard-stop 위반을 점검한다.
 
 ```bash
-python3 vendor/harness-kit/scripts/validate_phase_gate.py docs/task/<task_id> --paths docs/task/<task_id>/issue.md docs/task/<task_id>/phase_status.md
+python3 vendor/harness-kit/downstream/scripts/validate_phase_gate.py docs/task/<task_id> --paths docs/task/<task_id>/issue.md docs/task/<task_id>/phase_status.md
 ```
 
 상세 설명이 더 필요하면 아래 reference로 이어서 읽는다.

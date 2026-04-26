@@ -102,7 +102,7 @@
 - 재수행을 시작할 때는 현재 Phase에서 수정 가능한 파일 집합을 먼저 정한다.
 - write-set 밖의 파일은 현재 Phase가 다시 승인될 때까지 잠금 상태로 본다.
 - 현재 Phase보다 뒤의 문서, final task-local 산출물, close-out 문서, canonical 문서는 기본적으로 잠금 대상이다.
-- `phase_status.md`를 쓰는 task라면 허용 write-set과 잠긴 경로를 그 파일에 명시하고, `scripts/validate_phase_gate.py`로 위반 여부를 검사할 수 있어야 한다.
+- `phase_status.md`를 쓰는 task라면 허용 write-set과 잠긴 경로를 그 파일에 명시하고, `downstream/scripts/validate_phase_gate.py`로 위반 여부를 검사할 수 있어야 한다.
 - 예를 들어 Phase 1을 다시 수행할 때는 기본적으로 `issue.md`, `requirements.md`, `plan.md`, `implementation_notes.md`만 수정 대상으로 두고, `validation_report.md`, final task-local 산출물, `docs/decisions/*`는 잠근다.
 - 예외적으로 잠금을 풀어야 하면 사용자 승인을 먼저 받는다.
 

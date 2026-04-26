@@ -52,7 +52,7 @@
 - 감사가 여러 단계면 필요한 내부 감사가 모두 승인 가능이어야 사용자 승인 게이트로 이동할 수 있다.
 - 감사가 승인 가능이어도 사용자 승인 없이는 다음 Phase로 이동하지 않는다.
 - 재감사 시에는 이전 피드백 해소 여부를 먼저 확인한다.
-- task workspace에 `phase_status.md`가 있으면 현재 gate와 허용 write-set을 그 파일 기준으로 먼저 확인하고, 필요하면 `scripts/validate_phase_gate.py`로 hard-stop 위반 여부를 본다.
+- task workspace에 `phase_status.md`가 있으면 현재 gate와 허용 write-set을 그 파일 기준으로 먼저 확인하고, 필요하면 `downstream/scripts/validate_phase_gate.py`로 hard-stop 위반 여부를 본다.
 - 변경 요청이나 방향 변경이 들어오면 문서 수정 전에 가장 이른 영향 Phase, stale 처리할 감사/승인, 잠글 산출물을 먼저 선언한다.
 - 입력 문서나 산출물 변경으로 재수행할 때는 변경 영향이 걸린 가장 이른 Phase부터 다시 수행한다.
 - 어떤 Phase 산출물이 수정되면 그 Phase 감사는 stale 이 되고, 이미 승인된 상태였다면 사용자 승인도 stale 이 된다.

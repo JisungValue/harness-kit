@@ -264,7 +264,11 @@
 
 | 현재 경로 | 목표 canonical path |
 | --- | --- |
-| `scripts/validate_phase_gate.py` | `downstream/scripts/validate_phase_gate.py` |
+| `downstream/scripts/validate_phase_gate.py` | `downstream/scripts/validate_phase_gate.py` |
+
+루트 `scripts/validate_phase_gate.py` wrapper는 transition entry path이며 source-of-truth가 아니다.
+
+- 제거 조건: `#146` 단계에서 source repo 안내 문서, tests/CI, generated bundle consumer 경로가 canonical `downstream/scripts/validate_phase_gate.py`만으로 안정 동작하는지 확인한 뒤 정리한다.
 
 ### 4. 루트 유지 또는 후속 결정
 

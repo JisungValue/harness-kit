@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-VALIDATOR_SCRIPT = ROOT / "scripts" / "validate_phase_gate.py"
+VALIDATOR_SCRIPT = ROOT / "downstream" / "scripts" / "validate_phase_gate.py"
 
 
 class ValidatePhaseGateTest(unittest.TestCase):

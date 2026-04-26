@@ -128,6 +128,8 @@ def bundle_relative_path_for_source(relative_path: Path) -> Path:
         return Path("scripts") / relative_path.name
     if relative_posix.startswith("downstream/docs/"):
         return Path("docs") / relative_path.relative_to("downstream/docs")
+    if relative_posix.startswith("downstream/scripts/"):
+        return Path("downstream/scripts") / relative_path.name
     return relative_path
 
 

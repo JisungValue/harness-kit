@@ -62,7 +62,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             self.assertTrue((output / "scripts/adopt_dry_run.py").exists())
             self.assertTrue((output / "scripts/adopt_safe_write.py").exists())
             self.assertTrue((output / "scripts/check_first_success_docs.py").exists())
-            self.assertTrue((output / "scripts/validate_phase_gate.py").exists())
+            self.assertTrue((output / "downstream/scripts/validate_phase_gate.py").exists())
 
             self.assertFalse((output / "maintainer/docs/release_process.md").exists())
             self.assertFalse((output / "scripts/check_harness_docs.py").exists())
@@ -85,7 +85,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             self.assertIn("docs/project_overlay/adopt_dry_run.md", copied_paths)
             self.assertIn("docs/project_overlay/harness_doc_guard_workflow_template.yml", copied_paths)
             self.assertIn("scripts/bootstrap_init.py", copied_paths)
-            self.assertIn("scripts/validate_phase_gate.py", copied_paths)
+            self.assertIn("downstream/scripts/validate_phase_gate.py", copied_paths)
             self.assertEqual(manifest["artifact_format"], "directory")
             self.assertEqual(
                 manifest["boundary_document"],
@@ -102,6 +102,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             self.assertIn("downstream/docs/standard/coding_guidelines_core.md", manifest["source_patterns"])
             self.assertIn("downstream/docs/templates/task/**/*.md", manifest["source_patterns"])
             self.assertIn("downstream/docs/examples/**/*.md", manifest["source_patterns"])
+            self.assertIn("downstream/scripts/validate_phase_gate.py", manifest["source_patterns"])
             self.assertIn("bootstrap/docs/project_overlay/harness_doc_guard_workflow_template.yml", manifest["source_patterns"])
             self.assertIn("maintainer/docs/*", manifest["excluded_patterns"])
             self.assertEqual(manifest["generated_files"][0]["path"], "README.md")
