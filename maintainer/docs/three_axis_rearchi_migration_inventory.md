@@ -88,10 +88,10 @@
 | `docs/kit_maintenance/downstream_bundle_boundary.md` | `maintainer/docs/downstream_bundle_boundary.md` | bundle 경계 정본 |
 | `docs/kit_maintenance/downstream_bundle_smoke_validation.md` | `maintainer/docs/downstream_bundle_smoke_validation.md` | maintainer smoke 기준 |
 | `docs/kit_maintenance/three_axis_rearchi_migration_inventory.md` | `maintainer/docs/three_axis_rearchi_migration_inventory.md` | maintainer migration source-of-truth |
-| `scripts/check_harness_docs.py` | `maintainer/scripts/check_harness_docs.py` | maintainer 전용 문서 검사 |
-| `scripts/generate_downstream_bundle.py` | `maintainer/scripts/generate_downstream_bundle.py` | bundle 생성 |
-| `scripts/validate_downstream_bundle.py` | `maintainer/scripts/validate_downstream_bundle.py` | bundle 검증 |
-| `scripts/install_downstream_bundle.py` | `maintainer/scripts/install_downstream_bundle.py` | source repo helper |
+| `maintainer/scripts/check_harness_docs.py` | `maintainer/scripts/check_harness_docs.py` | maintainer 전용 문서 검사 |
+| `maintainer/scripts/generate_downstream_bundle.py` | `maintainer/scripts/generate_downstream_bundle.py` | bundle 생성 |
+| `maintainer/scripts/validate_downstream_bundle.py` | `maintainer/scripts/validate_downstream_bundle.py` | bundle 검증 |
+| `maintainer/scripts/install_downstream_bundle.py` | `maintainer/scripts/install_downstream_bundle.py` | source repo helper |
 
 루트 유지:
 
@@ -157,9 +157,7 @@
 | `bootstrap/scripts/adopt_dry_run.py` | `bootstrap/scripts/adopt_dry_run.py` |
 | `bootstrap/scripts/adopt_safe_write.py` | `bootstrap/scripts/adopt_safe_write.py` |
 
-루트 `scripts/*.py` wrapper는 transition entry path이며 source-of-truth가 아니다.
-
-- 제거 조건: `#146` 단계에서 tests/CI와 source repo 안내 문서가 canonical `bootstrap/scripts/*` 또는 downstream materialized `scripts/*`만으로 안정 동작하는지 확인한 뒤 정리한다.
+루트 `scripts/*.py` bootstrap wrapper는 제거되었다.
 
 #### bootstrap/language_conventions
 
@@ -266,9 +264,7 @@
 | --- | --- |
 | `downstream/scripts/validate_phase_gate.py` | `downstream/scripts/validate_phase_gate.py` |
 
-루트 `scripts/validate_phase_gate.py` wrapper는 transition entry path이며 source-of-truth가 아니다.
-
-- 제거 조건: `#146` 단계에서 source repo 안내 문서, tests/CI, generated bundle consumer 경로가 canonical `downstream/scripts/validate_phase_gate.py`만으로 안정 동작하는지 확인한 뒤 정리한다.
+루트 `scripts/validate_phase_gate.py` wrapper는 제거되었다.
 
 ### 4. 루트 유지 또는 후속 결정
 

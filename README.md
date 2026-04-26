@@ -48,10 +48,26 @@
 - Start here: [`bootstrap/docs/quickstart.md`](bootstrap/docs/quickstart.md)
 - 이 저장소의 `README.md`는 source repo 안내 문서다. 실제 bootstrap, adopt, validate 명령은 `harness-kit` source repo가 아니라 downstream 프로젝트 루트에서 실행한다.
 
+## 3축 지도
+
+- `downstream/`
+  - downstream 프로젝트에 vendoring되거나, 도입 이후 계속 참조되는 운영 규칙과 runtime 도구의 source-of-truth다.
+- `bootstrap/`
+  - downstream 프로젝트를 처음 세팅하거나 adoption/readiness 상태를 맞출 때 쓰는 문서, template, bootstrap/adoption 스크립트의 source-of-truth다.
+- `maintainer/`
+  - 이 source repo를 유지보수하고 bundle/release/audit를 관리하는 maintainer 전용 자산의 source-of-truth다.
+
+generated downstream bundle에서는 consumer 시작 경로를 유지하기 위해 아래처럼 materialize 된다.
+
+- `downstream/docs/*` -> `docs/*`
+- `bootstrap/docs/*` -> `docs/*`
+- `bootstrap/scripts/*` -> `scripts/*`
+- `downstream/scripts/*` -> `downstream/scripts/*`
+
 ### Source Repo Shortcut
 
 - source repo에서 downstream 프로젝트로 첫 설치를 바로 시작하려면 `maintainer/scripts/install_downstream_bundle.py`를 쓸 수 있다.
-- 이 helper는 canonical bundle 재생성, target 프로젝트 vendoring, vendored `bootstrap_init.py` 실행을 한 번에 묶는다.
+- 이 helper는 canonical bundle 재생성, target 프로젝트 vendoring, vendored `scripts/bootstrap_init.py` 실행을 한 번에 묶는다.
 - 기본 vendored 경로는 `vendor/harness-kit`이고, 다른 경로를 쓰려면 `--vendor-path third_party/harness-kit`처럼 project-root relative path를 준다.
 - vendored path는 downstream `docs/` 트리 밖에 두는 것을 전제로 하며, 이미 vendored bundle이 있으면 `--force-vendor`, bootstrap 결과물이 이미 있으면 `--force-bootstrap`을 사용한다.
 
@@ -114,6 +130,8 @@ python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-proj
   - 기존 프로젝트의 현재 overlay 상태를 bootstrap baseline과 비교해 missing, unchanged, differing, conflict candidate를 read-only로 분류하는 adopt dry-run이다.
 - [`bootstrap/scripts/adopt_safe_write.py`](bootstrap/scripts/adopt_safe_write.py)
   - 기존 프로젝트에 대해 `adopt_dry_run.py`와 같은 판정 규칙을 사용해 missing file create, unchanged refresh, explicit path force overwrite만 허용하는 제한적 safe write/update 도구다.
+- [`downstream/scripts/validate_phase_gate.py`](downstream/scripts/validate_phase_gate.py)
+  - task workspace의 `phase_status.md`와 candidate path 또는 git 변경분을 기준으로 hard-stop gate와 write-set 위반을 검사하는 downstream runtime validator다.
 - [`maintainer/scripts/generate_downstream_bundle.py`](maintainer/scripts/generate_downstream_bundle.py)
   - downstream 배포 경계 기준으로 project-facing 자산만 모아 `dist/harness-kit-project-bundle/` directory artifact와 `bundle_manifest.json`을 생성하는 maintainer용 bundle generation command다.
 - [`maintainer/scripts/validate_downstream_bundle.py`](maintainer/scripts/validate_downstream_bundle.py)
@@ -212,7 +230,8 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 11. local validator가 통과하면 [`bootstrap/docs/project_overlay/harness_doc_guard_workflow_template.yml`](bootstrap/docs/project_overlay/harness_doc_guard_workflow_template.yml)을 source repo canonical template로 보고, downstream vendored bundle에서는 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사한 뒤 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꿔 future-session guardrail을 고정한다.
 12. 첫 task를 시작하기 전에 [`downstream/docs/downstream_harness_flow.md`](downstream/docs/downstream_harness_flow.md)를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
 13. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
-14. 실제 task 몇 개를 돌린 뒤 project overlay와 decisions index를 함께 보강한다.
+14. task 진행 중 gate/write-set 위반을 확인해야 하면 `python3 vendor/harness-kit/downstream/scripts/validate_phase_gate.py docs/task/<task_id> --paths ...`를 사용한다.
+15. 실제 task 몇 개를 돌린 뒤 project overlay와 decisions index를 함께 보강한다.
 
 기존 프로젝트나 부분 도입 상태를 먼저 읽어야 하면 [`bootstrap/docs/project_overlay/adopt_dry_run.md`](bootstrap/docs/project_overlay/adopt_dry_run.md)의 read-only adopt 흐름부터 시작한다.
 

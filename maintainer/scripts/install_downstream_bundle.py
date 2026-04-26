@@ -9,7 +9,7 @@ import sys
 from pathlib import Path, PurePosixPath
 
 ROOT = Path(__file__).resolve().parents[2]
-BOOTSTRAP_SCRIPT_ROOT = ROOT / "scripts"
+BOOTSTRAP_SCRIPT_ROOT = ROOT / "bootstrap" / "scripts"
 if str(BOOTSTRAP_SCRIPT_ROOT) not in sys.path:
     sys.path.append(str(BOOTSTRAP_SCRIPT_ROOT))
 

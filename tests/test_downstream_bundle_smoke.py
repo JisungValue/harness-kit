@@ -10,8 +10,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-GENERATE_SCRIPT = ROOT / "scripts" / "generate_downstream_bundle.py"
-BOOTSTRAP_SCRIPT = ROOT / "scripts" / "bootstrap_init.py"
+GENERATE_SCRIPT = ROOT / "maintainer" / "scripts" / "generate_downstream_bundle.py"
+BOOTSTRAP_SCRIPT = ROOT / "bootstrap" / "scripts" / "bootstrap_init.py"
 CANONICAL_BUNDLE_ROOT = ROOT / "dist" / "harness-kit-project-bundle"
 DEFAULT_HARNESS_GUIDE_REFERENCE = "vendor/harness-kit/docs/harness_guide.md"
 FIRST_SUCCESS_SCRIPT = "check_first_success_docs.py"

@@ -8,8 +8,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BOOTSTRAP_SCRIPT = ROOT / "scripts" / "bootstrap_init.py"
-ADOPT_SCRIPT = ROOT / "scripts" / "adopt_dry_run.py"
+BOOTSTRAP_SCRIPT = ROOT / "bootstrap" / "scripts" / "bootstrap_init.py"
+ADOPT_SCRIPT = ROOT / "bootstrap" / "scripts" / "adopt_dry_run.py"
 
 
 class AdoptDryRunTest(unittest.TestCase):

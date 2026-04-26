@@ -49,6 +49,7 @@ class InstallDownstreamBundleTest(unittest.TestCase):
 
             vendor_root = project_root / "vendor/harness-kit"
             self.assertTrue((vendor_root / "bundle_manifest.json").exists())
+            self.assertTrue((vendor_root / "downstream/scripts/validate_phase_gate.py").exists())
             self.assertTrue((project_root / "AGENTS.md").exists())
             self.assertTrue((project_root / "docs/project_entrypoint.md").exists())
             self.assertIn(
@@ -89,6 +90,7 @@ class InstallDownstreamBundleTest(unittest.TestCase):
 
             vendor_root = project_root / "third_party/harness-kit"
             self.assertTrue((vendor_root / "bundle_manifest.json").exists())
+            self.assertTrue((vendor_root / "downstream/scripts/validate_phase_gate.py").exists())
             self.assertIn(
                 "third_party/harness-kit/docs/harness_guide.md",
                 (project_root / "docs/project_entrypoint.md").read_text(encoding="utf-8"),

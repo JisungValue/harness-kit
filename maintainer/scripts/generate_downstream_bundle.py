@@ -24,7 +24,7 @@ BOUNDARY_INCLUDE_SECTIONS = (
 )
 BOUNDARY_EXCLUDE_SECTIONS = ("### 3) Maintainer 전용 자산",)
 
-SOURCE_ROOTS = (ROOT / "bootstrap", ROOT / "docs", ROOT / "downstream", ROOT / "scripts")
+SOURCE_ROOTS = (ROOT / "bootstrap", ROOT / "docs", ROOT / "downstream")
 
 
 @dataclass(frozen=True)

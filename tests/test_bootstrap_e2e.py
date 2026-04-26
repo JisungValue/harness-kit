@@ -9,8 +9,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BOOTSTRAP_SCRIPT = ROOT / "scripts" / "bootstrap_init.py"
-CONSISTENCY_SCRIPT = ROOT / "scripts" / "validate_overlay_consistency.py"
+BOOTSTRAP_SCRIPT = ROOT / "bootstrap" / "scripts" / "bootstrap_init.py"
+CONSISTENCY_SCRIPT = ROOT / "bootstrap" / "scripts" / "validate_overlay_consistency.py"
 TEMPLATE_MAPPINGS = {
     "bootstrap/docs/project_overlay/agent_entrypoint_template.md": "AGENTS.md",
     "bootstrap/docs/project_overlay/claude_entrypoint_template.md": "CLAUDE.md",
@@ -30,7 +30,7 @@ DEFAULT_HARNESS_GUIDE_REFERENCE = "vendor/harness-kit/docs/harness_guide.md"
 DEFAULT_BOOTSTRAP_REFERENCE = (
     "vendor/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md"
 )
-FIRST_SUCCESS_SCRIPT = ROOT / "scripts" / "check_first_success_docs.py"
+FIRST_SUCCESS_SCRIPT = ROOT / "bootstrap" / "scripts" / "check_first_success_docs.py"
 
 
 class BootstrapEndToEndTest(unittest.TestCase):

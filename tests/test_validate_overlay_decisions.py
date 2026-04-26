@@ -8,8 +8,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BOOTSTRAP_SCRIPT = ROOT / "scripts" / "bootstrap_init.py"
-VALIDATOR_SCRIPT = ROOT / "scripts" / "validate_overlay_decisions.py"
+BOOTSTRAP_SCRIPT = ROOT / "bootstrap" / "scripts" / "bootstrap_init.py"
+VALIDATOR_SCRIPT = ROOT / "bootstrap" / "scripts" / "validate_overlay_decisions.py"
 
 
 class ValidateOverlayDecisionsTest(unittest.TestCase):

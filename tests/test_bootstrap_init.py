@@ -8,7 +8,7 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-SCRIPT = ROOT / "scripts" / "bootstrap_init.py"
+SCRIPT = ROOT / "bootstrap" / "scripts" / "bootstrap_init.py"
 
 
 class BootstrapInitCliTest(unittest.TestCase):

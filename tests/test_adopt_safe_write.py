@@ -8,8 +8,8 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-BOOTSTRAP_SCRIPT = ROOT / "scripts" / "bootstrap_init.py"
-ADOPT_SAFE_WRITE_SCRIPT = ROOT / "scripts" / "adopt_safe_write.py"
+BOOTSTRAP_SCRIPT = ROOT / "bootstrap" / "scripts" / "bootstrap_init.py"
+ADOPT_SAFE_WRITE_SCRIPT = ROOT / "bootstrap" / "scripts" / "adopt_safe_write.py"
 
 
 class AdoptSafeWriteTest(unittest.TestCase):
