@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import shutil
 import subprocess
 import sys
@@ -220,6 +221,57 @@ class BootstrapEndToEndTest(unittest.TestCase):
 
             self.assertEqual(verify_result.returncode, 0, verify_result.stderr)
             self.assertIn("first success docs are present", verify_result.stdout)
+
+    def test_first_success_fails_on_directory_path_shape(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_root = Path(tmp_dir) / "bootstrap-cli-project"
+
+            init_result = subprocess.run(
+                [sys.executable, str(BOOTSTRAP_SCRIPT), str(project_root), "--language", "python"],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            self.assertEqual(init_result.returncode, 0, init_result.stderr)
+            entrypoint_path = project_root / "docs/project_entrypoint.md"
+            entrypoint_path.unlink()
+            entrypoint_path.mkdir()
+
+            verify_result = self.run_first_success_command(project_root)
+
+            self.assertEqual(verify_result.returncode, 1)
+            self.assertIn("first-success doc check failed", verify_result.stderr)
+            self.assertIn("Required docs with invalid path shapes", verify_result.stderr)
+            self.assertIn("docs/project_entrypoint.md: expected a file but found a directory", verify_result.stderr)
+
+    def test_first_success_fails_on_non_file_path_shape(self) -> None:
+        if not hasattr(os, "mkfifo"):
+            self.skipTest("mkfifo unavailable")
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_root = Path(tmp_dir) / "bootstrap-cli-project"
+
+            init_result = subprocess.run(
+                [sys.executable, str(BOOTSTRAP_SCRIPT), str(project_root), "--language", "python"],
+                cwd=ROOT,
+                capture_output=True,
+                text=True,
+                check=False,
+            )
+
+            self.assertEqual(init_result.returncode, 0, init_result.stderr)
+            entrypoint_path = project_root / "docs/project_entrypoint.md"
+            entrypoint_path.unlink()
+            os.mkfifo(entrypoint_path)
+
+            verify_result = self.run_first_success_command(project_root)
+
+            self.assertEqual(verify_result.returncode, 1)
+            self.assertIn("first-success doc check failed", verify_result.stderr)
+            self.assertIn("Required docs with invalid path shapes", verify_result.stderr)
+            self.assertIn("docs/project_entrypoint.md: expected a file but found a non-file path", verify_result.stderr)
 
     def test_init_cli_supports_localized_vendor_path_without_manual_edits(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:

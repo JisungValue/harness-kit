@@ -19,6 +19,26 @@ REQUIRED_DOCS = (
 )
 
 
+def describe_invalid_doc_shape(path: Path) -> str:
+    if path.is_dir():
+        return "expected a file but found a directory"
+    return "expected a file but found a non-file path"
+
+
+def collect_required_doc_failures(project_root: Path) -> tuple[list[str], list[tuple[str, str]]]:
+    missing: list[str] = []
+    invalid_shapes: list[tuple[str, str]] = []
+    for relative_path in REQUIRED_DOCS:
+        path = project_root / relative_path
+        if not path.exists():
+            missing.append(relative_path)
+            continue
+        if path.is_file():
+            continue
+        invalid_shapes.append((relative_path, describe_invalid_doc_shape(path)))
+    return missing, invalid_shapes
+
+
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
         description="Check that the first-success document set exists in a target project.",
@@ -36,11 +56,17 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     project_root = args.target.expanduser().resolve()
-    missing = [path for path in REQUIRED_DOCS if not (project_root / path).exists()]
-    if missing:
-        print("first-success docs are missing:", file=sys.stderr)
-        for path in missing:
-            print(f"- {path}", file=sys.stderr)
+    missing, invalid_shapes = collect_required_doc_failures(project_root)
+    if missing or invalid_shapes:
+        print("first-success doc check failed:", file=sys.stderr)
+        if missing:
+            print("Missing required docs:", file=sys.stderr)
+            for path in missing:
+                print(f"- {path}", file=sys.stderr)
+        if invalid_shapes:
+            print("Required docs with invalid path shapes:", file=sys.stderr)
+            for path, detail in invalid_shapes:
+                print(f"- {path}: {detail}", file=sys.stderr)
         return 1
 
     print("first success docs are present")
