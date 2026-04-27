@@ -125,15 +125,38 @@ def iter_content_lines(text: str) -> list[tuple[int, str]]:
     return lines
 
 
-def collect_missing_docs(project_root: Path) -> list[str]:
-    return [path for path in REQUIRED_DOCS if not (project_root / path).exists()]
+def describe_invalid_doc_shape(path: Path) -> str:
+    if path.is_dir():
+        return "expected a file but found a directory"
+    return "expected a file but found a non-file path"
+
+
+def collect_required_doc_failures(project_root: Path) -> tuple[list[str], list[Finding]]:
+    missing: list[str] = []
+    invalid_shapes: list[Finding] = []
+    for relative_path in REQUIRED_DOCS:
+        path = project_root / relative_path
+        if not path.exists():
+            missing.append(relative_path)
+            continue
+        if path.is_file():
+            continue
+        invalid_shapes.append(
+            Finding(
+                path=relative_path,
+                line_number=0,
+                marker="invalid-path",
+                line=describe_invalid_doc_shape(path),
+            )
+        )
+    return missing, invalid_shapes
 
 
 def collect_findings(project_root: Path) -> list[Finding]:
     findings: list[Finding] = []
     for relative_path in REQUIRED_DOCS:
         path = project_root / relative_path
-        if not path.exists():
+        if not path.is_file():
             continue
         text = path.read_text(encoding="utf-8")
         for line_number, line in iter_content_lines(text):
@@ -208,7 +231,7 @@ def collect_required_field_failures(readiness: str, project_root: Path) -> list[
     failures: list[Finding] = []
     for relative_path, rules in REQUIRED_FIELD_RULES[readiness].items():
         path = project_root / relative_path
-        if not path.exists():
+        if not path.is_file():
             continue
         text = path.read_text(encoding="utf-8")
         for label, resolved_pattern, unresolved_pattern, locator_pattern, remediation in rules:
@@ -265,14 +288,14 @@ def main(argv: list[str] | None = None) -> int:
     args = parse_args(argv)
     project_root = args.target.expanduser().resolve()
 
-    missing_docs = collect_missing_docs(project_root)
+    missing_docs, invalid_doc_shapes = collect_required_doc_failures(project_root)
     findings = collect_findings(project_root)
     blocking, allowed = partition_findings(args.readiness, findings)
     required_field_failures = collect_required_field_failures(args.readiness, project_root)
     blocking.extend(required_field_failures)
     blocking, allowed = suppress_duplicate_required_field_markers(blocking, allowed, required_field_failures)
 
-    if missing_docs or blocking:
+    if missing_docs or invalid_doc_shapes or blocking:
         print(
             f"overlay decision validation failed for readiness '{args.readiness}'.",
             file=sys.stderr,
@@ -281,6 +304,8 @@ def main(argv: list[str] | None = None) -> int:
             print("Missing required overlay docs:", file=sys.stderr)
             for relative_path in missing_docs:
                 print(f"- {relative_path}", file=sys.stderr)
+        if invalid_doc_shapes:
+            print_findings("Required overlay docs with invalid path shapes:", invalid_doc_shapes, sys.stderr)
         required_field_blocking = [finding for finding in blocking if finding.marker == "required-field"]
         unresolved_blocking = [finding for finding in blocking if finding.marker != "required-field"]
         if required_field_blocking:

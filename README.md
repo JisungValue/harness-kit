@@ -277,6 +277,7 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 - 기록 대상은 공통 규칙, phase 기준, audit 기준, 템플릿, 예시, core 문서 구조처럼 여러 프로젝트에 영향을 줄 수 있는 변경이다.
 - 단순 오탈자, 링크 수정, 비의미적 포맷 정리만 예외로 둘 수 있다. 애매하면 기록한다.
 - 변경 후에는 구현 주체와 분리된 subagent audit를 반드시 수행한다.
+- GitHub issue 기반 maintainer 작업이면, 최소 한 번은 subagent가 issue 본문과 acceptance criteria를 현재 diff/테스트와 직접 대조해 구현 누락이나 범위 이탈이 없는지 확인한다.
 - audit는 `changed-parts`와 `whole-harness`를 모두 수행한다. 전자는 바뀐 부분과 인접 영향을 보고, 후자는 전체 흐름과 core 일관성을 본다.
 - `audit-summary` 필수 규칙은 2026-04-03 이후 신규 항목부터 적용한다.
 - changed-parts / whole-harness audit에는 이번 변경이 필수 재참조 문서 수, 중복 규칙, 문서 길이를 불필요하게 늘려 하네스 수행 중 오동작이나 누락 위험을 키우지 않는지도 포함한다.

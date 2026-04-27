@@ -50,6 +50,8 @@
 - maintainer 감사에서는 현재 작업 브랜치가 대상 issue의 `{issue_num}_{title}` 형식을 따르는지와, 작업이 기본 브랜치가 아니라 issue 전용 브랜치에서 진행 중인지 확인한다.
 - 브랜치 생성 시점이나 과거 재사용 이력은 자동 또는 저장소 상태만으로 완전 검증하기 어려우므로, 이 둘은 maintainer 운영 원칙으로 관리한다.
 - core 의미 변경이 있으면 구현 주체와 분리된 subagent audit를 수행한다.
+- GitHub issue 기반 maintainer 작업이면, changed-parts / whole-harness와 별도로 최소 한 번은 subagent가 issue 본문과 acceptance criteria를 현재 diff, 테스트, 실패/성공 동작과 직접 대조해 구현 누락이나 범위 이탈이 없는지 확인한다.
+- 위 issue 대조 점검은 findings가 없더라도 "누락 없음" 또는 남은 testing gap을 명시적으로 남긴다.
 - audit는 반드시 `changed-parts`와 `whole-harness`로 분리해 수행한다.
 - `changed-parts`와 `whole-harness`는 각각 독립된 subagent 세션으로 수행하고 self-audit만으로 대체하지 않는다.
 - 최종 판정은 두 audit가 모두 승인 가능일 때만 승인 가능으로 본다.
@@ -69,6 +71,7 @@ changed-parts는 바뀐 파일과 인접 영향만 본다.
 ### 2) 로컬 일관성
 
 - 변경 의도와 실제 수정 내용이 일치하는가
+- GitHub issue 기반 작업이면 issue 본문/acceptance criteria의 요구와 현재 수정/테스트가 일치하고, 남은 gap이 명시적으로 분류되었는가
 - 인접 참조 경로, 문서명, 섹션명이 깨지지 않았는가
 - template 변경 시 관련 phase 또는 guide 문서의 인접 영향이 반영되었는가
 - "적절히", "충분히"처럼 해석 여지가 큰 표현은 가능한 한 조건문 또는 명시 기준으로 바꿨는가

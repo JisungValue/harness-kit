@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import subprocess
 import sys
 import tempfile
@@ -86,6 +87,41 @@ class ValidateOverlayDecisionsTest(unittest.TestCase):
             self.assertEqual(result.returncode, 1)
             self.assertIn("Missing required overlay docs", result.stderr)
             self.assertIn("docs/standard/testing_profile.md", result.stderr)
+
+    def test_directory_path_shape_fails_without_traceback(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+            entrypoint_path = target / "docs/project_entrypoint.md"
+            entrypoint_path.unlink()
+            entrypoint_path.mkdir()
+
+            result = self.run_validator(target, "first-success")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("Required overlay docs with invalid path shapes", result.stderr)
+            self.assertIn("docs/project_entrypoint.md", result.stderr)
+            self.assertIn("expected a file but found a directory", result.stderr)
+            self.assertNotIn("Traceback", result.stderr)
+
+    def test_non_file_path_shape_fails_without_traceback(self) -> None:
+        if not hasattr(os, "mkfifo"):
+            self.skipTest("mkfifo unavailable")
+
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+            entrypoint_path = target / "docs/project_entrypoint.md"
+            entrypoint_path.unlink()
+            os.mkfifo(entrypoint_path)
+
+            result = self.run_validator(target, "first-success")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("Required overlay docs with invalid path shapes", result.stderr)
+            self.assertIn("docs/project_entrypoint.md", result.stderr)
+            self.assertIn("expected a file but found a non-file path", result.stderr)
+            self.assertNotIn("Traceback", result.stderr)
 
     def test_phase2_passes_after_required_decisions_are_resolved(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
