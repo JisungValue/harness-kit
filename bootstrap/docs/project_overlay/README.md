@@ -82,6 +82,7 @@
 - `docs/standard/implementation_order.md`
   - Phase 2에서 사용할 프로젝트별 레이어 진행 순서와 세분화 기준을 정의한다.
   - `architecture.md`의 실제 구조와 의존성 방향을 기준으로 작성한다.
+  - 특정 feature, user story, API endpoint를 이번 TASK에서 어떤 순서로 구현할지는 이 문서보다 `plan.md`에 남긴다.
 - `docs/standard/coding_conventions_project.md`
   - 프레임워크 특화 규칙, DTO postfix, 프로젝트 전용 네이밍, 트랜잭션 관례처럼 core에 두기 어려운 convention을 둔다.
   - 언어별 convention 초안이 필요하면 `bootstrap/language_conventions/`에서 해당 언어 템플릿을 골라 수동 복사 또는 병합해 시작한다.

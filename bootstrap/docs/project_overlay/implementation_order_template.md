@@ -4,6 +4,10 @@
 
 이 문서는 Phase 2에서 이 프로젝트가 레이어를 어떤 순서와 단위로 구현하는지 정의한다.
 
+- 이 문서는 프로젝트 기본 구현 순서를 정의하는 문서다.
+- 특정 기능, user story, API endpoint를 이번 TASK에서 어떤 순서로 구현할지는 여기보다 `plan.md`에 남긴다.
+- 즉, `implementation_order.md`는 `domain -> application -> adapter` 같은 프로젝트 기본 흐름을 다루고, `POST /signup -> POST /login` 같은 task-specific 순서는 다루지 않는다.
+
 ## 기본 원칙
 
 - 레이어 순서와 세분화 기준은 `docs/standard/architecture.md`의 실제 구조와 의존성 방향을 기준으로 정한다.
@@ -15,6 +19,8 @@
 
 - 이 프로젝트의 실제 레이어 순서를 명시한다.
 - 레이어가 일부 없거나 통합되어 있으면 그 이유를 함께 남긴다.
+- endpoint, screen, user story 같은 기능 backlog 순서를 그대로 옮기지 않는다.
+- 기능 구현 순서는 이번 TASK의 `plan.md`가 이 문서를 참고해 별도로 정한다.
 
 ## 레이어 세분화 기준
 
@@ -25,4 +31,5 @@
 ## 기록 규칙
 
 - 이번 TASK에서 선택한 레이어 순서와 세분화 근거를 `implementation_notes.md`에 남긴다.
+- 이번 TASK에서 어떤 API 또는 기능부터 구현할지는 `plan.md`에 남긴다.
 - 공통 규칙과 다른 예외 적용이 필요하면 근거와 승인 여부를 함께 남긴다.

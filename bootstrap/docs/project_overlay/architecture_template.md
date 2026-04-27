@@ -7,7 +7,8 @@
 ## 구현 순서 문서와의 관계
 
 - `docs/standard/implementation_order.md`는 이 문서의 레이어 구조와 의존성 방향을 기준으로 작성한다.
-- 이 문서는 구조와 경계를 정의하고, 실제 Phase 2 진행 순서는 `implementation_order.md`에서 확정한다.
+- 이 문서는 구조와 경계를 정의하고, 프로젝트 기본 레이어 진행 순서는 `implementation_order.md`에서 확정한다.
+- 특정 TASK에서 어떤 API나 기능부터 구현할지는 `implementation_order.md`가 아니라 `plan.md`에서 정한다.
 
 ## 레이어 또는 모듈 구조
 

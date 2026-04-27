@@ -161,6 +161,7 @@
 - 선택된 레이어들 사이의 작업 순서는 의존성 안쪽부터 바깥쪽으로 진행한다.
 - 프로젝트별 실제 구현 순서와 레이어 세분화 기준은 `docs/standard/implementation_order.md`에서 정의한다.
 - 프로젝트 `docs/standard/implementation_order.md`는 `docs/standard/architecture.md`의 실제 구조와 의존성 방향을 기준으로 작성해 구조와 구현 순서 해석이 분리되지 않게 유지한다.
+- 특정 TASK의 API/기능 구현 우선순위는 `plan.md`에서 정하고, `implementation_order.md`는 그 판단의 프로젝트 기본 레이어 기준으로 유지한다.
 - 프로젝트 구조에 맞는 실제 레이어 명칭은 overlay 문서에서 정의한다.
 - 각 선택 레이어는 아래 순서를 따른다.
   1. 테스트 작성

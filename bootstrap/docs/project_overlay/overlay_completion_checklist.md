@@ -69,6 +69,7 @@
 
 - [ ] `implementation_order.md`가 `architecture.md`의 실제 구조와 의존성 방향을 기준으로 작성돼 있다.
 - [ ] `architecture.md`와 `implementation_order.md`를 보면 Phase 2에서 어느 레이어부터 진행할지 해석할 수 있다.
+- [ ] `implementation_order.md`가 task별 API backlog처럼 쓰이지 않고, 프로젝트 기본 레이어 순서 문서로 유지돼 있다.
 
 ### 8. 자동 validator 결과
 

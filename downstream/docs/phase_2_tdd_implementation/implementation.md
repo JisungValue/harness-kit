@@ -45,6 +45,7 @@
 
 - 레이어 명칭, 구현 순서, 세분화 기준의 1차 책임은 프로젝트 `docs/standard/implementation_order.md`에 있다.
 - Core harness는 `안쪽 책임 -> 바깥쪽 책임` 원칙과 `테스트 작성 -> 구현 -> 감사` 절차를 제공하며, 프로젝트별 상세 순서를 고정하지 않는다.
+- 특정 TASK에서 어떤 API, use case, 화면, 배치 작업부터 구현할지는 승인된 `plan.md`가 정하고, `implementation_order.md`는 그 판단의 프로젝트 기본 레이어 기준을 제공한다.
 - 프로젝트 문서가 없거나 현재 TASK 기준으로 모호하면, Phase 2 구현을 진행하지 않고 프로젝트 문서를 먼저 보강해 기준을 확정한다.
 
 ## 입력
@@ -65,6 +66,8 @@
 - Phase 2가 다시 승인되기 전에는 Phase 3 이후 문서와 close-out 문서를 수정하지 않는다.
 - 필요한 레이어만 선택해 안쪽 책임부터 바깥쪽 책임 순서로 진행한다.
 - 레이어 명칭, 선택 순서, 세분화 기준은 프로젝트 `docs/standard/implementation_order.md`를 단일 기준으로 따른다.
+- `implementation_order.md`를 이번 기획서의 API 구현 체크리스트처럼 다시 쓰지 않는다.
+- API/기능 단위의 실제 작업 순서는 `plan.md`에 남기고, 그 순서가 프로젝트 기본 레이어 순서와 충돌하지 않게 맞춘다.
 - 프로젝트 전용 framework 또는 language convention이 있으면 프로젝트 `docs/standard/coding_conventions_project.md`를 함께 참조한다.
 - 현재 작업과 직접 관련 있는 언어별 규칙 범주를 `coding_conventions_project.md`에서 먼저 좁혀 읽고 구현한다.
 - 언어별 상세 규칙이 별도 문서로 분리돼 있으면 `coding_conventions_project.md`가 그 경로를 정확히 가리키는지 먼저 확인한다.

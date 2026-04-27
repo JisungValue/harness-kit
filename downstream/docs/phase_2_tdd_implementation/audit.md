@@ -52,6 +52,7 @@
 - 레이어 명칭, 구현 순서, 세분화 기준의 1차 기준은 프로젝트 `docs/standard/implementation_order.md`다.
 - 감사자는 Phase 2 진행 순서가 프로젝트 문서와 일치하는지 먼저 확인한다.
 - Core harness는 `안쪽 책임 -> 바깥쪽 책임`과 `테스트 작성 -> 구현 -> 감사` 절차 준수 여부를 확인하며, 프로젝트 상세 순서 자체를 대체하지 않는다.
+- 특정 API나 기능을 이번 TASK에서 어떤 순서로 구현할지는 `plan.md`가 담당하고, 감사자는 그 task 순서가 `implementation_order.md`의 프로젝트 기본 레이어 기준과 충돌하지 않는지 본다.
 - 프로젝트 문서가 없거나 현재 TASK 기준으로 모호하면, 구현 진행 정당성은 승인 가능으로 판정하지 않는다.
 - 승인된 입력 또는 특정 레이어 산출물이 바뀌면 해당 레이어 이후의 감사 결과와 Phase 2 전체 감사는 stale 로 본다.
 - 감사자는 최신 테스트/구현 상태를 기준으로만 승인 가능 여부를 판정한다.
@@ -61,6 +62,8 @@
 - 각 선택 레이어가 `테스트 작성 -> 구현 -> 감사` 순서로 진행되었는가
 - 재수행이 있었다면 가장 이른 영향 레이어부터 동일 순서가 다시 적용되었는가
 - 선택한 레이어 명칭, 순서, 세분화 기준이 프로젝트 `docs/standard/implementation_order.md`와 충돌하지 않는가
+- `implementation_order.md`가 task별 API backlog처럼 오염되지 않았는가
+- API/기능 단위 실제 작업 순서가 `plan.md`에 있고, 그 계획이 프로젝트 기본 레이어 순서와 충돌하지 않는가
 - 프로젝트 문서가 없거나 현재 TASK 기준으로 모호한 상태에서 임의 순서를 적용하지 않았는가
 - 프로젝트 `docs/standard/coding_conventions_project.md`가 정의한 language/framework convention과 구현이 충돌하지 않는가
 - 현재 변경과 직접 관련 있는 언어별 규칙 범주가 `coding_conventions_project.md` 또는 그가 참조하는 언어 문서에서 식별 가능한가

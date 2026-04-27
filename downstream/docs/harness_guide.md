@@ -171,6 +171,7 @@
 - 출력: 테스트, 구현 코드, 필요한 경우 `implementation_notes.md`
 - 목표: 승인된 범위 안에서 필요한 레이어만 선택해 구현한다.
 - 프로젝트별 실제 레이어 순서와 세분화 기준은 프로젝트 `docs/standard/implementation_order.md`를 따르며, 이 문서는 프로젝트 `docs/standard/architecture.md`의 실제 구조와 의존성 방향을 기준으로 작성한다.
+- `docs/standard/implementation_order.md`는 프로젝트 기본 레이어 순서 문서이며, 특정 기획서 기준의 API 구현 우선순위나 task별 작업 순서는 `plan.md`에 남긴다.
 - 프로젝트 `docs/standard/implementation_order.md`가 없거나 현재 TASK 기준으로 모호하면, Phase 2 구현과 감사를 진행하지 않고 프로젝트 문서를 먼저 보강한다.
 
 ### Phase 3. Integration
