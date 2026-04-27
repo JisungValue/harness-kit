@@ -41,6 +41,7 @@
   - `docs/standard/quality_gate_profile.md`
   - `docs/standard/testing_profile.md`
   - `docs/standard/commit_rule.md`
+- 이 중 `docs/standard/implementation_order.md`는 프로젝트 기본 레이어 순서 문서이고, 특정 task의 API/기능 구현 순서는 task `plan.md`에 남긴다.
 
 ### Bootstrap
 

@@ -130,6 +130,7 @@ flowchart LR
 ```
 
 - 프로젝트별 실제 레이어 순서와 세분화 기준은 `docs/standard/implementation_order.md`가 정한다.
+- `docs/standard/implementation_order.md`는 프로젝트 기본 레이어 순서 문서이고, 이번 task에서 어떤 API/기능부터 구현할지는 `plan.md`가 정한다.
 - Phase 2는 기능 전체를 한 번에 구현하는 것이 아니라, 현재 task에 필요한 레이어만 선택해 순서대로 진행한다.
 - 각 선택 레이어는 `테스트 작성 -> 구현 -> 현재 레이어 감사` 순서를 따른다.
 - 한 레이어 감사가 끝나면 다음 선택 레이어로 넘어가 같은 TDD 루프를 반복한다.
