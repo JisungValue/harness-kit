@@ -8,18 +8,20 @@ import sys
 from pathlib import Path
 
 from generate_downstream_bundle import (
-    BOUNDARY_DOCUMENT,
     DEFAULT_OUTPUT,
     ENTRY_README,
     MANIFEST_NAME,
+    BUNDLE_TEXT_REPLACEMENTS,
     build_bundle_files,
     bundle_readme_text,
+    extract_bundle_layout_patterns,
     existing_output_paths,
-    extract_bundle_patterns,
-    extract_maintainer_only_paths,
     owned_bundle_paths,
     sha256_hex,
 )
+
+
+FORBIDDEN_RENDERED_REFERENCE_PREFIXES = tuple(source_prefix for source_prefix, _ in BUNDLE_TEXT_REPLACEMENTS)
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -38,12 +40,10 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
 
 def build_expected_manifest(bundle_files) -> dict:
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "bundle_name": DEFAULT_OUTPUT.name,
         "artifact_format": "directory",
-        "boundary_document": BOUNDARY_DOCUMENT,
-        "source_patterns": extract_bundle_patterns(),
-        "excluded_patterns": extract_maintainer_only_paths(),
+        "bundle_patterns": extract_bundle_layout_patterns(),
         "entry_readme": ENTRY_README,
         "manifest_path": MANIFEST_NAME,
         "copied_files": [
@@ -97,9 +97,30 @@ def validate_copied_file_contents(bundle_root: Path, bundle_files, errors: list[
         actual_size = bundle_path.stat().st_size
         if actual_sha256 != bundle_file.sha256 or actual_size != bundle_file.size_bytes:
             errors.append(
-                "bundle file differs from source-of-truth: "
+                "rendered bundle file differs from source-of-truth: "
                 f"{bundle_file.relative_path.as_posix()}"
             )
+
+
+def validate_rendered_markdown_references(bundle_root: Path, bundle_files, errors: list[str]) -> None:
+    for bundle_file in bundle_files:
+        if bundle_file.relative_path.suffix != ".md":
+            continue
+
+        bundle_path = bundle_root / bundle_file.relative_path
+        if not bundle_path.is_file():
+            continue
+
+        try:
+            text = bundle_path.read_text(encoding="utf-8")
+        except OSError:
+            continue
+        for forbidden_prefix in FORBIDDEN_RENDERED_REFERENCE_PREFIXES:
+            if forbidden_prefix in text:
+                errors.append(
+                    "rendered markdown still contains source-only reference prefix "
+                    f"`{forbidden_prefix}`: {bundle_file.relative_path.as_posix()}"
+                )
 
 
 def validate_generated_readme(bundle_root: Path, bundle_files, errors: list[str]) -> None:
@@ -123,9 +144,7 @@ def validate_manifest(bundle_root: Path, bundle_files, manifest: dict | None, er
         "schema_version",
         "bundle_name",
         "artifact_format",
-        "boundary_document",
-        "source_patterns",
-        "excluded_patterns",
+        "bundle_patterns",
         "entry_readme",
         "manifest_path",
         "copied_files",
@@ -167,6 +186,7 @@ def main(argv: list[str] | None = None) -> int:
     manifest = load_manifest(bundle_root, errors)
     validate_structure(bundle_root, bundle_files, errors)
     validate_copied_file_contents(bundle_root, bundle_files, errors)
+    validate_rendered_markdown_references(bundle_root, bundle_files, errors)
     validate_generated_readme(bundle_root, bundle_files, errors)
     validate_manifest(bundle_root, bundle_files, manifest, errors)
 
@@ -177,7 +197,7 @@ def main(argv: list[str] | None = None) -> int:
         return 1
 
     print(f"downstream bundle validation passed: {bundle_root}")
-    print(f"- boundary document: {BOUNDARY_DOCUMENT}")
+    print(f"- bundle patterns: {len(extract_bundle_layout_patterns())}")
     print(f"- validated copied files: {len(bundle_files)}")
     return 0
 

@@ -31,8 +31,84 @@ SOURCE_ROOTS = (ROOT / "bootstrap", ROOT / "docs", ROOT / "downstream")
 class BundleFile:
     source: Path
     relative_path: Path
+    content: bytes
     sha256: str
     size_bytes: int
+
+
+BUNDLE_TEXT_REPLACEMENTS = (
+    ("bootstrap/docs/", "docs/"),
+    ("downstream/docs/", "docs/"),
+    ("bootstrap/scripts/", "scripts/"),
+)
+
+
+BUNDLE_TEXT_REPLACEMENTS_BY_PATH: dict[str, tuple[tuple[str, str], ...]] = {
+    "bootstrap/README.md": (
+        (
+            "- source repo canonical CLI는 `scripts/bootstrap_init.py`, `scripts/check_first_success_docs.py`, `scripts/validate_overlay_decisions.py`, `scripts/validate_overlay_consistency.py`이며 모두 Python 3 runtime으로 실행한다.",
+            "- bundle에서는 `scripts/bootstrap_init.py`, `scripts/check_first_success_docs.py`, `scripts/validate_overlay_decisions.py`, `scripts/validate_overlay_consistency.py`를 모두 Python 3 runtime으로 실행한다.",
+        ),
+        (
+            "- `scripts/bootstrap_init.py`는 `docs/project_overlay/*` 템플릿을 source of truth로 삼고, generated bundle에서는 같은 자산을 `docs/project_overlay/*`와 `scripts/*`로 materialize 한 뒤 새 프로젝트 또는 거의 빈 대상 디렉터리에 최소 project overlay 문서 세트를 그대로 복사해 생성한다.",
+            "- `scripts/bootstrap_init.py`는 이 bundle 안의 `docs/project_overlay/*` 템플릿을 기준으로 최소 project overlay 문서 세트를 그대로 복사해 생성한다.",
+        ),
+        (
+            "- `scripts/check_first_success_docs.py`는 source repo canonical helper command다. generated bundle에서는 `scripts/check_first_success_docs.py`로 materialize 된다.",
+            "- `scripts/check_first_success_docs.py`는 bundle helper command다.",
+        ),
+    ),
+    "docs/downstream_harness_flow.md": (
+        (
+            "- source repo 자산과 downstream 생성 문서의 대응 관계가 먼저 필요하면 `README.md`의 `Source Repo 와 Downstream 관계` 표를 함께 본다.",
+            "- bootstrap 전후 구조 설명이 더 필요하면 `docs/quickstart.md`와 `docs/how_harness_kit_works.md`를 함께 본다.",
+        ),
+        (
+            "- 이 저장소는 bootstrap 전 source repo이고, 실제로 동작하는 하네스는 downstream 프로젝트 안에서 맞물린다.",
+            "- 이 bundle은 downstream 프로젝트에 vendoring하기 전의 delivery unit이고, 실제로 동작하는 하네스는 downstream 프로젝트 안에서 맞물린다.",
+        ),
+    ),
+    "docs/how_harness_kit_works.md": (
+        (
+            "- `bootstrap_init.py`는 source repo 기준 `docs/project_overlay/*` template를 source of truth로 사용하고, generated bundle에서는 이를 `docs/project_overlay/*`로 materialize 해 최소 문서 세트와 runtime instruction entrypoint 파일을 생성한다.",
+            "- `bootstrap_init.py`는 이 bundle 안의 `docs/project_overlay/*` template를 기준으로 최소 문서 세트와 runtime instruction entrypoint 파일을 생성한다.",
+        ),
+    ),
+    "docs/project_overlay/README.md": (
+        (
+            "- 이 문서는 source repo 안의 project overlay template guide다.",
+            "- 이 문서는 downstream bundle 안의 project overlay guide다.",
+        ),
+        (
+            "- 이 저장소에서는 먼저 `docs/quickstart.md`를 보고, 필요할 때만 `docs/project_overlay/first_success_guide.md`, `docs/project_overlay/local_diagnostics_and_dry_run.md`, `docs/how_harness_kit_works.md`로 이어진다.",
+            "- 이 bundle에서는 먼저 `docs/quickstart.md`를 보고, 필요할 때만 `docs/project_overlay/first_success_guide.md`, `docs/project_overlay/local_diagnostics_and_dry_run.md`, `docs/how_harness_kit_works.md`로 이어진다.",
+        ),
+        (
+            "## source repo와 downstream 구분",
+            "## bundle과 downstream 구분",
+        ),
+        (
+            "- source repo에는 root `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `docs/project_entrypoint.md`, `docs/decisions/README.md`가 아직 없다.",
+            "- 이 bundle 자체에는 root `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `docs/project_entrypoint.md`, `docs/decisions/README.md`가 아직 없다.",
+        ),
+        (
+            "- 따라서 source repo에서 문서를 읽는 단계에서는 `docs/project_overlay/*` canonical source를 먼저 보고, downstream 프로젝트에서는 generated bundle의 `docs/project_overlay/*`와 생성된 runtime entrypoint, project entrypoint를 따른다.",
+            "- 이 bundle 안에서는 `docs/project_overlay/*`를 직접 읽고, 실제 downstream 프로젝트에서는 여기서 생성한 runtime entrypoint와 project entrypoint를 따른다.",
+        ),
+        (
+            "  - source repo canonical workflow template이다.",
+            "  - bundle 안에서 바로 복사해 쓰는 workflow template이다.",
+        ),
+        (
+            "  - generated bundle에서는 `docs/project_overlay/harness_doc_guard_workflow_template.yml`로 materialize 되고, 프로젝트 `.github/workflows/`로 복사해 harness-kit 문서 정합성 검사를 자동 실행한다.",
+            "  - 프로젝트 `.github/workflows/`로 복사해 harness-kit 문서 정합성 검사를 자동 실행한다.",
+        ),
+        (
+            "- `docs/project_overlay/`는 guide, template, workflow의 canonical source다.\n- generated downstream bundle은 이 자산을 `docs/project_overlay/` 아래로 materialize 해 consumer-facing 경로를 유지한다.",
+            "- 이 bundle에서는 `docs/project_overlay/` 아래 자산을 guide, template, workflow 기준 경로로 사용한다.",
+        ),
+    ),
+}
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -116,8 +192,20 @@ def extract_maintainer_only_paths() -> list[str]:
     return extract_boundary_paths(BOUNDARY_EXCLUDE_SECTIONS)
 
 
+def bundle_pattern_for_source_pattern(pattern: str) -> str:
+    return bundle_relative_path_for_source(Path(pattern)).as_posix()
+
+
+def extract_bundle_layout_patterns() -> list[str]:
+    return [bundle_pattern_for_source_pattern(pattern) for pattern in extract_bundle_patterns()]
+
+
 def matches_any_pattern(relative_path: Path, patterns: list[str]) -> bool:
     return any(relative_path.match(pattern) for pattern in patterns)
+
+
+def is_shippable_bundle_source(relative_path: Path) -> bool:
+    return "__pycache__" not in relative_path.parts and relative_path.suffix != ".pyc"
 
 
 def bundle_relative_path_for_source(relative_path: Path) -> Path:
@@ -133,6 +221,25 @@ def bundle_relative_path_for_source(relative_path: Path) -> Path:
     return relative_path
 
 
+def render_bundle_text(relative_path: Path, text: str) -> str:
+    rendered = text
+    for source_prefix, bundle_prefix in BUNDLE_TEXT_REPLACEMENTS:
+        rendered = rendered.replace(source_prefix, bundle_prefix)
+
+    for old, new in BUNDLE_TEXT_REPLACEMENTS_BY_PATH.get(relative_path.as_posix(), ()):  # pragma: no branch
+        rendered = rendered.replace(old, new)
+
+    return rendered
+
+
+def render_bundle_file_content(source: Path, relative_path: Path) -> bytes:
+    if source.suffix != ".md":
+        return source.read_bytes()
+
+    rendered_text = render_bundle_text(relative_path, source.read_text(encoding="utf-8"))
+    return rendered_text.encode("utf-8")
+
+
 def build_bundle_files() -> list[BundleFile]:
     by_path: dict[str, BundleFile] = {}
     excluded_patterns = extract_maintainer_only_paths()
@@ -142,16 +249,20 @@ def build_bundle_files() -> list[BundleFile]:
         for path in ROOT.glob(pattern):
             if not path.is_file():
                 continue
-            matched_any = True
             relative_path = path.relative_to(ROOT)
+            if not is_shippable_bundle_source(relative_path):
+                continue
+            matched_any = True
             if matches_any_pattern(relative_path, excluded_patterns):
                 continue
             bundle_relative_path = bundle_relative_path_for_source(relative_path)
+            bundle_content = render_bundle_file_content(path, bundle_relative_path)
             by_path[bundle_relative_path.as_posix()] = BundleFile(
                 source=path,
                 relative_path=bundle_relative_path,
-                sha256=sha256_hex(path),
-                size_bytes=path.stat().st_size,
+                content=bundle_content,
+                sha256=hashlib.sha256(bundle_content).hexdigest(),
+                size_bytes=len(bundle_content),
             )
         if not matched_any:
             raise ValueError(f"Boundary pattern matched no files: {pattern}")
@@ -160,7 +271,6 @@ def build_bundle_files() -> list[BundleFile]:
 
 
 def bundle_readme_text(bundle_files: list[BundleFile]) -> str:
-    maintainer_only_paths = extract_maintainer_only_paths()
     return "\n".join(
         [
             "# Harness Kit Project Bundle",
@@ -184,8 +294,9 @@ def bundle_readme_text(bundle_files: list[BundleFile]) -> str:
             "",
             "## Not Included",
             "",
-            "- maintainer-only exclusion pattern은 include path와 겹쳐도 downstream bundle에서 우선 제외한다.",
-            *[f"- `{path}`" for path in maintainer_only_paths],
+            "- maintainer-only docs, release procedures, and audit records",
+            "- maintainer-only generation and validation scripts",
+            "- repository tests and git metadata",
             "",
             "## Bundle Facts",
             "",
@@ -198,12 +309,10 @@ def bundle_readme_text(bundle_files: list[BundleFile]) -> str:
 
 def manifest_data(bundle_files: list[BundleFile], generated_readme_sha256: str, generated_readme_size: int) -> dict:
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "bundle_name": DEFAULT_OUTPUT.name,
         "artifact_format": "directory",
-        "boundary_document": BOUNDARY_DOCUMENT,
-        "source_patterns": extract_bundle_patterns(),
-        "excluded_patterns": extract_maintainer_only_paths(),
+        "bundle_patterns": extract_bundle_layout_patterns(),
         "entry_readme": ENTRY_README,
         "manifest_path": MANIFEST_NAME,
         "copied_files": [
@@ -247,7 +356,13 @@ def load_existing_manifest_paths(output_root: Path) -> set[str]:
     except (OSError, json.JSONDecodeError):
         return set()
 
-    if manifest.get("boundary_document") != BOUNDARY_DOCUMENT:
+    if manifest.get("schema_version") != 2:
+        return set()
+    if manifest.get("bundle_name") != DEFAULT_OUTPUT.name:
+        return set()
+    if manifest.get("artifact_format") != "directory":
+        return set()
+    if manifest.get("bundle_patterns") != extract_bundle_layout_patterns():
         return set()
     if manifest.get("entry_readme") != ENTRY_README:
         return set()
@@ -332,7 +447,8 @@ def write_bundle(output_root: Path, bundle_files: list[BundleFile]) -> None:
     for bundle_file in bundle_files:
         destination = output_root / bundle_file.relative_path
         destination.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copy2(bundle_file.source, destination)
+        destination.write_bytes(bundle_file.content)
+        shutil.copystat(bundle_file.source, destination)
 
     readme_path = output_root / ENTRY_README
     readme_text = bundle_readme_text(bundle_files)

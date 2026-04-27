@@ -6,7 +6,7 @@
 
 - 이 문서는 개념 설명 문서다.
 - 처음 쓰는 사용자가 실제로 어디서 시작할지는 `README.md`와 `bootstrap/docs/quickstart.md`를 먼저 본다.
-- downstream 프로젝트 구조와 Phase 흐름 상세는 `docs/downstream_harness_flow.md`가 더 직접적으로 설명한다.
+- downstream 프로젝트 구조와 Phase 흐름 상세는 `downstream/docs/downstream_harness_flow.md`가 더 직접적으로 설명한다.
 - 현재 지원 범위와 최신 릴리스는 `bootstrap/docs/version_support.md`를 기준으로 본다.
 
 ## 한 줄 요약
@@ -19,12 +19,12 @@
 
 - 여러 프로젝트에서 공통으로 재사용하는 규칙과 phase 기준이다.
 - 이 저장소의 공통 guide와 phase/policy 문서가 여기에 속한다.
-- core 운영 판단은 현재 repo 안의 `README`, `docs/*`, `docs/decisions/*`, `scripts/*`, `config` 같은 repo-local 근거를 source-of-truth로 우선한다.
+- core 운영 판단은 현재 repo 안의 `README`, `downstream/docs/*`, `bootstrap/docs/*`, `bootstrap/scripts/*`, `config` 같은 repo-local 근거를 source-of-truth로 우선한다.
 - 대표적으로 아래가 core다.
-  - repo의 `docs/harness_guide.md`
-  - `docs/harness/common/*`
-  - `docs/phase_*`
-  - `docs/templates/task/*`
+  - repo의 `downstream/docs/harness_guide.md`
+  - `downstream/docs/harness/common/*`
+  - `downstream/docs/phase_*`
+  - `downstream/docs/templates/task/*`
 
 ### Project Overlay
 
@@ -132,7 +132,7 @@
 
 ## Repo-Local Source Of Truth
 
-- 현재 repo 안의 `README`, `docs/*`, `docs/decisions/*`, `scripts/*`, `config`가 작업 기준의 source-of-truth다.
+- 현재 repo 안의 `README`, `downstream/docs/*`, `bootstrap/docs/*`, `bootstrap/scripts/*`, `config`가 작업 기준의 source-of-truth다.
 - 기억, 외부 대화, 다른 프로젝트 관행은 참고할 수 있어도 현재 repo 근거보다 우선하지 않는다.
 - repo에 없는 결정은 추측으로 메우지 않는다.
 - 없는 결정은 project overlay, `docs/decisions/`, `implementation_notes.md`, `validation_report.md` 같은 task workspace 기록으로 handoff하고 필요하면 사용자 승인 대상으로 올린다.

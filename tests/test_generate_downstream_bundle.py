@@ -63,6 +63,8 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             self.assertTrue((output / "scripts/adopt_safe_write.py").exists())
             self.assertTrue((output / "scripts/check_first_success_docs.py").exists())
             self.assertTrue((output / "downstream/scripts/validate_phase_gate.py").exists())
+            self.assertFalse(any(output.rglob("*.pyc")))
+            self.assertFalse(any(path.name == "__pycache__" for path in output.rglob("*")))
 
             self.assertFalse((output / "maintainer/docs/release_process.md").exists())
             self.assertFalse((output / "scripts/check_harness_docs.py").exists())
@@ -73,7 +75,20 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             bundle_readme = (output / "README.md").read_text(encoding="utf-8")
             self.assertIn("# Harness Kit Project Bundle", bundle_readme)
             self.assertNotIn("maintainer/docs/downstream_bundle_boundary.md", bundle_readme)
-            self.assertIn("- `.git*`", bundle_readme)
+            self.assertIn("maintainer-only docs, release procedures, and audit records", bundle_readme)
+            self.assertNotIn("maintainer/docs/*", bundle_readme)
+
+            quickstart = (output / "docs/quickstart.md").read_text(encoding="utf-8")
+            self.assertIn("`docs/project_overlay/first_success_guide.md`", quickstart)
+            self.assertNotIn("bootstrap/docs/project_overlay/first_success_guide.md", quickstart)
+
+            overlay_readme = (output / "docs/project_overlay/README.md").read_text(encoding="utf-8")
+            self.assertIn("downstream bundle 안의 project overlay guide", overlay_readme)
+            self.assertNotIn("bootstrap/docs/project_overlay/", overlay_readme)
+
+            bootstrap_readme = (output / "bootstrap/README.md").read_text(encoding="utf-8")
+            self.assertIn("bundle에서는 `scripts/bootstrap_init.py`", bootstrap_readme)
+            self.assertNotIn("bootstrap/scripts/bootstrap_init.py", bootstrap_readme)
 
             manifest = json.loads((output / "bundle_manifest.json").read_text(encoding="utf-8"))
             copied_paths = [entry["path"] for entry in manifest["copied_files"]]
@@ -87,24 +102,20 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             self.assertIn("scripts/bootstrap_init.py", copied_paths)
             self.assertIn("downstream/scripts/validate_phase_gate.py", copied_paths)
             self.assertEqual(manifest["artifact_format"], "directory")
-            self.assertEqual(
-                manifest["boundary_document"],
-                "maintainer/docs/downstream_bundle_boundary.md",
-            )
-            self.assertIn("bootstrap/**/*", manifest["source_patterns"])
-            self.assertIn("bootstrap/docs/quickstart.md", manifest["source_patterns"])
-            self.assertIn("bootstrap/docs/version_support.md", manifest["source_patterns"])
-            self.assertIn("bootstrap/scripts/bootstrap_init.py", manifest["source_patterns"])
-            self.assertIn("downstream/docs/downstream_harness_flow.md", manifest["source_patterns"])
-            self.assertIn("downstream/docs/harness_guide.md", manifest["source_patterns"])
-            self.assertIn("downstream/docs/harness/common/**/*.md", manifest["source_patterns"])
-            self.assertIn("downstream/docs/phase_*/*.md", manifest["source_patterns"])
-            self.assertIn("downstream/docs/standard/coding_guidelines_core.md", manifest["source_patterns"])
-            self.assertIn("downstream/docs/templates/task/**/*.md", manifest["source_patterns"])
-            self.assertIn("downstream/docs/examples/**/*.md", manifest["source_patterns"])
-            self.assertIn("downstream/scripts/validate_phase_gate.py", manifest["source_patterns"])
-            self.assertIn("bootstrap/docs/project_overlay/harness_doc_guard_workflow_template.yml", manifest["source_patterns"])
-            self.assertIn("maintainer/docs/*", manifest["excluded_patterns"])
+            self.assertEqual(manifest["schema_version"], 2)
+            self.assertIn("bootstrap/**/*", manifest["bundle_patterns"])
+            self.assertIn("docs/quickstart.md", manifest["bundle_patterns"])
+            self.assertIn("docs/version_support.md", manifest["bundle_patterns"])
+            self.assertIn("scripts/bootstrap_init.py", manifest["bundle_patterns"])
+            self.assertIn("docs/downstream_harness_flow.md", manifest["bundle_patterns"])
+            self.assertIn("docs/harness_guide.md", manifest["bundle_patterns"])
+            self.assertIn("docs/harness/common/**/*.md", manifest["bundle_patterns"])
+            self.assertIn("docs/phase_*/*.md", manifest["bundle_patterns"])
+            self.assertIn("docs/standard/coding_guidelines_core.md", manifest["bundle_patterns"])
+            self.assertIn("docs/templates/task/**/*.md", manifest["bundle_patterns"])
+            self.assertIn("docs/examples/**/*.md", manifest["bundle_patterns"])
+            self.assertIn("downstream/scripts/validate_phase_gate.py", manifest["bundle_patterns"])
+            self.assertIn("docs/project_overlay/harness_doc_guard_workflow_template.yml", manifest["bundle_patterns"])
             self.assertEqual(manifest["generated_files"][0]["path"], "README.md")
 
     def test_bundle_patterns_are_read_from_boundary_document(self) -> None:
@@ -152,8 +163,8 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
         with mock.patch.object(module, "read_boundary_document", return_value=synthetic_boundary):
             readme_text = module.bundle_readme_text([])
 
-        self.assertIn("- `maintainer/scripts/check_harness_docs.py`", readme_text)
-        self.assertIn("- `maintainer/scripts/validate_downstream_bundle.py`", readme_text)
+        self.assertIn("maintainer-only docs, release procedures, and audit records", readme_text)
+        self.assertIn("maintainer-only generation and validation scripts", readme_text)
 
     def test_maintainer_only_patterns_override_included_paths(self) -> None:
         module = load_bundle_module()

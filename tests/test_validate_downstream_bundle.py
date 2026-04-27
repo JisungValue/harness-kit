@@ -73,35 +73,20 @@ class ValidateDownstreamBundleTest(unittest.TestCase):
                 validate_result.stderr,
             )
 
-    def test_manifest_source_patterns_mismatch_fails(self) -> None:
+    def test_manifest_bundle_patterns_mismatch_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             output = Path(tmp_dir) / "bundle"
             self.assertEqual(self.run_generate(output).returncode, 0)
 
             manifest_path = output / "bundle_manifest.json"
             manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-            manifest["source_patterns"] = ["docs/examples/**/*.md"]
+            manifest["bundle_patterns"] = ["docs/examples/**/*.md"]
             manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
 
             validate_result = self.run_validate(output)
 
             self.assertEqual(validate_result.returncode, 1)
-            self.assertIn("manifest field mismatch for source_patterns", validate_result.stderr)
-
-    def test_manifest_excluded_patterns_mismatch_fails(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            output = Path(tmp_dir) / "bundle"
-            self.assertEqual(self.run_generate(output).returncode, 0)
-
-            manifest_path = output / "bundle_manifest.json"
-            manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-            manifest["excluded_patterns"] = ["tests/*"]
-            manifest_path.write_text(json.dumps(manifest, indent=2, ensure_ascii=False) + "\n", encoding="utf-8")
-
-            validate_result = self.run_validate(output)
-
-            self.assertEqual(validate_result.returncode, 1)
-            self.assertIn("manifest field mismatch for excluded_patterns", validate_result.stderr)
+            self.assertIn("manifest field mismatch for bundle_patterns", validate_result.stderr)
 
     def test_bundle_file_content_drift_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -113,7 +98,30 @@ class ValidateDownstreamBundleTest(unittest.TestCase):
             validate_result = self.run_validate(output)
 
             self.assertEqual(validate_result.returncode, 1)
-            self.assertIn("bundle file differs from source-of-truth: scripts/bootstrap_init.py", validate_result.stderr)
+            self.assertIn(
+                "rendered bundle file differs from source-of-truth: scripts/bootstrap_init.py",
+                validate_result.stderr,
+            )
+
+    def test_source_only_markdown_reference_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            output = Path(tmp_dir) / "bundle"
+            self.assertEqual(self.run_generate(output).returncode, 0)
+
+            changed_path = output / "docs/quickstart.md"
+            changed_path.write_text(
+                changed_path.read_text(encoding="utf-8")
+                + "\n- stale path: `bootstrap/docs/project_overlay/first_success_guide.md`\n",
+                encoding="utf-8",
+            )
+
+            validate_result = self.run_validate(output)
+
+            self.assertEqual(validate_result.returncode, 1)
+            self.assertIn(
+                "rendered markdown still contains source-only reference prefix `bootstrap/docs/`: docs/quickstart.md",
+                validate_result.stderr,
+            )
 
     def test_generated_readme_drift_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:

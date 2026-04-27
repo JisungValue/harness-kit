@@ -8,7 +8,7 @@
 - canonical 시작 경로는 항상 `bootstrap/docs/quickstart.md`를 먼저 본다.
 - 이 문서는 quickstart의 greenfield 경로를 더 자세히 풀어 쓴 reference다.
 - 실패 원인과 출력 해석은 `bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md`를 본다.
-- downstream 구조와 Phase 흐름 전체는 `docs/downstream_harness_flow.md`를 본다.
+- downstream 구조와 Phase 흐름 전체는 `downstream/docs/downstream_harness_flow.md`를 본다.
 - 새 서브에이전트가 가장 먼저 여는 onboarding 문서는 아니고, `bootstrap/docs/quickstart.md`에서 greenfield 경로를 고른 뒤에 읽는 문서다.
 
 ## 시작 전 준비물
@@ -131,7 +131,7 @@ Created harness bootstrap docs in /path/to/project
 
 init CLI를 쓰지 않아도 된다. 수동 경로의 목표도 같은 최소 문서 세트를 재현하는 것이다.
 
-1. `vendor/harness-kit/docs/project_overlay/`의 template를 프로젝트 경로로 복사한다.
+1. downstream 프로젝트 안에 vendoring된 `vendor/harness-kit/docs/project_overlay/`의 template를 프로젝트 경로로 복사한다.
 2. 아래 매핑대로 배치한다.
 
 ```text
@@ -181,7 +181,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness f
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ```
 
-local validator가 통과하면 아래 workflow template를 복사해 future-session CI guardrail을 붙인다.
+local validator가 통과하면 downstream 프로젝트 안의 vendored bundle에서 아래 workflow template를 복사해 future-session CI guardrail을 붙인다.
 
 ```text
 vendor/harness-kit/docs/project_overlay/harness_doc_guard_workflow_template.yml -> project .github/workflows/ 아래 harness doc guard workflow 파일
@@ -189,7 +189,7 @@ vendor/harness-kit/docs/project_overlay/harness_doc_guard_workflow_template.yml 
 
 non-default vendoring이면 source 경로의 `vendor/harness-kit/` 부분만 실제 경로로 바꾸고, workflow 안의 `@<pin-tag-or-sha>`를 릴리스 태그 또는 고정 SHA로 치환한다.
 
-first success를 확인한 뒤 첫 task를 시작하기 전에는 `docs/downstream_harness_flow.md`를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
+first success를 확인한 뒤 첫 task를 시작하기 전에는 `downstream/docs/downstream_harness_flow.md`를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
 
 ## 첫 검증 포인트
 

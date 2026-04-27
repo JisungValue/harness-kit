@@ -99,15 +99,15 @@ def normalize_vendor_path(raw_path: str) -> str:
 
 
 def resolve_template_source(source_rel: str) -> Path:
-    source = ROOT / source_rel
-    if source.exists():
-        return source
-
     canonical_prefix = "bootstrap/docs/project_overlay/"
     if source_rel.startswith(canonical_prefix):
         materialized_source = ROOT / MATERIALIZED_PROJECT_OVERLAY_ROOT / source_rel.removeprefix(canonical_prefix)
         if materialized_source.exists():
             return materialized_source
+
+    source = ROOT / source_rel
+    if source.exists():
+        return source
 
     raise FileNotFoundError(f"Bootstrap template not found: {source_rel}")
 

@@ -116,6 +116,10 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
         )
         self.assertEqual(init_result.returncode, 0, init_result.stderr)
         self.assertIn("Created harness bootstrap docs in", init_result.stdout)
+        self.assertIn(
+            "docs/project_entrypoint.md <- docs/project_overlay/project_entrypoint_template.md",
+            init_result.stdout,
+        )
 
         first_success_result = self.run_first_success_command(project_root, vendor_relative_path=vendor_relative_path)
         self.assertEqual(first_success_result.returncode, 0, first_success_result.stderr)
