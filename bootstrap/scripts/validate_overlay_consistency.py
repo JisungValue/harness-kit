@@ -45,6 +45,8 @@ DECISION_RECORD_REQUIRED_HEADINGS = (
     "When To Update",
 )
 
+INSTALL_TIME_BOOTSTRAP_REFERENCE_RE = re.compile(r"^install-time-only:[A-Za-z0-9_.-]+\.md$")
+
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser = argparse.ArgumentParser(
@@ -402,7 +404,12 @@ def validate_coding_conventions(project_root: Path, errors: list[str], mode: str
             errors.append(
                 "docs/project/standards/coding_conventions_project.md: bootstrap 기준 문서가 .md 경로가 아닙니다."
             )
-        if bootstrap_reference.startswith("bootstrap/language_conventions/"):
+        if bootstrap_reference.startswith("install-time-only:"):
+            if not INSTALL_TIME_BOOTSTRAP_REFERENCE_RE.match(bootstrap_reference):
+                errors.append(
+                    "docs/project/standards/coding_conventions_project.md: install-time bootstrap 기준 문서 표기가 올바르지 않습니다."
+                )
+        elif bootstrap_reference.startswith("bootstrap/language_conventions/"):
             errors.append(
                 "docs/project/standards/coding_conventions_project.md: bootstrap 기준 문서가 repo-local path로 남아 있습니다. vendored 또는 project-local path로 현지화해야 합니다."
             )

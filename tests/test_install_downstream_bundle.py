@@ -24,12 +24,11 @@ class InstallDownstreamBundleTest(unittest.TestCase):
     def run_vendored_script(
         self,
         project_root: Path,
-        vendor_relative_path: Path,
         script_name: str,
         *args: str,
     ) -> subprocess.CompletedProcess[str]:
         return subprocess.run(
-            [sys.executable, str(project_root / vendor_relative_path / "scripts" / script_name), *args],
+            [sys.executable, str(project_root / "scripts" / script_name), *args],
             cwd=project_root,
             capture_output=True,
             text=True,
@@ -44,12 +43,9 @@ class InstallDownstreamBundleTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("Generated canonical downstream bundle", result.stdout)
-            self.assertIn("Vendored downstream bundle into", result.stdout)
+            self.assertIn("Install-time bundle inputs removed from final runtime surface", result.stdout)
             self.assertIn("Install flow completed", result.stdout)
 
-            vendor_root = project_root / "vendor/harness-kit"
-            self.assertTrue((vendor_root / "bundle_manifest.json").exists())
-            self.assertTrue((vendor_root / "downstream/scripts/validate_phase_gate.py").exists())
             self.assertTrue((project_root / "AGENTS.md").exists())
             self.assertTrue((project_root / "docs/entrypoint.md").exists())
             self.assertTrue((project_root / "docs/process/harness_guide.md").exists())
@@ -61,25 +57,41 @@ class InstallDownstreamBundleTest(unittest.TestCase):
             self.assertTrue((project_root / "docs/process/standard/coding_guidelines_core.md").exists())
             self.assertTrue((project_root / "docs/process/templates/task/issue.md").exists())
             self.assertTrue((project_root / "docs/process/examples/sample-task/issue.md").exists())
+            self.assertTrue((project_root / "scripts/validate_overlay_decisions.py").exists())
+            self.assertTrue((project_root / "scripts/validate_overlay_consistency.py").exists())
+            self.assertTrue((project_root / "scripts/validate_phase_gate.py").exists())
+            self.assertFalse((project_root / "vendor/harness-kit").exists())
+            self.assertFalse((project_root / "bootstrap").exists())
+            self.assertFalse((project_root / "bundle_manifest.json").exists())
+            self.assertFalse((project_root / "docs/project_overlay").exists())
+            self.assertFalse((project_root / "docs/quickstart.md").exists())
+            self.assertFalse((project_root / "scripts/bootstrap_init.py").exists())
+            self.assertFalse((project_root / "scripts/adopt_common.py").exists())
+            self.assertFalse((project_root / "scripts/adopt_dry_run.py").exists())
+            self.assertFalse((project_root / "scripts/adopt_safe_write.py").exists())
+            self.assertFalse((project_root / "scripts/check_first_success_docs.py").exists())
             self.assertFalse((project_root / "docs/harness/common/process_policy.md").exists())
             self.assertFalse((project_root / "docs/templates/task/issue.md").exists())
             self.assertIn(
                 "docs/process/harness_guide.md",
                 (project_root / "docs/entrypoint.md").read_text(encoding="utf-8"),
             )
-
-            first_success = self.run_vendored_script(
-                project_root,
-                Path("vendor/harness-kit"),
-                "check_first_success_docs.py",
-                ".",
+            self.assertIn(
+                "install-time-only:java_coding_conventions_template.md",
+                (project_root / "docs/project/standards/coding_conventions_project.md").read_text(encoding="utf-8"),
             )
-            self.assertEqual(first_success.returncode, 0, first_success.stderr)
-            self.assertIn("first success docs are present", first_success.stdout)
+
+            decisions = self.run_vendored_script(
+                project_root,
+                "validate_overlay_decisions.py",
+                ".",
+                "--readiness",
+                "first-success",
+            )
+            self.assertEqual(decisions.returncode, 0, decisions.stderr)
 
             consistency = self.run_vendored_script(
                 project_root,
-                Path("vendor/harness-kit"),
                 "validate_overlay_consistency.py",
                 ".",
             )
@@ -99,17 +111,19 @@ class InstallDownstreamBundleTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 0, result.stderr)
 
-            vendor_root = project_root / "third_party/harness-kit"
-            self.assertTrue((vendor_root / "bundle_manifest.json").exists())
-            self.assertTrue((vendor_root / "downstream/scripts/validate_phase_gate.py").exists())
+            self.assertFalse((project_root / "third_party/harness-kit").exists())
+            self.assertTrue((project_root / "scripts/validate_phase_gate.py").exists())
             self.assertIn(
                 "docs/process/harness_guide.md",
                 (project_root / "docs/entrypoint.md").read_text(encoding="utf-8"),
             )
+            self.assertIn(
+                "install-time-only:python_coding_conventions_template.md",
+                (project_root / "docs/project/standards/coding_conventions_project.md").read_text(encoding="utf-8"),
+            )
 
             consistency = self.run_vendored_script(
                 project_root,
-                Path("third_party/harness-kit"),
                 "validate_overlay_consistency.py",
                 ".",
             )
@@ -162,7 +176,8 @@ class InstallDownstreamBundleTest(unittest.TestCase):
 
             self.assertEqual(second_result.returncode, 0, second_result.stderr)
             self.assertIn("Install flow completed", second_result.stdout)
-            self.assertTrue((project_root / "vendor/harness-kit/bundle_manifest.json").exists())
+            self.assertFalse((project_root / "vendor/harness-kit").exists())
+            self.assertTrue((project_root / "scripts/validate_overlay_consistency.py").exists())
 
     def test_force_vendor_replaces_legacy_process_doc_layout(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -177,10 +192,48 @@ class InstallDownstreamBundleTest(unittest.TestCase):
             result = self.run_cli(project_root, "--language", "python", "--force-vendor")
 
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertFalse(legacy_policy.exists())
-            self.assertFalse(legacy_template.exists())
-            self.assertTrue((project_root / "vendor/harness-kit/docs/process/common/process_policy.md").exists())
+            self.assertFalse((project_root / "vendor/harness-kit").exists())
             self.assertTrue((project_root / "docs/process/common/process_policy.md").exists())
+
+    def test_existing_legacy_vendor_requires_force_vendor_for_cleanup(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_root = Path(tmp_dir) / "recipeForBaby"
+            legacy_policy = project_root / "vendor/harness-kit/docs/harness/common/process_policy.md"
+            legacy_policy.parent.mkdir(parents=True, exist_ok=True)
+            legacy_policy.write_text("legacy policy\n", encoding="utf-8")
+
+            result = self.run_cli(project_root, "--language", "python")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("legacy vendor path already contains files", result.stderr)
+            self.assertTrue(legacy_policy.exists())
+
+    def test_force_vendor_refuses_unknown_legacy_vendor_content(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_root = Path(tmp_dir) / "recipeForBaby"
+            custom_file = project_root / "vendor/harness-kit/custom.txt"
+            custom_file.parent.mkdir(parents=True, exist_ok=True)
+            custom_file.write_text("keep me\n", encoding="utf-8")
+
+            result = self.run_cli(project_root, "--language", "python", "--force-vendor")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("contains non-bundle paths", result.stderr)
+            self.assertTrue(custom_file.exists())
+
+    def test_existing_install_time_residue_fails_before_final_install(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_root = Path(tmp_dir) / "recipeForBaby"
+            residue = project_root / "docs/project_overlay/README.md"
+            residue.parent.mkdir(parents=True, exist_ok=True)
+            residue.write_text("stale bundle guide\n", encoding="utf-8")
+
+            result = self.run_cli(project_root, "--language", "python")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("install-time only assets remain", result.stderr)
+            self.assertIn("docs/project_overlay", result.stderr)
+            self.assertFalse((project_root / "AGENTS.md").exists())
 
 
 if __name__ == "__main__":

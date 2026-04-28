@@ -27,9 +27,10 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
         downstream_flow_path.parent.mkdir(parents=True, exist_ok=True)
         downstream_flow_path.write_text("# Downstream Harness Flow\n", encoding="utf-8")
 
-        bootstrap_path = target / bootstrap_reference
-        bootstrap_path.parent.mkdir(parents=True, exist_ok=True)
-        bootstrap_path.write_text("# Python Coding Conventions\n", encoding="utf-8")
+        if not bootstrap_reference.startswith("install-time-only:"):
+            bootstrap_path = target / bootstrap_reference
+            bootstrap_path.parent.mkdir(parents=True, exist_ok=True)
+            bootstrap_path.write_text("# Python Coding Conventions\n", encoding="utf-8")
 
     def bootstrap_project(self, target: Path) -> None:
         self.bootstrap_project_with_vendor_path(target)
@@ -38,6 +39,7 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
         self,
         target: Path,
         vendor_path: str = "vendor/harness-kit",
+        bootstrap_reference: str | None = None,
     ) -> None:
         result = subprocess.run(
             [
@@ -55,10 +57,18 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             check=False,
         )
         self.assertEqual(result.returncode, 0, result.stderr)
+        default_bootstrap_reference = (
+            f"{vendor_path}/bootstrap/language_conventions/python_coding_conventions_template.md"
+        )
+        if bootstrap_reference is not None:
+            coding_path = target / "docs/project/standards/coding_conventions_project.md"
+            coding_text = coding_path.read_text(encoding="utf-8")
+            coding_text = coding_text.replace(default_bootstrap_reference, bootstrap_reference)
+            coding_path.write_text(coding_text, encoding="utf-8")
         self.create_reference_files(
             target,
             harness_guide_reference=f"{vendor_path}/docs/harness_guide.md",
-            bootstrap_reference=f"{vendor_path}/bootstrap/language_conventions/python_coding_conventions_template.md",
+            bootstrap_reference=bootstrap_reference or default_bootstrap_reference,
         )
 
     def run_checker(self, target: Path, *extra_args: str) -> subprocess.CompletedProcess[str]:
@@ -494,6 +504,19 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project_with_vendor_path(target, vendor_path="third_party/harness-kit")
+
+            result = self.run_checker(target)
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertIn("overlay consistency validation passed", result.stdout)
+
+    def test_install_time_only_bootstrap_reference_passes_without_persistent_vendor(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project_with_vendor_path(
+                target,
+                bootstrap_reference="install-time-only:python_coding_conventions_template.md",
+            )
 
             result = self.run_checker(target)
 

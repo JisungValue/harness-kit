@@ -75,6 +75,16 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         help="Project-root relative vendored harness-kit path used in generated references.",
     )
     parser.add_argument(
+        "--language-reference-mode",
+        choices=("vendor-path", "install-time-note"),
+        default="vendor-path",
+        help=(
+            "How generated coding conventions should record the bootstrap language template. "
+            "`vendor-path` keeps a project-local harness-kit path; `install-time-note` records "
+            "that the template was consumed during install and is not a runtime dependency."
+        ),
+    )
+    parser.add_argument(
         "--force",
         action="store_true",
         help="Overwrite generated files if they already exist.",
@@ -198,9 +208,29 @@ def render_process_doc_text(content: str) -> str:
     return content
 
 
-def build_plan(target_root: Path, language: str, vendor_path: str = DEFAULT_VENDOR_PATH) -> list[PlannedFile]:
+def bootstrap_reference_for_language(language: str, vendor_path: str, language_reference_mode: str) -> str:
+    template_name = Path(LANGUAGE_BOOTSTRAP_PATHS[language]).name
+    if language_reference_mode == "vendor-path":
+        return f"{vendor_path}/bootstrap/language_conventions/{template_name}"
+    if language_reference_mode == "install-time-note":
+        return f"install-time-only:{template_name}"
+    raise ValueError(f"Unsupported language reference mode: {language_reference_mode}")
+
+
+def bootstrap_reference_directory(bootstrap_ref: str) -> str:
+    if bootstrap_ref.startswith("install-time-only:"):
+        return f"{bootstrap_ref} (install-completion input)"
+    return f"{bootstrap_ref.rsplit('/', 1)[0]}/"
+
+
+def build_plan(
+    target_root: Path,
+    language: str,
+    vendor_path: str = DEFAULT_VENDOR_PATH,
+    language_reference_mode: str = "vendor-path",
+) -> list[PlannedFile]:
     plan: list[PlannedFile] = []
-    bootstrap_ref = f"{vendor_path}/bootstrap/language_conventions/{Path(LANGUAGE_BOOTSTRAP_PATHS[language]).name}"
+    bootstrap_ref = bootstrap_reference_for_language(language, vendor_path, language_reference_mode)
     harness_guide_ref = "docs/process/harness_guide.md"
 
     for source_rel, destination_rel in iter_process_doc_targets():
@@ -230,10 +260,11 @@ def customize_project_entrypoint_template(content: str, harness_guide_ref: str) 
 
 
 def customize_coding_conventions_template(content: str, language: str, bootstrap_ref: str) -> str:
+    bootstrap_directory = bootstrap_reference_directory(bootstrap_ref)
     replacements = {
         "- 언어별 convention 초안이 필요하면 `bootstrap/language_conventions/`에서 해당 언어 템플릿을 골라 이 문서에 병합한다.": (
             "- 언어별 convention 초안이 필요하면 "
-            f"`{bootstrap_ref.rsplit('/', 1)[0]}/`에서 해당 언어 템플릿을 골라 이 문서에 병합한다."
+            f"`{bootstrap_directory}`에서 해당 언어 템플릿을 골라 이 문서에 병합한다."
         ),
         "- bootstrap 템플릿을 복사했다면 어떤 언어 템플릿을 기준으로 병합했는지 적는다.": (
             "- bootstrap 템플릿을 복사했다면 어떤 언어 템플릿을 기준으로 병합했는지 적는다.\n"
@@ -304,7 +335,12 @@ def main(argv: list[str] | None = None) -> int:
     target_root = args.target.expanduser().resolve()
     try:
         vendor_path = normalize_vendor_path(args.vendor_path)
-        plan = build_plan(target_root, args.language, vendor_path)
+        plan = build_plan(
+            target_root,
+            args.language,
+            vendor_path,
+            language_reference_mode=args.language_reference_mode,
+        )
     except ValueError as exc:
         print(f"bootstrap init failed: {exc}", file=sys.stderr)
         return 1

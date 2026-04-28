@@ -154,6 +154,26 @@ class BootstrapInitCliTest(unittest.TestCase):
                 coding_conventions,
             )
 
+    def test_can_record_install_time_only_language_reference(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+
+            result = self.run_cli(target, "--language-reference-mode", "install-time-note")
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            coding_conventions = (target / "docs/project/standards/coding_conventions_project.md").read_text(
+                encoding="utf-8"
+            )
+
+            self.assertIn(
+                "install-time-only:python_coding_conventions_template.md",
+                coding_conventions,
+            )
+            self.assertNotIn(
+                "vendor/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md",
+                coding_conventions,
+            )
+
     def test_rejects_absolute_vendor_path(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
