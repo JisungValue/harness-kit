@@ -103,7 +103,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py . --mode incr
 - `differing files`가 핵심 문서에 걸려 있다.
 - `conflict candidates`가 나온다.
 - 필수 문서 세트, phase gate, validator 기준이 바뀌었다.
-- localized `docs/project_entrypoint.md`, `docs/standard/*`, `AGENTS.md`가 현재 팀 규칙과 강하게 결합돼 있다.
+- localized `docs/entrypoint.md`, `docs/project/standards/*`, `AGENTS.md`가 현재 팀 규칙과 강하게 결합돼 있다.
 - 새 bundle이 기존 overlay를 그대로 두고는 validator를 통과시키지 못한다.
 
 이 경우에는 파일을 한 번에 전면 overwrite하지 말고, 문서별로 현재 local rule과 새 baseline을 비교해 반영한다.

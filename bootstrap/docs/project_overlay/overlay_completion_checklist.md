@@ -18,24 +18,24 @@
 
 ### 1. 필수 문서 세트
 
-- [ ] `docs/project_entrypoint.md`가 있다.
-- [ ] `docs/decisions/README.md`가 있다.
-- [ ] `docs/standard/architecture.md`가 있다.
-- [ ] `docs/standard/implementation_order.md`가 있다.
-- [ ] `docs/standard/coding_conventions_project.md`가 있다.
-- [ ] `docs/standard/quality_gate_profile.md`가 있다.
-- [ ] `docs/standard/testing_profile.md`가 있다.
-- [ ] `docs/standard/commit_rule.md`가 있다.
+- [ ] `docs/entrypoint.md`가 있다.
+- [ ] `docs/project/decisions/README.md`가 있다.
+- [ ] `docs/project/standards/architecture.md`가 있다.
+- [ ] `docs/project/standards/implementation_order.md`가 있다.
+- [ ] `docs/project/standards/coding_conventions_project.md`가 있다.
+- [ ] `docs/project/standards/quality_gate_profile.md`가 있다.
+- [ ] `docs/project/standards/testing_profile.md`가 있다.
+- [ ] `docs/project/standards/commit_rule.md`가 있다.
 
 ### 2. local harness guide 연결
 
-- [ ] `docs/project_entrypoint.md`의 `공통 규칙`에 vendored `harness-kit/docs/harness_guide.md` 또는 실제 사용하는 공통 guide 경로가 있다.
-- [ ] `docs/project_entrypoint.md`의 `프로젝트 전용 규칙`이 필수 `docs/standard/*` 문서를 모두 연결한다.
-- [ ] `docs/project_entrypoint.md`의 `프로젝트 결정 문서`가 `docs/decisions/README.md`를 연결한다.
+- [ ] `docs/entrypoint.md`의 `공통 규칙`에 `docs/process/harness_guide.md`와 `docs/process/downstream_harness_flow.md`가 있다.
+- [ ] `docs/entrypoint.md`의 `프로젝트 전용 규칙`이 필수 `docs/project/standards/*` 문서를 모두 연결한다.
+- [ ] `docs/entrypoint.md`의 `프로젝트 결정 문서`가 `docs/project/decisions/README.md`를 연결한다.
 
 ### 3. 프로젝트 결정 문서 구조
 
-- [ ] `docs/decisions/README.md`가 있다.
+- [ ] `docs/project/decisions/README.md`가 있다.
 - [ ] architecture와 decisions의 역할 경계가 index에서 보인다.
 - [ ] 중요한 결정만 남기고 사소한 구현 디테일은 decision 문서 범위 밖이라고 명시돼 있다.
 - [ ] 새 decision 번호 규칙(`DEC-###-slug.md`, max+1, renumber 금지)이 index에 적혀 있다.
@@ -44,14 +44,14 @@
 ### 4. runtime instruction entrypoint 연결
 
 - [ ] `AGENTS.md`가 있다.
-- [ ] `AGENTS.md`가 `docs/project_entrypoint.md`를 우선 읽을 문서로 연결한다.
+- [ ] `AGENTS.md`가 `docs/entrypoint.md`를 우선 읽을 문서로 연결한다.
 - [ ] `CLAUDE.md`가 `AGENTS.md`를 공통 진입점으로 연결한다.
 - [ ] `GEMINI.md`가 `AGENTS.md`를 공통 진입점으로 연결한다.
 
 ### 5. 프로젝트 결정 필요 항목 해소 여부
 
-- [ ] `docs/standard/coding_conventions_project.md`의 활성 언어/런타임이 확정돼 있다.
-- [ ] `docs/standard/coding_conventions_project.md`의 bootstrap 기준 문서가 확정돼 있다.
+- [ ] `docs/project/standards/coding_conventions_project.md`의 활성 언어/런타임이 확정돼 있다.
+- [ ] `docs/project/standards/coding_conventions_project.md`의 bootstrap 기준 문서가 확정돼 있다.
 - [ ] `TODO`, `TBD` 같은 미완료 표기가 남아 있지 않다.
 - [ ] first-success 시점에 허용되는 placeholder와 금지되는 placeholder를 `validate_overlay_decisions.py --readiness first-success` 결과와 맞춰 확인했다.
 - [ ] Phase 2 진입 전이면 `validate_overlay_decisions.py --readiness phase2` 결과도 확인했다.

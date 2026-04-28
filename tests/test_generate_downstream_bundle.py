@@ -50,8 +50,8 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             self.assertIn("Generated downstream bundle", result.stdout)
             self.assertTrue((output / "README.md").exists())
             self.assertTrue((output / "bundle_manifest.json").exists())
-            self.assertTrue((output / "docs/harness_guide.md").exists())
-            self.assertTrue((output / "docs/downstream_harness_flow.md").exists())
+            self.assertTrue((output / "docs/process/harness_guide.md").exists())
+            self.assertTrue((output / "docs/process/downstream_harness_flow.md").exists())
             self.assertTrue((output / "docs/version_support.md").exists())
             self.assertTrue((output / "docs/examples/sample-task/issue.md").exists())
             self.assertTrue((output / "bootstrap/README.md").exists())
@@ -94,7 +94,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             copied_paths = [entry["path"] for entry in manifest["copied_files"]]
             self.assertEqual(copied_paths, sorted(copied_paths))
             self.assertIn("docs/quickstart.md", copied_paths)
-            self.assertIn("docs/downstream_harness_flow.md", copied_paths)
+            self.assertIn("docs/process/downstream_harness_flow.md", copied_paths)
             self.assertIn("docs/version_support.md", copied_paths)
             self.assertIn("docs/project_overlay/first_success_guide.md", copied_paths)
             self.assertIn("docs/project_overlay/adopt_dry_run.md", copied_paths)
@@ -107,8 +107,8 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             self.assertIn("docs/quickstart.md", manifest["bundle_patterns"])
             self.assertIn("docs/version_support.md", manifest["bundle_patterns"])
             self.assertIn("scripts/bootstrap_init.py", manifest["bundle_patterns"])
-            self.assertIn("docs/downstream_harness_flow.md", manifest["bundle_patterns"])
-            self.assertIn("docs/harness_guide.md", manifest["bundle_patterns"])
+            self.assertIn("docs/process/downstream_harness_flow.md", manifest["bundle_patterns"])
+            self.assertIn("docs/process/harness_guide.md", manifest["bundle_patterns"])
             self.assertIn("docs/harness/common/**/*.md", manifest["bundle_patterns"])
             self.assertIn("docs/phase_*/*.md", manifest["bundle_patterns"])
             self.assertIn("docs/standard/coding_guidelines_core.md", manifest["bundle_patterns"])
@@ -141,7 +141,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             bundle_paths = [bundle_file.relative_path.as_posix() for bundle_file in bundle_files]
 
         self.assertIn("scripts/bootstrap_init.py", bundle_paths)
-        self.assertNotIn("docs/project_entrypoint.md", bundle_paths)
+        self.assertNotIn("docs/entrypoint.md", bundle_paths)
         self.assertTrue(
             all(path == "scripts/bootstrap_init.py" or path.startswith("docs/examples/") for path in bundle_paths)
         )

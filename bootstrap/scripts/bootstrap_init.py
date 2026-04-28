@@ -21,14 +21,19 @@ TEMPLATE_TARGETS = {
     "bootstrap/docs/project_overlay/agent_entrypoint_template.md": "AGENTS.md",
     "bootstrap/docs/project_overlay/claude_entrypoint_template.md": "CLAUDE.md",
     "bootstrap/docs/project_overlay/gemini_entrypoint_template.md": "GEMINI.md",
-    "bootstrap/docs/project_overlay/project_entrypoint_template.md": "docs/project_entrypoint.md",
-    "bootstrap/docs/project_overlay/decisions_index_template.md": "docs/decisions/README.md",
-    "bootstrap/docs/project_overlay/architecture_template.md": "docs/standard/architecture.md",
-    "bootstrap/docs/project_overlay/implementation_order_template.md": "docs/standard/implementation_order.md",
-    "bootstrap/docs/project_overlay/coding_conventions_project_template.md": "docs/standard/coding_conventions_project.md",
-    "bootstrap/docs/project_overlay/quality_gate_profile_template.md": "docs/standard/quality_gate_profile.md",
-    "bootstrap/docs/project_overlay/testing_profile_template.md": "docs/standard/testing_profile.md",
-    "bootstrap/docs/project_overlay/commit_rule_template.md": "docs/standard/commit_rule.md",
+    "bootstrap/docs/project_overlay/project_entrypoint_template.md": "docs/entrypoint.md",
+    "bootstrap/docs/project_overlay/decisions_index_template.md": "docs/project/decisions/README.md",
+    "bootstrap/docs/project_overlay/architecture_template.md": "docs/project/standards/architecture.md",
+    "bootstrap/docs/project_overlay/implementation_order_template.md": "docs/project/standards/implementation_order.md",
+    "bootstrap/docs/project_overlay/coding_conventions_project_template.md": "docs/project/standards/coding_conventions_project.md",
+    "bootstrap/docs/project_overlay/quality_gate_profile_template.md": "docs/project/standards/quality_gate_profile.md",
+    "bootstrap/docs/project_overlay/testing_profile_template.md": "docs/project/standards/testing_profile.md",
+    "bootstrap/docs/project_overlay/commit_rule_template.md": "docs/project/standards/commit_rule.md",
+}
+
+PROCESS_DOC_TARGETS = {
+    "downstream/docs/harness_guide.md": "docs/process/harness_guide.md",
+    "downstream/docs/downstream_harness_flow.md": "docs/process/downstream_harness_flow.md",
 }
 
 MATERIALIZED_PROJECT_OVERLAY_ROOT = "docs/project_overlay"
@@ -112,18 +117,42 @@ def resolve_template_source(source_rel: str) -> Path:
     raise FileNotFoundError(f"Bootstrap template not found: {source_rel}")
 
 
+def resolve_process_doc_source(source_rel: str) -> Path:
+    canonical_prefix = "downstream/docs/"
+    if source_rel.startswith(canonical_prefix):
+        materialized_process_source = ROOT / "docs" / "process" / source_rel.removeprefix(canonical_prefix)
+        if materialized_process_source.exists():
+            return materialized_process_source
+
+        materialized_bundle_source = ROOT / "docs" / source_rel.removeprefix(canonical_prefix)
+        if materialized_bundle_source.exists():
+            return materialized_bundle_source
+
+    source = ROOT / source_rel
+    if source.exists():
+        return source
+
+    raise FileNotFoundError(f"Bootstrap process doc not found: {source_rel}")
+
+
 def build_plan(target_root: Path, language: str, vendor_path: str = DEFAULT_VENDOR_PATH) -> list[PlannedFile]:
     plan: list[PlannedFile] = []
     bootstrap_ref = f"{vendor_path}/bootstrap/language_conventions/{Path(LANGUAGE_BOOTSTRAP_PATHS[language]).name}"
-    harness_guide_ref = f"{vendor_path}/docs/harness_guide.md"
+    harness_guide_ref = "docs/process/harness_guide.md"
+
+    for source_rel, destination_rel in PROCESS_DOC_TARGETS.items():
+        source = resolve_process_doc_source(source_rel)
+        destination = target_root / destination_rel
+        content = source.read_text(encoding="utf-8")
+        plan.append(PlannedFile(source=source, destination=destination, content=content))
 
     for source_rel, destination_rel in TEMPLATE_TARGETS.items():
         source = resolve_template_source(source_rel)
         destination = target_root / destination_rel
         content = source.read_text(encoding="utf-8")
-        if destination_rel == "docs/project_entrypoint.md":
+        if destination_rel == "docs/entrypoint.md":
             content = customize_project_entrypoint_template(content, harness_guide_ref)
-        if destination_rel == "docs/standard/coding_conventions_project.md":
+        if destination_rel == "docs/project/standards/coding_conventions_project.md":
             content = customize_coding_conventions_template(content, language, bootstrap_ref)
         plan.append(PlannedFile(source=source, destination=destination, content=content))
 
@@ -131,10 +160,10 @@ def build_plan(target_root: Path, language: str, vendor_path: str = DEFAULT_VEND
 
 
 def customize_project_entrypoint_template(content: str, harness_guide_ref: str) -> str:
-    default_reference = f"{DEFAULT_VENDOR_PATH}/docs/harness_guide.md"
+    default_reference = "docs/process/harness_guide.md"
     if default_reference not in content:
         raise ValueError(f"Expected template snippet not found: {default_reference}")
-    return content.replace(default_reference, harness_guide_ref, 1)
+    return content
 
 
 def customize_coding_conventions_template(content: str, language: str, bootstrap_ref: str) -> str:

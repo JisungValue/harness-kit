@@ -33,15 +33,15 @@ python3 vendor/harness-kit/scripts/adopt_dry_run.py . --language python
   - 현재 파일이 unrelated 문서이거나, target path가 파일이 아니거나, bootstrap 기준과의 shape 충돌이 크다.
   - overwrite보다 수동 판단이 먼저 필요한 대상으로 본다.
 - `legacy entrypoint migration candidates`
-  - 예전 project-local 경로 `docs/harness_guide.md`가 남아 있어, 새 canonical 경로 `docs/project_entrypoint.md`로 rename migration이 먼저 필요한 상태다.
+  - 예전 project-local 경로 `docs/harness_guide.md`가 남아 있어, 새 canonical 경로 `docs/entrypoint.md`로 rename migration이 먼저 필요한 상태다.
   - 기본 safe create보다 `adopt_safe_write.py --migrate-legacy-entrypoint` 또는 수동 rename 검토가 우선이다.
 
 ## 예시 해석
 
-- `docs/project_entrypoint.md`가 vendored path만 다르면 보통 `differing files`로 나온다.
-- legacy `docs/harness_guide.md`만 있고 `docs/project_entrypoint.md`가 아직 없으면 보통 `legacy entrypoint migration candidates`로 나온다.
-- `docs/standard/commit_rule.md`가 다른 제목의 unrelated 문서로 바뀌어 있으면 `conflict candidates`로 나온다.
-- `docs/standard/testing_profile.md`가 없으면 `missing files`로 나온다.
+- `docs/entrypoint.md`가 process guide path만 다르면 보통 `differing files`로 나온다.
+- legacy `docs/harness_guide.md`만 있고 `docs/entrypoint.md`가 아직 없으면 보통 `legacy entrypoint migration candidates`로 나온다.
+- `docs/project/standards/commit_rule.md`가 다른 제목의 unrelated 문서로 바뀌어 있으면 `conflict candidates`로 나온다.
+- `docs/project/standards/testing_profile.md`가 없으면 `missing files`로 나온다.
 
 ## 현재 범위
 

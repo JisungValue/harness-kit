@@ -2,8 +2,8 @@
 
 ## 문서 역할
 
-- 이 파일은 vendored `harness-kit` 안의 재사용 가능한 core guide다.
-- downstream 프로젝트의 로컬 문서 entrypoint는 `docs/project_entrypoint.md`이고, 그 파일이 이 core guide와 프로젝트 전용 overlay 문서를 함께 연결한다.
+- 이 파일은 `harness-kit`가 제공하는 재사용 가능한 process guide다.
+- downstream 프로젝트의 로컬 문서 entrypoint는 `docs/entrypoint.md`이고, 그 파일이 이 core guide와 프로젝트 전용 overlay 문서를 함께 연결한다.
 
 ## 빠른 시작 요약
 
@@ -18,9 +18,9 @@
 - 재수행은 변경 영향이 걸린 가장 이른 Phase부터 시작하고, 이후 영향을 받은 Phase만 순서대로 다시 수행한다.
 - 각 Phase 또는 레이어의 한 작업 단위가 끝날 때마다 task workspace의 `implementation_notes.md`의 `진행 로그`를 갱신한다.
 - 공통 정책 해석과 충돌 판단은 `docs/harness/common/process_policy.md`의 우선순위 규칙을 따른다.
-- 작업 판단의 source-of-truth는 현재 repo 안의 `README`, `docs/*`, `docs/decisions/*`, `scripts/*`, `config` 같은 repo-local 근거다.
+- 작업 판단의 source-of-truth는 현재 repo 안의 `README`, `docs/*`, `docs/project/decisions/*`, `scripts/*`, `config` 같은 repo-local 근거다.
 - 기억, 외부 대화, 다른 프로젝트 관행은 repo-local 근거보다 우선하지 않는다.
-- 필요한 결정이나 근거가 repo에 없으면 추측으로 메우지 말고 project overlay 또는 `docs/decisions/` 반영 후보로 넘기며, 같은 사실을 `implementation_notes.md`나 `validation_report.md`에도 남긴다.
+- 필요한 결정이나 근거가 repo에 없으면 추측으로 메우지 말고 project overlay 또는 `docs/project/decisions/` 반영 후보로 넘기며, 같은 사실을 `implementation_notes.md`나 `validation_report.md`에도 남긴다.
 - 테스트, 테스트 더블 판단, 검증은 각각 `testing_policy.md`, `test_double_policy.md`, `validation_policy.md`를 기준으로 수행한다.
 - 현재 TASK와 직접 관련 없는 기존 중복 제거, 구조 정리, 선제 추상화는 별도 리팩터링 태스크로 분리한다.
 - 작은 태스크의 경량 운영 예외 가능 여부는 `docs/harness/common/lightweight_task_policy.md`를 따른다.
@@ -66,7 +66,7 @@
 
 아래 문서는 모든 구현 태스크에서 시작 전에 먼저 확인한다.
 
-- `docs/project_entrypoint.md`
+- `docs/entrypoint.md`
 - `docs/harness/common/process_policy.md`
 - `docs/harness/common/artifact_policy.md`
 
@@ -83,20 +83,20 @@
 
 ### Phase 2. TDD Implementation
 
-- 구현 중 필수 재참조: `docs/harness/common/testing_policy.md`, `docs/harness/common/test_double_policy.md`, `docs/harness/common/code_hygiene_policy.md`, `docs/harness/common/design_quality_policy.md`, `docs/harness/common/performance_policy.md`, `docs/standard/coding_guidelines_core.md`, 프로젝트 `docs/standard/architecture.md`, 프로젝트 `docs/standard/implementation_order.md`, 프로젝트 `docs/standard/coding_conventions_project.md`, 프로젝트 `docs/standard/quality_gate_profile.md`
-- 감사 직전 필수 재참조: `docs/harness/common/audit_policy.md`, `docs/harness/common/testing_policy.md`, `docs/harness/common/test_double_policy.md`, `docs/harness/common/code_hygiene_policy.md`, `docs/harness/common/design_quality_policy.md`, `docs/harness/common/performance_policy.md`, `docs/standard/coding_guidelines_core.md`, 프로젝트 `docs/standard/architecture.md`, 프로젝트 `docs/standard/implementation_order.md`, 프로젝트 `docs/standard/coding_conventions_project.md`, 프로젝트 `docs/standard/quality_gate_profile.md`
+- 구현 중 필수 재참조: `docs/harness/common/testing_policy.md`, `docs/harness/common/test_double_policy.md`, `docs/harness/common/code_hygiene_policy.md`, `docs/harness/common/design_quality_policy.md`, `docs/harness/common/performance_policy.md`, `docs/standard/coding_guidelines_core.md`, 프로젝트 `docs/project/standards/architecture.md`, 프로젝트 `docs/project/standards/implementation_order.md`, 프로젝트 `docs/project/standards/coding_conventions_project.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`
+- 감사 직전 필수 재참조: `docs/harness/common/audit_policy.md`, `docs/harness/common/testing_policy.md`, `docs/harness/common/test_double_policy.md`, `docs/harness/common/code_hygiene_policy.md`, `docs/harness/common/design_quality_policy.md`, `docs/harness/common/performance_policy.md`, `docs/standard/coding_guidelines_core.md`, 프로젝트 `docs/project/standards/architecture.md`, 프로젝트 `docs/project/standards/implementation_order.md`, 프로젝트 `docs/project/standards/coding_conventions_project.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`
 - 조건부 참조: `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`
 
 ### Phase 3. Integration
 
-- 구현 중 필수 재참조: `docs/harness/common/testing_policy.md`, `docs/harness/common/test_double_policy.md`, `docs/harness/common/validation_policy.md`, 프로젝트 `docs/standard/quality_gate_profile.md`, 프로젝트 `docs/standard/testing_profile.md`
-- 감사 직전 필수 재참조: `docs/harness/common/audit_policy.md`, `docs/harness/common/testing_policy.md`, `docs/harness/common/test_double_policy.md`, `docs/harness/common/validation_policy.md`, 프로젝트 `docs/standard/quality_gate_profile.md`, 프로젝트 `docs/standard/testing_profile.md`
+- 구현 중 필수 재참조: `docs/harness/common/testing_policy.md`, `docs/harness/common/test_double_policy.md`, `docs/harness/common/validation_policy.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`, 프로젝트 `docs/project/standards/testing_profile.md`
+- 감사 직전 필수 재참조: `docs/harness/common/audit_policy.md`, `docs/harness/common/testing_policy.md`, `docs/harness/common/test_double_policy.md`, `docs/harness/common/validation_policy.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`, 프로젝트 `docs/project/standards/testing_profile.md`
 - 조건부 참조: `docs/harness/common/audit_policy.md`, `implementation_notes.md`
 
 ### Phase 4. Validation
 
-- 구현 중 필수 재참조: `docs/harness/common/validation_policy.md`, 프로젝트 `docs/standard/quality_gate_profile.md`
-- 감사 직전 필수 재참조: `docs/harness/common/audit_policy.md`, `docs/harness/common/validation_policy.md`, 프로젝트 `docs/standard/quality_gate_profile.md`
+- 구현 중 필수 재참조: `docs/harness/common/validation_policy.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`
+- 감사 직전 필수 재참조: `docs/harness/common/audit_policy.md`, `docs/harness/common/validation_policy.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`
 - 조건부 참조: `docs/harness/common/audit_policy.md`
 
 ### Phase 5. Documentation
@@ -111,7 +111,7 @@
 
 - `requirements.md`가 구현 가능한 수준으로 정리되었는가
 - `plan.md`에 테스트 계획, 문서 반영 계획, 비범위가 포함되었는가
-- decision 반영 후보면 관련 `docs/decisions/` 계획이 `plan.md`에 포함되었는가
+- decision 반영 후보면 관련 `docs/project/decisions/` 계획이 `plan.md`에 포함되었는가
 - `issue.md`의 요청사항, 제약사항, 비범위가 `plan.md`에 빠짐없이 반영되었는가
 - 현재 범위 밖 작업이 계획에 섞이지 않았는가
 - requirements 감사, plan 감사, issue 대비 plan 누락 감사가 모두 승인 가능 상태인가
@@ -120,7 +120,7 @@
 ### Phase 2 종료 게이트
 
 - 선택한 레이어가 `테스트 작성 -> 구현 -> 감사` 순서를 지켰는가
-- `docs/standard/implementation_order.md` 기준으로 선택 레이어 순서와 세분화 근거를 남겼는가
+- `docs/project/standards/implementation_order.md` 기준으로 선택 레이어 순서와 세분화 근거를 남겼는가
 - 테스트를 통과시키는 최소 구현만 반영했는가
 - 단위 테스트가 부적절한 책임을 `implementation_notes.md`에 남겼는가
 
@@ -148,7 +148,7 @@
 ### Phase 5 종료 게이트
 
 - 새 계약, 구조적 결정, 사용법 변경이 관련 문서에 반영되었는가
-- Phase 4가 넘긴 related decisions/가 실제 `docs/decisions/`에 반영되었는가
+- Phase 4가 넘긴 related decisions/가 실제 `docs/project/decisions/`에 반영되었는가
 - 작업 로그가 변경 목적과 결과를 복원 가능하게 남기는가
 - 범위 밖 개선 사항이 현재 결과가 아니라 후속 후보로 분리되었는가
 - 이전 Phase가 stale 상태인데도 close-out 또는 canonical 문서가 먼저 수정되지 않았는가
@@ -160,7 +160,7 @@
 - 입력: `issue.md`
 - 출력: `requirements.md`, `plan.md`
 - 목표: 구현 범위, 제약, 비범위, 작업 계획을 확정한다.
-- decision 반영 후보가 있으면 `plan.md`에 관련 `docs/decisions/` 읽기/수정/생성 계획까지 포함한다.
+- decision 반영 후보가 있으면 `plan.md`에 관련 `docs/project/decisions/` 읽기/수정/생성 계획까지 포함한다.
 - 권장 순서: `issue.md` 분석 -> `requirements.md` 작성 -> requirements 감사 -> `plan.md` 작성 -> plan 감사 -> issue 대비 plan 누락 감사
 - 내부 감사: requirements 감사, plan 감사, issue 대비 plan 누락 감사
 - 사용자 승인: 내부 감사가 모두 승인 가능 상태가 된 뒤 Phase 1 종료 시점에 받는다.
@@ -170,9 +170,9 @@
 - 입력: `requirements.md`, `plan.md`
 - 출력: 테스트, 구현 코드, 필요한 경우 `implementation_notes.md`
 - 목표: 승인된 범위 안에서 필요한 레이어만 선택해 구현한다.
-- 프로젝트별 실제 레이어 순서와 세분화 기준은 프로젝트 `docs/standard/implementation_order.md`를 따르며, 이 문서는 프로젝트 `docs/standard/architecture.md`의 실제 구조와 의존성 방향을 기준으로 작성한다.
-- `docs/standard/implementation_order.md`는 프로젝트 기본 레이어 순서 문서이며, 특정 기획서 기준의 API 구현 우선순위나 task별 작업 순서는 `plan.md`에 남긴다.
-- 프로젝트 `docs/standard/implementation_order.md`가 없거나 현재 TASK 기준으로 모호하면, Phase 2 구현과 감사를 진행하지 않고 프로젝트 문서를 먼저 보강한다.
+- 프로젝트별 실제 레이어 순서와 세분화 기준은 프로젝트 `docs/project/standards/implementation_order.md`를 따르며, 이 문서는 프로젝트 `docs/project/standards/architecture.md`의 실제 구조와 의존성 방향을 기준으로 작성한다.
+- `docs/project/standards/implementation_order.md`는 프로젝트 기본 레이어 순서 문서이며, 특정 기획서 기준의 API 구현 우선순위나 task별 작업 순서는 `plan.md`에 남긴다.
+- 프로젝트 `docs/project/standards/implementation_order.md`가 없거나 현재 TASK 기준으로 모호하면, Phase 2 구현과 감사를 진행하지 않고 프로젝트 문서를 먼저 보강한다.
 
 ### Phase 3. Integration
 
@@ -190,4 +190,4 @@
 
 - 입력: 구현 및 검증 결과
 - 출력: 갱신된 문서와 작업 로그
-- 목표: 구조적 결정, 사용법, 작업 요약을 복원 가능하게 남기고, 필요한 `docs/decisions/` 반영을 실제로 닫는다.
+- 목표: 구조적 결정, 사용법, 작업 요약을 복원 가능하게 남기고, 필요한 `docs/project/decisions/` 반영을 실제로 닫는다.

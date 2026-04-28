@@ -10,14 +10,14 @@ from pathlib import Path
 
 
 REQUIRED_DOCS = (
-    "docs/project_entrypoint.md",
-    "docs/decisions/README.md",
-    "docs/standard/architecture.md",
-    "docs/standard/implementation_order.md",
-    "docs/standard/coding_conventions_project.md",
-    "docs/standard/quality_gate_profile.md",
-    "docs/standard/testing_profile.md",
-    "docs/standard/commit_rule.md",
+    "docs/entrypoint.md",
+    "docs/project/decisions/README.md",
+    "docs/project/standards/architecture.md",
+    "docs/project/standards/implementation_order.md",
+    "docs/project/standards/coding_conventions_project.md",
+    "docs/project/standards/quality_gate_profile.md",
+    "docs/project/standards/testing_profile.md",
+    "docs/project/standards/commit_rule.md",
 )
 
 UNRESOLVED_PATTERNS = (
@@ -29,28 +29,28 @@ UNRESOLVED_PATTERNS = (
 
 ALLOWED_MARKERS_BY_READINESS = {
     "first-success": {
-        "docs/standard/coding_conventions_project.md": {"[프로젝트 결정 필요]"},
-        "docs/standard/quality_gate_profile.md": {"[프로젝트 결정 필요]"},
-        "docs/standard/commit_rule.md": {"[팀 결정 필요]"},
+        "docs/project/standards/coding_conventions_project.md": {"[프로젝트 결정 필요]"},
+        "docs/project/standards/quality_gate_profile.md": {"[프로젝트 결정 필요]"},
+        "docs/project/standards/commit_rule.md": {"[팀 결정 필요]"},
     },
     "phase2": {
-        "docs/standard/commit_rule.md": {"[팀 결정 필요]"},
+        "docs/project/standards/commit_rule.md": {"[팀 결정 필요]"},
     },
 }
 
 IGNORED_MARKER_PATTERNS = {
-    "docs/standard/coding_conventions_project.md": (
+    "docs/project/standards/coding_conventions_project.md": (
         re.compile(r"^\s*-\s+`\[프로젝트 결정 필요\]` 표시는 남길 수 있지만"),
         re.compile(r"^\s*-\s+현재 변경에 영향을 주는 항목이 아직 `\[프로젝트 결정 필요\]` 상태면"),
     ),
-    "docs/standard/commit_rule.md": (
+    "docs/project/standards/commit_rule.md": (
         re.compile(r"^\s*-\s+`\[팀 결정 필요\]`로 표시한 항목은 팀 정책에 맞게"),
     ),
 }
 
 REQUIRED_FIELD_RULES = {
     "first-success": {
-        "docs/standard/coding_conventions_project.md": (
+        "docs/project/standards/coding_conventions_project.md": (
             (
                 "활성 언어/런타임 필드",
                 re.compile(

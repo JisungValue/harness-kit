@@ -8,14 +8,14 @@ from pathlib import Path
 
 
 REQUIRED_DOCS = (
-    "docs/project_entrypoint.md",
-    "docs/decisions/README.md",
-    "docs/standard/architecture.md",
-    "docs/standard/implementation_order.md",
-    "docs/standard/coding_conventions_project.md",
-    "docs/standard/quality_gate_profile.md",
-    "docs/standard/testing_profile.md",
-    "docs/standard/commit_rule.md",
+    "docs/entrypoint.md",
+    "docs/project/decisions/README.md",
+    "docs/project/standards/architecture.md",
+    "docs/project/standards/implementation_order.md",
+    "docs/project/standards/coding_conventions_project.md",
+    "docs/project/standards/quality_gate_profile.md",
+    "docs/project/standards/testing_profile.md",
+    "docs/project/standards/commit_rule.md",
 )
 
 

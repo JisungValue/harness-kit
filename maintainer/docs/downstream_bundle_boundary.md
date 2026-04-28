@@ -91,9 +91,10 @@ README.md
 bundle_manifest.json
 bootstrap/
 docs/
-  harness_guide.md
+  process/
+    harness_guide.md
+    downstream_harness_flow.md
   harness/
-  downstream_harness_flow.md
   how_harness_kit_works.md
   phase_*/
   project_overlay/
@@ -117,7 +118,7 @@ downstream/
     validate_phase_gate.py
 ```
 
-`docs/project_entrypoint.md`와 `docs/decisions/README.md`는 bundle 안에 직접 들어가는 파일이 아니라, downstream 프로젝트에서 각각 `docs/project_overlay/project_entrypoint_template.md`, `docs/project_overlay/decisions_index_template.md`를 bootstrap 또는 수동 복사해 생성하는 consumer-local 파일이다. 반면 source repo 기준 `bootstrap/docs/project_overlay/*` guide/template/workflow는 generated bundle 안에서 `docs/project_overlay/*`로 materialize 되고, `docs/project_overlay/harness_doc_guard_workflow_template.yml`은 first-success 이후 consumer project가 `.github/workflows/harness-doc-guard.yml`로 복사해 future-session CI guardrail을 고정하는 shipped asset이다.
+`docs/entrypoint.md`와 `docs/project/decisions/README.md`는 bundle 안에 직접 들어가는 파일이 아니라, downstream 프로젝트에서 각각 `docs/project_overlay/project_entrypoint_template.md`, `docs/project_overlay/decisions_index_template.md`를 bootstrap 또는 수동 복사해 생성하는 consumer-local 파일이다. 반면 source repo 기준 `bootstrap/docs/project_overlay/*` guide/template/workflow는 generated bundle 안에서 `docs/project_overlay/*`로 materialize 되고, `docs/project_overlay/harness_doc_guard_workflow_template.yml`은 first-success 이후 consumer project가 `.github/workflows/harness-doc-guard.yml`로 복사해 future-session CI guardrail을 고정하는 shipped asset이다.
 
 ## Bundle Generation Command
 

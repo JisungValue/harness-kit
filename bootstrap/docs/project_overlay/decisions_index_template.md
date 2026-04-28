@@ -4,7 +4,7 @@
 
 ## 문서 역할
 
-- `docs/standard/architecture.md`는 현재 구조, 경계, 큰 그림을 설명한다.
+- `docs/project/standards/architecture.md`는 현재 구조, 경계, 큰 그림을 설명한다.
 - `docs/decisions/*.md`는 중요한 Architecture/Policy/Operational 결정을 기록한다.
 - 다음 작업이 관련 결정을 건드리면 이 index에서 관련 decision 문서를 찾아 함께 읽고 갱신한다.
 
@@ -35,7 +35,7 @@
 
 ## 읽기 방법
 
-- `docs/project_entrypoint.md`에서 이 문서로 들어왔으면, 현재 작업과 직접 관련 있는 decision부터 읽는다.
+- `docs/entrypoint.md`에서 이 문서로 들어왔으면, 현재 작업과 직접 관련 있는 decision부터 읽는다.
 - 구조 설명이 필요하면 `architecture.md`를 함께 읽고, 정책/책임/예외 규칙이 필요하면 관련 decision 문서를 함께 읽는다.
 - 관련 decision이 바뀌면 `Related Docs`, `When To Update`에 적힌 문서도 같은 작업에서 함께 갱신한다.
 - Phase 1에서는 이번 작업이 decision 후보인지 먼저 판정하고, 필요하면 plan에 decision 수정/생성을 넣는다.

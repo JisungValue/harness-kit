@@ -196,18 +196,27 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
             "README 최소 프로젝트 문서 세트와 project_overlay/README 필수 문서가 일치하지 않습니다."
         )
 
-    expected_project_docs = {path for path in readme_min if path.startswith("docs/standard/")}
+    expected_project_docs = {path for path in readme_min if path.startswith("docs/project/standards/")}
 
-    template_docs = set(extract_bullet_paths(project_guide_template.splitlines(), "docs/standard/"))
+    template_docs = set(extract_bullet_paths(project_guide_template.splitlines(), "docs/project/standards/"))
     if template_docs != expected_project_docs:
         errors.append(
-            "project_entrypoint_template의 docs/standard 문서 목록이 README 최소 문서 세트와 다릅니다."
+            "project_entrypoint_template의 docs/project/standards 문서 목록이 README 최소 문서 세트와 다릅니다."
         )
+
+    common_rule_docs = set(
+        extract_bullet_paths(extract_h2_section(project_guide_template, "공통 규칙"))
+    )
+    if common_rule_docs != {
+        "docs/process/harness_guide.md",
+        "docs/process/downstream_harness_flow.md",
+    }:
+        errors.append("project_entrypoint_template의 공통 규칙 문서 목록이 final layout contract와 다릅니다.")
 
     overlay_local_guide_docs = set(
         extract_codeblock_paths(
-            extract_h2_section(overlay_readme, "권장 로컬 `docs/project_entrypoint.md`"),
-            "docs/standard/",
+            extract_h2_section(overlay_readme, "권장 로컬 `docs/entrypoint.md`"),
+            "docs/project/standards/",
         )
     )
     if overlay_local_guide_docs != expected_project_docs:
@@ -219,7 +228,7 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
         errors.append("harness_guide에 구식 경로 `프로젝트 testing_profile.md` 표현이 남아 있습니다.")
 
     decisions_lines = extract_h2_section(project_guide_template, "프로젝트 결정 문서")
-    if set(extract_bullet_paths(decisions_lines)) != {"docs/decisions/README.md"}:
+    if set(extract_bullet_paths(decisions_lines)) != {"docs/project/decisions/README.md"}:
         errors.append("project_entrypoint_template의 프로젝트 결정 문서 목록이 기대값과 다릅니다.")
 
     for rel_path, text in {
@@ -306,7 +315,7 @@ def check_entrypoint_role_labels(errors: list[str]) -> None:
             errors.append(f"{rel_path}의 제목은 `{expected_title}`여야 합니다.")
 
     overlay_readme = read_text("bootstrap/docs/project_overlay/README.md")
-    local_entrypoint_lines = extract_h2_section(overlay_readme, "권장 로컬 `docs/project_entrypoint.md`")
+    local_entrypoint_lines = extract_h2_section(overlay_readme, "권장 로컬 `docs/entrypoint.md`")
     if "# Project Harness Entry Point" not in "\n".join(local_entrypoint_lines):
         errors.append("project_overlay/README의 로컬 entrypoint 예시 제목이 최신 구조와 다릅니다.")
 
@@ -332,6 +341,7 @@ def check_entrypoint_role_labels(errors: list[str]) -> None:
         "bootstrap/docs/project_overlay/project_entrypoint_template.md": (
             "공통 규칙",
             "프로젝트 전용 규칙",
+            "docs/process/downstream_harness_flow.md",
             "순서대로 모두 읽고 적용",
             "둘 중 하나만 읽고 멈추지 않는다",
         ),
@@ -400,7 +410,7 @@ def check_decisions_templates(errors: list[str]) -> None:
 def check_validator_explainer_docs(errors: list[str]) -> None:
     unresolved = read_text("bootstrap/docs/project_overlay/unresolved_decision_validator.md")
     for phrase in (
-        "docs/decisions/README.md",
+        "docs/project/decisions/README.md",
         "Resolve these required canonical fields first:",
         "Then resolve these blocking unresolved markers:",
         "Still allowed after the blocking items above are fixed:",
@@ -439,9 +449,16 @@ def check_repo_local_source_of_truth_docs(errors: list[str]) -> None:
         for phrase in required_phrases:
             if phrase not in text:
                 errors.append(f"{rel_path}에 repo-local source-of-truth 핵심 문구 `{phrase}`가 없습니다.")
-        for handoff_phrase in ("project overlay", "docs/decisions/", "implementation_notes.md", "validation_report.md"):
-            if handoff_phrase not in text:
-                errors.append(f"{rel_path}에 누락된 결정 handoff 문구 `{handoff_phrase}`가 없습니다.")
+        handoff_phrase_groups = (
+            ("project overlay",),
+            ("docs/project/decisions/", "docs/decisions/"),
+            ("implementation_notes.md",),
+            ("validation_report.md",),
+        )
+        for handoff_phrases in handoff_phrase_groups:
+            if not any(handoff_phrase in text for handoff_phrase in handoff_phrases):
+                label = " 또는 ".join(f"`{handoff_phrase}`" for handoff_phrase in handoff_phrases)
+                errors.append(f"{rel_path}에 누락된 결정 handoff 문구 {label}가 없습니다.")
 
     artifact_policy = read_text("downstream/docs/harness/common/artifact_policy.md")
     for phrase in (

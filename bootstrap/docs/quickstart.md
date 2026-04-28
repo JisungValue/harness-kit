@@ -51,12 +51,11 @@
 python3 vendor/harness-kit/scripts/bootstrap_init.py . --language python
 ```
 
-3. bootstrap 직후 `docs/project_entrypoint.md`와 `docs/decisions/README.md`를 먼저 읽고, 현재 프로젝트에서 구조/정책/예외/책임 위치 중 바로 확정해야 할 결정이 있는지 확인한다.
+3. bootstrap 직후 `docs/entrypoint.md`와 `docs/project/decisions/README.md`를 먼저 읽고, 현재 프로젝트에서 구조/정책/예외/책임 위치 중 바로 확정해야 할 결정이 있는지 확인한다.
 
-4. `harness-kit`를 `vendor/harness-kit/` 이외의 경로에 두었다면, bootstrap 때 `--vendor-path`를 이미 준 경우 generated reference는 바로 맞는다. 그 옵션 없이 생성했다면 validator를 돌리기 전에 아래 파일의 vendored 경로를 실제 배치 경로로 먼저 현지화한다.
+4. `harness-kit`를 `vendor/harness-kit/` 이외의 경로에 두었다면, bootstrap 때 `--vendor-path`를 이미 준 경우 language convention bootstrap reference는 바로 맞는다. 그 옵션 없이 생성했다면 validator를 돌리기 전에 아래 파일의 vendored 경로를 실제 배치 경로로 먼저 현지화한다.
 
-- `docs/project_entrypoint.md`
-- `docs/standard/coding_conventions_project.md`
+- `docs/project/standards/coding_conventions_project.md`
 
 5. 그다음 아래 검증 명령을 실행한다.
 
@@ -71,7 +70,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 7. 첫 task를 시작하기 전에 `downstream/docs/downstream_harness_flow.md`를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
 8. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
 9. task를 시작하면 `phase_status.md`에 현재 gate와 허용 write-set을 먼저 적고, 필요할 때 아래 validator로 hard-stop 위반을 점검한다.
-10. 이때 `docs/standard/implementation_order.md`는 프로젝트 기본 레이어 순서 문서로 유지하고, 이번 task에서 어떤 API/기능부터 구현할지는 `plan.md`에 적는다.
+10. 이때 `docs/project/standards/implementation_order.md`는 프로젝트 기본 레이어 순서 문서로 유지하고, 이번 task에서 어떤 API/기능부터 구현할지는 `plan.md`에 적는다.
 11. `validate_phase_gate.py`를 인자 없이 실행하면 기본적으로 현재 task workspace와 `phase_status.md`의 허용/잠금 패턴에 걸리는 dirty path만 검사한다. repo 전체 dirty path까지 함께 보려면 `--git-scope repo`를 명시한다.
 
 ```bash
@@ -85,7 +84,7 @@ python3 vendor/harness-kit/downstream/scripts/validate_phase_gate.py docs/task/<
 
 ### 기존 프로젝트 첫 도입
 
-- 아직 `docs/project_entrypoint.md`가 없거나, legacy `docs/harness_guide.md`만 남아 있거나, 최소 overlay 문서 세트가 아직 맞춰지지 않았다면 이 경로를 따른다.
+- 아직 `docs/entrypoint.md`가 없거나, legacy `docs/harness_guide.md`만 남아 있거나, 최소 overlay 문서 세트가 아직 맞춰지지 않았다면 이 경로를 따른다.
 
 1. `bootstrap/docs/project_overlay/adopt_dry_run.md`를 본다.
 2. 아래 명령을 실행한다.
@@ -101,7 +100,7 @@ python3 vendor/harness-kit/scripts/adopt_dry_run.py . --language python
     - `existing but unchanged targets`: baseline과 동일
     - `differing files`: 수동 검토 대상
     - `conflict candidates`: 수동 판단 우선 대상
-    - `legacy entrypoint migration candidates`: 예전 `docs/harness_guide.md`를 새 canonical `docs/project_entrypoint.md`로 옮겨야 하는 상태
+    - `legacy entrypoint migration candidates`: 예전 `docs/harness_guide.md`를 새 canonical `docs/entrypoint.md`로 옮겨야 하는 상태
 4. `legacy entrypoint migration candidates`가 보이면 아래 rename migration부터 먼저 검토한다.
 
 ```bash
@@ -118,7 +117,7 @@ python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python
 
 ```bash
 python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --update-unchanged
-python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --force-overwrite docs/project_entrypoint.md
+python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --force-overwrite docs/entrypoint.md
 ```
 
 7. `differing files`와 `conflict candidates`는 기본적으로 수동 비교 대상으로 남긴다.
@@ -136,7 +135,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 ### 이미 도입된 downstream 업그레이드
 
-- 이미 `docs/project_entrypoint.md`와 vendored harness가 있고, 새 bundle 버전만 반영하려면 adoption이 아니라 upgrade 경로를 따른다.
+- 이미 `docs/entrypoint.md`와 process guide 기준 문서가 있고, 새 bundle 버전만 반영하려면 adoption이 아니라 upgrade 경로를 따른다.
 - 이 경우에는 `bootstrap/docs/project_overlay/downstream_harness_upgrade_guide.md`를 먼저 보고, 영향도를 분류하려면 `bootstrap/docs/project_overlay/harness_upgrade_impact_policy.md`를, 사람 기준 diff review 항목이 필요하면 `bootstrap/docs/project_overlay/downstream_overlay_diff_review_checklist.md`를 함께 본다.
 
 ## 핵심 도구 역할
@@ -175,12 +174,12 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - vendored path를 실제 프로젝트 경로에 맞게 현지화하지 않음
 - non-default vendoring인데 bootstrap 때 `--vendor-path`를 주지 않아 unnecessary 수동 현지화가 생김
 - non-default vendored path인데 현지화 전에 consistency validator부터 실행해 false confidence 또는 즉시 실패를 만듦
-- agent가 `AGENTS.md`만 읽고 `docs/project_entrypoint.md`, core guide, `docs/standard/*`까지 따라가지 않음
-- 중요한 정책/예외/책임 위치 변경인데 `docs/decisions/README.md`와 관련 decision 문서를 같이 안 봄
+- agent가 `AGENTS.md`만 읽고 `docs/entrypoint.md`, core guide, `docs/project/standards/*`까지 따라가지 않음
+- 중요한 정책/예외/책임 위치 변경인데 `docs/project/decisions/README.md`와 관련 decision 문서를 같이 안 봄
 - `--language`를 실제 프로젝트와 다르게 선택함
 - local validator 이후 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 복사하지 않거나 `@<pin-tag-or-sha>`를 그대로 둬 future-session guardrail이 고정되지 않음
 - 기존 프로젝트에서 `adopt_dry_run.py` 결과를 보지 않고 validator를 너무 일찍 실행함
-- 기존 프로젝트에서 legacy `docs/harness_guide.md`를 그냥 두고 `docs/project_entrypoint.md`만 새로 생성해 반쪽 migration 상태가 됨
+- 기존 프로젝트에서 legacy `docs/harness_guide.md`를 그냥 두고 `docs/entrypoint.md`만 새로 생성해 반쪽 migration 상태가 됨
 - `validate_overlay_decisions.py`와 `validate_overlay_consistency.py`의 역할 차이를 혼동함
 
 ## 다음에 읽을 문서

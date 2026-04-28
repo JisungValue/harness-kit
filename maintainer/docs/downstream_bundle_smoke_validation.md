@@ -51,9 +51,9 @@ python3 /tmp/localized-project/third_party/harness-kit/scripts/validate_overlay_
 
 - 기대 결과:
   - 각 언어별 fresh consumer project에서 canonical bundle의 project-facing script만으로 최소 문서 세트 생성과 first-success validator 실행이 끝난다.
-  - `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`도 함께 생성되고 `AGENTS.md -> docs/project_entrypoint.md` 연결이 성립한다.
-  - `docs/decisions/README.md`도 함께 생성된다.
-  - `docs/project_entrypoint.md`와 `coding_conventions_project.md`는 vendored bundle 경로를 그대로 참조한다.
+  - `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`도 함께 생성되고 `AGENTS.md -> docs/entrypoint.md` 연결이 성립한다.
+  - `docs/project/decisions/README.md`도 함께 생성된다.
+  - `docs/entrypoint.md`는 `docs/process/harness_guide.md`를 참조하고, `coding_conventions_project.md`는 vendored bundle의 language convention 경로를 참조한다.
   - `coding_conventions_project.md`는 각 언어에 맞는 bootstrap convention template 경로를 가리킨다.
   - localized vendoring 시나리오는 `--vendor-path third_party/harness-kit`만으로 manual path edit 없이 consistency validator까지 통과한다.
   - generated bundle 안에 `docs/project_overlay/harness_doc_guard_workflow_template.yml`이 존재하고, consumer project는 이를 `.github/workflows/harness-doc-guard.yml`로 복사한 뒤 `@<pin-tag-or-sha>`를 실제 ref로 치환해 future-session guardrail을 붙일 수 있다.
@@ -63,8 +63,8 @@ python3 /tmp/localized-project/third_party/harness-kit/scripts/validate_overlay_
 
 - 입력 조건:
   - canonical `dist/harness-kit-project-bundle/`를 `vendor/harness-kit/`로 복사한 임시 consumer project
-  - 기존 프로젝트 쪽에는 `docs/project_entrypoint.md`만 있고, 나머지 최소 문서 세트와 decisions index는 없음
-  - 기존 `docs/project_entrypoint.md`는 heading은 유지하지만 vendored guide 경로를 다른 위치로 현지화한 상태
+  - 기존 프로젝트 쪽에는 `docs/entrypoint.md`만 있고, 나머지 최소 문서 세트와 decisions index는 없음
+  - 기존 `docs/entrypoint.md`는 heading은 유지하지만 process guide 경로를 다른 위치로 현지화한 상태
 - 실행 명령:
 
 ```bash
@@ -73,14 +73,14 @@ python3 vendor/harness-kit/scripts/adopt_dry_run.py . --language python
 
 - 기대 결과:
   - dry-run이 write 없이 `missing files`, `differing files`, `conflict candidates`를 출력한다.
-  - 위 조건에서는 `docs/project_entrypoint.md`가 `differing files`로 분류되고, 나머지 최소 문서 세트, decisions index, runtime entrypoint 세트는 `missing files`로 남는다.
+  - 위 조건에서는 `docs/entrypoint.md`가 `differing files`로 분류되고, 나머지 최소 문서 세트, decisions index, runtime entrypoint 세트는 `missing files`로 남는다.
   - maintainer 전용 자산 없이도 brownfield inspection 경로가 동작한다.
 
 ### 시나리오 3. brownfield incremental consistency mode
 
 - 입력 조건:
   - canonical `dist/harness-kit-project-bundle/`를 `vendor/harness-kit/`로 복사한 임시 consumer project
-  - 기존 프로젝트 쪽에는 canonical shape의 `docs/project_entrypoint.md`만 있고, 나머지 최소 문서 세트와 runtime entrypoint 세트는 없음
+  - 기존 프로젝트 쪽에는 canonical shape의 `docs/entrypoint.md`만 있고, 나머지 최소 문서 세트와 runtime entrypoint 세트는 없음
 - 실행 명령:
 
 ```bash
@@ -89,14 +89,14 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py . --mode incr
 
 - 기대 결과:
   - incremental consistency mode는 같은 partial state를 fail하지 않고, missing docs/runtime entrypoints를 follow-up으로 출력한다.
-  - vendored harness guide 경로, project entrypoint traversal contract처럼 이미 존재하는 anchor document의 구조는 그대로 검사한다.
+  - process guide 경로, project entrypoint traversal contract처럼 이미 존재하는 anchor document의 구조는 그대로 검사한다.
   - maintainer 전용 자산 없이도 brownfield intermediate signal 경로가 동작한다.
 
 ### 시나리오 4. brownfield missing-file safe write
 
 - 입력 조건:
   - canonical `dist/harness-kit-project-bundle/`를 `vendor/harness-kit/`로 복사한 임시 consumer project
-  - 기존 프로젝트 쪽에는 localized `docs/project_entrypoint.md`만 있고, 나머지 최소 문서 세트와 decisions index는 없음
+  - 기존 프로젝트 쪽에는 localized `docs/entrypoint.md`만 있고, 나머지 최소 문서 세트와 decisions index는 없음
 - 실행 명령:
 
 ```bash
@@ -104,7 +104,7 @@ python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python
 ```
 
 - 기대 결과:
-  - `missing files`는 생성되고 localized `docs/project_entrypoint.md`는 기본 동작에서 그대로 남는다.
+  - `missing files`는 생성되고 localized `docs/entrypoint.md`는 기본 동작에서 그대로 남는다.
   - 실행 후 first-success 문서 존재 확인과 overlay decision validator가 통과한다.
   - maintainer 전용 자산 없이도 brownfield create-only safe write 경로가 동작한다.
 
@@ -123,7 +123,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 - 기대 결과:
   - dry-run이 `legacy entrypoint migration candidates`를 보고한다.
-  - safe write가 legacy entrypoint를 canonical `docs/project_entrypoint.md`로 rename migration 한다.
+  - safe write가 legacy entrypoint를 canonical `docs/entrypoint.md`로 rename migration 한다.
   - migration 후 consistency validator가 통과한다.
 
 ## 실행 명령

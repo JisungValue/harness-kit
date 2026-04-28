@@ -6,7 +6,7 @@
 - Related Decisions:
   - 해당 없음
 - Related Docs:
-  - docs/standard/architecture.md
+  - docs/project/standards/architecture.md
 - When To Update:
   - 이 결정의 책임 위치나 적용 범위가 바뀔 때
 
@@ -28,7 +28,7 @@
 
 ## Related Docs
 
-- docs/standard/architecture.md
+- docs/project/standards/architecture.md
 
 ## Related Decisions
 

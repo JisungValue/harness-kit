@@ -48,7 +48,7 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
     parser.add_argument(
         "--migrate-legacy-entrypoint",
         action="store_true",
-        help="Rename legacy docs/harness_guide.md to docs/project_entrypoint.md and apply safe runtime entrypoint follow-up when possible.",
+        help="Rename legacy docs/harness_guide.md to docs/entrypoint.md and apply safe runtime entrypoint follow-up when possible.",
     )
     return parser.parse_args(argv)
 

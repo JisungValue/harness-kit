@@ -36,22 +36,22 @@ class AdoptSafeWriteTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
-            (target / "docs/standard/testing_profile.md").unlink()
+            (target / "docs/project/standards/testing_profile.md").unlink()
 
             result = self.run_adopt_safe_write(target)
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("- created files: 1", result.stdout)
             self.assertIn("- forced overwrites: 0", result.stdout)
-            self.assertTrue((target / "docs/standard/testing_profile.md").exists())
+            self.assertTrue((target / "docs/project/standards/testing_profile.md").exists())
 
     def test_safe_write_does_not_overwrite_differing_file_without_force(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
-            guide_path = target / "docs/project_entrypoint.md"
+            guide_path = target / "docs/entrypoint.md"
             guide_text = guide_path.read_text(encoding="utf-8").replace(
-                "vendor/harness-kit/docs/harness_guide.md",
+                "docs/process/harness_guide.md",
                 "third_party/harness-kit/docs/harness_guide.md",
                 1,
             )
@@ -68,23 +68,23 @@ class AdoptSafeWriteTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
-            guide_path = target / "docs/project_entrypoint.md"
+            guide_path = target / "docs/entrypoint.md"
             guide_path.write_text("# Project Harness Entry Point\n\nlocalized\n", encoding="utf-8")
 
-            result = self.run_adopt_safe_write(target, "--force-overwrite", "docs/project_entrypoint.md")
+            result = self.run_adopt_safe_write(target, "--force-overwrite", "docs/entrypoint.md")
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("- forced overwrites: 1", result.stdout)
             self.assertIn("- remaining differing files: 0", result.stdout)
-            self.assertIn("vendor/harness-kit/docs/harness_guide.md", guide_path.read_text(encoding="utf-8"))
+            self.assertIn("docs/process/harness_guide.md", guide_path.read_text(encoding="utf-8"))
 
     def test_safe_write_rejects_force_overwrite_for_missing_file(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
-            (target / "docs/standard/testing_profile.md").unlink()
+            (target / "docs/project/standards/testing_profile.md").unlink()
 
-            result = self.run_adopt_safe_write(target, "--force-overwrite", "docs/standard/testing_profile.md")
+            result = self.run_adopt_safe_write(target, "--force-overwrite", "docs/project/standards/testing_profile.md")
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("invalid force-overwrite target", result.stderr)
@@ -94,7 +94,7 @@ class AdoptSafeWriteTest(unittest.TestCase):
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            result = self.run_adopt_safe_write(target, "--force-overwrite", "docs/standard/testing_profile.md")
+            result = self.run_adopt_safe_write(target, "--force-overwrite", "docs/project/standards/testing_profile.md")
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("invalid force-overwrite target", result.stderr)
@@ -103,11 +103,11 @@ class AdoptSafeWriteTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
-            conflict_path = target / "docs/standard/quality_gate_profile.md"
+            conflict_path = target / "docs/project/standards/quality_gate_profile.md"
             conflict_path.unlink()
             conflict_path.mkdir()
 
-            result = self.run_adopt_safe_write(target, "--force-overwrite", "docs/standard/quality_gate_profile.md")
+            result = self.run_adopt_safe_write(target, "--force-overwrite", "docs/project/standards/quality_gate_profile.md")
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("force-overwrite blocked by target path shape conflict", result.stderr)
@@ -117,7 +117,7 @@ class AdoptSafeWriteTest(unittest.TestCase):
             target = Path(tmp_dir) / "not-a-project"
             target.write_text("not a directory\n", encoding="utf-8")
 
-            result = self.run_adopt_safe_write(target, "--force-overwrite", "docs/project_entrypoint.md")
+            result = self.run_adopt_safe_write(target, "--force-overwrite", "docs/entrypoint.md")
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("force-overwrite blocked by target path shape conflict", result.stderr)
@@ -130,8 +130,8 @@ class AdoptSafeWriteTest(unittest.TestCase):
             result = self.run_adopt_safe_write(target, "--update-unchanged")
 
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertIn("- refreshed unchanged targets: 11", result.stdout)
-            self.assertIn("- remaining unchanged targets: 11", result.stdout)
+            self.assertIn("- refreshed unchanged targets: 13", result.stdout)
+            self.assertIn("- remaining unchanged targets: 13", result.stdout)
 
     def test_safe_write_can_migrate_legacy_project_entrypoint(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -152,11 +152,11 @@ class AdoptSafeWriteTest(unittest.TestCase):
             self.assertIn("- migrated legacy entrypoints: 1", result.stdout)
             self.assertIn("- created runtime entrypoints for migration: 3", result.stdout)
             self.assertFalse(legacy_path.exists())
-            migrated_path = target / "docs/project_entrypoint.md"
+            migrated_path = target / "docs/entrypoint.md"
             self.assertTrue(migrated_path.exists())
             self.assertIn("third_party/harness-kit/docs/harness_guide.md", migrated_path.read_text(encoding="utf-8"))
             agents_text = (target / "AGENTS.md").read_text(encoding="utf-8")
-            self.assertIn("docs/project_entrypoint.md", agents_text)
+            self.assertIn("docs/entrypoint.md", agents_text)
 
     def test_safe_write_rejects_legacy_entrypoint_migration_when_no_candidate_exists(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -175,14 +175,14 @@ class AdoptSafeWriteTest(unittest.TestCase):
 
             legacy_path = target / "docs/harness_guide.md"
             legacy_path.write_text(
-                (target / "docs/project_entrypoint.md").read_text(encoding="utf-8"),
+                (target / "docs/entrypoint.md").read_text(encoding="utf-8"),
                 encoding="utf-8",
             )
 
             result = self.run_adopt_safe_write(target, "--migrate-legacy-entrypoint")
 
             self.assertEqual(result.returncode, 1)
-            self.assertIn("canonical docs/project_entrypoint.md already exists", result.stderr)
+            self.assertIn("canonical docs/entrypoint.md already exists", result.stderr)
 
 
 if __name__ == "__main__":

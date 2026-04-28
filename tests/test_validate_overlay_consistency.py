@@ -16,12 +16,16 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
     def create_reference_files(
         self,
         target: Path,
-        harness_guide_reference: str = "vendor/harness-kit/docs/harness_guide.md",
+        harness_guide_reference: str = "docs/process/harness_guide.md",
         bootstrap_reference: str = "vendor/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md",
     ) -> None:
         harness_guide_path = target / harness_guide_reference
         harness_guide_path.parent.mkdir(parents=True, exist_ok=True)
         harness_guide_path.write_text("# Harness Core Guide\n", encoding="utf-8")
+
+        downstream_flow_path = target / "docs/process/downstream_harness_flow.md"
+        downstream_flow_path.parent.mkdir(parents=True, exist_ok=True)
+        downstream_flow_path.write_text("# Downstream Harness Flow\n", encoding="utf-8")
 
         bootstrap_path = target / bootstrap_reference
         bootstrap_path.parent.mkdir(parents=True, exist_ok=True)
@@ -85,13 +89,13 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
                 "AGENTS.md",
                 "CLAUDE.md",
                 "GEMINI.md",
-                "docs/decisions/README.md",
-                "docs/standard/architecture.md",
-                "docs/standard/implementation_order.md",
-                "docs/standard/coding_conventions_project.md",
-                "docs/standard/quality_gate_profile.md",
-                "docs/standard/testing_profile.md",
-                "docs/standard/commit_rule.md",
+                "docs/project/decisions/README.md",
+                "docs/project/standards/architecture.md",
+                "docs/project/standards/implementation_order.md",
+                "docs/project/standards/coding_conventions_project.md",
+                "docs/project/standards/quality_gate_profile.md",
+                "docs/project/standards/testing_profile.md",
+                "docs/project/standards/commit_rule.md",
             ):
                 (target / relative_path).unlink()
 
@@ -100,8 +104,8 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("overlay consistency validation passed for mode 'incremental'.", result.stdout)
             self.assertIn("Still missing overlay docs allowed in incremental mode:", result.stdout)
-            self.assertIn("docs/decisions/README.md", result.stdout)
-            self.assertIn("docs/standard/architecture.md", result.stdout)
+            self.assertIn("docs/project/decisions/README.md", result.stdout)
+            self.assertIn("docs/project/standards/architecture.md", result.stdout)
             self.assertIn("Still missing runtime instruction entrypoints allowed in incremental mode:", result.stdout)
             self.assertIn("AGENTS.md", result.stdout)
 
@@ -115,7 +119,7 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("overlay consistency validation passed for mode 'incremental'.", result.stdout)
             self.assertIn("Still missing overlay docs allowed in incremental mode:", result.stdout)
-            self.assertIn("docs/project_entrypoint.md", result.stdout)
+            self.assertIn("docs/entrypoint.md", result.stdout)
             self.assertIn("Still missing runtime instruction entrypoints allowed in incremental mode:", result.stdout)
             self.assertIn("AGENTS.md", result.stdout)
 
@@ -137,7 +141,7 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             self.bootstrap_project(target)
             legacy_path = target / "docs/harness_guide.md"
             legacy_path.write_text(
-                (target / "docs/project_entrypoint.md").read_text(encoding="utf-8"),
+                (target / "docs/entrypoint.md").read_text(encoding="utf-8"),
                 encoding="utf-8",
             )
 
@@ -155,20 +159,20 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
                 "AGENTS.md",
                 "CLAUDE.md",
                 "GEMINI.md",
-                "docs/decisions/README.md",
-                "docs/standard/architecture.md",
-                "docs/standard/implementation_order.md",
-                "docs/standard/coding_conventions_project.md",
-                "docs/standard/quality_gate_profile.md",
-                "docs/standard/testing_profile.md",
-                "docs/standard/commit_rule.md",
+                "docs/project/decisions/README.md",
+                "docs/project/standards/architecture.md",
+                "docs/project/standards/implementation_order.md",
+                "docs/project/standards/coding_conventions_project.md",
+                "docs/project/standards/quality_gate_profile.md",
+                "docs/project/standards/testing_profile.md",
+                "docs/project/standards/commit_rule.md",
             ):
                 (target / relative_path).unlink()
 
-            guide_path = target / "docs/project_entrypoint.md"
+            guide_path = target / "docs/entrypoint.md"
             guide_text = guide_path.read_text(encoding="utf-8")
             guide_text = guide_text.replace(
-                "vendor/harness-kit/docs/harness_guide.md",
+                "docs/process/harness_guide.md",
                 "third_party/harness-kit/docs/harness_guide.md",
                 1,
             )
@@ -177,7 +181,7 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             result = self.run_checker(target, "--mode", "incremental")
 
             self.assertEqual(result.returncode, 1)
-            self.assertIn("vendored harness guide 경로가 실제 프로젝트에서 존재하지 않습니다", result.stderr)
+            self.assertIn("docs/process/harness_guide.md", result.stderr)
 
     def test_incremental_mode_on_full_overlay_suggests_full_validation(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -194,15 +198,15 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            guide_path = target / "docs/project_entrypoint.md"
+            guide_path = target / "docs/entrypoint.md"
             guide_text = guide_path.read_text(encoding="utf-8")
-            guide_text = guide_text.replace("- `docs/standard/testing_profile.md`\n", "", 1)
+            guide_text = guide_text.replace("- `docs/project/standards/testing_profile.md`\n", "", 1)
             guide_path.write_text(guide_text, encoding="utf-8")
 
             result = self.run_checker(target)
 
             self.assertEqual(result.returncode, 1)
-            self.assertIn("필수 standard 문서 참조가 누락", result.stderr)
+            self.assertIn("필수 project standard 문서 참조가 누락", result.stderr)
 
     def test_missing_agents_entrypoint_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -219,12 +223,12 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
-            (target / "docs/decisions/README.md").unlink()
+            (target / "docs/project/decisions/README.md").unlink()
 
             result = self.run_checker(target)
 
             self.assertEqual(result.returncode, 1)
-            self.assertIn("필수 overlay 문서가 없습니다: docs/decisions/README.md", result.stderr)
+            self.assertIn("필수 overlay 문서가 없습니다: docs/project/decisions/README.md", result.stderr)
 
     def test_gemini_adapter_without_agents_reference_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -233,7 +237,7 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
 
             gemini_path = target / "GEMINI.md"
             gemini_text = gemini_path.read_text(encoding="utf-8")
-            gemini_text = gemini_text.replace("- `AGENTS.md`\n", "- `docs/project_entrypoint.md`\n", 1)
+            gemini_text = gemini_text.replace("- `AGENTS.md`\n", "- `docs/entrypoint.md`\n", 1)
             gemini_path.write_text(gemini_text, encoding="utf-8")
 
             result = self.run_checker(target)
@@ -249,7 +253,7 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             agents_path = target / "AGENTS.md"
             agents_text = agents_path.read_text(encoding="utf-8")
             agents_text = agents_text.replace(
-                "## 실행 계약\n\n- 이 파일에 연결된 문서는 순서대로 모두 읽고 적용한 뒤에만 다음 작업으로 넘어간다.\n- `docs/project_entrypoint.md`를 열었으면 그 문서의 `공통 규칙`, `프로젝트 전용 규칙`에 연결된 문서까지 끝까지 이어서 읽고 적용한다.\n- 링크만 확인하고 중간 문서에서 멈추지 않는다.\n\n",
+                "## 실행 계약\n\n- 이 파일에 연결된 문서는 순서대로 모두 읽고 적용한 뒤에만 다음 작업으로 넘어간다.\n- `docs/entrypoint.md`를 열었으면 그 문서의 `공통 규칙`, `프로젝트 전용 규칙`에 연결된 문서까지 끝까지 이어서 읽고 적용한다.\n- 링크만 확인하고 중간 문서에서 멈추지 않는다.\n\n",
                 "",
                 1,
             )
@@ -265,10 +269,10 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            guide_path = target / "docs/project_entrypoint.md"
+            guide_path = target / "docs/entrypoint.md"
             guide_text = guide_path.read_text(encoding="utf-8")
             guide_text = guide_text.replace(
-                "## 실행 계약\n\n- 이 문서에 들어온 runtime 또는 작업자는 `공통 규칙`, `프로젝트 전용 규칙`에 적힌 문서를 순서대로 모두 읽고 적용한 뒤에만 구현 또는 판단을 진행한다.\n- vendored core guide는 공통 규칙 기준을 주고, `docs/standard/*` 문서는 프로젝트 전용 기준을 주므로 둘 중 하나만 읽고 멈추지 않는다.\n\n",
+                "## 실행 계약\n\n- 이 문서에 들어온 runtime 또는 작업자는 `공통 규칙`, `프로젝트 전용 규칙`에 적힌 문서를 순서대로 모두 읽고 적용한 뒤에만 구현 또는 판단을 진행한다.\n- process guide는 공통 규칙 기준을 주고, `docs/project/standards/*` 문서는 프로젝트 전용 기준을 주므로 둘 중 하나만 읽고 멈추지 않는다.\n\n",
                 "",
                 1,
             )
@@ -277,29 +281,56 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             result = self.run_checker(target)
 
             self.assertEqual(result.returncode, 1)
-            self.assertIn("docs/project_entrypoint.md: Missing section: ## 실행 계약", result.stderr)
+            self.assertIn("docs/entrypoint.md: Missing section: ## 실행 계약", result.stderr)
 
     def test_project_entrypoint_without_decisions_link_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            guide_path = target / "docs/project_entrypoint.md"
+            guide_path = target / "docs/entrypoint.md"
             guide_text = guide_path.read_text(encoding="utf-8")
-            guide_text = guide_text.replace("## 프로젝트 결정 문서\n\n- `docs/decisions/README.md`\n\n- 현재 작업이 중요한 정책, 예외 처리 규칙, 책임 배치, 운영 결정을 건드리면 이 문서에서 관련 decision을 찾아 함께 읽고 갱신한다.\n", "", 1)
+            guide_text = guide_text.replace("## 프로젝트 결정 문서\n\n- `docs/project/decisions/README.md`\n\n- 현재 작업이 중요한 정책, 예외 처리 규칙, 책임 배치, 운영 결정을 건드리면 이 문서에서 관련 decision을 찾아 함께 읽고 갱신한다.\n", "", 1)
             guide_path.write_text(guide_text, encoding="utf-8")
 
             result = self.run_checker(target)
 
             self.assertEqual(result.returncode, 1)
-            self.assertIn("docs/project_entrypoint.md: Missing section: ## 프로젝트 결정 문서", result.stderr)
+            self.assertIn("docs/entrypoint.md: Missing section: ## 프로젝트 결정 문서", result.stderr)
+
+    def test_project_entrypoint_without_downstream_flow_link_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            guide_path = target / "docs/entrypoint.md"
+            guide_text = guide_path.read_text(encoding="utf-8")
+            guide_text = guide_text.replace("- `docs/process/downstream_harness_flow.md`\n", "", 1)
+            guide_path.write_text(guide_text, encoding="utf-8")
+
+            result = self.run_checker(target)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("docs/process/downstream_harness_flow.md", result.stderr)
+
+    def test_project_entrypoint_with_missing_downstream_flow_file_fails(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+
+            (target / "docs/process/downstream_harness_flow.md").unlink()
+
+            result = self.run_checker(target)
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("docs/process/downstream_harness_flow.md", result.stderr)
 
     def test_decisions_index_missing_listed_decision_file_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            decisions_index_path = target / "docs/decisions/README.md"
+            decisions_index_path = target / "docs/project/decisions/README.md"
             decisions_text = decisions_index_path.read_text(encoding="utf-8")
             decisions_text = decisions_text.replace(
                 "- 아직 active decision 없음. 새 decision을 추가하면 여기에 기록한다.",
@@ -318,11 +349,11 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            guide_path = target / "docs/project_entrypoint.md"
+            guide_path = target / "docs/entrypoint.md"
             guide_text = guide_path.read_text(encoding="utf-8")
             guide_text = guide_text.replace(
-                "vendor/harness-kit/docs/harness_guide.md",
-                "docs/project_entrypoint.md",
+                "docs/process/harness_guide.md",
+                "docs/entrypoint.md",
                 1,
             )
             guide_path.write_text(guide_text, encoding="utf-8")
@@ -330,14 +361,14 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             result = self.run_checker(target)
 
             self.assertEqual(result.returncode, 1)
-            self.assertIn("공통 harness guide 경로가 없습니다", result.stderr)
+            self.assertIn("docs/process/harness_guide.md", result.stderr)
 
     def test_unlocalized_bootstrap_reference_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            coding_path = target / "docs/standard/coding_conventions_project.md"
+            coding_path = target / "docs/project/standards/coding_conventions_project.md"
             coding_text = coding_path.read_text(encoding="utf-8")
             coding_text = coding_text.replace(
                 "- bootstrap 출처 또는 기준 언어 문서: `vendor/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md`",
@@ -361,10 +392,10 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            guide_path = target / "docs/project_entrypoint.md"
+            guide_path = target / "docs/entrypoint.md"
             guide_text = guide_path.read_text(encoding="utf-8")
             guide_text = guide_text.replace(
-                "vendor/harness-kit/docs/harness_guide.md",
+                "docs/process/harness_guide.md",
                 "third_party/harness-kit/docs/harness_guide.md",
                 1,
             )
@@ -373,18 +404,18 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             result = self.run_checker(target)
 
             self.assertEqual(result.returncode, 1)
-            self.assertIn("vendored harness guide 경로가 실제 프로젝트에서 존재하지 않습니다", result.stderr)
+            self.assertIn("docs/process/harness_guide.md", result.stderr)
             self.assertIn("third_party/harness-kit/docs/harness_guide.md", result.stderr)
 
-    def test_existing_localized_common_harness_guide_path_passes(self) -> None:
+    def test_existing_localized_common_harness_guide_path_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            guide_path = target / "docs/project_entrypoint.md"
+            guide_path = target / "docs/entrypoint.md"
             guide_text = guide_path.read_text(encoding="utf-8")
             guide_text = guide_text.replace(
-                "vendor/harness-kit/docs/harness_guide.md",
+                "docs/process/harness_guide.md",
                 "third_party/harness-kit/docs/harness_guide.md",
                 1,
             )
@@ -393,19 +424,19 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
 
             result = self.run_checker(target)
 
-            self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertIn("overlay consistency validation passed", result.stdout)
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("docs/process/harness_guide.md", result.stderr)
 
     def test_mixed_valid_and_stale_common_harness_guide_paths_fail(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            guide_path = target / "docs/project_entrypoint.md"
+            guide_path = target / "docs/entrypoint.md"
             guide_text = guide_path.read_text(encoding="utf-8")
             guide_text = guide_text.replace(
-                "- `vendor/harness-kit/docs/harness_guide.md`\n",
-                "- `vendor/harness-kit/docs/harness_guide.md`\n- `third_party/harness-kit/docs/harness_guide.md`\n",
+                "- `docs/process/harness_guide.md`\n",
+                "- `docs/process/harness_guide.md`\n- `third_party/harness-kit/docs/harness_guide.md`\n",
                 1,
             )
             guide_path.write_text(guide_text, encoding="utf-8")
@@ -413,7 +444,7 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             result = self.run_checker(target)
 
             self.assertEqual(result.returncode, 1)
-            self.assertIn("stale vendored harness guide 경로가 남아 있습니다", result.stderr)
+            self.assertIn("stale harness guide 경로가 남아 있습니다", result.stderr)
             self.assertIn("third_party/harness-kit/docs/harness_guide.md", result.stderr)
 
     def test_missing_localized_bootstrap_reference_path_fails(self) -> None:
@@ -421,7 +452,7 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            coding_path = target / "docs/standard/coding_conventions_project.md"
+            coding_path = target / "docs/project/standards/coding_conventions_project.md"
             coding_text = coding_path.read_text(encoding="utf-8")
             coding_text = coding_text.replace(
                 "- bootstrap 출처 또는 기준 언어 문서: `vendor/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md`",
@@ -441,7 +472,7 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            coding_path = target / "docs/standard/coding_conventions_project.md"
+            coding_path = target / "docs/project/standards/coding_conventions_project.md"
             coding_text = coding_path.read_text(encoding="utf-8")
             coding_text = coding_text.replace(
                 "- bootstrap 출처 또는 기준 언어 문서: `vendor/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md`",
@@ -474,7 +505,7 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            quality_gate_path = target / "docs/standard/quality_gate_profile.md"
+            quality_gate_path = target / "docs/project/standards/quality_gate_profile.md"
             quality_gate_text = quality_gate_path.read_text(encoding="utf-8")
             quality_gate_text = quality_gate_text.replace(
                 "- 세부 테스트 범위와 환경은 `testing_profile.md`를 참조한다.\n",
@@ -493,7 +524,7 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            order_path = target / "docs/standard/implementation_order.md"
+            order_path = target / "docs/project/standards/implementation_order.md"
             order_text = order_path.read_text(encoding="utf-8")
             order_text = order_text.replace("architecture.md", "layer_structure.md", 1)
             order_path.write_text(order_text, encoding="utf-8")
@@ -508,7 +539,7 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            commit_rule_path = target / "docs/standard/commit_rule.md"
+            commit_rule_path = target / "docs/project/standards/commit_rule.md"
             commit_rule_text = commit_rule_path.read_text(encoding="utf-8")
             commit_rule_text = commit_rule_text.replace(
                 "- 현재 커밋 범위에서 필수 테스트가 통과하는가\n",
@@ -529,7 +560,7 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
 
             legacy_path = target / "docs/harness_guide.md"
             legacy_path.write_text(
-                (target / "docs/project_entrypoint.md").read_text(encoding="utf-8"),
+                (target / "docs/entrypoint.md").read_text(encoding="utf-8"),
                 encoding="utf-8",
             )
 

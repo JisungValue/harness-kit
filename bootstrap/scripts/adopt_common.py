@@ -13,7 +13,7 @@ from bootstrap_init import (
 
 
 LEGACY_PROJECT_ENTRYPOINT = Path("docs/harness_guide.md")
-CANONICAL_PROJECT_ENTRYPOINT = Path("docs/project_entrypoint.md")
+CANONICAL_PROJECT_ENTRYPOINT = Path("docs/entrypoint.md")
 RUNTIME_ENTRYPOINTS = (
     Path("AGENTS.md"),
     Path("CLAUDE.md"),
@@ -79,7 +79,7 @@ def extract_primary_heading(text: str) -> str | None:
 def normalize_legacy_agents_text(text: str) -> str:
     return (
         text.replace("# Agent Entry Point", "# Agent Runtime Entry Point", 1)
-        .replace("docs/harness_guide.md", "docs/project_entrypoint.md")
+        .replace("docs/harness_guide.md", "docs/entrypoint.md")
     )
 
 
@@ -143,7 +143,7 @@ def detect_legacy_entrypoint_migration(
         blocked_reason = "legacy project entrypoint path is not a regular file"
     elif canonical_path.exists():
         blocked_reason = (
-            "canonical docs/project_entrypoint.md already exists; compare the two files and retire the stale legacy file manually"
+            "canonical docs/entrypoint.md already exists; compare the two files and retire the stale legacy file manually"
         )
     elif canonical_target.reason:
         blocked_reason = f"canonical target path is blocked: {canonical_target.reason}"

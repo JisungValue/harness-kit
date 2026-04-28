@@ -31,16 +31,16 @@ class BootstrapInitCliTest(unittest.TestCase):
             self.assertTrue((target / "AGENTS.md").exists())
             self.assertTrue((target / "CLAUDE.md").exists())
             self.assertTrue((target / "GEMINI.md").exists())
-            self.assertTrue((target / "docs/project_entrypoint.md").exists())
-            self.assertTrue((target / "docs/decisions/README.md").exists())
-            self.assertTrue((target / "docs/standard/architecture.md").exists())
-            self.assertTrue((target / "docs/standard/implementation_order.md").exists())
-            self.assertTrue((target / "docs/standard/coding_conventions_project.md").exists())
-            self.assertTrue((target / "docs/standard/quality_gate_profile.md").exists())
-            self.assertTrue((target / "docs/standard/testing_profile.md").exists())
-            self.assertTrue((target / "docs/standard/commit_rule.md").exists())
+            self.assertTrue((target / "docs/entrypoint.md").exists())
+            self.assertTrue((target / "docs/project/decisions/README.md").exists())
+            self.assertTrue((target / "docs/project/standards/architecture.md").exists())
+            self.assertTrue((target / "docs/project/standards/implementation_order.md").exists())
+            self.assertTrue((target / "docs/project/standards/coding_conventions_project.md").exists())
+            self.assertTrue((target / "docs/project/standards/quality_gate_profile.md").exists())
+            self.assertTrue((target / "docs/project/standards/testing_profile.md").exists())
+            self.assertTrue((target / "docs/project/standards/commit_rule.md").exists())
 
-            content = (target / "docs/standard/coding_conventions_project.md").read_text(
+            content = (target / "docs/project/standards/coding_conventions_project.md").read_text(
                 encoding="utf-8"
             )
             self.assertIn("- 현재 프로젝트의 활성 언어/런타임: `python`", content)
@@ -51,18 +51,20 @@ class BootstrapInitCliTest(unittest.TestCase):
 
             agent_entrypoint = (target / "AGENTS.md").read_text(encoding="utf-8")
             self.assertIn("# Agent Runtime Entry Point", agent_entrypoint)
-            self.assertIn("docs/project_entrypoint.md", agent_entrypoint)
+            self.assertIn("docs/entrypoint.md", agent_entrypoint)
             self.assertIn("순서대로 모두 읽고 적용", agent_entrypoint)
 
-            project_entrypoint = (target / "docs/project_entrypoint.md").read_text(encoding="utf-8")
+            project_entrypoint = (target / "docs/entrypoint.md").read_text(encoding="utf-8")
             self.assertIn("# Project Harness Entry Point", project_entrypoint)
             self.assertIn("공통 규칙", project_entrypoint)
             self.assertIn("프로젝트 전용 규칙", project_entrypoint)
             self.assertIn("프로젝트 결정 문서", project_entrypoint)
-            self.assertIn("docs/decisions/README.md", project_entrypoint)
+            self.assertIn("docs/process/harness_guide.md", project_entrypoint)
+            self.assertIn("docs/process/downstream_harness_flow.md", project_entrypoint)
+            self.assertIn("docs/project/decisions/README.md", project_entrypoint)
             self.assertIn("둘 중 하나만 읽고 멈추지 않는다", project_entrypoint)
 
-            decisions_index = (target / "docs/decisions/README.md").read_text(encoding="utf-8")
+            decisions_index = (target / "docs/project/decisions/README.md").read_text(encoding="utf-8")
             self.assertIn("# Project Decision Index", decisions_index)
             self.assertIn("DEC-###-slug.md", decisions_index)
 
@@ -82,13 +84,13 @@ class BootstrapInitCliTest(unittest.TestCase):
             target.mkdir(parents=True)
             docs_dir = target / "docs"
             docs_dir.mkdir()
-            (docs_dir / "project_entrypoint.md").write_text("existing\n", encoding="utf-8")
+            (docs_dir / "entrypoint.md").write_text("existing\n", encoding="utf-8")
 
             result = self.run_cli(target)
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("bootstrap init failed", result.stderr)
-            self.assertIn("docs/project_entrypoint.md", result.stderr)
+            self.assertIn("docs/entrypoint.md", result.stderr)
 
     def test_force_overwrites_existing_generated_files(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -97,7 +99,7 @@ class BootstrapInitCliTest(unittest.TestCase):
             first_result = self.run_cli(target)
             self.assertEqual(first_result.returncode, 0, first_result.stderr)
 
-            guide_path = target / "docs/project_entrypoint.md"
+            guide_path = target / "docs/entrypoint.md"
             guide_path.write_text("changed\n", encoding="utf-8")
 
             second_result = self.run_cli(target, "--force")
@@ -126,12 +128,14 @@ class BootstrapInitCliTest(unittest.TestCase):
             result = self.run_cli(target, "--vendor-path", "third_party/harness-kit")
 
             self.assertEqual(result.returncode, 0, result.stderr)
-            project_entrypoint = (target / "docs/project_entrypoint.md").read_text(encoding="utf-8")
-            coding_conventions = (target / "docs/standard/coding_conventions_project.md").read_text(
+            project_entrypoint = (target / "docs/entrypoint.md").read_text(encoding="utf-8")
+            coding_conventions = (target / "docs/project/standards/coding_conventions_project.md").read_text(
                 encoding="utf-8"
             )
 
-            self.assertIn("third_party/harness-kit/docs/harness_guide.md", project_entrypoint)
+            self.assertIn("docs/process/harness_guide.md", project_entrypoint)
+            self.assertIn("docs/process/downstream_harness_flow.md", project_entrypoint)
+            self.assertNotIn("third_party/harness-kit/docs/harness_guide.md", project_entrypoint)
             self.assertNotIn("vendor/harness-kit/docs/harness_guide.md", project_entrypoint)
             self.assertIn(
                 "third_party/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md",

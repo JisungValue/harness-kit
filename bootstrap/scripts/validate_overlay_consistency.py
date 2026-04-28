@@ -9,14 +9,14 @@ from pathlib import Path
 
 
 REQUIRED_DOCS = (
-    "docs/project_entrypoint.md",
-    "docs/decisions/README.md",
-    "docs/standard/architecture.md",
-    "docs/standard/implementation_order.md",
-    "docs/standard/coding_conventions_project.md",
-    "docs/standard/quality_gate_profile.md",
-    "docs/standard/testing_profile.md",
-    "docs/standard/commit_rule.md",
+    "docs/entrypoint.md",
+    "docs/project/decisions/README.md",
+    "docs/project/standards/architecture.md",
+    "docs/project/standards/implementation_order.md",
+    "docs/project/standards/coding_conventions_project.md",
+    "docs/project/standards/quality_gate_profile.md",
+    "docs/project/standards/testing_profile.md",
+    "docs/project/standards/commit_rule.md",
 )
 
 REQUIRED_RUNTIME_ENTRYPOINTS = (
@@ -28,12 +28,12 @@ REQUIRED_RUNTIME_ENTRYPOINTS = (
 LEGACY_PROJECT_ENTRYPOINT = "docs/harness_guide.md"
 
 EXPECTED_STANDARD_DOCS = {
-    "docs/standard/architecture.md",
-    "docs/standard/implementation_order.md",
-    "docs/standard/coding_conventions_project.md",
-    "docs/standard/quality_gate_profile.md",
-    "docs/standard/testing_profile.md",
-    "docs/standard/commit_rule.md",
+    "docs/project/standards/architecture.md",
+    "docs/project/standards/implementation_order.md",
+    "docs/project/standards/coding_conventions_project.md",
+    "docs/project/standards/quality_gate_profile.md",
+    "docs/project/standards/testing_profile.md",
+    "docs/project/standards/commit_rule.md",
 }
 
 DECISION_RECORD_REQUIRED_HEADINGS = (
@@ -123,17 +123,17 @@ def partition_existing_file_paths(project_root: Path, paths: list[str]) -> tuple
 
 
 def validate_project_entrypoint(project_root: Path, errors: list[str], mode: str) -> None:
-    if mode == "incremental" and not path_exists(project_root, "docs/project_entrypoint.md"):
+    if mode == "incremental" and not path_exists(project_root, "docs/entrypoint.md"):
         return
 
     try:
-        guide = read_text(project_root, "docs/project_entrypoint.md")
+        guide = read_text(project_root, "docs/entrypoint.md")
         traversal_lines = extract_h2_section(guide, "실행 계약")
         common_lines = extract_h2_section(guide, "공통 규칙")
         project_lines = extract_h2_section(guide, "프로젝트 전용 규칙")
         decisions_lines = extract_h2_section(guide, "프로젝트 결정 문서")
     except (FileNotFoundError, ValueError) as exc:
-        errors.append(f"docs/project_entrypoint.md: {exc}")
+        errors.append(f"docs/entrypoint.md: {exc}")
         return
 
     require_phrases(
@@ -144,30 +144,62 @@ def validate_project_entrypoint(project_root: Path, errors: list[str], mode: str
             "순서대로 모두 읽고 적용",
             "둘 중 하나만 읽고 멈추지 않는다",
         ),
-        "docs/project_entrypoint.md 실행 계약",
+        "docs/entrypoint.md 실행 계약",
         errors,
     )
 
     common_paths = extract_bullet_paths(common_lines)
+    required_common_paths = {
+        "docs/process/harness_guide.md",
+        "docs/process/downstream_harness_flow.md",
+    }
+    missing_required_common_paths = sorted(required_common_paths - set(common_paths))
+    if missing_required_common_paths:
+        joined = ", ".join(missing_required_common_paths)
+        errors.append(
+            "docs/entrypoint.md: 공통 규칙 섹션에 필수 process docs 경로가 없습니다: "
+            f"{joined}"
+        )
     candidate_common_paths = [
-        path for path in common_paths if path.endswith("/docs/harness_guide.md") and path != "docs/project_entrypoint.md"
+        path
+        for path in common_paths
+        if path in required_common_paths or path.endswith("/docs/harness_guide.md")
     ]
     if not candidate_common_paths:
         errors.append(
-            "docs/project_entrypoint.md: 공통 규칙 섹션에 공통 harness guide 경로가 없습니다."
+            "docs/entrypoint.md: 공통 규칙 섹션에 공통 harness guide 경로가 없습니다."
         )
     else:
         existing_paths, missing_paths = partition_existing_file_paths(project_root, candidate_common_paths)
-        if not existing_paths:
+        planned_process_paths = {
+            "docs/process/harness_guide.md",
+            "docs/process/downstream_harness_flow.md",
+        }
+        missing_planned_paths = [path for path in missing_paths if path in planned_process_paths]
+        if missing_planned_paths:
+            joined = ", ".join(missing_planned_paths)
+            errors.append(
+                "docs/entrypoint.md: 공통 규칙의 필수 process docs 경로가 실제 프로젝트에서 존재하지 않습니다: "
+                f"{joined}"
+            )
+            return
+        missing_non_planned_paths = [path for path in missing_paths if path not in planned_process_paths]
+        if missing_non_planned_paths and any(path in planned_process_paths for path in candidate_common_paths):
+            joined = ", ".join(missing_non_planned_paths)
+            errors.append(
+                "docs/entrypoint.md: 공통 규칙에 stale harness guide 경로가 남아 있습니다. "
+                f"존재하지 않는 경로를 정리하거나 현지화하세요: {joined}"
+            )
+        elif not existing_paths and not all(path in planned_process_paths for path in candidate_common_paths):
             joined = ", ".join(candidate_common_paths)
             errors.append(
-                "docs/project_entrypoint.md: 공통 규칙의 vendored harness guide 경로가 실제 프로젝트에서 존재하지 않습니다. "
+                "docs/entrypoint.md: 공통 규칙의 harness guide 경로가 실제 프로젝트에서 존재하지 않습니다. "
                 f"먼저 vendored 경로를 현지화하거나 배치 상태를 확인하세요: {joined}"
             )
-        elif missing_paths:
-            joined = ", ".join(missing_paths)
+        elif missing_non_planned_paths:
+            joined = ", ".join(missing_non_planned_paths)
             errors.append(
-                "docs/project_entrypoint.md: 공통 규칙에 stale vendored harness guide 경로가 남아 있습니다. "
+                "docs/entrypoint.md: 공통 규칙에 stale harness guide 경로가 남아 있습니다. "
                 f"존재하지 않는 경로를 정리하거나 현지화하세요: {joined}"
             )
 
@@ -175,20 +207,20 @@ def validate_project_entrypoint(project_root: Path, errors: list[str], mode: str
     missing_paths = EXPECTED_STANDARD_DOCS - project_paths
     if missing_paths:
         errors.append(
-            "docs/project_entrypoint.md: 프로젝트 전용 규칙에서 필수 standard 문서 참조가 누락됐습니다."
+            "docs/entrypoint.md: 프로젝트 전용 규칙에서 필수 project standard 문서 참조가 누락됐습니다."
         )
 
     decisions_paths = set(extract_bullet_paths(decisions_lines))
-    if "docs/decisions/README.md" not in decisions_paths:
-        errors.append("docs/project_entrypoint.md: `docs/decisions/README.md`를 프로젝트 결정 문서 진입점으로 연결하지 않습니다.")
+    if "docs/project/decisions/README.md" not in decisions_paths:
+        errors.append("docs/entrypoint.md: `docs/project/decisions/README.md`를 프로젝트 결정 문서 진입점으로 연결하지 않습니다.")
 
 
 def validate_decisions_index(project_root: Path, errors: list[str], mode: str) -> None:
-    if mode == "incremental" and not path_exists(project_root, "docs/decisions/README.md"):
+    if mode == "incremental" and not path_exists(project_root, "docs/project/decisions/README.md"):
         return
 
     try:
-        decisions_index = read_text(project_root, "docs/decisions/README.md")
+        decisions_index = read_text(project_root, "docs/project/decisions/README.md")
         extract_h2_section(decisions_index, "문서 역할")
         extract_h2_section(decisions_index, "여기에 남기는 것")
         extract_h2_section(decisions_index, "여기에 남기지 않는 것")
@@ -197,16 +229,16 @@ def validate_decisions_index(project_root: Path, errors: list[str], mode: str) -
         current_lines = extract_h2_section(decisions_index, "Current Decisions")
         superseded_lines = extract_h2_section(decisions_index, "Superseded Decisions")
     except (FileNotFoundError, ValueError) as exc:
-        errors.append(f"docs/decisions/README.md: {exc}")
+        errors.append(f"docs/project/decisions/README.md: {exc}")
         return
 
     if "DEC-###-slug.md" not in "\n".join(numbering_lines):
-        errors.append("docs/decisions/README.md: 번호 규칙에 `DEC-###-slug.md` 형식이 없습니다.")
+        errors.append("docs/project/decisions/README.md: 번호 규칙에 `DEC-###-slug.md` 형식이 없습니다.")
 
     listed_paths = extract_bullet_paths(current_lines) + extract_bullet_paths(superseded_lines)
     for path in listed_paths:
         if not (project_root / path).is_file():
-            errors.append(f"docs/decisions/README.md: index에 적힌 decision 문서가 실제 프로젝트에 없습니다: {path}")
+            errors.append(f"docs/project/decisions/README.md: index에 적힌 decision 문서가 실제 프로젝트에 없습니다: {path}")
             continue
         validate_decision_record(project_root, path, errors)
 
@@ -256,10 +288,10 @@ def validate_runtime_entrypoints(project_root: Path, errors: list[str], mode: st
     )
 
     agent_paths = set(extract_bullet_paths(agent_lines))
-    if "docs/project_entrypoint.md" not in agent_paths:
-        errors.append("AGENTS.md: `docs/project_entrypoint.md`를 우선 읽을 문서로 연결하지 않습니다.")
-    elif not path_exists(project_root, "docs/project_entrypoint.md"):
-        errors.append("AGENTS.md: `docs/project_entrypoint.md`를 가리키지만 실제 파일이 없습니다.")
+    if "docs/entrypoint.md" not in agent_paths:
+        errors.append("AGENTS.md: `docs/entrypoint.md`를 우선 읽을 문서로 연결하지 않습니다.")
+    elif not path_exists(project_root, "docs/entrypoint.md"):
+        errors.append("AGENTS.md: `docs/entrypoint.md`를 가리키지만 실제 파일이 없습니다.")
 
     for adapter_path in ("CLAUDE.md", "GEMINI.md"):
         if mode == "incremental" and not path_exists(project_root, adapter_path):
@@ -282,51 +314,51 @@ def validate_legacy_project_entrypoint_absence(project_root: Path, errors: list[
     legacy_path = project_root / LEGACY_PROJECT_ENTRYPOINT
     if legacy_path.exists():
         errors.append(
-            "legacy project-local entrypoint가 남아 있습니다: docs/harness_guide.md -> docs/project_entrypoint.md로 migrate하고 기존 파일을 retire해야 합니다."
+            "legacy project-local entrypoint가 남아 있습니다: docs/harness_guide.md -> docs/entrypoint.md로 migrate하고 기존 파일을 retire해야 합니다."
         )
 
 
 def validate_architecture_and_order(project_root: Path, errors: list[str], mode: str) -> None:
-    if mode == "incremental" and not path_exists(project_root, "docs/standard/implementation_order.md"):
+    if mode == "incremental" and not path_exists(project_root, "docs/project/standards/implementation_order.md"):
         return
 
-    if mode == "incremental" and not path_exists(project_root, "docs/standard/architecture.md"):
+    if mode == "incremental" and not path_exists(project_root, "docs/project/standards/architecture.md"):
         errors.append(
-            "docs/standard/implementation_order.md: implementation_order 문서가 있으면 architecture.md도 함께 있어야 합니다."
+            "docs/project/standards/implementation_order.md: implementation_order 문서가 있으면 architecture.md도 함께 있어야 합니다."
         )
         return
 
-    implementation_order = read_text(project_root, "docs/standard/implementation_order.md")
+    implementation_order = read_text(project_root, "docs/project/standards/implementation_order.md")
     if "architecture.md" not in implementation_order:
         errors.append(
-            "docs/standard/implementation_order.md: architecture.md 참조가 없어 레이어 진행 순서 기준이 불명확합니다."
+            "docs/project/standards/implementation_order.md: architecture.md 참조가 없어 레이어 진행 순서 기준이 불명확합니다."
         )
 
 
 def validate_quality_gate_and_testing(project_root: Path, errors: list[str], mode: str) -> None:
-    has_quality_gate = path_exists(project_root, "docs/standard/quality_gate_profile.md")
-    has_testing = path_exists(project_root, "docs/standard/testing_profile.md")
+    has_quality_gate = path_exists(project_root, "docs/project/standards/quality_gate_profile.md")
+    has_testing = path_exists(project_root, "docs/project/standards/testing_profile.md")
 
     if mode == "incremental" and not has_quality_gate and not has_testing:
         return
 
-    quality_gate = read_text(project_root, "docs/standard/quality_gate_profile.md") if has_quality_gate else ""
-    testing = read_text(project_root, "docs/standard/testing_profile.md") if has_testing else ""
+    quality_gate = read_text(project_root, "docs/project/standards/quality_gate_profile.md") if has_quality_gate else ""
+    testing = read_text(project_root, "docs/project/standards/testing_profile.md") if has_testing else ""
 
     if has_quality_gate and "testing_profile.md" not in quality_gate:
         errors.append(
-            "docs/standard/quality_gate_profile.md: testing_profile.md 참조가 없어 테스트 세부 기준 책임 경계가 불명확합니다."
+            "docs/project/standards/quality_gate_profile.md: testing_profile.md 참조가 없어 테스트 세부 기준 책임 경계가 불명확합니다."
         )
     if has_testing and "quality_gate_profile.md" not in testing:
         errors.append(
-            "docs/standard/testing_profile.md: quality_gate_profile.md 참조가 없어 테스트 명령 책임 경계가 불명확합니다."
+            "docs/project/standards/testing_profile.md: quality_gate_profile.md 참조가 없어 테스트 명령 책임 경계가 불명확합니다."
         )
 
     if has_testing:
         try:
             testing_owner_lines = extract_h2_section(testing, "quality_gate_profile에 두는 항목")
         except ValueError as exc:
-            errors.append(f"docs/standard/testing_profile.md: {exc}")
+            errors.append(f"docs/project/standards/testing_profile.md: {exc}")
             return
 
         joined = "\n".join(testing_owner_lines)
@@ -339,24 +371,24 @@ def validate_quality_gate_and_testing(project_root: Path, errors: list[str], mod
         for phrase in required_keywords:
             if phrase not in joined:
                 errors.append(
-                    f"docs/standard/testing_profile.md: quality_gate_profile 책임 항목에서 `{phrase}` 설명이 빠져 있습니다."
+                    f"docs/project/standards/testing_profile.md: quality_gate_profile 책임 항목에서 `{phrase}` 설명이 빠져 있습니다."
                 )
 
     if has_quality_gate and ("testing_profile.md" not in quality_gate or "세부 테스트 범위" not in quality_gate):
         errors.append(
-            "docs/standard/quality_gate_profile.md: test 섹션이 testing_profile.md로 세부 기준을 연결하지 않습니다."
+            "docs/project/standards/quality_gate_profile.md: test 섹션이 testing_profile.md로 세부 기준을 연결하지 않습니다."
         )
 
 
 def validate_coding_conventions(project_root: Path, errors: list[str], mode: str) -> None:
-    if mode == "incremental" and not path_exists(project_root, "docs/standard/coding_conventions_project.md"):
+    if mode == "incremental" and not path_exists(project_root, "docs/project/standards/coding_conventions_project.md"):
         return
 
-    coding = read_text(project_root, "docs/standard/coding_conventions_project.md")
+    coding = read_text(project_root, "docs/project/standards/coding_conventions_project.md")
 
-    if "docs/standard/quality_gate_profile.md" not in coding:
+    if "docs/project/standards/quality_gate_profile.md" not in coding:
         errors.append(
-            "docs/standard/coding_conventions_project.md: quality_gate_profile.md 책임 경계 참조가 없습니다."
+            "docs/project/standards/coding_conventions_project.md: quality_gate_profile.md 책임 경계 참조가 없습니다."
         )
 
     bootstrap_match = re.search(
@@ -368,33 +400,33 @@ def validate_coding_conventions(project_root: Path, errors: list[str], mode: str
         bootstrap_reference = bootstrap_match.group(1)
         if not bootstrap_reference.endswith(".md"):
             errors.append(
-                "docs/standard/coding_conventions_project.md: bootstrap 기준 문서가 .md 경로가 아닙니다."
+                "docs/project/standards/coding_conventions_project.md: bootstrap 기준 문서가 .md 경로가 아닙니다."
             )
         if bootstrap_reference.startswith("bootstrap/language_conventions/"):
             errors.append(
-                "docs/standard/coding_conventions_project.md: bootstrap 기준 문서가 repo-local path로 남아 있습니다. vendored 또는 project-local path로 현지화해야 합니다."
+                "docs/project/standards/coding_conventions_project.md: bootstrap 기준 문서가 repo-local path로 남아 있습니다. vendored 또는 project-local path로 현지화해야 합니다."
             )
         elif not (project_root / bootstrap_reference).is_file():
             errors.append(
-                "docs/standard/coding_conventions_project.md: bootstrap 기준 문서 경로가 실제 프로젝트에서 존재하지 않습니다. "
+                "docs/project/standards/coding_conventions_project.md: bootstrap 기준 문서 경로가 실제 프로젝트에서 존재하지 않습니다. "
                 f"먼저 vendored 경로를 현지화하거나 배치 상태를 확인하세요: {bootstrap_reference}"
             )
     else:
         errors.append(
-            "docs/standard/coding_conventions_project.md: bootstrap 출처 또는 기준 언어 문서 라인이 없습니다."
+            "docs/project/standards/coding_conventions_project.md: bootstrap 출처 또는 기준 언어 문서 라인이 없습니다."
         )
 
 
 def validate_commit_rule(project_root: Path, errors: list[str], mode: str) -> None:
-    if mode == "incremental" and not path_exists(project_root, "docs/standard/commit_rule.md"):
+    if mode == "incremental" and not path_exists(project_root, "docs/project/standards/commit_rule.md"):
         return
 
-    commit_rule = read_text(project_root, "docs/standard/commit_rule.md")
+    commit_rule = read_text(project_root, "docs/project/standards/commit_rule.md")
 
     try:
         precommit_lines = extract_h2_section(commit_rule, "커밋 전 최소 점검 항목")
     except ValueError as exc:
-        errors.append(f"docs/standard/commit_rule.md: {exc}")
+        errors.append(f"docs/project/standards/commit_rule.md: {exc}")
         return
 
     joined = "\n".join(precommit_lines)
@@ -407,7 +439,7 @@ def validate_commit_rule(project_root: Path, errors: list[str], mode: str) -> No
     for label, pattern in required_term_patterns.items():
         if not pattern.search(joined):
             errors.append(
-                f"docs/standard/commit_rule.md: 커밋 전 최소 점검 항목에 `{label}` 기준이 없습니다."
+                f"docs/project/standards/commit_rule.md: 커밋 전 최소 점검 항목에 `{label}` 기준이 없습니다."
             )
 
 
