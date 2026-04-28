@@ -31,12 +31,8 @@ TEMPLATE_TARGETS = {
     "bootstrap/docs/project_overlay/commit_rule_template.md": "docs/project/standards/commit_rule.md",
 }
 
-PROCESS_DOC_TARGETS = {
-    "downstream/docs/harness_guide.md": "docs/process/harness_guide.md",
-    "downstream/docs/downstream_harness_flow.md": "docs/process/downstream_harness_flow.md",
-}
-
 MATERIALIZED_PROJECT_OVERLAY_ROOT = "docs/project_overlay"
+MATERIALIZED_PROCESS_DOC_ROOT = "docs/process"
 
 LANGUAGE_BOOTSTRAP_PATHS = {
     "python": "vendor/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md",
@@ -135,15 +131,82 @@ def resolve_process_doc_source(source_rel: str) -> Path:
     raise FileNotFoundError(f"Bootstrap process doc not found: {source_rel}")
 
 
+def process_doc_target_for_source(relative_path: Path) -> Path:
+    relative_posix = relative_path.as_posix()
+    if relative_posix == "downstream/docs/harness_guide.md":
+        return Path("docs/process/harness_guide.md")
+    if relative_posix == "downstream/docs/downstream_harness_flow.md":
+        return Path("docs/process/downstream_harness_flow.md")
+    if relative_posix.startswith("downstream/docs/harness/common/"):
+        return Path("docs/process/common") / relative_path.relative_to("downstream/docs/harness/common")
+    if relative_posix.startswith("downstream/docs/phase_"):
+        return Path("docs/process/phases") / relative_path.relative_to("downstream/docs")
+    if relative_posix.startswith("downstream/docs/standard/"):
+        return Path("docs/process/standard") / relative_path.relative_to("downstream/docs/standard")
+    if relative_posix.startswith("downstream/docs/templates/task/"):
+        return Path("docs/process/templates/task") / relative_path.relative_to("downstream/docs/templates/task")
+    if relative_posix.startswith("downstream/docs/examples/"):
+        return Path("docs/process/examples") / relative_path.relative_to("downstream/docs/examples")
+    raise ValueError(f"Unsupported process doc source path: {relative_posix}")
+
+
+def iter_process_doc_targets() -> list[tuple[str, str]]:
+    downstream_docs_root = ROOT / "downstream/docs"
+    if downstream_docs_root.exists():
+        targets: list[tuple[str, str]] = []
+        for path in sorted(downstream_docs_root.rglob("*.md")):
+            source_rel = path.relative_to(ROOT)
+            targets.append((source_rel.as_posix(), process_doc_target_for_source(source_rel).as_posix()))
+        return targets
+
+    materialized_root = ROOT / MATERIALIZED_PROCESS_DOC_ROOT
+    if materialized_root.exists():
+        return [
+            (path.relative_to(ROOT).as_posix(), path.relative_to(ROOT).as_posix())
+            for path in sorted(materialized_root.rglob("*.md"))
+        ]
+
+    raise FileNotFoundError("Bootstrap process docs not found: downstream/docs or docs/process")
+
+
+PROCESS_DOC_TEXT_REPLACEMENTS = (
+    ("downstream/docs/harness_guide.md", "docs/process/harness_guide.md"),
+    ("downstream/docs/downstream_harness_flow.md", "docs/process/downstream_harness_flow.md"),
+    ("downstream/docs/harness/common/", "docs/process/common/"),
+    ("downstream/docs/phase_", "docs/process/phases/phase_"),
+    ("downstream/docs/standard/", "docs/process/standard/"),
+    ("downstream/docs/templates/task/", "docs/process/templates/task/"),
+    ("downstream/docs/examples/", "docs/process/examples/"),
+    ("vendor/harness-kit/docs/templates/task/", "docs/process/templates/task/"),
+    ("docs/harness/common/", "docs/process/common/"),
+    ("docs/phase_", "docs/process/phases/phase_"),
+    ("docs/standard/coding_guidelines_core.md", "docs/process/standard/coding_guidelines_core.md"),
+    ("docs/standard/architecture.md", "docs/project/standards/architecture.md"),
+    ("docs/standard/implementation_order.md", "docs/project/standards/implementation_order.md"),
+    ("docs/standard/coding_conventions_project.md", "docs/project/standards/coding_conventions_project.md"),
+    ("docs/standard/quality_gate_profile.md", "docs/project/standards/quality_gate_profile.md"),
+    ("docs/standard/testing_profile.md", "docs/project/standards/testing_profile.md"),
+    ("docs/standard/commit_rule.md", "docs/project/standards/commit_rule.md"),
+    ("docs/templates/task/", "docs/process/templates/task/"),
+    ("docs/examples/", "docs/process/examples/"),
+)
+
+
+def render_process_doc_text(content: str) -> str:
+    for old, new in PROCESS_DOC_TEXT_REPLACEMENTS:
+        content = content.replace(old, new)
+    return content
+
+
 def build_plan(target_root: Path, language: str, vendor_path: str = DEFAULT_VENDOR_PATH) -> list[PlannedFile]:
     plan: list[PlannedFile] = []
     bootstrap_ref = f"{vendor_path}/bootstrap/language_conventions/{Path(LANGUAGE_BOOTSTRAP_PATHS[language]).name}"
     harness_guide_ref = "docs/process/harness_guide.md"
 
-    for source_rel, destination_rel in PROCESS_DOC_TARGETS.items():
+    for source_rel, destination_rel in iter_process_doc_targets():
         source = resolve_process_doc_source(source_rel)
         destination = target_root / destination_rel
-        content = source.read_text(encoding="utf-8")
+        content = render_process_doc_text(source.read_text(encoding="utf-8"))
         plan.append(PlannedFile(source=source, destination=destination, content=content))
 
     for source_rel, destination_rel in TEMPLATE_TARGETS.items():

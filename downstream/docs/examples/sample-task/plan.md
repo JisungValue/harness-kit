@@ -2,20 +2,20 @@
 
 ## 변경 대상 파일 또는 모듈
 
-- `docs/project_entrypoint.md`
-- `docs/standard/architecture.md`
-- `docs/standard/implementation_order.md`
-- `docs/standard/coding_conventions_project.md`
-- `docs/standard/quality_gate_profile.md`
-- `docs/standard/testing_profile.md`
-- `docs/standard/commit_rule.md`
+- `docs/entrypoint.md`
+- `docs/project/standards/architecture.md`
+- `docs/project/standards/implementation_order.md`
+- `docs/project/standards/coding_conventions_project.md`
+- `docs/project/standards/quality_gate_profile.md`
+- `docs/project/standards/testing_profile.md`
+- `docs/project/standards/commit_rule.md`
 
 ## 레이어별 작업 계획
 
 - 공통 guide 참조 구조를 먼저 정리한다.
 - 프로젝트 전용 문서를 최소 세트로 작성한다.
 - 새 task에서 재사용할 수 있는 문서 위치를 고정한다.
-- 이번 TASK의 실제 기능/API 작업 순서는 이 섹션에 적고, 프로젝트 기본 레이어 순서 자체는 `docs/standard/implementation_order.md`에서 관리한다.
+- 이번 TASK의 실제 기능/API 작업 순서는 이 섹션에 적고, 프로젝트 기본 레이어 순서 자체는 `docs/project/standards/implementation_order.md`에서 관리한다.
 
 ## 테스트 계획
 
@@ -27,7 +27,7 @@
 - 프로젝트 로컬 entrypoint를 갱신한다.
 - 필요한 overlay 문서를 추가한다.
 - 현재 작업과 직접 관련 있는 언어별 convention 항목을 project convention 문서에서 식별 가능하게 정리한다.
-- 관련 `docs/decisions/README.md` 또는 `DEC-###-slug.md` 읽기/수정/생성 필요 여부: 해당 없음. 이번 작업은 decision 내용 확정보다 공통 문서 구조 정리에 집중한다.
+- 관련 `docs/project/decisions/README.md` 또는 `DEC-###-slug.md` 읽기/수정/생성 필요 여부: 해당 없음. 이번 작업은 decision 내용 확정보다 공통 문서 구조 정리에 집중한다.
 - 새 decision이 필요하면 index 갱신 계획: 해당 없음.
 
 ## 비범위

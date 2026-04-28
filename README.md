@@ -230,8 +230,8 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 9. `python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success`로 unresolved decision readiness를 확인한다.
 10. `python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .`로 문서 간 교차 정합성과 runtime instruction entrypoint 연결을 확인한다.
 11. local validator가 통과하면 [`bootstrap/docs/project_overlay/harness_doc_guard_workflow_template.yml`](bootstrap/docs/project_overlay/harness_doc_guard_workflow_template.yml)을 source repo canonical template로 보고, downstream vendored bundle에서는 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사한 뒤 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꿔 future-session guardrail을 고정한다.
-12. 첫 task를 시작하기 전에 [`downstream/docs/downstream_harness_flow.md`](downstream/docs/downstream_harness_flow.md)를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
-13. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
+12. 첫 task를 시작하기 전에 설치된 프로젝트의 `docs/process/downstream_harness_flow.md`를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
+13. `docs/process/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
 14. task 진행 중 gate/write-set 위반을 확인해야 하면 `python3 vendor/harness-kit/downstream/scripts/validate_phase_gate.py docs/task/<task_id> --paths ...`를 사용한다. 인자 없이 실행하는 기본 모드는 현재 task workspace와 `phase_status.md`의 허용/잠금 패턴에 걸리는 dirty path만 검사하고, repo 전체 dirty path까지 함께 보려면 `--git-scope repo`를 명시한다.
 15. 실제 task 몇 개를 돌린 뒤 project overlay와 decisions index를 함께 보강한다.
 
@@ -258,7 +258,7 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 
 - 이 저장소 source repo를 읽는 중이라면 먼저 [`bootstrap/docs/quickstart.md`](bootstrap/docs/quickstart.md)를 본다.
 - 그다음 greenfield면 [`bootstrap/docs/project_overlay/first_success_guide.md`](bootstrap/docs/project_overlay/first_success_guide.md), brownfield first adoption이면 [`bootstrap/docs/project_overlay/adopt_dry_run.md`](bootstrap/docs/project_overlay/adopt_dry_run.md), 이미 도입된 downstream upgrade면 [`bootstrap/docs/project_overlay/downstream_harness_upgrade_guide.md`](bootstrap/docs/project_overlay/downstream_harness_upgrade_guide.md)를 본다.
-- 적용이 끝나면 첫 task 전에 [`downstream/docs/downstream_harness_flow.md`](downstream/docs/downstream_harness_flow.md)를 읽어 Phase 운영 규칙으로 넘어간다.
+- 적용이 끝나면 첫 task 전에 설치된 프로젝트의 `docs/process/downstream_harness_flow.md`를 읽어 Phase 운영 규칙으로 넘어간다.
 - source repo에는 root `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`가 아직 없고, 이 파일들은 downstream 프로젝트를 bootstrap한 뒤에 생긴다.
 - 아래 순서는 downstream 프로젝트를 bootstrap한 뒤 생성되는 문서 기준이다.
 

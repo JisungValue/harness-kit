@@ -21,7 +21,17 @@ MANIFEST_NAME = "bundle_manifest.json"
 OBSOLETE_BUNDLE_PATHS = {
     "docs/harness_guide.md",
     "docs/downstream_harness_flow.md",
+    "docs/harness",
+    "docs/phase_1_requirement_and_planning",
+    "docs/phase_2_tdd_implementation",
+    "docs/phase_3_integration",
+    "docs/phase_4_validation",
+    "docs/phase_5_documentation",
+    "docs/standard",
+    "docs/templates",
+    "docs/examples",
 }
+OBSOLETE_BUNDLE_PREFIXES = tuple(f"{path}/" for path in OBSOLETE_BUNDLE_PATHS)
 BOUNDARY_INCLUDE_SECTIONS = (
     "### 1) Downstream 필수 자산",
     "### 2) Downstream 선택 자산",
@@ -44,8 +54,25 @@ BUNDLE_TEXT_REPLACEMENTS = (
     ("bootstrap/docs/", "docs/"),
     ("downstream/docs/harness_guide.md", "docs/process/harness_guide.md"),
     ("downstream/docs/downstream_harness_flow.md", "docs/process/downstream_harness_flow.md"),
+    ("downstream/docs/harness/common/", "docs/process/common/"),
+    ("downstream/docs/phase_", "docs/process/phases/phase_"),
+    ("downstream/docs/standard/", "docs/process/standard/"),
+    ("downstream/docs/templates/task/", "docs/process/templates/task/"),
+    ("downstream/docs/examples/", "docs/process/examples/"),
     ("downstream/docs/", "docs/"),
     ("bootstrap/scripts/", "scripts/"),
+    ("vendor/harness-kit/docs/templates/task/", "docs/process/templates/task/"),
+    ("docs/harness/common/", "docs/process/common/"),
+    ("docs/phase_", "docs/process/phases/phase_"),
+    ("docs/standard/coding_guidelines_core.md", "docs/process/standard/coding_guidelines_core.md"),
+    ("docs/standard/architecture.md", "docs/project/standards/architecture.md"),
+    ("docs/standard/implementation_order.md", "docs/project/standards/implementation_order.md"),
+    ("docs/standard/coding_conventions_project.md", "docs/project/standards/coding_conventions_project.md"),
+    ("docs/standard/quality_gate_profile.md", "docs/project/standards/quality_gate_profile.md"),
+    ("docs/standard/testing_profile.md", "docs/project/standards/testing_profile.md"),
+    ("docs/standard/commit_rule.md", "docs/project/standards/commit_rule.md"),
+    ("docs/templates/task/", "docs/process/templates/task/"),
+    ("docs/examples/", "docs/process/examples/"),
 )
 
 
@@ -224,6 +251,16 @@ def bundle_relative_path_for_source(relative_path: Path) -> Path:
         return Path("docs/process/harness_guide.md")
     if relative_posix == "downstream/docs/downstream_harness_flow.md":
         return Path("docs/process/downstream_harness_flow.md")
+    if relative_posix.startswith("downstream/docs/harness/common/"):
+        return Path("docs/process/common") / relative_path.relative_to("downstream/docs/harness/common")
+    if relative_posix.startswith("downstream/docs/phase_"):
+        return Path("docs/process/phases") / relative_path.relative_to("downstream/docs")
+    if relative_posix.startswith("downstream/docs/standard/"):
+        return Path("docs/process/standard") / relative_path.relative_to("downstream/docs/standard")
+    if relative_posix.startswith("downstream/docs/templates/task/"):
+        return Path("docs/process/templates/task") / relative_path.relative_to("downstream/docs/templates/task")
+    if relative_posix.startswith("downstream/docs/examples/"):
+        return Path("docs/process/examples") / relative_path.relative_to("downstream/docs/examples")
     if relative_posix.startswith("downstream/docs/"):
         return Path("docs") / relative_path.relative_to("downstream/docs")
     if relative_posix.startswith("downstream/scripts/"):
@@ -440,7 +477,11 @@ def prepare_output_dir(output_root: Path, bundle_files: list[BundleFile], force:
             )
 
         allowed_paths = owned_bundle_paths(bundle_files) | load_existing_manifest_paths(output_root) | OBSOLETE_BUNDLE_PATHS
-        unknown_paths = sorted(existing_output_paths(output_root) - allowed_paths)
+        unknown_paths = sorted(
+            path
+            for path in existing_output_paths(output_root) - allowed_paths
+            if not path.startswith(OBSOLETE_BUNDLE_PREFIXES)
+        )
         if unknown_paths:
             preview = ", ".join(unknown_paths[:5])
             raise ValueError(

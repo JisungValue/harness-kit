@@ -113,8 +113,16 @@ def prepare_vendor_destination(vendor_root: Path, bundle_files: list[bundle.Bund
                 "Re-run with --force-vendor to replace the existing vendored bundle."
             )
 
-        allowed_paths = bundle.owned_bundle_paths(bundle_files) | bundle.load_existing_manifest_paths(vendor_root)
-        unknown_paths = sorted(bundle.existing_output_paths(vendor_root) - allowed_paths)
+        allowed_paths = (
+            bundle.owned_bundle_paths(bundle_files)
+            | bundle.load_existing_manifest_paths(vendor_root)
+            | bundle.OBSOLETE_BUNDLE_PATHS
+        )
+        unknown_paths = sorted(
+            path
+            for path in bundle.existing_output_paths(vendor_root) - allowed_paths
+            if not path.startswith(bundle.OBSOLETE_BUNDLE_PREFIXES)
+        )
         if unknown_paths:
             preview = ", ".join(unknown_paths[:5])
             raise ValueError(

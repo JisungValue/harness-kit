@@ -67,8 +67,8 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 6. local validator가 통과하면 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사하고 workflow 안의 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꾼다.
 
-7. 첫 task를 시작하기 전에 `downstream/docs/downstream_harness_flow.md`를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
-8. `vendor/harness-kit/docs/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
+7. 첫 task를 시작하기 전에 `docs/process/downstream_harness_flow.md`를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
+8. `docs/process/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
 9. task를 시작하면 `phase_status.md`에 현재 gate와 허용 write-set을 먼저 적고, 필요할 때 아래 validator로 hard-stop 위반을 점검한다.
 10. 이때 `docs/project/standards/implementation_order.md`는 프로젝트 기본 레이어 순서 문서로 유지하고, 이번 task에서 어떤 API/기능부터 구현할지는 `plan.md`에 적는다.
 11. `validate_phase_gate.py`를 인자 없이 실행하면 기본적으로 현재 task workspace와 `phase_status.md`의 허용/잠금 패턴에 걸리는 dirty path만 검사한다. repo 전체 dirty path까지 함께 보려면 `--git-scope repo`를 명시한다.
@@ -123,7 +123,7 @@ python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --for
 7. `differing files`와 `conflict candidates`는 기본적으로 수동 비교 대상으로 남긴다.
 8. partial adoption 상태가 structurally safe한지 먼저 보려면 아래 incremental validator를 실행한다.
 9. 최소 문서 세트가 어느 정도 맞춰진 뒤에만 full validator로 넘어간다.
-10. 첫 task를 시작하기 전에 `downstream/docs/downstream_harness_flow.md`를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
+10. 첫 task를 시작하기 전에 `docs/process/downstream_harness_flow.md`를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
 
 ```bash
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py . --mode incremental

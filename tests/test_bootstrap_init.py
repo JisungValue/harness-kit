@@ -39,6 +39,13 @@ class BootstrapInitCliTest(unittest.TestCase):
             self.assertTrue((target / "docs/project/standards/quality_gate_profile.md").exists())
             self.assertTrue((target / "docs/project/standards/testing_profile.md").exists())
             self.assertTrue((target / "docs/project/standards/commit_rule.md").exists())
+            self.assertTrue((target / "docs/process/harness_guide.md").exists())
+            self.assertTrue((target / "docs/process/downstream_harness_flow.md").exists())
+            self.assertTrue((target / "docs/process/common/process_policy.md").exists())
+            self.assertTrue((target / "docs/process/phases/phase_1_requirement_and_planning/implementation.md").exists())
+            self.assertTrue((target / "docs/process/standard/coding_guidelines_core.md").exists())
+            self.assertTrue((target / "docs/process/templates/task/issue.md").exists())
+            self.assertTrue((target / "docs/process/examples/sample-task/issue.md").exists())
 
             content = (target / "docs/project/standards/coding_conventions_project.md").read_text(
                 encoding="utf-8"
@@ -67,6 +74,11 @@ class BootstrapInitCliTest(unittest.TestCase):
             decisions_index = (target / "docs/project/decisions/README.md").read_text(encoding="utf-8")
             self.assertIn("# Project Decision Index", decisions_index)
             self.assertIn("DEC-###-slug.md", decisions_index)
+
+            process_guide = (target / "docs/process/harness_guide.md").read_text(encoding="utf-8")
+            self.assertIn("docs/process/common/process_policy.md", process_guide)
+            self.assertIn("docs/process/standard/coding_guidelines_core.md", process_guide)
+            self.assertNotIn("docs/harness/common/process_policy.md", process_guide)
 
             claude_entrypoint = (target / "CLAUDE.md").read_text(encoding="utf-8")
             self.assertIn("# Claude Adapter Entry Point", claude_entrypoint)

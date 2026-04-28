@@ -24,7 +24,7 @@
 
 입력물 중 일부를 읽지 못했거나 존재하지 않으면 그 사실을 감사 결과에 명시한다.
 
-- 경량 운영 예외가 적용됐거나 후보였으면 `docs/harness/common/lightweight_task_policy.md`도 함께 확인한다.
+- 경량 운영 예외가 적용됐거나 후보였으면 `docs/process/common/lightweight_task_policy.md`도 함께 확인한다.
 - 현재 작업이 runtime contract, phase gate, entrypoint chain, downstream 사용 흐름을 바꿨다면 아래 인접 문서도 함께 교차 검토한다.
   - `docs/harness_guide.md`
   - `docs/downstream_harness_flow.md`

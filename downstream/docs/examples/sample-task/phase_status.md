@@ -18,7 +18,7 @@
 ## Locked Paths
 
 - `$TASK/validation_report.md`
-- `docs/decisions/*`
+- `docs/project/decisions/*`
 
 ## Stale Artifacts
 

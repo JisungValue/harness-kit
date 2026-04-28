@@ -8,17 +8,17 @@
 
 ### 필수 재참조
 
-- `docs/harness/common/audit_policy.md`
-- `docs/harness/common/testing_policy.md`
-- `docs/harness/common/test_double_policy.md`
-- `docs/harness/common/code_hygiene_policy.md`
-- `docs/harness/common/design_quality_policy.md`
-- `docs/harness/common/performance_policy.md`
-- `docs/standard/coding_guidelines_core.md`
-- 프로젝트 `docs/standard/architecture.md`
-- 프로젝트 `docs/standard/implementation_order.md`
-- 프로젝트 `docs/standard/coding_conventions_project.md`
-- 프로젝트 `docs/standard/quality_gate_profile.md`
+- `docs/process/common/audit_policy.md`
+- `docs/process/common/testing_policy.md`
+- `docs/process/common/test_double_policy.md`
+- `docs/process/common/code_hygiene_policy.md`
+- `docs/process/common/design_quality_policy.md`
+- `docs/process/common/performance_policy.md`
+- `docs/process/standard/coding_guidelines_core.md`
+- 프로젝트 `docs/project/standards/architecture.md`
+- 프로젝트 `docs/project/standards/implementation_order.md`
+- 프로젝트 `docs/project/standards/coding_conventions_project.md`
+- 프로젝트 `docs/project/standards/quality_gate_profile.md`
 
 ### 조건부 참조
 
@@ -32,12 +32,12 @@
 - TDD 순서가 유지되었는가
 - 최소 구현 원칙과 범위 통제가 지켜졌는가
 - 테스트 더블 선택이 검증 책임과 맞는가
-- 선택한 레이어 명칭, 순서, 세분화가 프로젝트 `docs/standard/implementation_order.md`와 정합한가
+- 선택한 레이어 명칭, 순서, 세분화가 프로젝트 `docs/project/standards/implementation_order.md`와 정합한가
 - 프로젝트 문서가 없거나 모호한 상태에서 임의 순서로 진행하지 않았는가
-- 프로젝트 `docs/standard/coding_conventions_project.md`에 정의한 convention과 충돌하지 않는가
+- 프로젝트 `docs/project/standards/coding_conventions_project.md`에 정의한 convention과 충돌하지 않는가
 - 현재 변경과 직접 관련 있는 언어별 convention 항목이 `coding_conventions_project.md`에 식별 가능하게 정리돼 있는가
 - 현재 변경과 직접 관련 있는 언어별 금지 패턴을 실제로 위반하지 않았는가
-- 프로젝트 `docs/standard/quality_gate_profile.md`가 현재 Phase 2까지 적용하도록 정의한 품질 게이트와 모순되거나 생략된 검증이 있는가
+- 프로젝트 `docs/project/standards/quality_gate_profile.md`가 현재 Phase 2까지 적용하도록 정의한 품질 게이트와 모순되거나 생략된 검증이 있는가
 - 현재 변경과 직접 관련 있는 import/unused/dead code/debug 흔적이 남아 있지 않은가
 - stale 상태의 레이어 감사 또는 Phase 2 전체 감사 결과를 재사용하지 않는가
 - 현재 변경이 책임 분리, 추상화 수준, 응집도, 경계 분리를 악화시키지 않았는가
@@ -49,7 +49,7 @@
 
 ## 프로젝트 구현 순서 준수 감사
 
-- 레이어 명칭, 구현 순서, 세분화 기준의 1차 기준은 프로젝트 `docs/standard/implementation_order.md`다.
+- 레이어 명칭, 구현 순서, 세분화 기준의 1차 기준은 프로젝트 `docs/project/standards/implementation_order.md`다.
 - 감사자는 Phase 2 진행 순서가 프로젝트 문서와 일치하는지 먼저 확인한다.
 - Core harness는 `안쪽 책임 -> 바깥쪽 책임`과 `테스트 작성 -> 구현 -> 감사` 절차 준수 여부를 확인하며, 프로젝트 상세 순서 자체를 대체하지 않는다.
 - 특정 API나 기능을 이번 TASK에서 어떤 순서로 구현할지는 `plan.md`가 담당하고, 감사자는 그 task 순서가 `implementation_order.md`의 프로젝트 기본 레이어 기준과 충돌하지 않는지 본다.
@@ -61,15 +61,15 @@
 
 - 각 선택 레이어가 `테스트 작성 -> 구현 -> 감사` 순서로 진행되었는가
 - 재수행이 있었다면 가장 이른 영향 레이어부터 동일 순서가 다시 적용되었는가
-- 선택한 레이어 명칭, 순서, 세분화 기준이 프로젝트 `docs/standard/implementation_order.md`와 충돌하지 않는가
+- 선택한 레이어 명칭, 순서, 세분화 기준이 프로젝트 `docs/project/standards/implementation_order.md`와 충돌하지 않는가
 - `implementation_order.md`가 task별 API backlog처럼 오염되지 않았는가
 - API/기능 단위 실제 작업 순서가 `plan.md`에 있고, 그 계획이 프로젝트 기본 레이어 순서와 충돌하지 않는가
 - 프로젝트 문서가 없거나 현재 TASK 기준으로 모호한 상태에서 임의 순서를 적용하지 않았는가
-- 프로젝트 `docs/standard/coding_conventions_project.md`가 정의한 language/framework convention과 구현이 충돌하지 않는가
+- 프로젝트 `docs/project/standards/coding_conventions_project.md`가 정의한 language/framework convention과 구현이 충돌하지 않는가
 - 현재 변경과 직접 관련 있는 언어별 규칙 범주가 `coding_conventions_project.md` 또는 그가 참조하는 언어 문서에서 식별 가능한가
 - 현재 변경에 직접 영향을 주는 언어별 항목이 아직 `[프로젝트 결정 필요]` 상태로 남아 있지 않은가
 - 현재 변경이 프로젝트 convention 문서의 주요 금지 패턴을 사실상 새 기본값으로 만들지 않는가
-- 프로젝트 `docs/standard/quality_gate_profile.md`가 현재 Phase 2까지 적용하도록 정의한 formatter/linter/type checker/test 게이트가 누락되었거나 생략 사유 없이 빠지지 않았는가
+- 프로젝트 `docs/project/standards/quality_gate_profile.md`가 현재 Phase 2까지 적용하도록 정의한 formatter/linter/type checker/test 게이트가 누락되었거나 생략 사유 없이 빠지지 않았는가
 - 현재 변경과 직접 관련 있는 import/unused/dead code/debug 흔적이 남아 있지 않은가
 - 현재 변경이 긴 함수, 긴 인수 목록, 메시지 체인, 기능 편애, 거대한 클래스 같은 구조 악취를 더 심하게 만들지 않았는가
 - 추측성 일반화, 재사용 근거 없는 추상화, 범위 밖 재설계가 포함되지 않았는가
@@ -114,7 +114,7 @@
 - 추측성 일반화, 불필요한 wrapper/facade/interface/helper가 추가되지 않았는가
 - 메시지 체인, 기능 편애, 뒤엉킨 변경, 산탄총 수술 징후가 더 심해지지 않았는가
 - design quality와 performance 충돌이 있다면 근거 없는 최적화 대신 `performance_policy.md` 기준의 대안과 trade-off가 식별 가능한가
-- 위 판단이 애매하면 `docs/harness/common/design_quality_policy.md`의 함수 분리 판정 질문, 추상화 도입 판정 질문, 중복 처리 결정 규칙, 빠른 판정 체크리스트로 다시 좁혀 보았는가
+- 위 판단이 애매하면 `docs/process/common/design_quality_policy.md`의 함수 분리 판정 질문, 추상화 도입 판정 질문, 중복 처리 결정 규칙, 빠른 판정 체크리스트로 다시 좁혀 보았는가
 - design quality trade-off 기록이 있다면 `implementation_notes.md`가 canonical source로 사용됐는가
 
 ## Performance 감사 체크리스트
@@ -126,7 +126,7 @@
 - 성능 이슈나 최적화 주장이 있다면 측정값, 운영 증상, 입력 규모, query 수, timeout, 메모리 사용량 중 하나 이상의 근거가 있는가
 - 정확한 측정이 어렵다면 대상 경로, 우려 이유, 후속 검증 계획, 미실행 사유, 잔여 리스크가 대신 남아 있는가
 - 설계 품질과 성능 충돌 시 더 작은 국소 변경으로 해결 가능한지 먼저 검토했는가
-- 위 판단이 애매하면 `docs/harness/common/performance_policy.md`의 성능 검토 트리거 규칙, 시간복잡도 판정 질문, 메모리 판정 질문, 반복 호출 판정 질문, 빠른 판정 체크리스트로 다시 좁혀 보았는가
+- 위 판단이 애매하면 `docs/process/common/performance_policy.md`의 성능 검토 트리거 규칙, 시간복잡도 판정 질문, 메모리 판정 질문, 반복 호출 판정 질문, 빠른 판정 체크리스트로 다시 좁혀 보았는가
 
 ## 승인 불가 기준
 
@@ -134,7 +134,7 @@
 - 과도한 선제 구현이 포함됨
 - stale 상태의 레이어 감사 또는 Phase 2 전체 감사 결과를 그대로 승인 근거로 사용함
 - 테스트 더블이 구현 내부 협력을 과도하게 고정하거나 현재 책임과 맞지 않게 선택됨
-- 선택한 레이어 명칭, 순서, 세분화가 프로젝트 `docs/standard/implementation_order.md`와 충돌함
+- 선택한 레이어 명칭, 순서, 세분화가 프로젝트 `docs/project/standards/implementation_order.md`와 충돌함
 - 프로젝트 문서가 없거나 모호한 상태에서 기준 확정 없이 구현을 진행함
 - 승인되지 않은 범위 확장이 있음
 - 현재 변경과 직접 관련 없는 기존 중복 제거 또는 구조 정리가 함께 반영됨
