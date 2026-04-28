@@ -9,9 +9,9 @@
 - `AGENTS.md`
 - `CLAUDE.md`
 - `GEMINI.md`
-- `docs/project_entrypoint.md`
-- `docs/decisions/README.md`
-- `docs/standard/*`
+- `docs/entrypoint.md`
+- `docs/project/decisions/README.md`
+- `docs/process/standard/*`
 - `validate_overlay_decisions.py`
 - `validate_overlay_consistency.py`
 
@@ -27,35 +27,35 @@
 
 - 판정: 통과
 - 근거:
-  - `docs/project_entrypoint.md`
-  - `docs/decisions/README.md`
-  - `docs/standard/architecture.md`
-  - `docs/standard/implementation_order.md`
-  - `docs/standard/coding_conventions_project.md`
-  - `docs/standard/quality_gate_profile.md`
-  - `docs/standard/testing_profile.md`
-  - `docs/standard/commit_rule.md`
+  - `docs/entrypoint.md`
+  - `docs/project/decisions/README.md`
+  - `docs/project/standards/architecture.md`
+  - `docs/project/standards/implementation_order.md`
+  - `docs/project/standards/coding_conventions_project.md`
+  - `docs/project/standards/quality_gate_profile.md`
+  - `docs/project/standards/testing_profile.md`
+  - `docs/project/standards/commit_rule.md`
   가 모두 존재한다.
 
 ### 2. local harness guide 연결
 
 - 판정: 통과
 - 근거:
-  - `docs/project_entrypoint.md`가 vendored common guide 경로를 가진다.
-  - `docs/standard/*` 문서 세트를 모두 연결한다.
+  - `docs/entrypoint.md`가 vendored common guide 경로를 가진다.
+  - `docs/process/standard/*` 문서 세트를 모두 연결한다.
 
 ### 3. 프로젝트 결정 문서 구조
 
 - 판정: 통과
 - 근거:
-  - `docs/decisions/README.md`가 존재한다.
+  - `docs/project/decisions/README.md`가 존재한다.
   - project-local 중요한 결정을 architecture와 별도 index로 찾을 수 있다.
 
 ### 4. runtime instruction entrypoint 연결
 
 - 판정: 통과
 - 근거:
-  - `AGENTS.md`가 `docs/project_entrypoint.md`를 우선 읽을 문서로 가진다.
+  - `AGENTS.md`가 `docs/entrypoint.md`를 우선 읽을 문서로 가진다.
   - `CLAUDE.md`, `GEMINI.md`가 `AGENTS.md`를 공통 진입점으로 가진다.
 
 ### 5. 프로젝트 결정 필요 항목 해소 여부

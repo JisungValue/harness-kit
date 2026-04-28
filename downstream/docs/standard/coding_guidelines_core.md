@@ -78,8 +78,8 @@
 
 ## 테스트 기준
 
-- 테스트 공통 기준은 `docs/harness/common/testing_policy.md`를 따른다.
-- 테스트 산출물과 위임 책임 기록 규칙은 `docs/harness/common/artifact_policy.md`를 따른다.
+- 테스트 공통 기준은 `docs/process/common/testing_policy.md`를 따른다.
+- 테스트 산출물과 위임 책임 기록 규칙은 `docs/process/common/artifact_policy.md`를 따른다.
 - 실제 테스트 명령, coverage 목표, 환경 의존성은 project overlay에서 정의한다.
 
 ## 금지 사항

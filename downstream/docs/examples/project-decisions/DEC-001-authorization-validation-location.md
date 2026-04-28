@@ -4,8 +4,8 @@
 - Type: Policy
 - Date: 2026-04-13
 - Related Docs:
-  - docs/standard/architecture.md
-  - docs/standard/coding_conventions_project.md
+  - docs/project/standards/architecture.md
+  - docs/project/standards/coding_conventions_project.md
 - When To Update:
   - 인증 진입 지점이 filter/interceptor/controller 중 다른 위치로 바뀔 때
   - 인증 실패 응답 규칙이 바뀔 때
@@ -38,8 +38,8 @@ controller/service가 인증 세부사항에 오염되지 않는다.
 
 ## Related Docs
 
-- docs/standard/architecture.md
-- docs/standard/coding_conventions_project.md
+- docs/project/standards/architecture.md
+- docs/project/standards/coding_conventions_project.md
 
 ## When To Update
 

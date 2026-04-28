@@ -53,14 +53,14 @@
 
 검증 항목 요약 뒤에는 별도 섹션 `## Phase 5에서 반영할 related decisions/`를 두고 아래 중 하나를 남긴다.
 
-- 수정 또는 생성해야 할 `docs/decisions/README.md`, `DEC-###-slug.md` 경로와 반영 이유
+- 수정 또는 생성해야 할 `docs/project/decisions/README.md`, `DEC-###-slug.md` 경로와 반영 이유
 - decision 반영이 필요 없다는 판단과 그 사유
 
 ## 검증 결과 작성 원칙
 
 - 단순히 `확인함`으로 끝내지 않는다.
 - 자동 검증은 가능하면 실행 명령 또는 실행 단위를 남긴다.
-- 프로젝트 `docs/standard/quality_gate_profile.md`를 기준으로 어떤 품질 게이트를 실행했는지와 미실행 사유를 남긴다.
+- 프로젝트 `docs/project/standards/quality_gate_profile.md`를 기준으로 어떤 품질 게이트를 실행했는지와 미실행 사유를 남긴다.
 - code hygiene 관련 자동 게이트를 실행했다면 어떤 항목을 확인했는지 또는 왜 수동 검토로 대체했는지도 남긴다.
 - 성능 민감 변경 또는 성능 최적화 주장이 있으면 대상 경로, 근거, 검증 방법 또는 미실행 사유, 잔여 리스크가 `implementation_notes.md`와 `validation_report.md`에 식별 가능하게 남았는지 기록한다.
 - design quality와 performance가 충돌한 경우 대안, 추천안, 근거, 검증 계획, trade-off가 `implementation_notes.md`에 정리됐는지와 `validation_report.md`에 그 요약이 남았는지도 기록한다.

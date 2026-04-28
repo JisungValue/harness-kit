@@ -52,6 +52,17 @@ class InstallDownstreamBundleTest(unittest.TestCase):
             self.assertTrue((vendor_root / "downstream/scripts/validate_phase_gate.py").exists())
             self.assertTrue((project_root / "AGENTS.md").exists())
             self.assertTrue((project_root / "docs/entrypoint.md").exists())
+            self.assertTrue((project_root / "docs/process/harness_guide.md").exists())
+            self.assertTrue((project_root / "docs/process/downstream_harness_flow.md").exists())
+            self.assertTrue((project_root / "docs/process/common/process_policy.md").exists())
+            self.assertTrue(
+                (project_root / "docs/process/phases/phase_1_requirement_and_planning/implementation.md").exists()
+            )
+            self.assertTrue((project_root / "docs/process/standard/coding_guidelines_core.md").exists())
+            self.assertTrue((project_root / "docs/process/templates/task/issue.md").exists())
+            self.assertTrue((project_root / "docs/process/examples/sample-task/issue.md").exists())
+            self.assertFalse((project_root / "docs/harness/common/process_policy.md").exists())
+            self.assertFalse((project_root / "docs/templates/task/issue.md").exists())
             self.assertIn(
                 "docs/process/harness_guide.md",
                 (project_root / "docs/entrypoint.md").read_text(encoding="utf-8"),
@@ -152,6 +163,24 @@ class InstallDownstreamBundleTest(unittest.TestCase):
             self.assertEqual(second_result.returncode, 0, second_result.stderr)
             self.assertIn("Install flow completed", second_result.stdout)
             self.assertTrue((project_root / "vendor/harness-kit/bundle_manifest.json").exists())
+
+    def test_force_vendor_replaces_legacy_process_doc_layout(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_root = Path(tmp_dir) / "recipeForBaby"
+            legacy_policy = project_root / "vendor/harness-kit/docs/harness/common/process_policy.md"
+            legacy_template = project_root / "vendor/harness-kit/docs/templates/task/issue.md"
+            legacy_policy.parent.mkdir(parents=True, exist_ok=True)
+            legacy_template.parent.mkdir(parents=True, exist_ok=True)
+            legacy_policy.write_text("legacy policy\n", encoding="utf-8")
+            legacy_template.write_text("legacy template\n", encoding="utf-8")
+
+            result = self.run_cli(project_root, "--language", "python", "--force-vendor")
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertFalse(legacy_policy.exists())
+            self.assertFalse(legacy_template.exists())
+            self.assertTrue((project_root / "vendor/harness-kit/docs/process/common/process_policy.md").exists())
+            self.assertTrue((project_root / "docs/process/common/process_policy.md").exists())
 
 
 if __name__ == "__main__":

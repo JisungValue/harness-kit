@@ -16,7 +16,7 @@
 - 실패하는 테스트를 먼저 작성하고, 테스트를 통과시키는 최소 구현을 반영한다.
 - 핵심 규칙과 주요 분기는 명시적으로 검증한다.
 - 테스트는 현재 TASK 범위 안에서 필요한 책임을 충분히 덮어야 한다.
-- 테스트 더블 선택은 `docs/harness/common/test_double_policy.md`를 따른다.
+- 테스트 더블 선택은 `docs/process/common/test_double_policy.md`를 따른다.
 
 ## 단위 테스트 원칙
 
@@ -61,5 +61,5 @@
 
 ## 프로젝트별 세부 기준
 
-- 실제 테스트 프레임워크, coverage 기준, 통합 테스트 대상, 외부 의존성 기동 방식은 프로젝트 `docs/standard/testing_profile.md`에서 정의한다.
-- test 실행 명령과 test 게이트의 필수 여부, 실패 처리 기준은 프로젝트 `docs/standard/quality_gate_profile.md`에서 정의한다.
+- 실제 테스트 프레임워크, coverage 기준, 통합 테스트 대상, 외부 의존성 기동 방식은 프로젝트 `docs/project/standards/testing_profile.md`에서 정의한다.
+- test 실행 명령과 test 게이트의 필수 여부, 실패 처리 기준은 프로젝트 `docs/project/standards/quality_gate_profile.md`에서 정의한다.

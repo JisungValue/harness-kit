@@ -8,8 +8,8 @@
 
 ### 필수 재참조
 
-- `docs/harness/common/audit_policy.md`
-- `docs/harness/common/artifact_policy.md`
+- `docs/process/common/audit_policy.md`
+- `docs/process/common/artifact_policy.md`
 
 ### 조건부 참조
 
@@ -30,7 +30,7 @@
 
 - 새 계약, 구조적 결정, 사용법 변경이 관련 문서에 반영되었는가
 - 최신 `validation_report.md`와 최신 문서 상태 기준으로만 판정하는가
-- decision 반영 대상이면 `docs/decisions/README.md`와 관련 `DEC-###-slug.md`가 실제로 수정 또는 생성되었는가
+- decision 반영 대상이면 `docs/project/decisions/README.md`와 관련 `DEC-###-slug.md`가 실제로 수정 또는 생성되었는가
 - 새 decision이 생겼다면 index(Current Decisions 또는 Superseded Decisions)도 함께 갱신되었는가
 - 작업 로그가 변경 목적과 결과를 요약하고 있는가
 - 현재 TASK 범위 밖 개선 사항이 후속 후보로 분리 기록되었는가

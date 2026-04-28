@@ -14,7 +14,7 @@
 
 - 현재 변경 결과는 현재 TASK와 직접 관련 있는 코드만 남기고, 의미 없는 잔여물은 제거한다.
 - hygiene는 보기 좋은 정리가 아니라 변경 후 코드가 혼동 없이 읽히고 유지보수 가능한 상태인지 확인하는 기준이다.
-- 자동화 가능한 hygiene는 project `docs/standard/quality_gate_profile.md`에서 연결할 수 있지만, 도구가 못 잡는 잔여 코드는 여전히 구현자와 감사자가 직접 확인한다.
+- 자동화 가능한 hygiene는 project `docs/project/standards/quality_gate_profile.md`에서 연결할 수 있지만, 도구가 못 잡는 잔여 코드는 여전히 구현자와 감사자가 직접 확인한다.
 
 ## import 규칙
 
@@ -49,7 +49,7 @@
 
 ## quality gate 연결 원칙
 
-- import 정리, dead code, unused symbol, debug 흔적 제거처럼 자동화 가능한 항목은 project `docs/standard/quality_gate_profile.md`에서 linter 또는 hygiene check로 연결할 수 있다.
+- import 정리, dead code, unused symbol, debug 흔적 제거처럼 자동화 가능한 항목은 project `docs/project/standards/quality_gate_profile.md`에서 linter 또는 hygiene check로 연결할 수 있다.
 - 이 문서는 어떤 도구를 쓰라고 강제하지 않는다.
 - 도구가 없거나 도구가 못 잡는 hygiene는 Phase 2 구현과 감사에서 수동으로 확인한다.
 

@@ -118,7 +118,7 @@
 
 ## design quality 와 performance 경계 규칙
 
-- 시간복잡도, 메모리 사용, 반복 호출, 중간 컬렉션, 성능 검증 계획의 상세 기준은 `docs/harness/common/performance_policy.md`를 따른다.
+- 시간복잡도, 메모리 사용, 반복 호출, 중간 컬렉션, 성능 검증 계획의 상세 기준은 `docs/process/common/performance_policy.md`를 따른다.
 - 병목 근거나 명시된 성능 목표가 없으면 design quality를 크게 해치는 방향의 최적화를 기본 선택으로 삼지 않는다.
 - 실제 trade-off가 존재하면 상세 판정 질문과 기록 형식은 `performance_policy.md`를 사용한다.
 
@@ -131,7 +131,7 @@
 ## quality gate 연결 원칙
 
 - design quality는 주로 구현자와 감사자의 수동 판단 영역이다.
-- architecture rule, module boundary check처럼 자동화 가능한 일부 항목만 project `docs/standard/quality_gate_profile.md`에 연결할 수 있다.
+- architecture rule, module boundary check처럼 자동화 가능한 일부 항목만 project `docs/project/standards/quality_gate_profile.md`에 연결할 수 있다.
 - 이 문서는 특정 정적 분석 도구나 architecture 도구를 강제하지 않는다.
 
 ## Phase 2에서 확인해야 할 것

@@ -18,7 +18,7 @@
 - `$TASK/issue.md`
 - `$TASK/requirements.md`
 - `$TASK/plan.md`
-- `docs/decisions/*`
+- `docs/project/decisions/*`
 
 ## Stale Artifacts
 

@@ -8,11 +8,11 @@
 
 ### 필수 재참조
 
-- `docs/harness/common/audit_policy.md`
+- `docs/process/common/audit_policy.md`
 
 ### 조건부 참조
 
-- `docs/harness/common/artifact_policy.md`
+- `docs/process/common/artifact_policy.md`
 - 필요한 경우 프로젝트 overlay 문서
 
 ## Phase 체크리스트
@@ -26,7 +26,7 @@
 - `issue.md` 요청사항과 제약사항이 `plan.md`에 빠짐없이 반영되었는가
 - stale 상태인 `requirements.md`, `plan.md`, 사용자 승인 결과를 재사용하지 않는가
 - decision 반영 후보 여부가 판정되었는가
-- decision 반영 후보면 관련 `docs/decisions/` 작업이 `plan.md`에 포함되었는가
+- decision 반영 후보면 관련 `docs/project/decisions/` 작업이 `plan.md`에 포함되었는가
 - 승인되지 않은 범위 확장이 섞이지 않았는가
 
 ## 감사 순서
@@ -60,8 +60,8 @@
 - stale 상태가 아닌 최신 `requirements.md`, `plan.md` 조합을 기준으로 판정하는가
 - 승인되지 않은 범위 확장이 계획에 포함되지 않았는가
 - 현재 TASK와 직접 관련 없는 구조 개선이나 후속 개선이 현재 계획에 섞이지 않았는가
-- decision 반영 후보면 `docs/decisions/README.md`와 관련 `DEC-###-slug.md`의 읽기/수정/생성 계획이 문서 반영 계획에 포함되는가
-- 새 decision이 필요하면 index(`docs/decisions/README.md`) 갱신 계획도 포함되는가
+- decision 반영 후보면 `docs/project/decisions/README.md`와 관련 `DEC-###-slug.md`의 읽기/수정/생성 계획이 문서 반영 계획에 포함되는가
+- 새 decision이 필요하면 index(`docs/project/decisions/README.md`) 갱신 계획도 포함되는가
 
 ### 3. `issue.md` 대비 `plan.md` 누락 감사
 
@@ -70,7 +70,7 @@
 - `issue.md`의 제약사항과 승인 조건이 `plan.md`의 작업 순서, 테스트 계획, 문서 반영 계획에 반영되었는가
 - `issue.md`의 비범위가 `plan.md`에서 유지되고 있는가
 - 프로젝트 전용 문서가 필요한 판단이면 overlay 문서를 참조했는가
-- issue가 구조/정책/예외/책임 위치 변경을 요구하면 관련 `docs/decisions/` 반영 계획이 누락되지 않았는가
+- issue가 구조/정책/예외/책임 위치 변경을 요구하면 관련 `docs/project/decisions/` 반영 계획이 누락되지 않았는가
 
 ## 승인 불가 기준
 
@@ -80,6 +80,6 @@
 - 비범위가 누락되어 범위 통제가 어려움
 - `plan.md`에 테스트 계획 또는 문서 반영 계획이 없음
 - stale 상태의 `requirements.md`, `plan.md`, 사용자 승인 결과를 최신본 대신 재사용함
-- decision 반영 후보인데 관련 `docs/decisions/` 읽기/수정/생성 계획이 `plan.md`에 없음
+- decision 반영 후보인데 관련 `docs/project/decisions/` 읽기/수정/생성 계획이 `plan.md`에 없음
 - `issue.md`의 요청사항, 제약사항, 비범위 중 일부가 `plan.md`에 반영되지 않음
 - 현재 TASK와 직접 관련 없는 구조 개선이 계획에 포함됨

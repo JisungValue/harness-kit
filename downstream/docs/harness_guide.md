@@ -17,13 +17,13 @@
 - 특정 입력 문서나 산출물이 바뀌어 재수행이 필요해도 무조건 처음부터 다시 시작하지 않는다.
 - 재수행은 변경 영향이 걸린 가장 이른 Phase부터 시작하고, 이후 영향을 받은 Phase만 순서대로 다시 수행한다.
 - 각 Phase 또는 레이어의 한 작업 단위가 끝날 때마다 task workspace의 `implementation_notes.md`의 `진행 로그`를 갱신한다.
-- 공통 정책 해석과 충돌 판단은 `docs/harness/common/process_policy.md`의 우선순위 규칙을 따른다.
+- 공통 정책 해석과 충돌 판단은 `docs/process/common/process_policy.md`의 우선순위 규칙을 따른다.
 - 작업 판단의 source-of-truth는 현재 repo 안의 `README`, `docs/*`, `docs/project/decisions/*`, `scripts/*`, `config` 같은 repo-local 근거다.
 - 기억, 외부 대화, 다른 프로젝트 관행은 repo-local 근거보다 우선하지 않는다.
 - 필요한 결정이나 근거가 repo에 없으면 추측으로 메우지 말고 project overlay 또는 `docs/project/decisions/` 반영 후보로 넘기며, 같은 사실을 `implementation_notes.md`나 `validation_report.md`에도 남긴다.
 - 테스트, 테스트 더블 판단, 검증은 각각 `testing_policy.md`, `test_double_policy.md`, `validation_policy.md`를 기준으로 수행한다.
 - 현재 TASK와 직접 관련 없는 기존 중복 제거, 구조 정리, 선제 추상화는 별도 리팩터링 태스크로 분리한다.
-- 작은 태스크의 경량 운영 예외 가능 여부는 `docs/harness/common/lightweight_task_policy.md`를 따른다.
+- 작은 태스크의 경량 운영 예외 가능 여부는 `docs/process/common/lightweight_task_policy.md`를 따른다.
 - 감사는 구현 주체와 분리된 서브에이전트가 수행한다.
 - 작업 식별자가 있으면 브랜치 이름은 `{task_id}_{task_name}` 형식을 권장한다.
 - task workspace는 `docs/task/{task_id}_{task_name}/`를 권장하며, stable한 작업 식별자가 없으면 `docs/task/{task_name}/`를 사용할 수 있다.
@@ -31,17 +31,17 @@
 
 ## 공통 참조 문서
 
-- Phase 운영 규칙: `docs/harness/common/process_policy.md`
-- 산출물 규칙: `docs/harness/common/artifact_policy.md`
-- 감사 운영 규칙: `docs/harness/common/audit_policy.md`
-- 테스트 규칙: `docs/harness/common/testing_policy.md`
-- 테스트 더블 규칙: `docs/harness/common/test_double_policy.md`
-- 검증 규칙: `docs/harness/common/validation_policy.md`
-- 코드 hygiene 규칙: `docs/harness/common/code_hygiene_policy.md`
-- 설계 품질 규칙: `docs/harness/common/design_quality_policy.md`
-- 성능 검토 규칙: `docs/harness/common/performance_policy.md`
-- 경량 태스크 예외 규칙: `docs/harness/common/lightweight_task_policy.md`
-- 공통 코드 규칙: `docs/standard/coding_guidelines_core.md`
+- Phase 운영 규칙: `docs/process/common/process_policy.md`
+- 산출물 규칙: `docs/process/common/artifact_policy.md`
+- 감사 운영 규칙: `docs/process/common/audit_policy.md`
+- 테스트 규칙: `docs/process/common/testing_policy.md`
+- 테스트 더블 규칙: `docs/process/common/test_double_policy.md`
+- 검증 규칙: `docs/process/common/validation_policy.md`
+- 코드 hygiene 규칙: `docs/process/common/code_hygiene_policy.md`
+- 설계 품질 규칙: `docs/process/common/design_quality_policy.md`
+- 성능 검토 규칙: `docs/process/common/performance_policy.md`
+- 경량 태스크 예외 규칙: `docs/process/common/lightweight_task_policy.md`
+- 공통 코드 규칙: `docs/process/standard/coding_guidelines_core.md`
 
 모든 Phase의 구현과 감사는 위 문서들을 함께 참조한다.
 
@@ -67,8 +67,8 @@
 아래 문서는 모든 구현 태스크에서 시작 전에 먼저 확인한다.
 
 - `docs/entrypoint.md`
-- `docs/harness/common/process_policy.md`
-- `docs/harness/common/artifact_policy.md`
+- `docs/process/common/process_policy.md`
+- `docs/process/common/artifact_policy.md`
 
 아래 문서들은 모든 Phase에서 항상 다시 읽는 문서가 아니다.
 현재 수행 중인 Phase와 판단이 필요한 상황에 따라 필요한 문서만 재참조한다.
@@ -77,32 +77,32 @@
 
 ### Phase 1. Requirement And Planning
 
-- 구현 중 필수 재참조: `docs/harness/common/artifact_policy.md`
-- 감사 직전 필수 재참조: `docs/harness/common/audit_policy.md`
+- 구현 중 필수 재참조: `docs/process/common/artifact_policy.md`
+- 감사 직전 필수 재참조: `docs/process/common/audit_policy.md`
 - 조건부 참조: 프로젝트 overlay 문서
 
 ### Phase 2. TDD Implementation
 
-- 구현 중 필수 재참조: `docs/harness/common/testing_policy.md`, `docs/harness/common/test_double_policy.md`, `docs/harness/common/code_hygiene_policy.md`, `docs/harness/common/design_quality_policy.md`, `docs/harness/common/performance_policy.md`, `docs/standard/coding_guidelines_core.md`, 프로젝트 `docs/project/standards/architecture.md`, 프로젝트 `docs/project/standards/implementation_order.md`, 프로젝트 `docs/project/standards/coding_conventions_project.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`
-- 감사 직전 필수 재참조: `docs/harness/common/audit_policy.md`, `docs/harness/common/testing_policy.md`, `docs/harness/common/test_double_policy.md`, `docs/harness/common/code_hygiene_policy.md`, `docs/harness/common/design_quality_policy.md`, `docs/harness/common/performance_policy.md`, `docs/standard/coding_guidelines_core.md`, 프로젝트 `docs/project/standards/architecture.md`, 프로젝트 `docs/project/standards/implementation_order.md`, 프로젝트 `docs/project/standards/coding_conventions_project.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`
-- 조건부 참조: `docs/harness/common/artifact_policy.md`, `docs/harness/common/audit_policy.md`
+- 구현 중 필수 재참조: `docs/process/common/testing_policy.md`, `docs/process/common/test_double_policy.md`, `docs/process/common/code_hygiene_policy.md`, `docs/process/common/design_quality_policy.md`, `docs/process/common/performance_policy.md`, `docs/process/standard/coding_guidelines_core.md`, 프로젝트 `docs/project/standards/architecture.md`, 프로젝트 `docs/project/standards/implementation_order.md`, 프로젝트 `docs/project/standards/coding_conventions_project.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`
+- 감사 직전 필수 재참조: `docs/process/common/audit_policy.md`, `docs/process/common/testing_policy.md`, `docs/process/common/test_double_policy.md`, `docs/process/common/code_hygiene_policy.md`, `docs/process/common/design_quality_policy.md`, `docs/process/common/performance_policy.md`, `docs/process/standard/coding_guidelines_core.md`, 프로젝트 `docs/project/standards/architecture.md`, 프로젝트 `docs/project/standards/implementation_order.md`, 프로젝트 `docs/project/standards/coding_conventions_project.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`
+- 조건부 참조: `docs/process/common/artifact_policy.md`, `docs/process/common/audit_policy.md`
 
 ### Phase 3. Integration
 
-- 구현 중 필수 재참조: `docs/harness/common/testing_policy.md`, `docs/harness/common/test_double_policy.md`, `docs/harness/common/validation_policy.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`, 프로젝트 `docs/project/standards/testing_profile.md`
-- 감사 직전 필수 재참조: `docs/harness/common/audit_policy.md`, `docs/harness/common/testing_policy.md`, `docs/harness/common/test_double_policy.md`, `docs/harness/common/validation_policy.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`, 프로젝트 `docs/project/standards/testing_profile.md`
-- 조건부 참조: `docs/harness/common/audit_policy.md`, `implementation_notes.md`
+- 구현 중 필수 재참조: `docs/process/common/testing_policy.md`, `docs/process/common/test_double_policy.md`, `docs/process/common/validation_policy.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`, 프로젝트 `docs/project/standards/testing_profile.md`
+- 감사 직전 필수 재참조: `docs/process/common/audit_policy.md`, `docs/process/common/testing_policy.md`, `docs/process/common/test_double_policy.md`, `docs/process/common/validation_policy.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`, 프로젝트 `docs/project/standards/testing_profile.md`
+- 조건부 참조: `docs/process/common/audit_policy.md`, `implementation_notes.md`
 
 ### Phase 4. Validation
 
-- 구현 중 필수 재참조: `docs/harness/common/validation_policy.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`
-- 감사 직전 필수 재참조: `docs/harness/common/audit_policy.md`, `docs/harness/common/validation_policy.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`
-- 조건부 참조: `docs/harness/common/audit_policy.md`
+- 구현 중 필수 재참조: `docs/process/common/validation_policy.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`
+- 감사 직전 필수 재참조: `docs/process/common/audit_policy.md`, `docs/process/common/validation_policy.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`
+- 조건부 참조: `docs/process/common/audit_policy.md`
 
 ### Phase 5. Documentation
 
-- 구현 중 필수 재참조: `docs/harness/common/artifact_policy.md`
-- 감사 직전 필수 재참조: `docs/harness/common/audit_policy.md`
+- 구현 중 필수 재참조: `docs/process/common/artifact_policy.md`
+- 감사 직전 필수 재참조: `docs/process/common/audit_policy.md`
 - 조건부 참조: 없음
 
 ## Phase별 종료 게이트

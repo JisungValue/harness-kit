@@ -6,7 +6,7 @@
 
 ## 요청사항
 
-- 프로젝트 로컬 `docs/project_entrypoint.md`가 kit guide를 참조하도록 구조를 정리한다.
+- 프로젝트 로컬 `docs/entrypoint.md`가 kit guide를 참조하도록 구조를 정리한다.
 - 프로젝트 전용 문서로 무엇을 유지해야 하는지 명확히 한다.
 
 ## 비범위

@@ -25,16 +25,16 @@
 
 공통 정책 문서를 함께 참조할 때 해석 우선순위는 아래와 같다.
 
-1. `docs/project_entrypoint.md`
+1. `docs/entrypoint.md`
 2. 현재 수행 중인 Phase의 `implementation.md`, `audit.md`
-3. `docs/harness/common/process_policy.md`
-4. `docs/harness/common/artifact_policy.md`
-5. `docs/harness/common/audit_policy.md`
-6. `docs/harness/common/testing_policy.md`
-7. `docs/harness/common/test_double_policy.md`
-8. `docs/harness/common/validation_policy.md`
-9. `docs/harness/common/lightweight_task_policy.md`
-10. `docs/standard/coding_guidelines_core.md`
+3. `docs/process/common/process_policy.md`
+4. `docs/process/common/artifact_policy.md`
+5. `docs/process/common/audit_policy.md`
+6. `docs/process/common/testing_policy.md`
+7. `docs/process/common/test_double_policy.md`
+8. `docs/process/common/validation_policy.md`
+9. `docs/process/common/lightweight_task_policy.md`
+10. `docs/process/standard/coding_guidelines_core.md`
 
 우선순위 해석 원칙은 아래와 같다.
 
@@ -45,17 +45,17 @@
 
 ## Repo-Local Source-Of-Truth 규칙
 
-- 작업 기준은 현재 repo 안의 `README`, `docs/*`, `docs/decisions/*`, `scripts/*`, `config` 같은 repo-local 근거를 우선한다.
+- 작업 기준은 현재 repo 안의 `README`, `docs/*`, `docs/project/decisions/*`, `scripts/*`, `config` 같은 repo-local 근거를 우선한다.
 - 위 규칙은 repo-local `source-of-truth` 우선 원칙으로 본다.
 - 기억, 외부 대화, 다른 프로젝트 관행, 과거 비슷한 프로젝트 경험은 참고할 수 있어도 현재 repo 근거보다 우선하지 않는다.
 - repo 안 근거끼리 충돌하면 위 우선순위 규칙과 더 구체적인 문서를 먼저 적용한다.
 - 그래도 해소되지 않으면 사용자 승인 없이는 예외 적용이나 Phase 변경을 하지 않는다.
 - 필요한 결정이나 근거가 repo에 없으면 추측으로 메우지 않는다.
-- repo에 없는 프로젝트 전용 결정은 project overlay 또는 `docs/decisions/` 반영 후보로 넘기고, 같은 사실을 `implementation_notes.md` 또는 `validation_report.md`에 기록한다.
+- repo에 없는 프로젝트 전용 결정은 project overlay 또는 `docs/project/decisions/` 반영 후보로 넘기고, 같은 사실을 `implementation_notes.md` 또는 `validation_report.md`에 기록한다.
 
 ## Phase 운영 원칙
 
-- 모든 구현 태스크는 `docs/project_entrypoint.md`에 정의된 Phase 순서를 따른다.
+- 모든 구현 태스크는 `docs/entrypoint.md`에 정의된 Phase 순서를 따른다.
 - 각 Phase는 해당 `implementation.md`를 기준으로 구현한 뒤 `audit.md`를 기준으로 감사를 수행한다.
 - 현재 Phase는 `implementation -> audit -> 사용자 승인 -> 다음 Phase` 순서를 지킨다.
 - 수정 요청이나 산출물 변경이 생기면 어떤 문서도 수정하기 전에 아래 3가지를 먼저 선언한다.
@@ -103,7 +103,7 @@
 - write-set 밖의 파일은 현재 Phase가 다시 승인될 때까지 잠금 상태로 본다.
 - 현재 Phase보다 뒤의 문서, final task-local 산출물, close-out 문서, canonical 문서는 기본적으로 잠금 대상이다.
 - `phase_status.md`를 쓰는 task라면 허용 write-set과 잠긴 경로를 그 파일에 명시하고, `downstream/scripts/validate_phase_gate.py`로 위반 여부를 검사할 수 있어야 한다. 인자 없이 실행한 기본 모드는 현재 task workspace와 `phase_status.md`의 허용/잠금 패턴에 걸리는 dirty path만 검사하고, repo 전체 dirty path까지 보려면 `--git-scope repo`를 명시한다.
-- 예를 들어 Phase 1을 다시 수행할 때는 기본적으로 `issue.md`, `requirements.md`, `plan.md`, `implementation_notes.md`만 수정 대상으로 두고, `validation_report.md`, final task-local 산출물, `docs/decisions/*`는 잠근다.
+- 예를 들어 Phase 1을 다시 수행할 때는 기본적으로 `issue.md`, `requirements.md`, `plan.md`, `implementation_notes.md`만 수정 대상으로 두고, `validation_report.md`, final task-local 산출물, `docs/project/decisions/*`는 잠근다.
 - 예외적으로 잠금을 풀어야 하면 사용자 승인을 먼저 받는다.
 
 ## Phase 이동 규칙
@@ -159,8 +159,8 @@
 
 - Phase 2는 기능 전체를 한 번에 구현하지 않고, 필요한 레이어만 선택해 진행한다.
 - 선택된 레이어들 사이의 작업 순서는 의존성 안쪽부터 바깥쪽으로 진행한다.
-- 프로젝트별 실제 구현 순서와 레이어 세분화 기준은 `docs/standard/implementation_order.md`에서 정의한다.
-- 프로젝트 `docs/standard/implementation_order.md`는 `docs/standard/architecture.md`의 실제 구조와 의존성 방향을 기준으로 작성해 구조와 구현 순서 해석이 분리되지 않게 유지한다.
+- 프로젝트별 실제 구현 순서와 레이어 세분화 기준은 `docs/project/standards/implementation_order.md`에서 정의한다.
+- 프로젝트 `docs/project/standards/implementation_order.md`는 `docs/project/standards/architecture.md`의 실제 구조와 의존성 방향을 기준으로 작성해 구조와 구현 순서 해석이 분리되지 않게 유지한다.
 - 특정 TASK의 API/기능 구현 우선순위는 `plan.md`에서 정하고, `implementation_order.md`는 그 판단의 프로젝트 기본 레이어 기준으로 유지한다.
 - 프로젝트 구조에 맞는 실제 레이어 명칭은 overlay 문서에서 정의한다.
 - 각 선택 레이어는 아래 순서를 따른다.

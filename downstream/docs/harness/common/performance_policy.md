@@ -101,7 +101,7 @@
 - 검증 계획에는 가능한 한 대상 경로, 입력 규모, 실행 방법, 볼 지표를 포함한다.
 - 자동 benchmark, profile, query-count check, load test, 수동 재현 시나리오 중 어떤 방식으로 확인할지 적는다.
 - 이번 TASK에서 검증을 실제로 실행하지 못하면 그 사유와 잔여 리스크를 남긴다.
-- project에 자동화된 성능 게이트가 있으면 실행 명령은 `docs/standard/quality_gate_profile.md`를 따른다.
+- project에 자동화된 성능 게이트가 있으면 실행 명령은 `docs/project/standards/quality_gate_profile.md`를 따른다.
 
 ## 설계 품질과 성능 충돌 규칙
 
@@ -141,8 +141,8 @@
 
 ## quality gate 연결 원칙
 
-- benchmark, profile, query-count check, load test, performance smoke test 같은 실행 명령은 project `docs/standard/quality_gate_profile.md`에서 정의한다.
-- 성능 테스트 데이터 규모, fixture, 외부 의존성 기동 방식, 허용 latency 기준 같은 환경 정보는 project `docs/standard/testing_profile.md`에서 정의한다.
+- benchmark, profile, query-count check, load test, performance smoke test 같은 실행 명령은 project `docs/project/standards/quality_gate_profile.md`에서 정의한다.
+- 성능 테스트 데이터 규모, fixture, 외부 의존성 기동 방식, 허용 latency 기준 같은 환경 정보는 project `docs/project/standards/testing_profile.md`에서 정의한다.
 - 이 문서는 특정 benchmark 도구나 profiler를 강제하지 않는다.
 - 자동화된 게이트가 없어도 Phase 2 구현과 감사에서 성능 검토 자체를 생략하지 않는다.
 

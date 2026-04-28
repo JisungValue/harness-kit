@@ -28,7 +28,7 @@ python3 bootstrap/scripts/check_first_success_docs.py /tmp/bootstrap-cli-project
 - `bootstrap/scripts/bootstrap_init.py`가 최소 문서 세트를 생성한다.
   - `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`가 함께 생성된다.
   - first-success helper command가 `first success docs are present`를 출력한다.
-  - `docs/project_entrypoint.md`가 vendored kit guide 경로를 가리키고, `AGENTS.md`가 그 문서로 수렴하며, `coding_conventions_project.md`가 선택 언어와 bootstrap 기준 문서를 함께 보여준다.
+  - `docs/entrypoint.md`가 vendored kit guide 경로를 가리키고, `AGENTS.md`가 그 문서로 수렴하며, `coding_conventions_project.md`가 선택 언어와 bootstrap 기준 문서를 함께 보여준다.
 
 ### 시나리오 2. init CLI non-default vendoring 경로
 
@@ -45,7 +45,7 @@ python3 bootstrap/scripts/validate_overlay_consistency.py /tmp/bootstrap-cli-loc
 ```
 
 - 기대 결과:
-  - `docs/project_entrypoint.md`와 `coding_conventions_project.md`가 처음부터 `third_party/harness-kit/...` 경로를 가리킨다.
+  - `docs/entrypoint.md`와 `coding_conventions_project.md`가 처음부터 `third_party/harness-kit/...` 경로를 가리킨다.
   - 별도 수동 현지화 없이도 first-success helper와 consistency validator가 같은 vendored 경로를 기준으로 통과한다.
 
 ### 시나리오 3. 수동 복사 경로
@@ -59,14 +59,14 @@ python3 bootstrap/scripts/validate_overlay_consistency.py /tmp/bootstrap-cli-loc
 bootstrap/docs/project_overlay/agent_entrypoint_template.md -> AGENTS.md
 bootstrap/docs/project_overlay/claude_entrypoint_template.md -> CLAUDE.md
 bootstrap/docs/project_overlay/gemini_entrypoint_template.md -> GEMINI.md
-bootstrap/docs/project_overlay/project_entrypoint_template.md -> docs/project_entrypoint.md
-bootstrap/docs/project_overlay/decisions_index_template.md -> docs/decisions/README.md
-bootstrap/docs/project_overlay/architecture_template.md -> docs/standard/architecture.md
-bootstrap/docs/project_overlay/implementation_order_template.md -> docs/standard/implementation_order.md
-bootstrap/docs/project_overlay/coding_conventions_project_template.md -> docs/standard/coding_conventions_project.md
-bootstrap/docs/project_overlay/quality_gate_profile_template.md -> docs/standard/quality_gate_profile.md
-bootstrap/docs/project_overlay/testing_profile_template.md -> docs/standard/testing_profile.md
-bootstrap/docs/project_overlay/commit_rule_template.md -> docs/standard/commit_rule.md
+bootstrap/docs/project_overlay/project_entrypoint_template.md -> docs/entrypoint.md
+bootstrap/docs/project_overlay/decisions_index_template.md -> docs/project/decisions/README.md
+bootstrap/docs/project_overlay/architecture_template.md -> docs/project/standards/architecture.md
+bootstrap/docs/project_overlay/implementation_order_template.md -> docs/project/standards/implementation_order.md
+bootstrap/docs/project_overlay/coding_conventions_project_template.md -> docs/project/standards/coding_conventions_project.md
+bootstrap/docs/project_overlay/quality_gate_profile_template.md -> docs/project/standards/quality_gate_profile.md
+bootstrap/docs/project_overlay/testing_profile_template.md -> docs/project/standards/testing_profile.md
+bootstrap/docs/project_overlay/commit_rule_template.md -> docs/project/standards/commit_rule.md
 ```
 
 - 기대 결과:
@@ -76,14 +76,14 @@ bootstrap/docs/project_overlay/commit_rule_template.md -> docs/standard/commit_r
 
 ## 확인한 최소 문서 세트
 
-- `docs/project_entrypoint.md`
-- `docs/decisions/README.md`
-- `docs/standard/architecture.md`
-- `docs/standard/implementation_order.md`
-- `docs/standard/coding_conventions_project.md`
-- `docs/standard/quality_gate_profile.md`
-- `docs/standard/testing_profile.md`
-- `docs/standard/commit_rule.md`
+- `docs/entrypoint.md`
+- `docs/project/decisions/README.md`
+- `docs/project/standards/architecture.md`
+- `docs/project/standards/implementation_order.md`
+- `docs/project/standards/coding_conventions_project.md`
+- `docs/project/standards/quality_gate_profile.md`
+- `docs/project/standards/testing_profile.md`
+- `docs/project/standards/commit_rule.md`
 
 ## 확인한 runtime instruction entrypoint 세트
 
@@ -115,7 +115,7 @@ docs/
 - 검증 항목: init CLI 경로가 first success 문서 세트를 생성하는지 확인
 - 대조한 입력물: `bootstrap/scripts/bootstrap_init.py`, `bootstrap/docs/project_overlay/first_success_guide.md`
   - 실행 방법 또는 확인 방식: default vendoring bootstrap smoke 시나리오에서 init CLI와 first-success helper를 순서대로 실행
-  - 결과: init CLI가 최소 문서 세트, decisions index, runtime instruction entrypoint 세트를 만들고 첫 검증 명령이 성공했으며, `docs/project_entrypoint.md`의 vendored guide 경로, `docs/decisions/README.md`의 numbering/index 규칙, `AGENTS.md -> docs/project_entrypoint.md`, `CLAUDE.md`/`GEMINI.md` -> `AGENTS.md` 연결, `coding_conventions_project.md`의 언어/bootstrap 기준 문서도 함께 확인됐다
+  - 결과: init CLI가 최소 문서 세트, decisions index, runtime instruction entrypoint 세트를 만들고 첫 검증 명령이 성공했으며, `docs/entrypoint.md`의 vendored guide 경로, `docs/project/decisions/README.md`의 numbering/index 규칙, `AGENTS.md -> docs/entrypoint.md`, `CLAUDE.md`/`GEMINI.md` -> `AGENTS.md` 연결, `coding_conventions_project.md`의 언어/bootstrap 기준 문서도 함께 확인됐다
   - 실패 또는 미실행 사유: 없음
   - 판정: 정합
   - 잔여 리스크: generated 문서의 vendored 경로 현지화는 소비자 프로젝트에서 추가로 확인해야 한다
@@ -123,14 +123,14 @@ docs/
 - 검증 항목: init CLI가 non-default vendoring 경로를 bootstrap 시점에 바로 현지화하는지 확인
 - 대조한 입력물: `bootstrap/scripts/bootstrap_init.py`, `bootstrap/docs/project_overlay/first_success_guide.md`
   - 실행 방법 또는 확인 방식: localized vendoring bootstrap smoke 시나리오에서 `--vendor-path third_party/harness-kit`와 local validator를 함께 실행
-  - 결과: `--vendor-path third_party/harness-kit`로 생성한 `docs/project_entrypoint.md`, `coding_conventions_project.md`가 같은 vendored 경로를 가리켰고, first-success helper와 consistency validator도 추가 수동 수정 없이 통과했다
+  - 결과: `--vendor-path third_party/harness-kit`로 생성한 `docs/entrypoint.md`, `coding_conventions_project.md`가 같은 vendored 경로를 가리켰고, first-success helper와 consistency validator도 추가 수동 수정 없이 통과했다
   - 실패 또는 미실행 사유: 없음
   - 판정: 정합
   - 잔여 리스크: vendored 경로를 bootstrap 이후에 다시 옮기면 path update는 별도 수동 작업이 필요하다
 
 - 검증 항목: 수동 복사 경로가 같은 최소 문서 세트로 수렴하는지 확인
 - 대조한 입력물: `bootstrap/docs/project_overlay/*`, `bootstrap/docs/project_overlay/first_success_guide.md`
-  - 실행 방법 또는 확인 방식: 수동 복사 시나리오에서 template 복사 후 non-default vendored path를 `docs/project_entrypoint.md`에 반영하고, `bootstrap/language_conventions/python_coding_conventions_template.md` 발췌 내용을 `coding_conventions_project.md`에 수동 병합해 검증
+  - 실행 방법 또는 확인 방식: 수동 복사 시나리오에서 template 복사 후 non-default vendored path를 `docs/entrypoint.md`에 반영하고, `bootstrap/language_conventions/python_coding_conventions_template.md` 발췌 내용을 `coding_conventions_project.md`에 수동 병합해 검증
   - 결과: 수동 경로도 최소 문서 세트와 runtime instruction entrypoint 세트, 첫 검증 명령 결과, vendored path 현지화, entrypoint 연결, 선택 언어와 bootstrap 기준 문서, 핵심 규칙 범주 식별 신호가 함께 확인됐다
   - 실패 또는 미실행 사유: 없음
   - 판정: 정합
@@ -138,7 +138,7 @@ docs/
 
 - 검증 항목: first success 가이드의 검증 명령과 expected success 상태 일치 여부 확인
 - 대조한 입력물: `bootstrap/docs/project_overlay/first_success_guide.md`, `bootstrap/scripts/check_first_success_docs.py`
-  - 실행 방법 또는 확인 방식: 가이드의 검증 명령을 실제 bootstrap 결과에 그대로 실행하고, 같은 smoke 시나리오에서 vendored guide 경로, `AGENTS.md -> docs/project_entrypoint.md`, `CLAUDE.md`/`GEMINI.md` -> `AGENTS.md`, `docs/standard/*` project 문서 링크, 선택 언어, bootstrap 기준 문서, 핵심 규칙 범주, profile 문서 비어 있지 않음, quality gate/commit rule의 미해결 decision marker 존재를 함께 확인
+  - 실행 방법 또는 확인 방식: 가이드의 검증 명령을 실제 bootstrap 결과에 그대로 실행하고, 같은 smoke 시나리오에서 vendored guide 경로, `AGENTS.md -> docs/entrypoint.md`, `CLAUDE.md`/`GEMINI.md` -> `AGENTS.md`, `docs/process/standard/*` project 문서 링크, 선택 언어, bootstrap 기준 문서, 핵심 규칙 범주, profile 문서 비어 있지 않음, quality gate/commit rule의 미해결 decision marker 존재를 함께 확인
   - 결과: 가이드의 첫 검증 명령과 실제 smoke 시나리오가 같은 성공 신호를 사용하고, 가이드가 말하는 핵심 first-success content signal과 runtime entrypoint 연결도 smoke 범위 안에 포함됐다
   - 실패 또는 미실행 사유: 없음
   - 판정: 정합
