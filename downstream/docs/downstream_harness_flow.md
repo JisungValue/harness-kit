@@ -90,7 +90,7 @@ flowchart LR
 - 어떤 Phase 산출물이 수정되면 그 Phase의 감사는 stale 이 되고, 이미 승인된 상태였다면 승인도 stale 이 된다.
 - 원인 Phase보다 뒤의 산출물은 stale 후보로 잠그고, 원인 Phase가 다시 승인되기 전에는 다음 Phase 문서, `validation_report.md`, final task-local 문서, close-out 문서, canonical 문서를 수정하지 않는다.
 - 특정 Phase의 입력 문서나 핵심 산출물이 바뀌면 그 Phase 내부 절차는 최신본 기준으로 처음부터 다시 맞춘다.
-- write-set 위반 가능성이 보이면 `downstream/scripts/validate_phase_gate.py`로 검사하고, 통과 전에는 다음 단계로 진행하지 않는다.
+- write-set 위반 가능성이 보이면 `downstream/scripts/validate_phase_gate.py`로 검사하고, 통과 전에는 다음 단계로 진행하지 않는다. 인자 없이 실행한 기본 모드는 현재 task workspace와 `phase_status.md`의 허용/잠금 패턴에 걸리는 dirty path만 검사하고, repo 전체 dirty path까지 보려면 `--git-scope repo`를 명시한다.
 
 ## Phase별 진행 흐름
 

@@ -42,6 +42,12 @@ def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
         default=None,
         help="Optional repo-relative candidate paths to validate instead of git status changes.",
     )
+    parser.add_argument(
+        "--git-scope",
+        choices=("task", "repo"),
+        default="task",
+        help="When --paths is omitted, validate task-relevant dirty paths only or validate the whole repo.",
+    )
     return parser.parse_args(argv)
 
 
@@ -224,6 +230,30 @@ def collect_git_status_paths(repo_root: Path) -> list[str]:
     return paths
 
 
+def is_task_workspace_path(candidate_path: str, workspace_rel: Path) -> bool:
+    workspace_prefix = f"{workspace_rel.as_posix()}/"
+    return candidate_path == workspace_rel.as_posix() or candidate_path.startswith(workspace_prefix)
+
+
+def is_task_relevant_path(candidate_path: str, workspace_rel: Path, status: PhaseStatus) -> bool:
+    if is_task_workspace_path(candidate_path, workspace_rel):
+        return True
+
+    relevant_patterns = [
+        *[normalize_pattern(pattern, workspace_rel) for pattern in status.allowed_write_set],
+        *[normalize_pattern(pattern, workspace_rel) for pattern in status.locked_paths],
+    ]
+    return any(path_matches_pattern(candidate_path, pattern) for pattern in relevant_patterns)
+
+
+def filter_task_relevant_paths(
+    candidate_paths: list[str],
+    workspace_rel: Path,
+    status: PhaseStatus,
+) -> list[str]:
+    return [path for path in candidate_paths if is_task_relevant_path(path, workspace_rel, status)]
+
+
 def validate_candidate_paths(
     candidate_paths: list[str],
     workspace_rel: Path,
@@ -261,6 +291,8 @@ def main(argv: list[str] | None = None) -> int:
         except ValueError as exc:
             print(f"phase gate validation failed: {exc}", file=sys.stderr)
             return 1
+        if args.git_scope == "task":
+            candidate_paths = filter_task_relevant_paths(candidate_paths, workspace_rel, status)
 
     errors.extend(validate_candidate_paths(candidate_paths, workspace_rel, status))
 
