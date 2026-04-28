@@ -496,6 +496,54 @@ def check_repo_local_source_of_truth_docs(errors: list[str]) -> None:
             errors.append(f"validation_report template에 `{phrase}` 항목이 없습니다.")
 
 
+def check_downstream_final_layout_contract(errors: list[str]) -> None:
+    contract_path = "maintainer/docs/downstream_final_layout_contract.md"
+    contract = read_text(contract_path)
+    bundle_boundary = read_text("maintainer/docs/downstream_bundle_boundary.md")
+    readme = read_text("README.md")
+
+    required_phrases = (
+        "Epic #153",
+        "runtime-only final surface",
+        "source repo의 물리 구조를 바꾸지",
+        "docs/entrypoint.md",
+        "docs/project/",
+        "docs/process/",
+        "scripts/validate_overlay_decisions.py",
+        "scripts/validate_overlay_consistency.py",
+        "scripts/validate_phase_gate.py",
+        "Maintainer-Only",
+        "Install-Time Only",
+        "Runtime / Operation-Time",
+        "Project-Local Generated",
+        "First-Success Minimum",
+        "Runtime Operation Minimum",
+    )
+    for phrase in required_phrases:
+        if phrase not in contract:
+            errors.append(f"{contract_path}에 final layout contract 핵심 문구 `{phrase}`가 없습니다.")
+
+    required_final_paths = (
+        "AGENTS.md",
+        "docs/project/decisions/README.md",
+        "docs/project/standards/coding_conventions_project.md",
+        "docs/process/harness_guide.md",
+        "docs/process/standard/coding_guidelines_core.md",
+        "docs/process/templates/task/*",
+        "no final runtime path",
+    )
+    for path in required_final_paths:
+        if path not in contract:
+            errors.append(f"{contract_path}에 source-to-final mapping 또는 minimum set 경로 `{path}`가 없습니다.")
+
+    for rel_path, text in {
+        "README.md": readme,
+        "maintainer/docs/downstream_bundle_boundary.md": bundle_boundary,
+    }.items():
+        if "maintainer/docs/downstream_final_layout_contract.md" not in text:
+            errors.append(f"{rel_path}에서 downstream final layout contract를 참조하지 않습니다.")
+
+
 def iter_harness_log_entries(lines: list[str]):
     date_header = None
     idx = 0
@@ -591,6 +639,7 @@ def main() -> int:
     check_decisions_templates(errors)
     check_validator_explainer_docs(errors)
     check_repo_local_source_of_truth_docs(errors)
+    check_downstream_final_layout_contract(errors)
     check_harness_log(errors)
     check_language_template_structure(errors)
     check_project_facing_maintainer_leakage(errors)

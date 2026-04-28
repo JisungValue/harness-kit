@@ -164,6 +164,8 @@ python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-proj
   - generated bundle을 vendored dependency처럼 써서 greenfield/brownfield 기본 경로가 실제로 동작하는지 점검하는 maintainer용 smoke validation 기준이다.
 - [`maintainer/docs/downstream_bundle_boundary.md`](maintainer/docs/downstream_bundle_boundary.md)
   - maintainer가 downstream bundle에 포함할 자산과 제외할 자산의 경계를 정의한다.
+- [`maintainer/docs/downstream_final_layout_contract.md`](maintainer/docs/downstream_final_layout_contract.md)
+  - Epic #153의 no-vendor greenfield final install layout과 install-time/runtime asset taxonomy를 정의한다.
 - [`maintainer/scripts/check_harness_docs.py`](maintainer/scripts/check_harness_docs.py)
   - core/overlay 경로 정합성과 `harness.log` 기록 규칙을 자동 검사한다.
 - [`.github/workflows/harness-doc-guard.yml`](.github/workflows/harness-doc-guard.yml)
@@ -206,7 +208,7 @@ python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-proj
   - 목적: `harness-kit` core 규칙, template, example, 문서 구조 자체를 수정할 때의 감사와 기록
   - 주 문서: [`maintainer/docs/audit_policy.md`](maintainer/docs/audit_policy.md), [`maintainer/docs/drift_response_guide.md`](maintainer/docs/drift_response_guide.md), [`maintainer/docs/release_process.md`](maintainer/docs/release_process.md), [`maintainer/docs/downstream_bundle_smoke_validation.md`](maintainer/docs/downstream_bundle_smoke_validation.md), [`harness.log`](harness.log)
 
-이 경계와 별도로, downstream에 실제로 배포할 자산은 저장소 전체가 아니라 project-facing 문서/스크립트/예시/bootstrapping 자산 중심의 부분집합으로 본다. downstream bundle 경계의 정본은 [`maintainer/docs/downstream_bundle_boundary.md`](maintainer/docs/downstream_bundle_boundary.md)를 따른다.
+이 경계와 별도로, downstream에 실제로 배포할 자산은 저장소 전체가 아니라 project-facing 문서/스크립트/예시/bootstrapping 자산 중심의 부분집합으로 본다. downstream bundle 경계의 정본은 [`maintainer/docs/downstream_bundle_boundary.md`](maintainer/docs/downstream_bundle_boundary.md)를 따른다. Epic #153의 greenfield final install 결과처럼 delivery bundle과 final runtime surface를 구분해야 하는 작업은 [`maintainer/docs/downstream_final_layout_contract.md`](maintainer/docs/downstream_final_layout_contract.md)를 함께 따른다.
 
 개별 서비스 프로젝트의 task 수행자는 maintainer 문서를 기본 운영 규칙으로 사용하지 않는다.
 `maintainer/docs/*`는 downstream 프로젝트가 가져가야 하는 최소 프로젝트 문서 세트에 포함되지 않는다.
