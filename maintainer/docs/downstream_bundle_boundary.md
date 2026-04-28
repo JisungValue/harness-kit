@@ -2,6 +2,8 @@
 
 이 문서는 `harness-kit` 저장소 안의 자산 중 무엇이 downstream 배포 대상이고, 무엇이 maintainer 전용 자산인지 구분하는 기준을 정의한다.
 
+Epic #153의 no-vendor greenfield final install 결과와 asset taxonomy는 [`maintainer/docs/downstream_final_layout_contract.md`](downstream_final_layout_contract.md)를 따른다. 이 문서의 현재 bundle 구조 섹션은 source repo에서 만든 delivery artifact 기준이며, final installed runtime layout 자체는 별도 계약 문서가 정본이다.
+
 ## 목적
 
 - 이미 작성된 프로젝트에 `harness-kit`를 적용할 때, 소비자가 실제로 받는 배포 단위를 먼저 명확히 한다.
@@ -144,3 +146,4 @@ downstream/
 - bundle validation은 이 문서의 분류와 기대 구조를 검사 기준으로 사용해야 한다.
 - safe write/update, change classification, upgrade guide, diff review는 repo 전체가 아니라 downstream bundle 경계를 기준으로 판단해야 한다.
 - consumer-facing change classification policy는 source repo 기준 `bootstrap/docs/project_overlay/harness_upgrade_impact_policy.md`에 두고, generated bundle에서는 `docs/project_overlay/harness_upgrade_impact_policy.md`로 materialize 하는 편을 우선한다.
+- Epic #153의 runtime-only final install 작업은 delivery bundle 경계와 final installed runtime surface를 구분해야 한다. final installed path, install-time only lifecycle, root `scripts/*` command surface는 `maintainer/docs/downstream_final_layout_contract.md`를 먼저 확인한다.
