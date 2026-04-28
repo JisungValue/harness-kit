@@ -7,7 +7,7 @@
 
 ## 사용 방법
 
-- 필요한 항목만 `docs/standard/coding_conventions_project.md`에 복사 또는 병합한다.
+- 필요한 항목만 `docs/project/standards/coding_conventions_project.md`에 복사 또는 병합한다.
 - 다중 언어 프로젝트면 Python 전용 문서로 분리한 뒤 프로젝트 문서에서 참조해도 된다.
 - framework, runtime, packaging, serialization, persistence 기술에 강하게 묶인 규칙은 `[프로젝트 결정 필요]`로 남긴다.
 

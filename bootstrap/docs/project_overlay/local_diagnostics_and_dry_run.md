@@ -34,9 +34,9 @@ python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness f
 python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ```
 
-bootstrap 직후에는 `docs/project_entrypoint.md`와 `docs/decisions/README.md`를 먼저 읽고, 현재 작업에서 바로 중요하게 다뤄야 할 구조/정책/예외 결정이 있는지 확인한다.
+bootstrap 직후에는 `docs/entrypoint.md`와 `docs/project/decisions/README.md`를 먼저 읽고, 현재 작업에서 바로 중요하게 다뤄야 할 구조/정책/예외 결정이 있는지 확인한다.
 
-`vendor/harness-kit/`가 아닌 다른 경로에 kit를 뒀다면, bootstrap 시점부터 `--vendor-path <actual-path>`를 같이 주는 쪽을 우선한다. 그렇게 생성하지 않았다면 `validate_overlay_consistency.py` 전에 `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 vendored 경로를 먼저 실제 배치 경로로 맞춘다.
+`vendor/harness-kit/`가 아닌 다른 경로에 kit를 뒀다면, bootstrap 시점부터 `--vendor-path <actual-path>`를 같이 주는 쪽을 우선한다. 그렇게 생성하지 않았다면 `validate_overlay_consistency.py` 전에 `docs/project/standards/coding_conventions_project.md`의 vendored bootstrap 경로를 먼저 실제 배치 경로로 맞춘다.
 
 local validator가 통과하면 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사하고 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꿔 future-session guardrail을 붙인다.
 
@@ -69,7 +69,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - write 여부: write 한다.
 - 기본 동작: fail-fast
 - `--force`: overwrite만 수행한다. merge하지 않는다.
-- `--vendor-path`: generated `docs/project_entrypoint.md`, `docs/standard/coding_conventions_project.md` 안의 vendored reference를 실제 배치 경로로 맞춘다.
+- `--vendor-path`: generated `docs/project/standards/coding_conventions_project.md` 안의 vendored bootstrap reference를 실제 배치 경로로 맞춘다.
 
 성공 신호:
 
@@ -147,7 +147,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 해석:
 
 - unresolved decision이 아니라, 문서 세트의 구조적 연결이 맞는지 보는 단계다.
-- 예: `AGENTS.md`가 `docs/project_entrypoint.md`로 연결되는지, `implementation_order.md`가 `architecture.md`를 기준으로 연결하는지, quality gate와 testing profile이 서로 역할을 나누는지.
+- 예: `AGENTS.md`가 `docs/entrypoint.md`로 연결되는지, `implementation_order.md`가 `architecture.md`를 기준으로 연결하는지, quality gate와 testing profile이 서로 역할을 나누는지.
 - non-default vendored path라면 common guide 경로나 bootstrap 기준 문서 경로가 실제로 존재하는지도 함께 본다.
 - decisions index가 있으면 project entrypoint와 연결되는지, index에 적힌 decision file이 실제로 존재하는지도 함께 본다.
 - 이 단계가 통과하면 local first-success confidence는 갖췄다고 보고, 이후에는 workflow template로 CI guardrail을 붙인다.
@@ -173,7 +173,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
   - target path shape가 잘못됐거나, unrelated 문서일 가능성이 높은 대상
   - overwrite보다 수동 판단이 먼저 필요하다
 - `legacy entrypoint migration candidates`
-  - 예전 project-local `docs/harness_guide.md`가 남아 있어 `docs/project_entrypoint.md`로 rename migration이 먼저 필요한 대상
+  - 예전 project-local `docs/harness_guide.md`가 남아 있어 `docs/entrypoint.md`로 rename migration이 먼저 필요한 대상
   - 기본 safe create보다 `--migrate-legacy-entrypoint` 또는 수동 rename 검토가 우선이다
 
 ### adopt_safe_write.py
@@ -183,7 +183,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - 기본 동작: `missing files`만 생성한다.
 - `--update-unchanged`: exact-match target을 현재 bootstrap 기준으로 다시 쓴다.
 - `--force-overwrite`: 명시한 특정 경로만 overwrite한다.
-- `--migrate-legacy-entrypoint`: legacy `docs/harness_guide.md`를 새 canonical `docs/project_entrypoint.md`로 rename하고 안전한 runtime entrypoint follow-up을 적용한다.
+- `--migrate-legacy-entrypoint`: legacy `docs/harness_guide.md`를 새 canonical `docs/entrypoint.md`로 rename하고 안전한 runtime entrypoint follow-up을 적용한다.
 - merge/semantic update: 하지 않는다.
 
 성공 신호:
@@ -210,7 +210,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 ### 새 프로젝트인데 init가 안 된다
 
-1. 대상 경로에 이미 `docs/project_entrypoint.md`나 `docs/standard/*`가 있는지 본다.
+1. 대상 경로에 이미 `docs/entrypoint.md`나 `docs/project/standards/*`가 있는지 본다.
 2. 부모 경로 중 파일이 있는지 본다.
 3. non-default vendoring이면 `--vendor-path <actual-path>`를 같이 줬는지 본다.
 4. overwrite가 정말 필요한 경우에만 `--force`를 쓴다.
@@ -224,7 +224,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 
 ### decision validator는 통과하는데 consistency checker가 실패한다
 
-1. `AGENTS.md`가 `docs/project_entrypoint.md`를 가리키고, `CLAUDE.md`/`GEMINI.md`가 `AGENTS.md`를 다시 가리키는지 본다.
+1. `AGENTS.md`가 `docs/entrypoint.md`를 가리키고, `CLAUDE.md`/`GEMINI.md`가 `AGENTS.md`를 다시 가리키는지 본다.
 2. `implementation_order.md`가 `architecture.md`를 기준 문서로 연결하는지 본다.
 3. `quality_gate_profile.md`와 `testing_profile.md`가 서로 책임 경계를 참조하는지 본다.
 
@@ -237,7 +237,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 ### 기존 프로젝트인데 무엇부터 해야 할지 모르겠다
 
 1. `adopt_dry_run.py`부터 실행한다.
-2. `legacy entrypoint migration candidates`가 있으면 `docs/harness_guide.md -> docs/project_entrypoint.md` migration부터 검토한다.
+2. `legacy entrypoint migration candidates`가 있으면 `docs/harness_guide.md -> docs/entrypoint.md` migration부터 검토한다.
 3. `missing files`와 `conflict candidates`를 먼저 구분한다.
 4. `missing files`가 주 문제면 `adopt_safe_write.py`로 제한적 생성부터 수행한다.
 5. baseline과 큰 차이가 없는 경우에만 이후 validator로 넘어간다.

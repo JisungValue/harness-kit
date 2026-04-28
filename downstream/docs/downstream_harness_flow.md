@@ -47,23 +47,24 @@ flowchart TD
 ## Bootstrap 이후 Downstream 상태
 
 - 이 저장소는 bootstrap 전 source repo이고, 실제로 동작하는 하네스는 downstream 프로젝트 안에서 맞물린다.
-- bootstrap 또는 vendoring이 끝나면 downstream 프로젝트 안에서 `AGENTS.md`, `docs/project_entrypoint.md`, `docs/standard/*`, `docs/decisions/README.md`, `vendor/harness-kit/docs/harness_guide.md`를 함께 읽는 구조가 된다.
+- bootstrap 또는 vendoring이 끝나면 downstream 프로젝트 안에서 `AGENTS.md`, `docs/entrypoint.md`, `docs/project/standards/*`, `docs/project/decisions/README.md`, `docs/process/harness_guide.md`, `docs/process/downstream_harness_flow.md`를 함께 읽는 구조가 된다.
 - 자세한 bootstrap/adoption 절차는 `bootstrap/docs/quickstart.md`, `bootstrap/docs/project_overlay/first_success_guide.md`, `bootstrap/docs/project_overlay/adopt_dry_run.md`를 기준으로 본다.
 
 ## 프로젝트 진입점은 무엇을 하나
 
 ```mermaid
 flowchart TD
-    A[AGENTS.md] --> B[docs/project_entrypoint.md]
-    B --> C[공통 규칙<br/>vendor/harness-kit/docs/harness_guide.md]
-    B --> D[프로젝트 전용 규칙<br/>docs/standard/*]
-    B --> E[프로젝트 결정<br/>docs/decisions/README.md]
+    A[AGENTS.md] --> B[docs/entrypoint.md]
+    B --> C[공통 규칙<br/>docs/process/harness_guide.md]
+    B --> D[공통 흐름<br/>docs/process/downstream_harness_flow.md]
+    B --> E[프로젝트 전용 규칙<br/>docs/project/standards/*]
+    B --> F[프로젝트 결정<br/>docs/project/decisions/README.md]
 ```
 
 - `AGENTS.md`는 runtime launcher entrypoint다.
-- downstream에서 실제 문서 규칙을 묶는 documentation/policy entrypoint는 `docs/project_entrypoint.md`다.
-- 이 문서가 vendored core guide와 프로젝트 전용 문서를 함께 묶어서, 지금 프로젝트에서 무엇을 읽고 어떤 규칙으로 움직여야 하는지 정해 준다.
-- 중요한 정책, 예외, 책임 배치 결정이 있으면 `docs/decisions/README.md`와 개별 decision 문서까지 함께 읽는다.
+- downstream에서 실제 문서 규칙을 묶는 documentation/policy entrypoint는 `docs/entrypoint.md`다.
+- 이 문서가 process guide, downstream flow, 프로젝트 전용 문서를 함께 묶어서, 지금 프로젝트에서 무엇을 읽고 어떤 규칙으로 움직여야 하는지 정해 준다.
+- 중요한 정책, 예외, 책임 배치 결정이 있으면 `docs/project/decisions/README.md`와 개별 decision 문서까지 함께 읽는다.
 
 ## Phase 전체 흐름
 
@@ -112,7 +113,7 @@ flowchart LR
 - 즉, 내부 감사 세 가지를 한 번에 몰아서 하는 것이 아니라, 각 산출물이 닫히는 시점마다 순서대로 수행한다.
 - 세 내부 감사가 모두 승인 가능 상태가 된 뒤에만 사용자 승인으로 간다.
 - `issue.md`, `requirements.md`, `plan.md` 중 하나라도 바뀌면 Phase 1 내부 감사 3종은 모두 stale 이 되며, 최신본 기준으로 다시 수행한다.
-- Phase 1이 다시 승인되기 전에는 `validation_report.md`, final task-local 문서, `docs/decisions/*`를 수정하지 않는다.
+- Phase 1이 다시 승인되기 전에는 `validation_report.md`, final task-local 문서, `docs/project/decisions/*`를 수정하지 않는다.
 
 ### Phase 2. TDD Implementation
 
@@ -129,8 +130,8 @@ flowchart LR
     H --> I[user approval]
 ```
 
-- 프로젝트별 실제 레이어 순서와 세분화 기준은 `docs/standard/implementation_order.md`가 정한다.
-- `docs/standard/implementation_order.md`는 프로젝트 기본 레이어 순서 문서이고, 이번 task에서 어떤 API/기능부터 구현할지는 `plan.md`가 정한다.
+- 프로젝트별 실제 레이어 순서와 세분화 기준은 `docs/project/standards/implementation_order.md`가 정한다.
+- `docs/project/standards/implementation_order.md`는 프로젝트 기본 레이어 순서 문서이고, 이번 task에서 어떤 API/기능부터 구현할지는 `plan.md`가 정한다.
 - Phase 2는 기능 전체를 한 번에 구현하는 것이 아니라, 현재 task에 필요한 레이어만 선택해 순서대로 진행한다.
 - 각 선택 레이어는 `테스트 작성 -> 구현 -> 현재 레이어 감사` 순서를 따른다.
 - 한 레이어 감사가 끝나면 다음 선택 레이어로 넘어가 같은 TDD 루프를 반복한다.

@@ -15,7 +15,7 @@
 
 - `bootstrap/language_conventions/`
   - 언어별 coding convention 초안을 둔다.
-  - 필요한 언어만 골라 `docs/standard/coding_conventions_project.md`에 병합하거나 별도 언어 문서로 복사해 사용한다.
+  - 필요한 언어만 골라 `docs/project/standards/coding_conventions_project.md`에 병합하거나 별도 언어 문서로 복사해 사용한다.
 
 ## Init CLI
 
@@ -27,17 +27,17 @@
 - 대상 경로 자체가 디렉터리가 아니거나, 생성 경로의 부모가 파일인 경우에는 부분 생성 없이 즉시 실패한다.
 - 현재 MVP는 관리 대상 문서 경로만 검사한다. 즉, unrelated 파일이 있는 비어 있지 않은 저장소라도 생성 대상 경로와 충돌하지 않으면 진행한다.
 - 생성되는 기본 문서 경로는 아래와 같다.
-  - `docs/project_entrypoint.md`
-  - `docs/decisions/README.md`
-  - `docs/standard/architecture.md`
-  - `docs/standard/implementation_order.md`
-  - `docs/standard/coding_conventions_project.md`
-  - `docs/standard/quality_gate_profile.md`
-  - `docs/standard/testing_profile.md`
-  - `docs/standard/commit_rule.md`
+  - `docs/entrypoint.md`
+  - `docs/project/decisions/README.md`
+  - `docs/project/standards/architecture.md`
+  - `docs/project/standards/implementation_order.md`
+  - `docs/project/standards/coding_conventions_project.md`
+  - `docs/project/standards/quality_gate_profile.md`
+  - `docs/project/standards/testing_profile.md`
+  - `docs/project/standards/commit_rule.md`
 - 선택 언어 convention은 프로젝트 문서 안에 `vendor/harness-kit/bootstrap/language_conventions/...` 참조를 기본값으로 기록한다.
-- 로컬 `docs/project_entrypoint.md`도 기본적으로 `vendor/harness-kit/docs/harness_guide.md`를 참조하는 초안을 생성한다.
-- 따라서 init 결과를 사용하는 프로젝트는 vendored harness-kit 경로를 실제 배치 경로에 맞게 현지화해야 한다.
+- 로컬 `docs/entrypoint.md`도 기본적으로 `docs/process/harness_guide.md`를 참조하는 초안을 생성한다.
+- 따라서 non-default vendoring을 쓰는 프로젝트는 `--vendor-path`로 language convention bootstrap reference를 실제 배치 경로에 맞게 현지화해야 한다.
 
 ## First-Success Existence Check
 

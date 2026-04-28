@@ -43,8 +43,8 @@ class ValidateOverlayDecisionsTest(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("overlay decision validation passed", result.stdout)
             self.assertIn("Allowed unresolved markers", result.stdout)
-            self.assertIn("docs/standard/quality_gate_profile.md", result.stdout)
-            self.assertIn("docs/standard/commit_rule.md", result.stdout)
+            self.assertIn("docs/project/standards/quality_gate_profile.md", result.stdout)
+            self.assertIn("docs/project/standards/commit_rule.md", result.stdout)
 
     def test_fresh_bootstrap_fails_phase2_due_to_unresolved_overlay_docs(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -55,16 +55,16 @@ class ValidateOverlayDecisionsTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("overlay decision validation failed", result.stderr)
-            self.assertIn("docs/standard/coding_conventions_project.md", result.stderr)
-            self.assertIn("docs/standard/quality_gate_profile.md", result.stderr)
+            self.assertIn("docs/project/standards/coding_conventions_project.md", result.stderr)
+            self.assertIn("docs/project/standards/quality_gate_profile.md", result.stderr)
             self.assertIn("Still allowed after the blocking items above are fixed", result.stderr)
-            self.assertIn("docs/standard/commit_rule.md", result.stderr)
+            self.assertIn("docs/project/standards/commit_rule.md", result.stderr)
 
     def test_todo_marker_is_always_blocking(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
-            architecture_path = target / "docs/standard/architecture.md"
+            architecture_path = target / "docs/project/standards/architecture.md"
             architecture_path.write_text(
                 architecture_path.read_text(encoding="utf-8") + "\nTODO: fill me\n",
                 encoding="utf-8",
@@ -74,25 +74,25 @@ class ValidateOverlayDecisionsTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("TODO", result.stderr)
-            self.assertIn("docs/standard/architecture.md", result.stderr)
+            self.assertIn("docs/project/standards/architecture.md", result.stderr)
 
     def test_missing_required_doc_fails_validation(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
-            (target / "docs/standard/testing_profile.md").unlink()
+            (target / "docs/project/standards/testing_profile.md").unlink()
 
             result = self.run_validator(target, "first-success")
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("Missing required overlay docs", result.stderr)
-            self.assertIn("docs/standard/testing_profile.md", result.stderr)
+            self.assertIn("docs/project/standards/testing_profile.md", result.stderr)
 
     def test_directory_path_shape_fails_without_traceback(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
-            entrypoint_path = target / "docs/project_entrypoint.md"
+            entrypoint_path = target / "docs/entrypoint.md"
             entrypoint_path.unlink()
             entrypoint_path.mkdir()
 
@@ -100,7 +100,7 @@ class ValidateOverlayDecisionsTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("Required overlay docs with invalid path shapes", result.stderr)
-            self.assertIn("docs/project_entrypoint.md", result.stderr)
+            self.assertIn("docs/entrypoint.md", result.stderr)
             self.assertIn("expected a file but found a directory", result.stderr)
             self.assertNotIn("Traceback", result.stderr)
 
@@ -111,7 +111,7 @@ class ValidateOverlayDecisionsTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
-            entrypoint_path = target / "docs/project_entrypoint.md"
+            entrypoint_path = target / "docs/entrypoint.md"
             entrypoint_path.unlink()
             os.mkfifo(entrypoint_path)
 
@@ -119,7 +119,7 @@ class ValidateOverlayDecisionsTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("Required overlay docs with invalid path shapes", result.stderr)
-            self.assertIn("docs/project_entrypoint.md", result.stderr)
+            self.assertIn("docs/entrypoint.md", result.stderr)
             self.assertIn("expected a file but found a non-file path", result.stderr)
             self.assertNotIn("Traceback", result.stderr)
 
@@ -128,7 +128,7 @@ class ValidateOverlayDecisionsTest(unittest.TestCase):
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            coding_path = target / "docs/standard/coding_conventions_project.md"
+            coding_path = target / "docs/project/standards/coding_conventions_project.md"
             coding_text = coding_path.read_text(encoding="utf-8")
             coding_text = coding_text.replace(
                 "- 현재 프로젝트에서 우선 적용하는 핵심 규칙 범주: `[naming / modeling / error handling / concurrency / collections / testing / interop 등]`",
@@ -147,7 +147,7 @@ class ValidateOverlayDecisionsTest(unittest.TestCase):
             )
             coding_path.write_text(coding_text, encoding="utf-8")
 
-            quality_gate_path = target / "docs/standard/quality_gate_profile.md"
+            quality_gate_path = target / "docs/project/standards/quality_gate_profile.md"
             quality_gate_text = quality_gate_path.read_text(encoding="utf-8")
             quality_gate_text = quality_gate_text.replace("[프로젝트 결정 필요]", "`poetry run ruff check .`", 1)
             quality_gate_text = quality_gate_text.replace("[프로젝트 결정 필요]", "formatter failure blocks commit", 1)
@@ -178,7 +178,7 @@ class ValidateOverlayDecisionsTest(unittest.TestCase):
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            coding_path = target / "docs/standard/coding_conventions_project.md"
+            coding_path = target / "docs/project/standards/coding_conventions_project.md"
             coding_text = coding_path.read_text(encoding="utf-8")
             coding_text = coding_text.replace(
                 "- 현재 프로젝트의 활성 언어/런타임: `python`",
@@ -193,7 +193,7 @@ class ValidateOverlayDecisionsTest(unittest.TestCase):
             self.assertIn("required-field", result.stderr)
             self.assertIn("Resolve these required canonical fields first", result.stderr)
             self.assertIn("- 활성 언어: `[프로젝트 결정 필요]`", result.stderr)
-            self.assertRegex(result.stderr, r"docs/standard/coding_conventions_project\.md:\d+")
+            self.assertRegex(result.stderr, r"docs/project/standards/coding_conventions_project\.md:\d+")
             self.assertIn("next: Replace the canonical active runtime line with a resolved value.", result.stderr)
 
     def test_first_success_fails_if_unresolved_canonical_field_is_left_and_duplicated(self) -> None:
@@ -201,7 +201,7 @@ class ValidateOverlayDecisionsTest(unittest.TestCase):
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            coding_path = target / "docs/standard/coding_conventions_project.md"
+            coding_path = target / "docs/project/standards/coding_conventions_project.md"
             coding_text = coding_path.read_text(encoding="utf-8")
             coding_text = coding_text.replace(
                 "- 현재 프로젝트의 활성 언어/런타임: `python`",
@@ -215,14 +215,14 @@ class ValidateOverlayDecisionsTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 1)
             self.assertIn("- 현재 프로젝트의 활성 언어/런타임: `[프로젝트 결정 필요]`", result.stderr)
-            self.assertNotIn("docs/standard/coding_conventions_project.md:24 [프로젝트 결정 필요]", result.stderr)
+            self.assertNotIn("docs/project/standards/coding_conventions_project.md:24 [프로젝트 결정 필요]", result.stderr)
 
     def test_same_line_todo_is_not_suppressed_by_required_field_dedup(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            coding_path = target / "docs/standard/coding_conventions_project.md"
+            coding_path = target / "docs/project/standards/coding_conventions_project.md"
             coding_text = coding_path.read_text(encoding="utf-8")
             coding_text = coding_text.replace(
                 "- 현재 프로젝트의 활성 언어/런타임: `python`",
@@ -236,14 +236,14 @@ class ValidateOverlayDecisionsTest(unittest.TestCase):
             self.assertEqual(result.returncode, 1)
             self.assertIn("required-field", result.stderr)
             self.assertIn("TODO", result.stderr)
-            self.assertIn("docs/standard/coding_conventions_project.md:24 TODO", result.stderr)
+            self.assertIn("docs/project/standards/coding_conventions_project.md:24 TODO", result.stderr)
 
     def test_decisions_index_placeholder_is_blocking(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
-            decisions_path = target / "docs/decisions/README.md"
+            decisions_path = target / "docs/project/decisions/README.md"
             decisions_text = decisions_path.read_text(encoding="utf-8")
             decisions_text = decisions_text.replace(
                 "- 아직 active decision 없음. 새 decision을 추가하면 여기에 기록한다.",
@@ -255,7 +255,7 @@ class ValidateOverlayDecisionsTest(unittest.TestCase):
             result = self.run_validator(target, "first-success")
 
             self.assertEqual(result.returncode, 1)
-            self.assertIn("docs/decisions/README.md", result.stderr)
+            self.assertIn("docs/project/decisions/README.md", result.stderr)
             self.assertIn("[프로젝트 결정 필요]", result.stderr)
 
 

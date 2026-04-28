@@ -13,7 +13,7 @@ ROOT = Path(__file__).resolve().parents[1]
 GENERATE_SCRIPT = ROOT / "maintainer" / "scripts" / "generate_downstream_bundle.py"
 BOOTSTRAP_SCRIPT = ROOT / "bootstrap" / "scripts" / "bootstrap_init.py"
 CANONICAL_BUNDLE_ROOT = ROOT / "dist" / "harness-kit-project-bundle"
-DEFAULT_HARNESS_GUIDE_REFERENCE = "vendor/harness-kit/docs/harness_guide.md"
+DEFAULT_HARNESS_GUIDE_REFERENCE = "docs/process/harness_guide.md"
 FIRST_SUCCESS_SCRIPT = "check_first_success_docs.py"
 DEFAULT_VENDOR_RELATIVE_PATH = Path("vendor/harness-kit")
 
@@ -117,7 +117,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
         self.assertEqual(init_result.returncode, 0, init_result.stderr)
         self.assertIn("Created harness bootstrap docs in", init_result.stdout)
         self.assertIn(
-            "docs/project_entrypoint.md <- docs/project_overlay/project_entrypoint_template.md",
+            "docs/entrypoint.md <- docs/project_overlay/project_entrypoint_template.md",
             init_result.stdout,
         )
 
@@ -125,22 +125,19 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
         self.assertEqual(first_success_result.returncode, 0, first_success_result.stderr)
         self.assertIn("first success docs are present", first_success_result.stdout)
 
-        harness_guide = (project_root / "docs/project_entrypoint.md").read_text(encoding="utf-8")
-        decisions_index = (project_root / "docs/decisions/README.md").read_text(encoding="utf-8")
-        coding_conventions = (project_root / "docs/standard/coding_conventions_project.md").read_text(
+        harness_guide = (project_root / "docs/entrypoint.md").read_text(encoding="utf-8")
+        decisions_index = (project_root / "docs/project/decisions/README.md").read_text(encoding="utf-8")
+        coding_conventions = (project_root / "docs/project/standards/coding_conventions_project.md").read_text(
             encoding="utf-8"
         )
         agents = (project_root / "AGENTS.md").read_text(encoding="utf-8")
         gemini = (project_root / "GEMINI.md").read_text(encoding="utf-8")
-        expected_harness_guide_reference = DEFAULT_HARNESS_GUIDE_REFERENCE
-        if vendor_path_arg is not None:
-            expected_harness_guide_reference = f"{vendor_path_arg}/docs/harness_guide.md"
-        self.assertIn(expected_harness_guide_reference, harness_guide)
+        self.assertIn(DEFAULT_HARNESS_GUIDE_REFERENCE, harness_guide)
         self.assertIn(bootstrap_reference, coding_conventions)
-        self.assertIn("docs/project_entrypoint.md", agents)
+        self.assertIn("docs/entrypoint.md", agents)
         self.assertIn("순서대로 모두 읽고 적용", agents)
         self.assertIn("둘 중 하나만 읽고 멈추지 않는다", harness_guide)
-        self.assertIn("docs/decisions/README.md", harness_guide)
+        self.assertIn("docs/project/decisions/README.md", harness_guide)
         self.assertIn("DEC-###-slug.md", decisions_index)
         self.assertIn("AGENTS.md", gemini)
         self.assertIn("연결된 문서 체인도 끝까지 따라간다", gemini)
@@ -196,7 +193,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
                 "third_party/harness-kit/docs/harness_guide.md",
                 1,
             )
-            existing_harness_guide = project_root / "docs/project_entrypoint.md"
+            existing_harness_guide = project_root / "docs/entrypoint.md"
             existing_harness_guide.parent.mkdir(parents=True, exist_ok=True)
             existing_harness_guide.write_text(harness_guide_template, encoding="utf-8")
 
@@ -209,12 +206,12 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             )
             self.assertEqual(adopt_result.returncode, 0, adopt_result.stderr)
             self.assertIn("write mode: disabled (read-only)", adopt_result.stdout)
-            self.assertIn("- missing files: 10", adopt_result.stdout)
+            self.assertIn("- missing files: 12", adopt_result.stdout)
             self.assertIn("- differing files: 1", adopt_result.stdout)
             self.assertIn("- conflict candidates: 0", adopt_result.stdout)
             self.assertIn("Differing files (manual review):", adopt_result.stdout)
             self.assertIn(
-                "docs/project_entrypoint.md <- docs/project_overlay/project_entrypoint_template.md",
+                "docs/entrypoint.md <- docs/project_overlay/project_entrypoint_template.md",
                 adopt_result.stdout,
             )
 
@@ -227,13 +224,15 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             harness_guide_template = (vendor_root / "docs/project_overlay/project_entrypoint_template.md").read_text(
                 encoding="utf-8"
             )
-            existing_harness_guide = project_root / "docs/project_entrypoint.md"
+            existing_harness_guide = project_root / "docs/entrypoint.md"
             existing_harness_guide.parent.mkdir(parents=True, exist_ok=True)
             existing_harness_guide.write_text(harness_guide_template, encoding="utf-8")
 
             third_party_guide = project_root / DEFAULT_HARNESS_GUIDE_REFERENCE
             third_party_guide.parent.mkdir(parents=True, exist_ok=True)
             third_party_guide.write_text("# Harness Core Guide\n", encoding="utf-8")
+            downstream_flow = project_root / "docs/process/downstream_harness_flow.md"
+            downstream_flow.write_text("# Downstream Harness Flow\n", encoding="utf-8")
 
             incremental_result = self.run_bundle_script(
                 project_root,
@@ -245,7 +244,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             self.assertEqual(incremental_result.returncode, 0, incremental_result.stderr)
             self.assertIn("overlay consistency validation passed for mode 'incremental'.", incremental_result.stdout)
             self.assertIn("Still missing overlay docs allowed in incremental mode:", incremental_result.stdout)
-            self.assertIn("docs/decisions/README.md", incremental_result.stdout)
+            self.assertIn("docs/project/decisions/README.md", incremental_result.stdout)
             self.assertIn("Still missing runtime instruction entrypoints allowed in incremental mode:", incremental_result.stdout)
             self.assertIn("AGENTS.md", incremental_result.stdout)
 
@@ -263,7 +262,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
                 "third_party/harness-kit/docs/harness_guide.md",
                 1,
             )
-            existing_harness_guide = project_root / "docs/project_entrypoint.md"
+            existing_harness_guide = project_root / "docs/entrypoint.md"
             existing_harness_guide.parent.mkdir(parents=True, exist_ok=True)
             existing_harness_guide.write_text(harness_guide_template, encoding="utf-8")
 
@@ -275,7 +274,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
                 "python",
             )
             self.assertEqual(safe_write_result.returncode, 0, safe_write_result.stderr)
-            self.assertIn("- created files: 10", safe_write_result.stdout)
+            self.assertIn("- created files: 12", safe_write_result.stdout)
             self.assertIn("- remaining missing files: 0", safe_write_result.stdout)
             self.assertIn("- remaining differing files: 1", safe_write_result.stdout)
 
@@ -301,14 +300,6 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             legacy_template = (vendor_root / "docs/project_overlay/project_entrypoint_template.md").read_text(
                 encoding="utf-8"
             )
-            legacy_template = legacy_template.replace(
-                DEFAULT_HARNESS_GUIDE_REFERENCE,
-                "third_party/harness-kit/docs/harness_guide.md",
-                1,
-            )
-            third_party_guide = project_root / "third_party/harness-kit/docs/harness_guide.md"
-            third_party_guide.parent.mkdir(parents=True, exist_ok=True)
-            third_party_guide.write_text("# Harness Core Guide\n", encoding="utf-8")
             legacy_path = project_root / "docs/harness_guide.md"
             legacy_path.parent.mkdir(parents=True, exist_ok=True)
             legacy_path.write_text(legacy_template, encoding="utf-8")
@@ -316,7 +307,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             agents_template = (vendor_root / "docs/project_overlay/agent_entrypoint_template.md").read_text(
                 encoding="utf-8"
             )
-            agents_template = agents_template.replace("docs/project_entrypoint.md", "docs/harness_guide.md", 1)
+            agents_template = agents_template.replace("docs/entrypoint.md", "docs/harness_guide.md", 1)
             (project_root / "AGENTS.md").write_text(agents_template, encoding="utf-8")
 
             dry_run_result = self.run_bundle_script(
@@ -340,7 +331,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             self.assertEqual(migrate_result.returncode, 0, migrate_result.stderr)
             self.assertIn("- migrated legacy entrypoints: 1", migrate_result.stdout)
             self.assertFalse(legacy_path.exists())
-            self.assertTrue((project_root / "docs/project_entrypoint.md").exists())
+            self.assertTrue((project_root / "docs/entrypoint.md").exists())
 
             consistency_result = self.run_bundle_script(project_root, "validate_overlay_consistency.py", ".")
             self.assertEqual(consistency_result.returncode, 0, consistency_result.stderr)

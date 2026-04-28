@@ -16,18 +16,18 @@ TEMPLATE_MAPPINGS = {
     "bootstrap/docs/project_overlay/agent_entrypoint_template.md": "AGENTS.md",
     "bootstrap/docs/project_overlay/claude_entrypoint_template.md": "CLAUDE.md",
     "bootstrap/docs/project_overlay/gemini_entrypoint_template.md": "GEMINI.md",
-    "bootstrap/docs/project_overlay/project_entrypoint_template.md": "docs/project_entrypoint.md",
-    "bootstrap/docs/project_overlay/decisions_index_template.md": "docs/decisions/README.md",
-    "bootstrap/docs/project_overlay/architecture_template.md": "docs/standard/architecture.md",
-    "bootstrap/docs/project_overlay/implementation_order_template.md": "docs/standard/implementation_order.md",
-    "bootstrap/docs/project_overlay/coding_conventions_project_template.md": "docs/standard/coding_conventions_project.md",
-    "bootstrap/docs/project_overlay/quality_gate_profile_template.md": "docs/standard/quality_gate_profile.md",
-    "bootstrap/docs/project_overlay/testing_profile_template.md": "docs/standard/testing_profile.md",
-    "bootstrap/docs/project_overlay/commit_rule_template.md": "docs/standard/commit_rule.md",
+    "bootstrap/docs/project_overlay/project_entrypoint_template.md": "docs/entrypoint.md",
+    "bootstrap/docs/project_overlay/decisions_index_template.md": "docs/project/decisions/README.md",
+    "bootstrap/docs/project_overlay/architecture_template.md": "docs/project/standards/architecture.md",
+    "bootstrap/docs/project_overlay/implementation_order_template.md": "docs/project/standards/implementation_order.md",
+    "bootstrap/docs/project_overlay/coding_conventions_project_template.md": "docs/project/standards/coding_conventions_project.md",
+    "bootstrap/docs/project_overlay/quality_gate_profile_template.md": "docs/project/standards/quality_gate_profile.md",
+    "bootstrap/docs/project_overlay/testing_profile_template.md": "docs/project/standards/testing_profile.md",
+    "bootstrap/docs/project_overlay/commit_rule_template.md": "docs/project/standards/commit_rule.md",
 }
 EXPECTED_FILES = tuple(TEMPLATE_MAPPINGS.values())
 LANGUAGE = "python"
-DEFAULT_HARNESS_GUIDE_REFERENCE = "vendor/harness-kit/docs/harness_guide.md"
+DEFAULT_HARNESS_GUIDE_REFERENCE = "docs/process/harness_guide.md"
 DEFAULT_BOOTSTRAP_REFERENCE = (
     "vendor/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md"
 )
@@ -45,23 +45,23 @@ class BootstrapEndToEndTest(unittest.TestCase):
         harness_guide_reference: str,
         bootstrap_reference: str,
     ) -> None:
-        harness_guide = (project_root / "docs/project_entrypoint.md").read_text(encoding="utf-8")
-        decisions_index = (project_root / "docs/decisions/README.md").read_text(encoding="utf-8")
+        harness_guide = (project_root / "docs/entrypoint.md").read_text(encoding="utf-8")
+        decisions_index = (project_root / "docs/project/decisions/README.md").read_text(encoding="utf-8")
         coding_conventions = (
-            project_root / "docs/standard/coding_conventions_project.md"
+            project_root / "docs/project/standards/coding_conventions_project.md"
         ).read_text(encoding="utf-8")
 
         self.assertIn(harness_guide_reference, harness_guide)
         self.assertIn("# Project Harness Entry Point", harness_guide)
-        self.assertIn("docs/decisions/README.md", harness_guide)
+        self.assertIn("docs/project/decisions/README.md", harness_guide)
         self.assertIn("DEC-###-slug.md", decisions_index)
         for project_doc_path in (
-            "docs/standard/architecture.md",
-            "docs/standard/implementation_order.md",
-            "docs/standard/coding_conventions_project.md",
-            "docs/standard/quality_gate_profile.md",
-            "docs/standard/testing_profile.md",
-            "docs/standard/commit_rule.md",
+            "docs/project/standards/architecture.md",
+            "docs/project/standards/implementation_order.md",
+            "docs/project/standards/coding_conventions_project.md",
+            "docs/project/standards/quality_gate_profile.md",
+            "docs/project/standards/testing_profile.md",
+            "docs/project/standards/commit_rule.md",
         ):
             self.assertIn(project_doc_path, harness_guide)
 
@@ -73,19 +73,19 @@ class BootstrapEndToEndTest(unittest.TestCase):
         )
 
         quality_gate_profile = (
-            project_root / "docs/standard/quality_gate_profile.md"
+            project_root / "docs/project/standards/quality_gate_profile.md"
         ).read_text(encoding="utf-8")
         agents = (project_root / "AGENTS.md").read_text(encoding="utf-8")
         claude = (project_root / "CLAUDE.md").read_text(encoding="utf-8")
         gemini = (project_root / "GEMINI.md").read_text(encoding="utf-8")
-        commit_rule = (project_root / "docs/standard/commit_rule.md").read_text(
+        commit_rule = (project_root / "docs/project/standards/commit_rule.md").read_text(
             encoding="utf-8"
         )
 
         for relative_path in (
-            "docs/standard/quality_gate_profile.md",
-            "docs/standard/testing_profile.md",
-            "docs/standard/commit_rule.md",
+            "docs/project/standards/quality_gate_profile.md",
+            "docs/project/standards/testing_profile.md",
+            "docs/project/standards/commit_rule.md",
         ):
             self.assertGreater(
                 len((project_root / relative_path).read_text(encoding="utf-8").strip()),
@@ -96,7 +96,7 @@ class BootstrapEndToEndTest(unittest.TestCase):
         self.assertIn("[프로젝트 결정 필요]", quality_gate_profile)
         self.assertIn("[팀 결정 필요]", commit_rule)
         self.assertIn("# Agent Runtime Entry Point", agents)
-        self.assertIn("docs/project_entrypoint.md", agents)
+        self.assertIn("docs/entrypoint.md", agents)
         self.assertIn("# Claude Adapter Entry Point", claude)
         self.assertIn("AGENTS.md", claude)
         self.assertIn("# Gemini Adapter Entry Point", gemini)
@@ -108,16 +108,11 @@ class BootstrapEndToEndTest(unittest.TestCase):
         harness_guide_reference: str,
         bootstrap_reference: str,
     ) -> None:
-        harness_guide_path = project_root / "docs/project_entrypoint.md"
+        harness_guide_path = project_root / "docs/entrypoint.md"
         harness_guide_content = harness_guide_path.read_text(encoding="utf-8")
-        harness_guide_content = harness_guide_content.replace(
-            DEFAULT_HARNESS_GUIDE_REFERENCE,
-            harness_guide_reference,
-            1,
-        )
         harness_guide_path.write_text(harness_guide_content, encoding="utf-8")
 
-        coding_conventions_path = project_root / "docs/standard/coding_conventions_project.md"
+        coding_conventions_path = project_root / "docs/project/standards/coding_conventions_project.md"
         content = coding_conventions_path.read_text(encoding="utf-8")
         content = content.replace(
             "- 언어별 convention 초안이 필요하면 `bootstrap/language_conventions/`에서 해당 언어 템플릿을 골라 이 문서에 병합한다.",
@@ -199,15 +194,15 @@ class BootstrapEndToEndTest(unittest.TestCase):
             self.assertEqual(init_result.returncode, 0, init_result.stderr)
             self.assertIn("Created harness bootstrap docs in", init_result.stdout)
             self.assertIn(
-                "docs/project_entrypoint.md <- bootstrap/docs/project_overlay/project_entrypoint_template.md",
+                "docs/entrypoint.md <- bootstrap/docs/project_overlay/project_entrypoint_template.md",
                 init_result.stdout,
             )
             self.assertIn(
-                "docs/decisions/README.md <- bootstrap/docs/project_overlay/decisions_index_template.md",
+                "docs/project/decisions/README.md <- bootstrap/docs/project_overlay/decisions_index_template.md",
                 init_result.stdout,
             )
             self.assertIn(
-                "docs/standard/coding_conventions_project.md <- bootstrap/docs/project_overlay/coding_conventions_project_template.md",
+                "docs/project/standards/coding_conventions_project.md <- bootstrap/docs/project_overlay/coding_conventions_project_template.md",
                 init_result.stdout,
             )
             self.assert_expected_files_exist(project_root)
@@ -235,7 +230,7 @@ class BootstrapEndToEndTest(unittest.TestCase):
             )
 
             self.assertEqual(init_result.returncode, 0, init_result.stderr)
-            entrypoint_path = project_root / "docs/project_entrypoint.md"
+            entrypoint_path = project_root / "docs/entrypoint.md"
             entrypoint_path.unlink()
             entrypoint_path.mkdir()
 
@@ -244,7 +239,7 @@ class BootstrapEndToEndTest(unittest.TestCase):
             self.assertEqual(verify_result.returncode, 1)
             self.assertIn("first-success doc check failed", verify_result.stderr)
             self.assertIn("Required docs with invalid path shapes", verify_result.stderr)
-            self.assertIn("docs/project_entrypoint.md: expected a file but found a directory", verify_result.stderr)
+            self.assertIn("docs/entrypoint.md: expected a file but found a directory", verify_result.stderr)
 
     def test_first_success_fails_on_non_file_path_shape(self) -> None:
         if not hasattr(os, "mkfifo"):
@@ -262,7 +257,7 @@ class BootstrapEndToEndTest(unittest.TestCase):
             )
 
             self.assertEqual(init_result.returncode, 0, init_result.stderr)
-            entrypoint_path = project_root / "docs/project_entrypoint.md"
+            entrypoint_path = project_root / "docs/entrypoint.md"
             entrypoint_path.unlink()
             os.mkfifo(entrypoint_path)
 
@@ -271,12 +266,12 @@ class BootstrapEndToEndTest(unittest.TestCase):
             self.assertEqual(verify_result.returncode, 1)
             self.assertIn("first-success doc check failed", verify_result.stderr)
             self.assertIn("Required docs with invalid path shapes", verify_result.stderr)
-            self.assertIn("docs/project_entrypoint.md: expected a file but found a non-file path", verify_result.stderr)
+            self.assertIn("docs/entrypoint.md: expected a file but found a non-file path", verify_result.stderr)
 
     def test_init_cli_supports_localized_vendor_path_without_manual_edits(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             project_root = Path(tmp_dir) / "bootstrap-cli-localized-project"
-            harness_guide_reference = "third_party/harness-kit/docs/harness_guide.md"
+            harness_guide_reference = DEFAULT_HARNESS_GUIDE_REFERENCE
             bootstrap_reference = (
                 "third_party/harness-kit/bootstrap/language_conventions/"
                 "python_coding_conventions_template.md"
@@ -318,7 +313,7 @@ class BootstrapEndToEndTest(unittest.TestCase):
     def test_manual_template_copy_reaches_same_minimum_doc_set(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             project_root = Path(tmp_dir) / "bootstrap-manual-project"
-            harness_guide_reference = "third_party/harness-kit/docs/harness_guide.md"
+            harness_guide_reference = DEFAULT_HARNESS_GUIDE_REFERENCE
             bootstrap_reference = (
                 "third_party/harness-kit/bootstrap/language_conventions/"
                 "python_coding_conventions_template.md"

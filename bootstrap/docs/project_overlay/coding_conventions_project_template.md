@@ -25,7 +25,7 @@
 - 현재 프로젝트에서 우선 적용하는 핵심 규칙 범주: `[naming / modeling / error handling / concurrency / collections / testing / interop 등]`
 - 현재 프로젝트의 주요 금지 패턴: `[프로젝트 결정 필요]`
 - 현재 Phase 2에서 미해결로 둘 수 없는 언어별 결정 항목: `[프로젝트 결정 필요]`
-- formatter/linter/type checker/test의 실행 명령, 필수 여부, 적용 시점은 이 문서가 아니라 `docs/standard/quality_gate_profile.md`에 둔다.
+- formatter/linter/type checker/test의 실행 명령, 필수 여부, 적용 시점은 이 문서가 아니라 `docs/project/standards/quality_gate_profile.md`에 둔다.
 
 ## Phase 2에서 확인해야 할 것
 

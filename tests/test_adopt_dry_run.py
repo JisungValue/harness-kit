@@ -41,7 +41,7 @@ class AdoptDryRunTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("- missing files: 0", result.stdout)
-            self.assertIn("- existing but unchanged targets: 11", result.stdout)
+            self.assertIn("- existing but unchanged targets: 13", result.stdout)
             self.assertIn("- differing files: 0", result.stdout)
             self.assertIn("- conflict candidates: 0", result.stdout)
 
@@ -49,23 +49,23 @@ class AdoptDryRunTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
-            (target / "docs/standard/testing_profile.md").unlink()
+            (target / "docs/project/standards/testing_profile.md").unlink()
 
             result = self.run_adopt_dry_run(target)
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("- missing files: 1", result.stdout)
             self.assertIn("Missing files (safe to create):", result.stdout)
-            self.assertIn("docs/standard/testing_profile.md", result.stdout)
+            self.assertIn("docs/project/standards/testing_profile.md", result.stdout)
 
     def test_localized_existing_file_is_reported_as_differing(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
-            guide_path = target / "docs/project_entrypoint.md"
+            guide_path = target / "docs/entrypoint.md"
             guide_text = guide_path.read_text(encoding="utf-8")
             guide_text = guide_text.replace(
-                "vendor/harness-kit/docs/harness_guide.md",
+                "docs/process/harness_guide.md",
                 "third_party/harness-kit/docs/harness_guide.md",
                 1,
             )
@@ -76,13 +76,13 @@ class AdoptDryRunTest(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("- differing files: 1", result.stdout)
             self.assertIn("Differing files (manual review):", result.stdout)
-            self.assertIn("docs/project_entrypoint.md", result.stdout)
+            self.assertIn("docs/entrypoint.md", result.stdout)
 
     def test_unrelated_file_at_target_path_is_reported_as_conflict_candidate(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
-            commit_rule_path = target / "docs/standard/commit_rule.md"
+            commit_rule_path = target / "docs/project/standards/commit_rule.md"
             commit_rule_path.write_text("# Totally Different Doc\n", encoding="utf-8")
 
             result = self.run_adopt_dry_run(target)
@@ -96,7 +96,7 @@ class AdoptDryRunTest(unittest.TestCase):
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
-            conflict_path = target / "docs/standard/quality_gate_profile.md"
+            conflict_path = target / "docs/project/standards/quality_gate_profile.md"
             conflict_path.unlink()
             conflict_path.mkdir()
 
@@ -116,7 +116,7 @@ class AdoptDryRunTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("- missing files: 3", result.stdout)
-            self.assertIn("- conflict candidates: 8", result.stdout)
+            self.assertIn("- conflict candidates: 10", result.stdout)
             self.assertIn("parent path is not a directory", result.stdout)
 
     def test_legacy_project_entrypoint_is_reported_as_migration_candidate(self) -> None:
@@ -125,11 +125,11 @@ class AdoptDryRunTest(unittest.TestCase):
             self.bootstrap_project(target)
 
             legacy_path = target / "docs/harness_guide.md"
-            (target / "docs/project_entrypoint.md").replace(legacy_path)
+            (target / "docs/entrypoint.md").replace(legacy_path)
 
             agents_path = target / "AGENTS.md"
             agents_text = agents_path.read_text(encoding="utf-8")
-            agents_text = agents_text.replace("docs/project_entrypoint.md", "docs/harness_guide.md", 1)
+            agents_text = agents_text.replace("docs/entrypoint.md", "docs/harness_guide.md", 1)
             agents_path.write_text(agents_text, encoding="utf-8")
 
             result = self.run_adopt_dry_run(target)
@@ -137,8 +137,8 @@ class AdoptDryRunTest(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("- legacy entrypoint migration candidates: 1", result.stdout)
             self.assertIn("Legacy entrypoint migration candidates:", result.stdout)
-            self.assertIn("docs/harness_guide.md -> docs/project_entrypoint.md", result.stdout)
-            self.assertNotIn("Missing files (safe to create):\n- docs/project_entrypoint.md", result.stdout)
+            self.assertIn("docs/harness_guide.md -> docs/entrypoint.md", result.stdout)
+            self.assertNotIn("Missing files (safe to create):\n- docs/entrypoint.md", result.stdout)
 
     def test_stale_legacy_entrypoint_leftover_is_reported_as_blocked_migration_candidate(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -147,7 +147,7 @@ class AdoptDryRunTest(unittest.TestCase):
 
             legacy_path = target / "docs/harness_guide.md"
             legacy_path.write_text(
-                (target / "docs/project_entrypoint.md").read_text(encoding="utf-8"),
+                (target / "docs/entrypoint.md").read_text(encoding="utf-8"),
                 encoding="utf-8",
             )
 

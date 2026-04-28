@@ -51,10 +51,10 @@ class InstallDownstreamBundleTest(unittest.TestCase):
             self.assertTrue((vendor_root / "bundle_manifest.json").exists())
             self.assertTrue((vendor_root / "downstream/scripts/validate_phase_gate.py").exists())
             self.assertTrue((project_root / "AGENTS.md").exists())
-            self.assertTrue((project_root / "docs/project_entrypoint.md").exists())
+            self.assertTrue((project_root / "docs/entrypoint.md").exists())
             self.assertIn(
-                "vendor/harness-kit/docs/harness_guide.md",
-                (project_root / "docs/project_entrypoint.md").read_text(encoding="utf-8"),
+                "docs/process/harness_guide.md",
+                (project_root / "docs/entrypoint.md").read_text(encoding="utf-8"),
             )
 
             first_success = self.run_vendored_script(
@@ -92,8 +92,8 @@ class InstallDownstreamBundleTest(unittest.TestCase):
             self.assertTrue((vendor_root / "bundle_manifest.json").exists())
             self.assertTrue((vendor_root / "downstream/scripts/validate_phase_gate.py").exists())
             self.assertIn(
-                "third_party/harness-kit/docs/harness_guide.md",
-                (project_root / "docs/project_entrypoint.md").read_text(encoding="utf-8"),
+                "docs/process/harness_guide.md",
+                (project_root / "docs/entrypoint.md").read_text(encoding="utf-8"),
             )
 
             consistency = self.run_vendored_script(
@@ -123,7 +123,7 @@ class InstallDownstreamBundleTest(unittest.TestCase):
     def test_requires_force_bootstrap_when_generated_docs_already_exist(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             project_root = Path(tmp_dir) / "recipeForBaby"
-            existing_path = project_root / "docs/project_entrypoint.md"
+            existing_path = project_root / "docs/entrypoint.md"
             existing_path.parent.mkdir(parents=True, exist_ok=True)
             existing_path.write_text("stale\n", encoding="utf-8")
 

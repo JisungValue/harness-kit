@@ -30,18 +30,18 @@
 
 - 프로젝트마다 달라져야 하는 문서 세트다.
 - 여기서 말하는 문서는 downstream 프로젝트 안에 놓이는 로컬 문서다.
-- 이 문서 세트의 project-local 문서 entrypoint는 `docs/project_entrypoint.md`이고, 이 파일이 vendored core guide와 `docs/standard/*`를 함께 연결한다.
-- 중요한 정책/예외/책임 배치 결정은 `docs/decisions/README.md`와 `DEC-###-slug.md` 문서로 별도 관리한다.
+- 이 문서 세트의 project-local 문서 entrypoint는 `docs/entrypoint.md`이고, 이 파일이 process guide와 `docs/project/standards/*`를 함께 연결한다.
+- 중요한 정책/예외/책임 배치 결정은 `docs/project/decisions/README.md`와 `DEC-###-slug.md` 문서로 별도 관리한다.
 - repo에 아직 없는 프로젝트 전용 결정은 추측으로 메우지 않고 overlay 또는 decision 문서로 남긴다.
 - 대표적으로 아래 문서가 속한다.
-  - `docs/project_entrypoint.md`
-  - `docs/standard/architecture.md`
-  - `docs/standard/implementation_order.md`
-  - `docs/standard/coding_conventions_project.md`
-  - `docs/standard/quality_gate_profile.md`
-  - `docs/standard/testing_profile.md`
-  - `docs/standard/commit_rule.md`
-- 이 중 `docs/standard/implementation_order.md`는 프로젝트 기본 레이어 순서 문서이고, 특정 task의 API/기능 구현 순서는 task `plan.md`에 남긴다.
+  - `docs/entrypoint.md`
+  - `docs/project/standards/architecture.md`
+  - `docs/project/standards/implementation_order.md`
+  - `docs/project/standards/coding_conventions_project.md`
+  - `docs/project/standards/quality_gate_profile.md`
+  - `docs/project/standards/testing_profile.md`
+  - `docs/project/standards/commit_rule.md`
+- 이 중 `docs/project/standards/implementation_order.md`는 프로젝트 기본 레이어 순서 문서이고, 특정 task의 API/기능 구현 순서는 task `plan.md`에 남긴다.
 
 ### Bootstrap
 
@@ -53,9 +53,9 @@
 
 - `AGENTS.md`는 agent runtime이 공통으로 먼저 읽는 runtime launcher entrypoint다.
 - `CLAUDE.md`, `GEMINI.md`는 agent별 기본 파일명 차이를 흡수하는 얇은 adapter다.
-- 이 entrypoint들은 실제 규칙 본문을 중복 복사하지 않고 documentation/policy entrypoint인 `docs/project_entrypoint.md`로 수렴한다.
-- 중요한 계약은 link presence만이 아니라 traversal이다. `AGENTS.md`를 열었으면 `docs/project_entrypoint.md`, 그 문서의 core guide, project-specific supporting docs까지 순서대로 모두 읽고 적용해야 한다.
-- 현재 작업이 중요한 프로젝트 결정과 관련 있으면 `docs/decisions/README.md`에서 관련 decision 문서를 찾아 함께 읽고 적용해야 한다.
+- 이 entrypoint들은 실제 규칙 본문을 중복 복사하지 않고 documentation/policy entrypoint인 `docs/entrypoint.md`로 수렴한다.
+- 중요한 계약은 link presence만이 아니라 traversal이다. `AGENTS.md`를 열었으면 `docs/entrypoint.md`, 그 문서의 core guide, project-specific supporting docs까지 순서대로 모두 읽고 적용해야 한다.
+- 현재 작업이 중요한 프로젝트 결정과 관련 있으면 `docs/project/decisions/README.md`에서 관련 decision 문서를 찾아 함께 읽고 적용해야 한다.
 
 ### Validation
 
@@ -95,7 +95,7 @@
 ### Greenfield
 
 1. `bootstrap_init.py`로 최소 문서 세트를 만든다.
-2. runtime entrypoint chain을 따라 `AGENTS.md -> docs/project_entrypoint.md -> core guide + docs/standard/*` 순서를 확인한다.
+2. runtime entrypoint chain을 따라 `AGENTS.md -> docs/entrypoint.md -> core guide + docs/project/standards/*` 순서를 확인한다.
 3. `check_first_success_docs.py` helper command로 존재를 확인한다.
 4. `validate_overlay_decisions.py --readiness first-success`로 readiness를 확인한다.
 5. `validate_overlay_consistency.py`로 구조적 정합성과 traversal contract를 확인한다.

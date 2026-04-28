@@ -18,6 +18,10 @@ DEFAULT_OUTPUT = ROOT / "dist" / "harness-kit-project-bundle"
 BOUNDARY_DOCUMENT = "maintainer/docs/downstream_bundle_boundary.md"
 ENTRY_README = "README.md"
 MANIFEST_NAME = "bundle_manifest.json"
+OBSOLETE_BUNDLE_PATHS = {
+    "docs/harness_guide.md",
+    "docs/downstream_harness_flow.md",
+}
 BOUNDARY_INCLUDE_SECTIONS = (
     "### 1) Downstream 필수 자산",
     "### 2) Downstream 선택 자산",
@@ -38,6 +42,8 @@ class BundleFile:
 
 BUNDLE_TEXT_REPLACEMENTS = (
     ("bootstrap/docs/", "docs/"),
+    ("downstream/docs/harness_guide.md", "docs/process/harness_guide.md"),
+    ("downstream/docs/downstream_harness_flow.md", "docs/process/downstream_harness_flow.md"),
     ("downstream/docs/", "docs/"),
     ("bootstrap/scripts/", "scripts/"),
 )
@@ -58,7 +64,7 @@ BUNDLE_TEXT_REPLACEMENTS_BY_PATH: dict[str, tuple[tuple[str, str], ...]] = {
             "- `scripts/check_first_success_docs.py`는 bundle helper command다.",
         ),
     ),
-    "docs/downstream_harness_flow.md": (
+    "docs/process/downstream_harness_flow.md": (
         (
             "- source repo 자산과 downstream 생성 문서의 대응 관계가 먼저 필요하면 `README.md`의 `Source Repo 와 Downstream 관계` 표를 함께 본다.",
             "- bootstrap 전후 구조 설명이 더 필요하면 `docs/quickstart.md`와 `docs/how_harness_kit_works.md`를 함께 본다.",
@@ -88,8 +94,8 @@ BUNDLE_TEXT_REPLACEMENTS_BY_PATH: dict[str, tuple[tuple[str, str], ...]] = {
             "## bundle과 downstream 구분",
         ),
         (
-            "- source repo에는 root `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `docs/project_entrypoint.md`, `docs/decisions/README.md`가 아직 없다.",
-            "- 이 bundle 자체에는 root `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `docs/project_entrypoint.md`, `docs/decisions/README.md`가 아직 없다.",
+            "- source repo에는 root `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `docs/entrypoint.md`, `docs/project/decisions/README.md`가 아직 없다.",
+            "- 이 bundle 자체에는 root `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`, `docs/entrypoint.md`, `docs/project/decisions/README.md`가 아직 없다.",
         ),
         (
             "- 따라서 source repo에서 문서를 읽는 단계에서는 `docs/project_overlay/*` canonical source를 먼저 보고, downstream 프로젝트에서는 generated bundle의 `docs/project_overlay/*`와 생성된 runtime entrypoint, project entrypoint를 따른다.",
@@ -214,6 +220,10 @@ def bundle_relative_path_for_source(relative_path: Path) -> Path:
         return Path("docs") / relative_path.relative_to("bootstrap/docs")
     if relative_posix.startswith("bootstrap/scripts/"):
         return Path("scripts") / relative_path.name
+    if relative_posix == "downstream/docs/harness_guide.md":
+        return Path("docs/process/harness_guide.md")
+    if relative_posix == "downstream/docs/downstream_harness_flow.md":
+        return Path("docs/process/downstream_harness_flow.md")
     if relative_posix.startswith("downstream/docs/"):
         return Path("docs") / relative_path.relative_to("downstream/docs")
     if relative_posix.startswith("downstream/scripts/"):
@@ -429,7 +439,7 @@ def prepare_output_dir(output_root: Path, bundle_files: list[BundleFile], force:
                 "bundle generation failed: output directory already contains files. Re-run with --force to replace it."
             )
 
-        allowed_paths = owned_bundle_paths(bundle_files) | load_existing_manifest_paths(output_root)
+        allowed_paths = owned_bundle_paths(bundle_files) | load_existing_manifest_paths(output_root) | OBSOLETE_BUNDLE_PATHS
         unknown_paths = sorted(existing_output_paths(output_root) - allowed_paths)
         if unknown_paths:
             preview = ", ".join(unknown_paths[:5])

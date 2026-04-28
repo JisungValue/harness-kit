@@ -46,14 +46,14 @@ review를 시작하기 전에 아래를 먼저 고정한다.
 
 ### 2. Runtime / Entrypoint 체인 변화
 
-- `AGENTS.md -> docs/project_entrypoint.md -> vendor/harness-kit/docs/harness_guide.md -> docs/standard/*` 체인이 바뀌었는가?
+- `AGENTS.md -> docs/entrypoint.md -> docs/process/harness_guide.md` / `docs/process/downstream_harness_flow.md` -> `docs/project/standards/*` 체인이 바뀌었는가?
 - 새 필수 재참조 문서가 추가됐는가?
 - 현재 프로젝트의 runtime entrypoint가 새 traversal contract를 그대로 만족하는가?
 - legacy local entrypoint를 계속 둘 수 있는가, 아니면 migration이 필요한가?
 
 ### 3. 프로젝트 결정 필요 항목 변화
 
-- `docs/decisions/README.md`에서 새로 읽어야 하는 decision 종류가 생겼는가?
+- `docs/project/decisions/README.md`에서 새로 읽어야 하는 decision 종류가 생겼는가?
 - 기존에는 project-local 결정이 필요 없던 항목이 새 bundle에서 team decision을 요구하는가?
 - 반대로 이제 core rule로 승격돼 project-local decision 부담이 줄어든 항목이 있는가?
 
@@ -73,7 +73,7 @@ review를 시작하기 전에 아래를 먼저 고정한다.
 
 ### 6. Bootstrap / Template 영향
 
-- bootstrap template 변경이 `docs/standard/coding_conventions_project.md` 같은 localized 문서에 영향을 주는가?
+- bootstrap template 변경이 `docs/project/standards/coding_conventions_project.md` 같은 localized 문서에 영향을 주는가?
 - 새 baseline wording이 아니라 실제 팀 규칙 변경이 필요한가?
 - missing create로 해결되는 additive change인가, 아니면 localized 기존 문서 수동 병합이 필요한가?
 
@@ -91,7 +91,7 @@ review를 시작하기 전에 아래를 먼저 고정한다.
 
 - 필수 문서 구조가 바뀌었다.
 - phase gate 또는 validator 기준이 강화됐다.
-- localized `docs/standard/*`, `docs/project_entrypoint.md`, `AGENTS.md`가 새 baseline과 실질 충돌한다.
+- localized `docs/project/standards/*`, `docs/entrypoint.md`, `AGENTS.md`가 새 baseline과 실질 충돌한다.
 - breaking 가능성이 있는 `C4` 수준으로 판단된다.
 - safe write로 덮어쓰면 project-local rule이 사라질 수 있다.
 

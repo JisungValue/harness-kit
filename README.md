@@ -21,12 +21,12 @@
   - 지금 보고 있는 `harness-kit` 저장소 자체다.
 - `downstream project`
   - `harness-kit`를 vendoring하거나 bootstrap한 실제 사용 프로젝트다.
-- `vendored core`
-  - downstream 프로젝트 안에 들어온 `vendor/harness-kit/docs/harness_guide.md` 같은 공통 규칙 문서다.
+- `process guide`
+  - downstream 프로젝트 안에 materialize 되는 `docs/process/harness_guide.md` 같은 공통 규칙 문서다.
 - `runtime launcher entrypoint`
   - agent runtime이 맨 먼저 여는 `AGENTS.md`다.
 - `documentation/policy entrypoint`
-  - runtime launcher가 진입한 뒤 실제 문서 규칙을 묶어 주는 `docs/project_entrypoint.md`다.
+  - runtime launcher가 진입한 뒤 실제 문서 규칙을 묶어 주는 `docs/entrypoint.md`다.
 
 기본 예시는 `source repo`를 downstream 프로젝트 안의 `vendor/harness-kit/`로 vendoring하는 경로를 기준으로 설명한다.
 
@@ -35,13 +35,13 @@
 | source repo file | downstream generated or vendored file | runtime role |
 | --- | --- | --- |
 | [`bootstrap/docs/project_overlay/agent_entrypoint_template.md`](bootstrap/docs/project_overlay/agent_entrypoint_template.md) | `AGENTS.md` | runtime launcher entrypoint |
-| [`bootstrap/docs/project_overlay/project_entrypoint_template.md`](bootstrap/docs/project_overlay/project_entrypoint_template.md) | `docs/project_entrypoint.md` | documentation/policy entrypoint |
-| [`bootstrap/docs/project_overlay/decisions_index_template.md`](bootstrap/docs/project_overlay/decisions_index_template.md) | `docs/decisions/README.md` | project decision index |
-| [`downstream/docs/harness_guide.md`](downstream/docs/harness_guide.md) | `vendor/harness-kit/docs/harness_guide.md` | vendored core guide |
-| [`bootstrap/docs/project_overlay/architecture_template.md`](bootstrap/docs/project_overlay/architecture_template.md) | `docs/standard/architecture.md` | project-local supporting doc |
+| [`bootstrap/docs/project_overlay/project_entrypoint_template.md`](bootstrap/docs/project_overlay/project_entrypoint_template.md) | `docs/entrypoint.md` | documentation/policy entrypoint |
+| [`bootstrap/docs/project_overlay/decisions_index_template.md`](bootstrap/docs/project_overlay/decisions_index_template.md) | `docs/project/decisions/README.md` | project decision index |
+| [`downstream/docs/harness_guide.md`](downstream/docs/harness_guide.md) | `docs/process/harness_guide.md` | process guide |
+| [`bootstrap/docs/project_overlay/architecture_template.md`](bootstrap/docs/project_overlay/architecture_template.md) | `docs/project/standards/architecture.md` | project-local supporting doc |
 
 - source repo의 template/guide는 downstream에서 그대로 쓰이거나, bootstrap 결과물로 생성되거나, vendored copy로 들어간다.
-- downstream 사용자는 source repo의 template를 직접 실행하는 것이 아니라, downstream 프로젝트 안에 생긴 `AGENTS.md`, `docs/project_entrypoint.md`, `docs/standard/*`, `docs/decisions/README.md`, `vendor/harness-kit/docs/harness_guide.md`를 따라간다.
+- downstream 사용자는 source repo의 template를 직접 실행하는 것이 아니라, downstream 프로젝트 안에 생긴 `AGENTS.md`, `docs/entrypoint.md`, `docs/project/standards/*`, `docs/project/decisions/README.md`, `docs/process/harness_guide.md`, `docs/process/downstream_harness_flow.md`를 따라간다.
 
 ## 시작 문서
 
@@ -85,13 +85,13 @@ python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-proj
 
 ### 기존 프로젝트에 도입
 
-- 아직 `docs/project_entrypoint.md`나 vendored harness 기준 문서가 없거나, legacy `docs/harness_guide.md` 상태라면 이 경로부터 시작한다.
+- 아직 `docs/entrypoint.md`나 process guide 기준 문서가 없거나, legacy `docs/harness_guide.md` 상태라면 이 경로부터 시작한다.
 - read-only 현재 상태 파악: [`bootstrap/docs/project_overlay/adopt_dry_run.md`](bootstrap/docs/project_overlay/adopt_dry_run.md)
 - diagnostics reference: [`bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md`](bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md)
 
 ### 이미 도입된 프로젝트 업그레이드
 
-- 이미 `docs/project_entrypoint.md`와 vendored harness가 있고, 새 bundle 버전만 반영하려면 이 경로부터 시작한다.
+- 이미 `docs/entrypoint.md`와 process guide 기준 문서가 있고, 새 bundle 버전만 반영하려면 이 경로부터 시작한다.
 - upgrade 전체 흐름: [`bootstrap/docs/project_overlay/downstream_harness_upgrade_guide.md`](bootstrap/docs/project_overlay/downstream_harness_upgrade_guide.md)
 - diff review checklist: [`bootstrap/docs/project_overlay/downstream_overlay_diff_review_checklist.md`](bootstrap/docs/project_overlay/downstream_overlay_diff_review_checklist.md)
 - impact 분류: [`bootstrap/docs/project_overlay/harness_upgrade_impact_policy.md`](bootstrap/docs/project_overlay/harness_upgrade_impact_policy.md)
@@ -224,8 +224,8 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 3. 새 프로젝트면 `quickstart`의 greenfield 경로를, 기존 프로젝트 첫 도입이면 brownfield 경로를, 이미 도입된 프로젝트 업그레이드면 upgrade 경로를 먼저 따른다.
 4. 상세 설명이 더 필요할 때만 greenfield는 [`bootstrap/docs/project_overlay/first_success_guide.md`](bootstrap/docs/project_overlay/first_success_guide.md)를, 기존 프로젝트 진단은 [`bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md`](bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md)를 reference로 본다.
 5. init CLI 또는 `docs/project_overlay/` 수동 복사로 최소 문서 세트를 만든다.
-6. 생성된 `docs/project_entrypoint.md`, `docs/decisions/README.md`, `docs/standard/coding_conventions_project.md`를 읽고 현재 프로젝트에서 먼저 확정해야 할 구조/정책/예외 결정이 있는지 확인한다.
-7. `vendor/harness-kit/`가 아닌 경로에 kit를 둘 예정이면 bootstrap 시점부터 `--vendor-path <actual-path>`를 사용해 generated vendored reference를 바로 현지화한다. 그 옵션 없이 생성했다면 이후 `docs/project_entrypoint.md`와 `docs/standard/coding_conventions_project.md`의 경로를 실제 배치 경로에 맞게 수동 현지화한다.
+6. 생성된 `docs/entrypoint.md`, `docs/project/decisions/README.md`, `docs/project/standards/coding_conventions_project.md`를 읽고 현재 프로젝트에서 먼저 확정해야 할 구조/정책/예외 결정이 있는지 확인한다.
+7. `vendor/harness-kit/`가 아닌 경로에 kit를 둘 예정이면 bootstrap 시점부터 `--vendor-path <actual-path>`를 사용해 generated bootstrap reference를 바로 현지화한다. 그 옵션 없이 생성했다면 이후 `docs/project/standards/coding_conventions_project.md`의 경로를 실제 배치 경로에 맞게 수동 현지화한다.
 8. 아래 예시는 `vendor/harness-kit/`를 기준으로 한다. 다른 경로를 쓰면 실행 명령의 `vendor/harness-kit/` 부분도 같은 실제 경로로 함께 바꿔야 한다.
 9. `python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success`로 unresolved decision readiness를 확인한다.
 10. `python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .`로 문서 간 교차 정합성과 runtime instruction entrypoint 연결을 확인한다.
@@ -239,14 +239,14 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 
 ## 최소 프로젝트 문서 세트
 
-- `docs/project_entrypoint.md`
-- `docs/decisions/README.md`
-- `docs/standard/architecture.md`
-- `docs/standard/implementation_order.md`
-- `docs/standard/coding_conventions_project.md`
-- `docs/standard/quality_gate_profile.md`
-- `docs/standard/testing_profile.md`
-- `docs/standard/commit_rule.md`
+- `docs/entrypoint.md`
+- `docs/project/decisions/README.md`
+- `docs/project/standards/architecture.md`
+- `docs/project/standards/implementation_order.md`
+- `docs/project/standards/coding_conventions_project.md`
+- `docs/project/standards/quality_gate_profile.md`
+- `docs/project/standards/testing_profile.md`
+- `docs/project/standards/commit_rule.md`
 
 ## Runtime Instruction Entrypoint 세트
 
@@ -263,10 +263,11 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 - 아래 순서는 downstream 프로젝트를 bootstrap한 뒤 생성되는 문서 기준이다.
 
 - runtime launcher entrypoint: `AGENTS.md`
-- documentation/policy entrypoint: `docs/project_entrypoint.md`
-- project decision index: `docs/decisions/README.md`
-- reusable core guide: `vendor/harness-kit/docs/harness_guide.md`
-- project-specific supporting docs: `docs/standard/*`
+- documentation/policy entrypoint: `docs/entrypoint.md`
+- project decision index: `docs/project/decisions/README.md`
+- reusable core guide: `docs/process/harness_guide.md`
+- downstream process flow: `docs/process/downstream_harness_flow.md`
+- project-specific supporting docs: `docs/project/standards/*`
 
 ## Kit 유지보수 기록 규칙
 
