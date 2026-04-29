@@ -34,7 +34,7 @@
 7. `docs/process/common/test_double_policy.md`
 8. `docs/process/common/validation_policy.md`
 9. `docs/process/common/lightweight_task_policy.md`
-10. `docs/process/standard/coding_guidelines_core.md`
+10. `docs/process/common/coding_guidelines_policy.md`
 
 우선순위 해석 원칙은 아래와 같다.
 

@@ -43,7 +43,8 @@ class BootstrapInitCliTest(unittest.TestCase):
             self.assertTrue((target / "docs/process/downstream_harness_flow.md").exists())
             self.assertTrue((target / "docs/process/common/process_policy.md").exists())
             self.assertTrue((target / "docs/process/phases/phase_1_requirement_and_planning/implementation.md").exists())
-            self.assertTrue((target / "docs/process/standard/coding_guidelines_core.md").exists())
+            self.assertTrue((target / "docs/process/common/coding_guidelines_policy.md").exists())
+            self.assertFalse((target / "docs/process/standard").exists())
             self.assertTrue((target / "docs/process/templates/task/issue.md").exists())
             self.assertTrue((target / "docs/process/examples/sample-task/issue.md").exists())
 
@@ -77,7 +78,8 @@ class BootstrapInitCliTest(unittest.TestCase):
 
             process_guide = (target / "docs/process/harness_guide.md").read_text(encoding="utf-8")
             self.assertIn("docs/process/common/process_policy.md", process_guide)
-            self.assertIn("docs/process/standard/coding_guidelines_core.md", process_guide)
+            self.assertIn("docs/process/common/coding_guidelines_policy.md", process_guide)
+            self.assertNotIn("docs/process/standard", process_guide)
             self.assertNotIn("docs/harness/common/process_policy.md", process_guide)
 
             claude_entrypoint = (target / "CLAUDE.md").read_text(encoding="utf-8")

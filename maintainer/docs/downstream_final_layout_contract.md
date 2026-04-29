@@ -181,11 +181,11 @@ install 중 template에서 생성되고, install 완료 뒤 downstream project�
 
 Epic #166 removes the separate final `standard` axis from the downstream runtime docs surface. The common coding baseline is a common process policy, not a standalone `standard` namespace.
 
-- source repo canonical path after #168: `downstream/docs/harness/common/coding_guidelines_policy.md`
-- generated bundle path after #168: `docs/process/common/coding_guidelines_policy.md`
-- final installed runtime path after #168: `docs/process/common/coding_guidelines_policy.md`
+- source repo canonical path: `downstream/docs/harness/common/coding_guidelines_policy.md`
+- generated bundle path: `docs/process/common/coding_guidelines_policy.md`
+- final installed runtime path: `docs/process/common/coding_guidelines_policy.md`
 
-The following names and paths are legacy-only after #168 and must disappear from project-facing, generated bundle, and final runtime surfaces except in explicit migration inventory or stale-path audit text:
+The following names and paths are legacy-only and must disappear from project-facing, generated bundle, and final runtime surfaces except in explicit migration inventory or stale-path audit text:
 
 - `coding_guidelines_core.md`
 - `downstream/docs/standard/coding_guidelines_core.md`

@@ -13,7 +13,7 @@
 - `docs/process/common/code_hygiene_policy.md`
 - `docs/process/common/design_quality_policy.md`
 - `docs/process/common/performance_policy.md`
-- `docs/process/standard/coding_guidelines_core.md`
+- `docs/process/common/coding_guidelines_policy.md`
 - 프로젝트 `docs/project/standards/architecture.md`
 - 프로젝트 `docs/project/standards/implementation_order.md`
 - 프로젝트 `docs/project/standards/coding_conventions_project.md`

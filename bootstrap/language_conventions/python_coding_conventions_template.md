@@ -19,7 +19,7 @@
 
 ## 공통 품질 규칙 참조
 
-- 공통 boundary translation, 에러 처리, 테스트 책임, 범위 제한 규칙은 `docs/standard/coding_guidelines_core.md`를 따른다.
+- 공통 boundary translation, 에러 처리, 테스트 책임, 범위 제한 규칙은 `docs/process/common/coding_guidelines_policy.md`를 따른다.
 - 이 문서는 그 위에 Python에서 반복적으로 결정해야 하는 언어별 선택 기준만 추가한다.
 
 ## 적용 전 결정
