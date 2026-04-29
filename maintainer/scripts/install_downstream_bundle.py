@@ -24,7 +24,7 @@ CANONICAL_BUNDLE_ROOT = bundle.DEFAULT_OUTPUT
 RUNTIME_SCRIPT_SOURCES = {
     "scripts/validate_overlay_decisions.py": "scripts/validate_overlay_decisions.py",
     "scripts/validate_overlay_consistency.py": "scripts/validate_overlay_consistency.py",
-    "downstream/scripts/validate_phase_gate.py": "scripts/validate_phase_gate.py",
+    "scripts/validate_phase_gate.py": "scripts/validate_phase_gate.py",
 }
 
 INSTALL_TIME_RESIDUE_PATHS = (

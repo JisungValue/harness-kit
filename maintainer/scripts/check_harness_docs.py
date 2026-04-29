@@ -259,8 +259,8 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
         "bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md": diagnostics,
     }
     for rel_path, text in helper_command_surfaces.items():
-        if "scripts/check_first_success_docs.py" not in text:
-            errors.append(f"{rel_path}에 canonical first-success helper command가 반영되지 않았습니다.")
+        if "check_first_success_docs.py" not in text or "install" not in text:
+            errors.append(f"{rel_path}에 install-time first-success helper lifecycle 설명이 없습니다.")
 
     incremental_surfaces = {
         "bootstrap/docs/quickstart.md": quickstart,

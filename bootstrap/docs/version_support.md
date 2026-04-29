@@ -34,7 +34,7 @@
 
 - runtime self-healing, stale invalidation, write-set lock 규칙 명시
 - task-local `phase_status.md` runtime state file 추가
-- `downstream/scripts/validate_phase_gate.py` hard-stop validator 추가
+- `scripts/validate_phase_gate.py` hard-stop validator 추가
 - quickstart 중심 onboarding 단순화와 doc guard 결합 완화
 
 ## 0.2.0에서 추가된 핵심 범위

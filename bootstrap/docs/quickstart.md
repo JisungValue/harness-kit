@@ -42,7 +42,7 @@
     - 다른 경로를 쓰면 문서 안의 vendored path와 예시 명령의 `vendor/harness-kit/` 부분을 모두 같은 실제 경로로 바꿔서 실행한다.
 2. 먼저 bootstrap만 실행한다.
 
-- `bootstrap_init.py`, `check_first_success_docs.py`, validator 예시는 모두 Python 3 runtime이 필요하다.
+- `bootstrap_init.py`와 validator 예시는 모두 Python 3 runtime이 필요하다.
 - 현재 bootstrap CLI는 `python`, `java`, `kotlin` language profile을 지원하지만, 실행 자체는 Python 3로 한다.
 - non-default vendoring이면 bootstrap 시점부터 `--vendor-path <actual-path>`를 함께 줘 generated reference를 바로 현지화한다.
 - 아래 명령은 `harness-kit` source repo가 아니라 downstream 프로젝트 루트에서 실행한다.
@@ -57,12 +57,11 @@ python3 vendor/harness-kit/scripts/bootstrap_init.py . --language python
 
 - `docs/project/standards/coding_conventions_project.md`
 
-5. 그다음 아래 검증 명령을 실행한다.
+5. install flow는 install-time helper인 `check_first_success_docs.py`로 최소 문서 세트 존재 여부를 확인한 뒤 helper를 final runtime surface에 남기지 않는다. 설치가 끝난 뒤에는 아래 root-local runtime validator를 실행한다.
 
 ```bash
-python3 vendor/harness-kit/scripts/check_first_success_docs.py .
-python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
-python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
+python3 scripts/validate_overlay_decisions.py . --readiness first-success
+python3 scripts/validate_overlay_consistency.py .
 ```
 
 6. local validator가 통과하면 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사하고 workflow 안의 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꾼다.
@@ -74,7 +73,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 11. `validate_phase_gate.py`를 인자 없이 실행하면 기본적으로 현재 task workspace와 `phase_status.md`의 허용/잠금 패턴에 걸리는 dirty path만 검사한다. repo 전체 dirty path까지 함께 보려면 `--git-scope repo`를 명시한다.
 
 ```bash
-python3 vendor/harness-kit/downstream/scripts/validate_phase_gate.py docs/task/<task_id> --paths docs/task/<task_id>/issue.md docs/task/<task_id>/phase_status.md
+python3 scripts/validate_phase_gate.py docs/task/<task_id> --paths docs/task/<task_id>/issue.md docs/task/<task_id>/phase_status.md
 ```
 
 상세 설명이 더 필요하면 아래 reference로 이어서 읽는다.
@@ -126,9 +125,9 @@ python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --for
 10. 첫 task를 시작하기 전에 `docs/process/downstream_harness_flow.md`를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
 
 ```bash
-python3 vendor/harness-kit/scripts/validate_overlay_consistency.py . --mode incremental
-python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
-python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
+python3 scripts/validate_overlay_consistency.py . --mode incremental
+python3 scripts/validate_overlay_decisions.py . --readiness first-success
+python3 scripts/validate_overlay_consistency.py .
 ```
 
 출력 해석과 로컬 진단 순서가 더 필요하면 `bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md`를 reference로 본다.
@@ -143,7 +142,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
 - `bootstrap_init.py`
   - 새 프로젝트용 문서 세트를 실제로 생성한다.
 - `check_first_success_docs.py`
-  - 최소 문서 세트 존재 여부만 가장 빠르게 확인한다.
+  - install-time completion helper다. greenfield final install 완료 뒤에는 root `scripts/*` runtime surface에 남지 않는다.
 - `docs/project_overlay/harness_doc_guard_workflow_template.yml`
   - first-success local validator가 통과한 뒤 future-session consistency를 CI에 고정하는 workflow template다.
   - 복사 후 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꿔 사용한다.

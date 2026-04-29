@@ -73,9 +73,9 @@
 
 ### 8. 자동 validator 결과
 
-- [ ] `python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success`가 통과한다.
-- [ ] `python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .`가 통과한다.
-- [ ] Phase 2에 들어갈 준비가 됐다고 주장한다면 `python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness phase2`도 통과한다.
+- [ ] `python3 scripts/validate_overlay_decisions.py . --readiness first-success`가 통과한다.
+- [ ] `python3 scripts/validate_overlay_consistency.py .`가 통과한다.
+- [ ] Phase 2에 들어갈 준비가 됐다고 주장한다면 `python3 scripts/validate_overlay_decisions.py . --readiness phase2`도 통과한다.
 
 ### 9. 첫 phase 진행 가능 여부 판정
 
