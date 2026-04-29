@@ -4,6 +4,8 @@
 
 Epic #153의 no-vendor greenfield final install 결과와 asset taxonomy는 [`maintainer/docs/downstream_final_layout_contract.md`](downstream_final_layout_contract.md)를 따른다. 이 문서의 현재 bundle 구조 섹션은 source repo에서 만든 delivery artifact 기준이며, final installed runtime layout 자체는 별도 계약 문서가 정본이다.
 
+Epic #166의 final runtime docs surface 경량화도 같은 구분을 따른다. generated delivery bundle은 reference-only 자산을 포함할 수 있지만, final install은 `maintainer/docs/downstream_final_layout_contract.md`의 runtime minimum과 examples taxonomy만 target project에 남겨야 한다.
+
 ## 목적
 
 - 이미 작성된 프로젝트에 `harness-kit`를 적용할 때, 소비자가 실제로 받는 배포 단위를 먼저 명확히 한다.
@@ -119,6 +121,17 @@ scripts/
 ```
 
 `docs/entrypoint.md`와 `docs/project/decisions/README.md`는 bundle 안에 직접 들어가는 파일이 아니라, downstream 프로젝트에서 각각 `docs/project_overlay/project_entrypoint_template.md`, `docs/project_overlay/decisions_index_template.md`를 bootstrap 또는 수동 복사해 생성하는 consumer-local 파일이다. 반면 source repo 기준 `bootstrap/docs/project_overlay/*` guide/template/workflow는 generated bundle 안에서 `docs/project_overlay/*`로 materialize 되고, `docs/project_overlay/harness_doc_guard_workflow_template.yml`은 first-success 이후 consumer project가 `.github/workflows/harness-doc-guard.yml`로 복사해 future-session CI guardrail을 고정하는 shipped asset이다.
+
+## Final Install 과 Delivery Bundle 의 차이
+
+이 문서의 include 목록은 generated delivery bundle을 만든다. final install helper는 이 bundle을 입력으로 사용할 수 있지만, target project에 남기는 파일은 더 좁다.
+
+- coding guideline policy는 #168 이후 source repo `downstream/docs/harness/common/coding_guidelines_policy.md`, generated/final `docs/process/common/coding_guidelines_policy.md`가 canonical path다.
+- final install은 #168 이후 `docs/process/standard/`와 `coding_guidelines_core.md`를 남기지 않는다.
+- final install examples는 `maintainer/docs/downstream_final_layout_contract.md`의 Final Runtime Minimum Examples만 기본으로 남긴다.
+- generated delivery bundle에 reference-only examples가 남더라도, final install smoke는 그 파일들이 target project runtime tree에 남지 않는지 별도로 검증해야 한다.
+- `bootstrap-first-success/*` validation reports는 maintainer smoke/reference 성격이며 final runtime dependency가 아니다.
+- brownfield/upgrade 자동 migration은 이 boundary 문서와 Epic #166의 기본 범위가 아니다.
 
 ## Bundle Generation Command
 

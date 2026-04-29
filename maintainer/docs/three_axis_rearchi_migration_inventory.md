@@ -180,7 +180,9 @@
 | --- | --- |
 | `downstream/docs/harness_guide.md` | `downstream/docs/harness_guide.md` |
 | `downstream/docs/downstream_harness_flow.md` | `downstream/docs/downstream_harness_flow.md` |
-| `downstream/docs/standard/coding_guidelines_core.md` | `downstream/docs/standard/coding_guidelines_core.md` |
+| `downstream/docs/standard/coding_guidelines_core.md` | current source path; Epic #166/#168 target is `downstream/docs/harness/common/coding_guidelines_policy.md` |
+
+Epic #166 final runtime docs surface simplification removes the separate final `standard` axis. After #168, generated bundle and final install must use `docs/process/common/coding_guidelines_policy.md` and must not produce `docs/process/standard/coding_guidelines_core.md`.
 
 #### downstream/docs common policy docs
 
@@ -239,6 +241,8 @@
 - `downstream/docs/examples/sample-lightweight-task/*`
 - `downstream/docs/examples/bootstrap-first-success/*`
 - `downstream/docs/examples/project-decisions/*`
+
+Epic #166/#169 keeps examples lightweight in final install. `project-decisions/*` and a reduced `sample-lightweight-task/*` subset are the final runtime minimum candidates, `sample-task/*` is delivery bundle reference-only, and `bootstrap-first-success/*` is maintainer smoke/reference rather than a final runtime dependency. The file-level lifecycle contract is maintained in `maintainer/docs/downstream_final_layout_contract.md`.
 
 현재 확인된 파일 전체 목록:
 

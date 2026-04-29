@@ -2,9 +2,11 @@
 
 ## 목적
 
-이 문서는 Epic #153의 downstream greenfield final install 결과를 정의하는 maintainer source-of-truth다.
+이 문서는 Epic #153의 downstream greenfield final install 결과와 Epic #166의 final runtime docs surface 경량화 목표를 정의하는 maintainer source-of-truth다.
 
 Issue #154의 범위는 계약 확정이다. 이 문서는 source repo의 물리 구조를 바꾸지 않고, 후속 이슈 #155-#159가 같은 final path와 asset lifecycle 용어를 사용하게 하는 기준을 고정한다.
+
+Issue #167의 범위도 계약 확정이다. 이 단계에서는 실제 파일 이동과 generated/final install 구현을 수행하지 않고, #168-#170이 따라야 할 coding guideline policy path, examples taxonomy, stale path cleanup acceptance를 먼저 고정한다.
 
 ## 적용 범위
 
@@ -12,6 +14,7 @@ Issue #154의 범위는 계약 확정이다. 이 문서는 source repo의 물리
 - 비대상: source repo의 `bootstrap/`, `downstream/`, `maintainer/` 물리 구조 재배치
 - 비대상: brownfield 자동 migration 전체 재설계
 - 비대상: package registry 배포와 framework별 semantic migration 자동화
+- 비대상: 기존 brownfield 프로젝트 안의 legacy path를 자동 rename 또는 semantic merge 하는 upgrade migration
 
 source repo에서는 현재 3축 구조를 유지한다.
 
@@ -46,9 +49,8 @@ project-root/
       harness_guide.md
       downstream_harness_flow.md
       common/
+        coding_guidelines_policy.md
       phases/
-      standard/
-        coding_guidelines_core.md
       templates/
         task/
       examples/
@@ -115,10 +117,10 @@ install 완료 뒤 downstream 프로젝트가 task 수행, phase 운영, validat
 - `docs/process/harness_guide.md`
 - `docs/process/downstream_harness_flow.md`
 - `docs/process/common/*`
+- `docs/process/common/coding_guidelines_policy.md`
 - `docs/process/phases/*`
-- `docs/process/standard/coding_guidelines_core.md`
 - `docs/process/templates/task/*`
-- `docs/process/examples/*`
+- final runtime minimum examples defined in the Examples Taxonomy section
 - `scripts/validate_overlay_decisions.py`
 - `scripts/validate_overlay_consistency.py`
 - `scripts/validate_phase_gate.py`
@@ -158,9 +160,9 @@ install 중 template에서 생성되고, install 완료 뒤 downstream project�
 | `downstream/docs/downstream_harness_flow.md` | runtime / operation-time | `docs/process/downstream_harness_flow.md` |
 | `downstream/docs/harness/common/*` | runtime / operation-time | `docs/process/common/*` |
 | `downstream/docs/phase_*/*` | runtime / operation-time | `docs/process/phases/<existing-phase-dir>/*` |
-| `downstream/docs/standard/coding_guidelines_core.md` | runtime / operation-time | `docs/process/standard/coding_guidelines_core.md` |
+| `downstream/docs/harness/common/coding_guidelines_policy.md` | runtime / operation-time | `docs/process/common/coding_guidelines_policy.md` |
 | `downstream/docs/templates/task/*` | runtime / operation-time | `docs/process/templates/task/*` |
-| `downstream/docs/examples/*` | runtime / operation-time | `docs/process/examples/*` |
+| final runtime minimum examples from `downstream/docs/examples/*` | runtime / operation-time | `docs/process/examples/*` |
 | `bootstrap/scripts/validate_overlay_decisions.py` | runtime / operation-time | `scripts/validate_overlay_decisions.py` |
 | `bootstrap/scripts/validate_overlay_consistency.py` | runtime / operation-time | `scripts/validate_overlay_consistency.py` |
 | `downstream/scripts/validate_phase_gate.py` | runtime / operation-time | `scripts/validate_phase_gate.py` |
@@ -174,6 +176,76 @@ install 중 template에서 생성되고, install 완료 뒤 downstream project�
 | `bootstrap/docs/version_support.md` | install-time only | no final runtime path |
 | `bootstrap/docs/project_overlay/*` guide/checklist assets | install-time only | no final runtime path |
 | `maintainer/docs/*`, `maintainer/scripts/*`, `harness.log`, `tests/*` | maintainer-only | no final runtime path |
+
+## Coding Guideline Policy Contract
+
+Epic #166 removes the separate final `standard` axis from the downstream runtime docs surface. The common coding baseline is a common process policy, not a standalone `standard` namespace.
+
+- source repo canonical path after #168: `downstream/docs/harness/common/coding_guidelines_policy.md`
+- generated bundle path after #168: `docs/process/common/coding_guidelines_policy.md`
+- final installed runtime path after #168: `docs/process/common/coding_guidelines_policy.md`
+
+The following names and paths are legacy-only after #168 and must disappear from project-facing, generated bundle, and final runtime surfaces except in explicit migration inventory or stale-path audit text:
+
+- `coding_guidelines_core.md`
+- `downstream/docs/standard/coding_guidelines_core.md`
+- `docs/process/standard/coding_guidelines_core.md`
+- `docs/process/standard/`
+
+The source repo may mention those legacy strings only where the purpose is to define removal, stale cleanup, or historical migration context. User-facing runtime docs, generated bundle README/manifest content, bootstrap output, and final install smoke expectations must use `docs/process/common/coding_guidelines_policy.md`.
+
+## Examples Taxonomy
+
+Examples are split by lifecycle. Delivery bundle inclusion and final install inclusion are separate decisions: an example may be shipped in the delivery bundle for reference and still be excluded from the final installed runtime tree.
+
+### Final Runtime Minimum Examples
+
+These examples may remain in the final installed runtime surface because they are small, directly useful during task execution, and do not require maintainer context.
+
+| source path | final path | keep criteria |
+| --- | --- | --- |
+| `downstream/docs/examples/project-decisions/DEC-001-authorization-validation-location.md` | `docs/process/examples/project-decisions/DEC-001-authorization-validation-location.md` | one-file project decision record example |
+| `downstream/docs/examples/sample-lightweight-task/issue.md` | `docs/process/examples/sample-lightweight-task/issue.md` | compact task framing example |
+| `downstream/docs/examples/sample-lightweight-task/plan.md` | `docs/process/examples/sample-lightweight-task/plan.md` | compact planning example |
+| `downstream/docs/examples/sample-lightweight-task/validation_report.md` | `docs/process/examples/sample-lightweight-task/validation_report.md` | compact validation/audit evidence example |
+
+If #169 finds that even this set adds too much runtime surface, it may reduce the lightweight task example further, but it must keep at least one task-execution example and one decision-record example or explicitly update this contract first.
+
+### Delivery Bundle Reference-Only Examples
+
+These examples may be useful in the generated delivery bundle as optional reference material, but they are not final runtime dependencies and should not be copied into the final installed tree by default.
+
+| source path | bundle path | final install |
+| --- | --- | --- |
+| `downstream/docs/examples/sample-task/issue.md` | `docs/process/examples/sample-task/issue.md` | excluded by default |
+| `downstream/docs/examples/sample-task/requirements.md` | `docs/process/examples/sample-task/requirements.md` | excluded by default |
+| `downstream/docs/examples/sample-task/plan.md` | `docs/process/examples/sample-task/plan.md` | excluded by default |
+| `downstream/docs/examples/sample-task/phase_status.md` | `docs/process/examples/sample-task/phase_status.md` | excluded by default |
+| `downstream/docs/examples/sample-task/implementation_notes.md` | `docs/process/examples/sample-task/implementation_notes.md` | excluded by default |
+| `downstream/docs/examples/sample-task/validation_report.md` | `docs/process/examples/sample-task/validation_report.md` | excluded by default |
+| `downstream/docs/examples/sample-task/coding_conventions_project_example.md` | `docs/process/examples/sample-task/coding_conventions_project_example.md` | excluded by default |
+| `downstream/docs/examples/sample-lightweight-task/requirements.md` | `docs/process/examples/sample-lightweight-task/requirements.md` | excluded by default |
+| `downstream/docs/examples/sample-lightweight-task/phase_status.md` | `docs/process/examples/sample-lightweight-task/phase_status.md` | excluded by default |
+| `downstream/docs/examples/sample-lightweight-task/implementation_notes.md` | `docs/process/examples/sample-lightweight-task/implementation_notes.md` | excluded by default |
+
+The full `sample-task` subtree is the heavy reference example. It should remain outside the default final runtime tree unless a later contract update proves that a specific file is needed during normal downstream operation.
+
+### Install-Time / Reference Examples
+
+Install-time reference examples explain bootstrap or overlay completion behavior. They are not runtime process docs, and a greenfield install must not require them after install completion.
+
+Current policy: do not add new install-time examples under final `docs/process/examples/*`. If install-time examples are needed, prefer `bootstrap/docs/project_overlay/*` or maintainer docs, and make the final install exclusion explicit in #169.
+
+### Maintainer Smoke / Reference Examples
+
+These files validate maintainer smoke scenarios or document test evidence. They are not final runtime examples and must not be final install dependencies.
+
+| source path | lifecycle | final install |
+| --- | --- | --- |
+| `downstream/docs/examples/bootstrap-first-success/validation_report.md` | maintainer smoke/reference | excluded |
+| `downstream/docs/examples/bootstrap-first-success/overlay_completion_validation_report.md` | maintainer smoke/reference | excluded |
+
+The `bootstrap-first-success/*` validation reports may remain as maintainer reference material only if #169 keeps them out of the final installed runtime surface and prevents downstream operation docs from treating them as required reading.
 
 ## Minimum File Sets
 
@@ -191,7 +263,7 @@ First-success는 downstream project가 runtime entrypoint와 project-owned minim
 - `docs/project/standards/testing_profile.md`
 - `docs/project/standards/commit_rule.md`
 - `docs/process/harness_guide.md`
-- `docs/process/standard/coding_guidelines_core.md`
+- `docs/process/common/coding_guidelines_policy.md`
 - `scripts/validate_overlay_decisions.py`
 - `scripts/validate_overlay_consistency.py`
 
@@ -208,7 +280,7 @@ Runtime operation은 first-success minimum에 phase/task execution surface를 �
 - `docs/process/templates/task/*`
 - `scripts/validate_phase_gate.py`
 
-`docs/process/examples/*`는 runtime reference로 설치해도 되지만, phase/task 실행의 최소 hard dependency는 아니다. final install에 포함하는지 여부는 #156과 #159에서 smoke 기준과 함께 확정한다.
+`docs/process/examples/*`는 phase/task 실행의 hard dependency가 아니다. #169는 위 Examples Taxonomy의 final runtime minimum만 default final install에 남기고, delivery bundle reference-only 또는 maintainer smoke/reference 파일은 final install에서 제외해야 한다.
 
 ## 후속 이슈 기준
 
@@ -219,6 +291,16 @@ Runtime operation은 first-success minimum에 phase/task execution surface를 �
 - #159는 greenfield install smoke와 user-facing canonical path surface가 이 문서의 final layout과 일치하는지 확인한다.
 
 후속 이슈에서 이 문서와 다른 path 또는 lifecycle이 필요해지면, 구현보다 먼저 이 계약 문서를 갱신하고 변경 이유를 `harness.log`에 남긴다.
+
+## Epic #166 Acceptance Matrix
+
+| issue | implementation scope | required acceptance |
+| --- | --- | --- |
+| #168 | move/rename coding guideline policy and remove final standard axis | source path is `downstream/docs/harness/common/coding_guidelines_policy.md`; generated and final path is `docs/process/common/coding_guidelines_policy.md`; `docs/process/standard/` and `coding_guidelines_core.md` are absent from generated/final surfaces; stale bundle cleanup handles old `docs/process/standard/*` output |
+| #169 | minimize final examples surface | final install contains only the Final Runtime Minimum Examples or a contract-approved smaller set; `sample-task/*` is not copied into final install by default; `bootstrap-first-success/*` reports are excluded from final install; delivery bundle inclusion is tested separately from final install exclusion |
+| #170 | final smoke and docs guard closeout | generated bundle manifest, final installed tree, old path absence, excluded example absence, root validators, doc guard, and full tests all pass against the same contract |
+
+Brownfield/upgrade automatic migration is outside Epic #166. Existing projects with legacy `docs/process/standard/coding_guidelines_core.md` or heavyweight examples need a separate adoption/upgrade task; this epic only defines new generated/final surfaces and stale generated artifact cleanup in bundle/install tooling.
 
 ## Install-Time Lifecycle
 
