@@ -110,8 +110,10 @@ python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-proj
   - process, artifact, audit, testing, validation, code hygiene, design quality, performance, lightweight 정책을 둔다.
 - `downstream/docs/phase_*`
   - 각 Phase의 구현 기준과 감사 기준을 둔다.
-- [`downstream/docs/standard/coding_guidelines_core.md`](downstream/docs/standard/coding_guidelines_core.md)
-  - 여러 프로젝트에서 공통으로 재사용할 수 있는 코드 품질 규칙을 둔다.
+- coding guideline policy
+  - 현재 source repo의 공통 코드 품질 규칙은 `downstream/docs/standard/coding_guidelines_core.md`에 있다.
+  - Epic #166 계약 기준으로는 #168에서 `downstream/docs/harness/common/coding_guidelines_policy.md`로 옮기고, final install에서는 `docs/process/common/coding_guidelines_policy.md`만 canonical path로 남긴다.
+  - final installed runtime surface에는 `docs/process/standard/` 축을 남기지 않는다.
 - `downstream/docs/templates/task/`
   - 새 task를 시작할 때 복사해서 쓸 기본 산출물 템플릿을 둔다.
 - `downstream/docs/examples/`
@@ -208,7 +210,7 @@ python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-proj
   - 목적: `harness-kit` core 규칙, template, example, 문서 구조 자체를 수정할 때의 감사와 기록
   - 주 문서: [`maintainer/docs/audit_policy.md`](maintainer/docs/audit_policy.md), [`maintainer/docs/drift_response_guide.md`](maintainer/docs/drift_response_guide.md), [`maintainer/docs/release_process.md`](maintainer/docs/release_process.md), [`maintainer/docs/downstream_bundle_smoke_validation.md`](maintainer/docs/downstream_bundle_smoke_validation.md), [`harness.log`](harness.log)
 
-이 경계와 별도로, downstream에 실제로 배포할 자산은 저장소 전체가 아니라 project-facing 문서/스크립트/예시/bootstrapping 자산 중심의 부분집합으로 본다. downstream bundle 경계의 정본은 [`maintainer/docs/downstream_bundle_boundary.md`](maintainer/docs/downstream_bundle_boundary.md)를 따른다. Epic #153의 greenfield final install 결과처럼 delivery bundle과 final runtime surface를 구분해야 하는 작업은 [`maintainer/docs/downstream_final_layout_contract.md`](maintainer/docs/downstream_final_layout_contract.md)를 함께 따른다.
+이 경계와 별도로, downstream에 실제로 배포할 자산은 저장소 전체가 아니라 project-facing 문서/스크립트/예시/bootstrapping 자산 중심의 부분집합으로 본다. downstream bundle 경계의 정본은 [`maintainer/docs/downstream_bundle_boundary.md`](maintainer/docs/downstream_bundle_boundary.md)를 따른다. Epic #153의 greenfield final install 결과나 Epic #166의 runtime docs surface 경량화처럼 delivery bundle과 final runtime surface를 구분해야 하는 작업은 [`maintainer/docs/downstream_final_layout_contract.md`](maintainer/docs/downstream_final_layout_contract.md)를 함께 따른다.
 
 개별 서비스 프로젝트의 task 수행자는 maintainer 문서를 기본 운영 규칙으로 사용하지 않는다.
 `maintainer/docs/*`는 downstream 프로젝트가 가져가야 하는 최소 프로젝트 문서 세트에 포함되지 않는다.

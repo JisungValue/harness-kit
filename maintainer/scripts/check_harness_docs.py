@@ -521,6 +521,7 @@ def check_downstream_final_layout_contract(errors: list[str]) -> None:
 
     required_phrases = (
         "Epic #153",
+        "Epic #166",
         "runtime-only final surface",
         "source repo의 물리 구조를 바꾸지",
         "docs/entrypoint.md",
@@ -533,8 +534,11 @@ def check_downstream_final_layout_contract(errors: list[str]) -> None:
         "Install-Time Only",
         "Runtime / Operation-Time",
         "Project-Local Generated",
+        "Coding Guideline Policy Contract",
+        "Examples Taxonomy",
         "First-Success Minimum",
         "Runtime Operation Minimum",
+        "Epic #166 Acceptance Matrix",
     )
     for phrase in required_phrases:
         if phrase not in contract:
@@ -545,13 +549,28 @@ def check_downstream_final_layout_contract(errors: list[str]) -> None:
         "docs/project/decisions/README.md",
         "docs/project/standards/coding_conventions_project.md",
         "docs/process/harness_guide.md",
-        "docs/process/standard/coding_guidelines_core.md",
+        "docs/process/common/coding_guidelines_policy.md",
         "docs/process/templates/task/*",
         "no final runtime path",
     )
     for path in required_final_paths:
         if path not in contract:
             errors.append(f"{contract_path}에 source-to-final mapping 또는 minimum set 경로 `{path}`가 없습니다.")
+
+    required_surface_simplification_phrases = (
+        "downstream/docs/harness/common/coding_guidelines_policy.md",
+        "docs/process/standard/",
+        "coding_guidelines_core.md",
+        "bootstrap-first-success/validation_report.md",
+        "bootstrap-first-success/overlay_completion_validation_report.md",
+        "sample-task/issue.md",
+        "sample-lightweight-task/validation_report.md",
+        "Delivery bundle inclusion and final install inclusion are separate",
+        "Brownfield/upgrade automatic migration is outside Epic #166",
+    )
+    for phrase in required_surface_simplification_phrases:
+        if phrase not in contract:
+            errors.append(f"{contract_path}에 #167 surface simplification 계약 문구 `{phrase}`가 없습니다.")
 
     for rel_path, text in {
         "README.md": readme,
