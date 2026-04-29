@@ -37,23 +37,23 @@
 
 ### 새 프로젝트
 
-1. `harness-kit`를 프로젝트 안의 vendored 경로로 둔다.
-    - 아래 예시는 `vendor/harness-kit/`를 기준으로 한다.
-    - 다른 경로를 쓰면 문서 안의 vendored path와 예시 명령의 `vendor/harness-kit/` 부분을 모두 같은 실제 경로로 바꿔서 실행한다.
-2. 먼저 bootstrap만 실행한다.
+1. source repo shortcut이나 release install flow로 greenfield final layout을 만든다. source repo shortcut의 실제 maintainer command는 repo root `README.md`의 "Source Repo Shortcut"만 본다.
+2. release bundle 또는 vendored checkout을 직접 쓰는 경우, 그 경로는 install-time 입력으로만 취급한다. 아래 legacy 예시의 기준 경로는 `vendor/harness-kit/`이고, 다른 경로를 쓰면 문서 안의 vendored path와 예시 명령의 `vendor/harness-kit/` 부분을 모두 같은 실제 경로로 바꿔서 실행한다.
 
-- `bootstrap_init.py`와 validator 예시는 모두 Python 3 runtime이 필요하다.
+- install helper, `bootstrap_init.py`, validator 예시는 모두 Python 3 runtime이 필요하다.
 - 현재 bootstrap CLI는 `python`, `java`, `kotlin` language profile을 지원하지만, 실행 자체는 Python 3로 한다.
-- non-default vendoring이면 bootstrap 시점부터 `--vendor-path <actual-path>`를 함께 줘 generated reference를 바로 현지화한다.
-- 아래 명령은 `harness-kit` source repo가 아니라 downstream 프로젝트 루트에서 실행한다.
+- non-default install-time 또는 legacy vendored 입력을 정리해야 하면 install/bootstrap 시점부터 `--vendor-path <actual-path>`를 함께 줘 generated reference와 cleanup target을 바로 현지화한다.
+- 설치가 끝난 downstream 프로젝트에는 `vendor/harness-kit/`, `docs/project_overlay/`, `scripts/bootstrap_init.py`, `scripts/check_first_success_docs.py`가 final runtime surface로 남지 않는다.
+
+release bundle이나 vendored checkout에서 bootstrap helper를 직접 실행하는 legacy/manual 경로는 install-time 입력 경로에서만 실행한다. 이 명령은 final runtime command surface가 아니며, 완료 뒤에는 root `scripts/*` validator만 사용한다.
 
 ```bash
 python3 vendor/harness-kit/scripts/bootstrap_init.py . --language python
 ```
 
-3. bootstrap 직후 `docs/entrypoint.md`와 `docs/project/decisions/README.md`를 먼저 읽고, 현재 프로젝트에서 구조/정책/예외/책임 위치 중 바로 확정해야 할 결정이 있는지 확인한다.
+3. 설치 직후 `docs/entrypoint.md`와 `docs/project/decisions/README.md`를 먼저 읽고, 현재 프로젝트에서 구조/정책/예외/책임 위치 중 바로 확정해야 할 결정이 있는지 확인한다.
 
-4. `harness-kit`를 `vendor/harness-kit/` 이외의 경로에 두었다면, bootstrap 때 `--vendor-path`를 이미 준 경우 language convention bootstrap reference는 바로 맞는다. 그 옵션 없이 생성했다면 validator를 돌리기 전에 아래 파일의 vendored 경로를 실제 배치 경로로 먼저 현지화한다.
+4. install-time 입력을 `vendor/harness-kit/` 이외의 경로에 두었다면, install/bootstrap 때 `--vendor-path`를 이미 준 경우 language convention bootstrap reference는 바로 맞는다. 그 옵션 없이 생성했다면 validator를 돌리기 전에 아래 파일의 bootstrap reference를 실제 입력 경로 또는 install-time-only note에 맞게 먼저 현지화한다.
 
 - `docs/project/standards/coding_conventions_project.md`
 
@@ -64,7 +64,7 @@ python3 scripts/validate_overlay_decisions.py . --readiness first-success
 python3 scripts/validate_overlay_consistency.py .
 ```
 
-6. local validator가 통과하면 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사하고 workflow 안의 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꾼다.
+6. local validator가 통과하면 source repo 또는 delivery bundle의 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사하고 workflow 안의 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꾼다. 이 template는 install-time 자산이고, final runtime docs tree의 일부로 남기지 않는다.
 
 7. 첫 task를 시작하기 전에 `docs/process/downstream_harness_flow.md`를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
 8. `docs/process/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
@@ -170,13 +170,13 @@ python3 scripts/validate_overlay_consistency.py .
 ## 흔한 실패 원인
 
 - init 대상 경로에 이미 생성 대상 문서가 있어 fail-fast가 발생함
-- vendored path를 실제 프로젝트 경로에 맞게 현지화하지 않음
-- non-default vendoring인데 bootstrap 때 `--vendor-path`를 주지 않아 unnecessary 수동 현지화가 생김
-- non-default vendored path인데 현지화 전에 consistency validator부터 실행해 false confidence 또는 즉시 실패를 만듦
+- install-time 또는 legacy vendored path를 실제 프로젝트 경로에 맞게 현지화하지 않음
+- non-default install-time 입력인데 bootstrap 때 `--vendor-path`를 주지 않아 unnecessary 수동 현지화가 생김
+- non-default install-time 입력 경로인데 현지화 전에 consistency validator부터 실행해 false confidence 또는 즉시 실패를 만듦
 - agent가 `AGENTS.md`만 읽고 `docs/entrypoint.md`, core guide, `docs/project/standards/*`까지 따라가지 않음
 - 중요한 정책/예외/책임 위치 변경인데 `docs/project/decisions/README.md`와 관련 decision 문서를 같이 안 봄
 - `--language`를 실제 프로젝트와 다르게 선택함
-- local validator 이후 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 복사하지 않거나 `@<pin-tag-or-sha>`를 그대로 둬 future-session guardrail이 고정되지 않음
+- local validator 이후 source repo 또는 delivery bundle의 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 복사하지 않거나 `@<pin-tag-or-sha>`를 그대로 둬 future-session guardrail이 고정되지 않음
 - 기존 프로젝트에서 `adopt_dry_run.py` 결과를 보지 않고 validator를 너무 일찍 실행함
 - 기존 프로젝트에서 legacy `docs/harness_guide.md`를 그냥 두고 `docs/entrypoint.md`만 새로 생성해 반쪽 migration 상태가 됨
 - `validate_overlay_decisions.py`와 `validate_overlay_consistency.py`의 역할 차이를 혼동함
