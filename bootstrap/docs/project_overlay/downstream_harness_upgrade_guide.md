@@ -65,7 +65,7 @@
 
 ```bash
 python3 vendor/harness-kit/scripts/adopt_dry_run.py . --language python
-python3 vendor/harness-kit/scripts/validate_overlay_consistency.py . --mode incremental
+python3 scripts/validate_overlay_consistency.py . --mode incremental
 ```
 
 출력은 아래처럼 읽는다.
@@ -115,8 +115,8 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py . --mode incr
 아래 명령도 `vendor/harness-kit/` 기준 예시다. 다른 vendored 경로를 쓰면 같은 실제 경로로 바꾼다.
 
 ```bash
-python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
-python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
+python3 scripts/validate_overlay_decisions.py . --readiness first-success
+python3 scripts/validate_overlay_consistency.py .
 ```
 
 phase2 readiness까지 끌어올려야 하는 프로젝트면 해당 readiness 기준으로도 다시 확인한다.

@@ -66,7 +66,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             self.assertTrue((output / "scripts/adopt_dry_run.py").exists())
             self.assertTrue((output / "scripts/adopt_safe_write.py").exists())
             self.assertTrue((output / "scripts/check_first_success_docs.py").exists())
-            self.assertTrue((output / "downstream/scripts/validate_phase_gate.py").exists())
+            self.assertTrue((output / "scripts/validate_phase_gate.py").exists())
             self.assertFalse(any(output.rglob("*.pyc")))
             self.assertFalse(any(path.name == "__pycache__" for path in output.rglob("*")))
 
@@ -113,7 +113,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             self.assertIn("docs/project_overlay/adopt_dry_run.md", copied_paths)
             self.assertIn("docs/project_overlay/harness_doc_guard_workflow_template.yml", copied_paths)
             self.assertIn("scripts/bootstrap_init.py", copied_paths)
-            self.assertIn("downstream/scripts/validate_phase_gate.py", copied_paths)
+            self.assertIn("scripts/validate_phase_gate.py", copied_paths)
             self.assertEqual(manifest["artifact_format"], "directory")
             self.assertEqual(manifest["schema_version"], 2)
             self.assertIn("bootstrap/**/*", manifest["bundle_patterns"])
@@ -127,7 +127,7 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             self.assertIn("docs/process/standard/coding_guidelines_core.md", manifest["bundle_patterns"])
             self.assertIn("docs/process/templates/task/**/*.md", manifest["bundle_patterns"])
             self.assertIn("docs/process/examples/**/*.md", manifest["bundle_patterns"])
-            self.assertIn("downstream/scripts/validate_phase_gate.py", manifest["bundle_patterns"])
+            self.assertIn("scripts/validate_phase_gate.py", manifest["bundle_patterns"])
             self.assertIn("docs/project_overlay/harness_doc_guard_workflow_template.yml", manifest["bundle_patterns"])
             self.assertEqual(manifest["generated_files"][0]["path"], "README.md")
 

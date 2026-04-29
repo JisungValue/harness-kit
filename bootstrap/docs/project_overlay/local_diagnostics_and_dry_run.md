@@ -29,12 +29,11 @@
 
 ```bash
 python3 vendor/harness-kit/scripts/bootstrap_init.py . --language python
-python3 vendor/harness-kit/scripts/check_first_success_docs.py .
-python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
-python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
+python3 scripts/validate_overlay_decisions.py . --readiness first-success
+python3 scripts/validate_overlay_consistency.py .
 ```
 
-bootstrap 직후에는 `docs/entrypoint.md`와 `docs/project/decisions/README.md`를 먼저 읽고, 현재 작업에서 바로 중요하게 다뤄야 할 구조/정책/예외 결정이 있는지 확인한다.
+greenfield install flow는 install 중 `check_first_success_docs.py`를 completion helper로 실행하고, final runtime surface에는 남기지 않는다. bootstrap 직후에는 `docs/entrypoint.md`와 `docs/project/decisions/README.md`를 먼저 읽고, 현재 작업에서 바로 중요하게 다뤄야 할 구조/정책/예외 결정이 있는지 확인한다.
 
 `vendor/harness-kit/`가 아닌 다른 경로에 kit를 뒀다면, bootstrap 시점부터 `--vendor-path <actual-path>`를 같이 주는 쪽을 우선한다. 그렇게 생성하지 않았다면 `validate_overlay_consistency.py` 전에 `docs/project/standards/coding_conventions_project.md`의 vendored bootstrap 경로를 먼저 실제 배치 경로로 맞춘다.
 
@@ -56,9 +55,9 @@ python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python
 ```
 
 ```bash
-python3 vendor/harness-kit/scripts/validate_overlay_consistency.py . --mode incremental
-python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
-python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
+python3 scripts/validate_overlay_consistency.py . --mode incremental
+python3 scripts/validate_overlay_decisions.py . --readiness first-success
+python3 scripts/validate_overlay_consistency.py .
 ```
 
 ## 명령별 의미

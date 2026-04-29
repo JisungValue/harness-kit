@@ -30,6 +30,8 @@ OBSOLETE_BUNDLE_PATHS = {
     "docs/standard",
     "docs/templates",
     "docs/examples",
+    "downstream",
+    "downstream/scripts",
 }
 OBSOLETE_BUNDLE_PREFIXES = tuple(f"{path}/" for path in OBSOLETE_BUNDLE_PATHS)
 BOUNDARY_INCLUDE_SECTIONS = (
@@ -60,6 +62,7 @@ BUNDLE_TEXT_REPLACEMENTS = (
     ("downstream/docs/templates/task/", "docs/process/templates/task/"),
     ("downstream/docs/examples/", "docs/process/examples/"),
     ("downstream/docs/", "docs/"),
+    ("downstream/scripts/", "scripts/"),
     ("bootstrap/scripts/", "scripts/"),
     ("vendor/harness-kit/docs/templates/task/", "docs/process/templates/task/"),
     ("docs/harness/common/", "docs/process/common/"),
@@ -80,7 +83,7 @@ BUNDLE_TEXT_REPLACEMENTS_BY_PATH: dict[str, tuple[tuple[str, str], ...]] = {
     "bootstrap/README.md": (
         (
             "- source repo canonical CLI는 `scripts/bootstrap_init.py`, `scripts/check_first_success_docs.py`, `scripts/validate_overlay_decisions.py`, `scripts/validate_overlay_consistency.py`이며 모두 Python 3 runtime으로 실행한다.",
-            "- bundle에서는 `scripts/bootstrap_init.py`, `scripts/check_first_success_docs.py`, `scripts/validate_overlay_decisions.py`, `scripts/validate_overlay_consistency.py`를 모두 Python 3 runtime으로 실행한다.",
+            "- bundle에서는 `scripts/bootstrap_init.py`, `scripts/check_first_success_docs.py`를 install-time helper로, `scripts/validate_overlay_decisions.py`, `scripts/validate_overlay_consistency.py`, `scripts/validate_phase_gate.py`를 runtime validator source로 실행한다.",
         ),
         (
             "- `scripts/bootstrap_init.py`는 `docs/project_overlay/*` 템플릿을 source of truth로 삼고, generated bundle에서는 같은 자산을 `docs/project_overlay/*`와 `scripts/*`로 materialize 한 뒤 새 프로젝트 또는 거의 빈 대상 디렉터리에 최소 project overlay 문서 세트를 그대로 복사해 생성한다.",
@@ -88,7 +91,7 @@ BUNDLE_TEXT_REPLACEMENTS_BY_PATH: dict[str, tuple[tuple[str, str], ...]] = {
         ),
         (
             "- `scripts/check_first_success_docs.py`는 source repo canonical helper command다. generated bundle에서는 `scripts/check_first_success_docs.py`로 materialize 된다.",
-            "- `scripts/check_first_success_docs.py`는 bundle helper command다.",
+            "- `scripts/check_first_success_docs.py`는 install-time bundle helper command다. final runtime surface에는 남기지 않는다.",
         ),
     ),
     "docs/process/downstream_harness_flow.md": (
@@ -264,7 +267,7 @@ def bundle_relative_path_for_source(relative_path: Path) -> Path:
     if relative_posix.startswith("downstream/docs/"):
         return Path("docs") / relative_path.relative_to("downstream/docs")
     if relative_posix.startswith("downstream/scripts/"):
-        return Path("downstream/scripts") / relative_path.name
+        return Path("scripts") / relative_path.name
     return relative_path
 
 

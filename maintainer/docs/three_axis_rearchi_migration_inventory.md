@@ -263,9 +263,9 @@
 
 | 현재 경로 | 목표 canonical path |
 | --- | --- |
-| `downstream/scripts/validate_phase_gate.py` | `downstream/scripts/validate_phase_gate.py` |
+| `downstream/scripts/validate_phase_gate.py` | source repo 유지, generated bundle/final install에서는 `scripts/validate_phase_gate.py` |
 
-루트 `scripts/validate_phase_gate.py` wrapper는 제거되었다.
+source repo의 물리 위치는 `downstream/scripts/validate_phase_gate.py`로 유지하되, downstream delivery/runtime command surface는 root `scripts/validate_phase_gate.py`를 canonical path로 쓴다.
 
 ### 4. 루트 유지 또는 후속 결정
 

@@ -13,8 +13,8 @@
 프로젝트 루트에서 아래처럼 실행한다.
 
 ```bash
-python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
-python3 vendor/harness-kit/scripts/validate_overlay_consistency.py . --mode incremental
+python3 scripts/validate_overlay_consistency.py .
+python3 scripts/validate_overlay_consistency.py . --mode incremental
 ```
 
 - 기본값인 full mode는 complete overlay shape를 요구한다.
@@ -107,6 +107,6 @@ python3 vendor/harness-kit/scripts/validate_overlay_consistency.py . --mode incr
 - 예시:
 
 ```bash
-python3 vendor/harness-kit/scripts/validate_overlay_consistency.py .
-python3 vendor/harness-kit/scripts/validate_overlay_consistency.py . --mode incremental
+python3 scripts/validate_overlay_consistency.py .
+python3 scripts/validate_overlay_consistency.py . --mode incremental
 ```

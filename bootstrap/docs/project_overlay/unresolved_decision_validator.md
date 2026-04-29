@@ -13,8 +13,8 @@
 프로젝트 루트에서 아래처럼 실행한다.
 
 ```bash
-python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
-python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness phase2
+python3 scripts/validate_overlay_decisions.py . --readiness first-success
+python3 scripts/validate_overlay_decisions.py . --readiness phase2
 ```
 
 ## 검사 대상 문서
@@ -80,7 +80,7 @@ python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness p
 - 예시:
 
 ```bash
-python3 vendor/harness-kit/scripts/validate_overlay_decisions.py . --readiness first-success
+python3 scripts/validate_overlay_decisions.py . --readiness first-success
 ```
 
 - 더 엄격한 게이트가 필요하면 Phase 2 진입 전 CI나 local check에서 `--readiness phase2`를 사용한다.
