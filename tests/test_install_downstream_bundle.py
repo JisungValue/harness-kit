@@ -21,7 +21,7 @@ class InstallDownstreamBundleTest(unittest.TestCase):
             check=False,
         )
 
-    def run_vendored_script(
+    def run_runtime_script(
         self,
         project_root: Path,
         script_name: str,
@@ -33,6 +33,59 @@ class InstallDownstreamBundleTest(unittest.TestCase):
             capture_output=True,
             text=True,
             check=False,
+        )
+
+    def init_repo(self, project_root: Path) -> None:
+        result = subprocess.run(
+            ["git", "init", "-q", str(project_root)],
+            cwd=ROOT,
+            capture_output=True,
+            text=True,
+            check=False,
+        )
+        self.assertEqual(result.returncode, 0, result.stderr)
+
+    def write_phase_status(self, workspace: Path) -> None:
+        workspace.mkdir(parents=True, exist_ok=True)
+        (workspace / "phase_status.md").write_text(
+            "\n".join(
+                [
+                    "# Phase Status",
+                    "",
+                    "## Current State",
+                    "",
+                    "- Task Status: `active`",
+                    "- Current Phase: `Phase 1`",
+                    "- Current Gate: `requirements definition`",
+                    "- Last Approved Phase: `없음`",
+                    "",
+                    "## Allowed Write Set",
+                    "",
+                    "- `$TASK/issue.md`",
+                    "- `$TASK/requirements.md`",
+                    "- `$TASK/phase_status.md`",
+                    "",
+                    "## Locked Paths",
+                    "",
+                    "- `$TASK/plan.md`",
+                    "- `docs/project/decisions/*`",
+                    "",
+                    "## Stale Artifacts",
+                    "",
+                    "- 없음",
+                    "",
+                    "## Next Action",
+                    "",
+                    "- `requirements.md`를 보완한다.",
+                    "",
+                    "## Cleanup",
+                    "",
+                    "- Task 종료 전 유지: `yes`",
+                    "- Task 종료 후 정리: `Phase 5` close-out 완료 뒤 삭제 가능",
+                    "",
+                ]
+            ),
+            encoding="utf-8",
         )
 
     def test_installs_default_vendored_bundle_and_bootstraps_project(self) -> None:
@@ -81,7 +134,7 @@ class InstallDownstreamBundleTest(unittest.TestCase):
                 (project_root / "docs/project/standards/coding_conventions_project.md").read_text(encoding="utf-8"),
             )
 
-            decisions = self.run_vendored_script(
+            decisions = self.run_runtime_script(
                 project_root,
                 "validate_overlay_decisions.py",
                 ".",
@@ -90,12 +143,26 @@ class InstallDownstreamBundleTest(unittest.TestCase):
             )
             self.assertEqual(decisions.returncode, 0, decisions.stderr)
 
-            consistency = self.run_vendored_script(
+            consistency = self.run_runtime_script(
                 project_root,
                 "validate_overlay_consistency.py",
                 ".",
             )
             self.assertEqual(consistency.returncode, 0, consistency.stderr)
+
+            self.init_repo(project_root)
+            task_workspace = project_root / "docs/task/greenfield-smoke"
+            self.write_phase_status(task_workspace)
+            phase_gate = self.run_runtime_script(
+                project_root,
+                "validate_phase_gate.py",
+                "docs/task/greenfield-smoke",
+                "--paths",
+                "docs/task/greenfield-smoke/issue.md",
+                "docs/task/greenfield-smoke/phase_status.md",
+            )
+            self.assertEqual(phase_gate.returncode, 0, phase_gate.stderr)
+            self.assertIn("phase gate validation passed", phase_gate.stdout)
 
     def test_installs_localized_vendor_path_and_bootstraps_with_localized_references(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -122,7 +189,7 @@ class InstallDownstreamBundleTest(unittest.TestCase):
                 (project_root / "docs/project/standards/coding_conventions_project.md").read_text(encoding="utf-8"),
             )
 
-            consistency = self.run_vendored_script(
+            consistency = self.run_runtime_script(
                 project_root,
                 "validate_overlay_consistency.py",
                 ".",

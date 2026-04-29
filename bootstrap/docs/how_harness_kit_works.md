@@ -94,12 +94,13 @@
 
 ### Greenfield
 
-1. `bootstrap_init.py`로 최소 문서 세트를 만든다.
+1. greenfield install flow가 install-time `bootstrap_init.py`로 최소 문서 세트를 만들고 helper 자산을 제거한다.
 2. runtime entrypoint chain을 따라 `AGENTS.md -> docs/entrypoint.md -> core guide + docs/project/standards/*` 순서를 확인한다.
 3. install flow가 `check_first_success_docs.py` helper command로 존재를 확인한다.
 4. root `scripts/validate_overlay_decisions.py --readiness first-success`로 readiness를 확인한다.
 5. root `scripts/validate_overlay_consistency.py`로 구조적 정합성과 traversal contract를 확인한다.
-6. project overlay를 채우고 실제 task를 시작한다.
+6. 첫 task를 시작하기 전에 root `scripts/validate_phase_gate.py`가 task workspace의 `phase_status.md` 기준으로 동작하는지 확인할 수 있다.
+7. project overlay를 채우고 실제 task를 시작한다.
 
 ### Brownfield
 
@@ -113,7 +114,7 @@
 ## 왜 여러 도구로 나누는가
 
 - `bootstrap_init.py`
-  - 생성 도구다.
+  - install-time 생성 도구다.
 - `validate_overlay_decisions.py`
   - 미결정 상태를 본다.
 - `validate_overlay_consistency.py`

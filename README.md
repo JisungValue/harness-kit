@@ -20,7 +20,7 @@
 - `source repo`
   - 지금 보고 있는 `harness-kit` 저장소 자체다.
 - `downstream project`
-  - `harness-kit`를 vendoring하거나 bootstrap한 실제 사용 프로젝트다.
+  - `harness-kit`를 설치하거나 bootstrap한 실제 사용 프로젝트다.
 - `process guide`
   - downstream 프로젝트 안에 materialize 되는 `docs/process/harness_guide.md` 같은 공통 규칙 문서다.
 - `runtime launcher entrypoint`
@@ -32,7 +32,7 @@ greenfield final install 이후의 runtime 예시는 downstream 프로젝트 루
 
 ## Source Repo 와 Downstream 관계
 
-| source repo file | downstream generated or vendored file | runtime role |
+| source repo file | downstream generated or installed file | runtime role |
 | --- | --- | --- |
 | [`bootstrap/docs/project_overlay/agent_entrypoint_template.md`](bootstrap/docs/project_overlay/agent_entrypoint_template.md) | `AGENTS.md` | runtime launcher entrypoint |
 | [`bootstrap/docs/project_overlay/project_entrypoint_template.md`](bootstrap/docs/project_overlay/project_entrypoint_template.md) | `docs/entrypoint.md` | documentation/policy entrypoint |
@@ -51,7 +51,7 @@ greenfield final install 이후의 runtime 예시는 downstream 프로젝트 루
 ## 3축 지도
 
 - `downstream/`
-  - downstream 프로젝트에 vendoring되거나, 도입 이후 계속 참조되는 운영 규칙과 runtime 도구의 source-of-truth다.
+  - downstream 프로젝트에 materialize 되는 운영 규칙과 runtime 도구의 source-of-truth다.
 - `bootstrap/`
   - downstream 프로젝트를 처음 세팅하거나 adoption/readiness 상태를 맞출 때 쓰는 문서, template, bootstrap/adoption 스크립트의 source-of-truth다.
 - `maintainer/`
@@ -220,16 +220,16 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 ## 권장 도입 순서
 
 1. 먼저 [`bootstrap/docs/quickstart.md`](bootstrap/docs/quickstart.md)부터 읽는다.
-2. `harness-kit`를 새 프로젝트로 가져온다.
+2. greenfield install helper 또는 release bundle을 통해 `harness-kit`를 새 프로젝트에 적용한다.
 3. 새 프로젝트면 `quickstart`의 greenfield 경로를, 기존 프로젝트 첫 도입이면 brownfield 경로를, 이미 도입된 프로젝트 업그레이드면 upgrade 경로를 먼저 따른다.
 4. 상세 설명이 더 필요할 때만 greenfield는 [`bootstrap/docs/project_overlay/first_success_guide.md`](bootstrap/docs/project_overlay/first_success_guide.md)를, 기존 프로젝트 진단은 [`bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md`](bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md)를 reference로 본다.
-5. init CLI 또는 `docs/project_overlay/` 수동 복사로 최소 문서 세트를 만든다.
+5. greenfield install flow 또는 install-time `docs/project_overlay/` 수동 복사로 최소 문서 세트를 만든다.
 6. 생성된 `docs/entrypoint.md`, `docs/project/decisions/README.md`, `docs/project/standards/coding_conventions_project.md`를 읽고 현재 프로젝트에서 먼저 확정해야 할 구조/정책/예외 결정이 있는지 확인한다.
-7. `vendor/harness-kit/`가 아닌 경로에 kit를 둘 예정이면 bootstrap 시점부터 `--vendor-path <actual-path>`를 사용해 generated bootstrap reference를 바로 현지화한다. 그 옵션 없이 생성했다면 이후 `docs/project/standards/coding_conventions_project.md`의 경로를 실제 배치 경로에 맞게 수동 현지화한다.
+7. install-time 입력 또는 legacy cleanup 대상이 `vendor/harness-kit/`가 아닌 경로라면 install/bootstrap 시점부터 `--vendor-path <actual-path>`를 사용해 generated bootstrap reference와 cleanup target을 바로 현지화한다. 그 옵션 없이 생성했다면 이후 `docs/project/standards/coding_conventions_project.md`의 경로를 실제 입력 경로 또는 install-time-only note에 맞게 수동 현지화한다.
 8. install 완료 뒤에는 runtime validator를 downstream 프로젝트 루트의 `scripts/*`에서 실행한다.
 9. `python3 scripts/validate_overlay_decisions.py . --readiness first-success`로 unresolved decision readiness를 확인한다.
 10. `python3 scripts/validate_overlay_consistency.py .`로 문서 간 교차 정합성과 runtime instruction entrypoint 연결을 확인한다.
-11. local validator가 통과하면 [`bootstrap/docs/project_overlay/harness_doc_guard_workflow_template.yml`](bootstrap/docs/project_overlay/harness_doc_guard_workflow_template.yml)을 source repo canonical template로 보고, downstream vendored bundle에서는 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사한 뒤 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꿔 future-session guardrail을 고정한다.
+11. local validator가 통과하면 [`bootstrap/docs/project_overlay/harness_doc_guard_workflow_template.yml`](bootstrap/docs/project_overlay/harness_doc_guard_workflow_template.yml)을 source repo canonical template로 보고, delivery bundle에서는 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사한 뒤 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꿔 future-session guardrail을 고정한다.
 12. 첫 task를 시작하기 전에 설치된 프로젝트의 `docs/process/downstream_harness_flow.md`를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
 13. `docs/process/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
 14. task 진행 중 gate/write-set 위반을 확인해야 하면 `python3 scripts/validate_phase_gate.py docs/task/<task_id> --paths ...`를 사용한다. 인자 없이 실행하는 기본 모드는 현재 task workspace와 `phase_status.md`의 허용/잠금 패턴에 걸리는 dirty path만 검사하고, repo 전체 dirty path까지 함께 보려면 `--git-scope repo`를 명시한다.
