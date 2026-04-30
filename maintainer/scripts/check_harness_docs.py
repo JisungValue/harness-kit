@@ -11,7 +11,7 @@ BOOTSTRAP_SCRIPT_ROOT = ROOT / "bootstrap" / "scripts"
 if str(BOOTSTRAP_SCRIPT_ROOT) not in sys.path:
     sys.path.append(str(BOOTSTRAP_SCRIPT_ROOT))
 
-from bootstrap_init import LANGUAGE_BOOTSTRAP_PATHS
+from bootstrap_init import FINAL_RUNTIME_EXAMPLE_TARGETS, LANGUAGE_BOOTSTRAP_PATHS
 
 
 LANGUAGE_TEMPLATE_REQUIRED_HEADINGS = {
@@ -105,6 +105,40 @@ MAINTAINER_ONLY_REFERENCES = [
 ]
 
 AUDIT_SUMMARY_PLACEHOLDERS = {"pending", "todo", "tbd"}
+EXPECTED_FINAL_RUNTIME_EXAMPLES = {
+    "docs/process/examples/project-decisions/DEC-001-authorization-validation-location.md",
+    "docs/process/examples/sample-lightweight-task/issue.md",
+    "docs/process/examples/sample-lightweight-task/plan.md",
+    "docs/process/examples/sample-lightweight-task/validation_report.md",
+}
+EXCLUDED_FINAL_RUNTIME_EXAMPLES = {
+    "docs/process/examples/bootstrap-first-success/validation_report.md",
+    "docs/process/examples/bootstrap-first-success/overlay_completion_validation_report.md",
+    "docs/process/examples/sample-task/issue.md",
+    "docs/process/examples/sample-task/requirements.md",
+    "docs/process/examples/sample-task/plan.md",
+    "docs/process/examples/sample-task/phase_status.md",
+    "docs/process/examples/sample-task/implementation_notes.md",
+    "docs/process/examples/sample-task/validation_report.md",
+    "docs/process/examples/sample-task/coding_conventions_project_example.md",
+    "docs/process/examples/sample-lightweight-task/requirements.md",
+    "docs/process/examples/sample-lightweight-task/phase_status.md",
+    "docs/process/examples/sample-lightweight-task/implementation_notes.md",
+}
+EXCLUDED_FINAL_RUNTIME_EXAMPLE_CONTRACT_PATHS = {
+    "downstream/docs/examples/bootstrap-first-success/validation_report.md",
+    "downstream/docs/examples/bootstrap-first-success/overlay_completion_validation_report.md",
+    "docs/process/examples/sample-task/issue.md",
+    "docs/process/examples/sample-task/requirements.md",
+    "docs/process/examples/sample-task/plan.md",
+    "docs/process/examples/sample-task/phase_status.md",
+    "docs/process/examples/sample-task/implementation_notes.md",
+    "docs/process/examples/sample-task/validation_report.md",
+    "docs/process/examples/sample-task/coding_conventions_project_example.md",
+    "docs/process/examples/sample-lightweight-task/requirements.md",
+    "docs/process/examples/sample-lightweight-task/phase_status.md",
+    "docs/process/examples/sample-lightweight-task/implementation_notes.md",
+}
 
 
 def read_text(rel_path: str) -> str:
@@ -580,6 +614,36 @@ def check_downstream_final_layout_contract(errors: list[str]) -> None:
             errors.append(f"{rel_path}에서 downstream final layout contract를 참조하지 않습니다.")
 
 
+def check_final_runtime_examples_surface(errors: list[str]) -> None:
+    contract_path = "maintainer/docs/downstream_final_layout_contract.md"
+    contract = read_text(contract_path)
+
+    actual_final_examples = set(FINAL_RUNTIME_EXAMPLE_TARGETS)
+    if actual_final_examples != EXPECTED_FINAL_RUNTIME_EXAMPLES:
+        errors.append(
+            "bootstrap final runtime examples allowlist가 downstream final layout contract의 minimum set과 다릅니다."
+        )
+
+    for path in sorted(EXPECTED_FINAL_RUNTIME_EXAMPLES):
+        if path not in contract:
+            errors.append(f"{contract_path}에 final runtime example `{path}`가 없습니다.")
+
+    for path in sorted(EXCLUDED_FINAL_RUNTIME_EXAMPLE_CONTRACT_PATHS):
+        if path not in contract:
+            errors.append(f"{contract_path}에 excluded example `{path}`가 없습니다.")
+
+    reference_docs = {
+        "bootstrap/docs/project_overlay/README.md": read_text("bootstrap/docs/project_overlay/README.md"),
+        "bootstrap/docs/project_overlay/first_success_guide.md": read_text(
+            "bootstrap/docs/project_overlay/first_success_guide.md"
+        ),
+        "maintainer/docs/downstream_bundle_boundary.md": read_text("maintainer/docs/downstream_bundle_boundary.md"),
+    }
+    for rel_path, text in reference_docs.items():
+        if "bootstrap-first-success" in text and "final runtime" not in text:
+            errors.append(f"{rel_path}에서 bootstrap-first-success 예시의 final runtime 제외 설명이 부족합니다.")
+
+
 def iter_harness_log_entries(lines: list[str]):
     date_header = None
     idx = 0
@@ -706,6 +770,7 @@ def main() -> int:
     check_validator_explainer_docs(errors)
     check_repo_local_source_of_truth_docs(errors)
     check_downstream_final_layout_contract(errors)
+    check_final_runtime_examples_surface(errors)
     check_harness_log(errors)
     check_language_template_structure(errors)
     check_project_facing_maintainer_leakage(errors)

@@ -60,6 +60,10 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             self.assertFalse((output / "docs/process/standard").exists())
             self.assertTrue((output / "docs/process/templates/task/issue.md").exists())
             self.assertTrue((output / "bootstrap/README.md").exists())
+            self.assertTrue((output / "docs/process/examples/bootstrap-first-success/validation_report.md").exists())
+            self.assertTrue(
+                (output / "docs/process/examples/bootstrap-first-success/overlay_completion_validation_report.md").exists()
+            )
             self.assertTrue((output / "docs/project_overlay/first_success_guide.md").exists())
             self.assertTrue((output / "docs/project_overlay/adopt_dry_run.md").exists())
             self.assertTrue((output / "docs/project_overlay/harness_doc_guard_workflow_template.yml").exists())
@@ -111,6 +115,11 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             self.assertNotIn("docs/process/standard/coding_guidelines_core.md", copied_paths)
             self.assertIn("docs/process/templates/task/issue.md", copied_paths)
             self.assertIn("docs/process/examples/sample-task/issue.md", copied_paths)
+            self.assertIn("docs/process/examples/bootstrap-first-success/validation_report.md", copied_paths)
+            self.assertIn(
+                "docs/process/examples/bootstrap-first-success/overlay_completion_validation_report.md",
+                copied_paths,
+            )
             self.assertIn("docs/project_overlay/first_success_guide.md", copied_paths)
             self.assertIn("docs/project_overlay/adopt_dry_run.md", copied_paths)
             self.assertIn("docs/project_overlay/harness_doc_guard_workflow_template.yml", copied_paths)

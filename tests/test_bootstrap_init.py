@@ -9,6 +9,26 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "bootstrap" / "scripts" / "bootstrap_init.py"
+FINAL_RUNTIME_EXAMPLES = (
+    "docs/process/examples/project-decisions/DEC-001-authorization-validation-location.md",
+    "docs/process/examples/sample-lightweight-task/issue.md",
+    "docs/process/examples/sample-lightweight-task/plan.md",
+    "docs/process/examples/sample-lightweight-task/validation_report.md",
+)
+EXCLUDED_FINAL_RUNTIME_EXAMPLES = (
+    "docs/process/examples/bootstrap-first-success/validation_report.md",
+    "docs/process/examples/bootstrap-first-success/overlay_completion_validation_report.md",
+    "docs/process/examples/sample-task/issue.md",
+    "docs/process/examples/sample-task/requirements.md",
+    "docs/process/examples/sample-task/plan.md",
+    "docs/process/examples/sample-task/phase_status.md",
+    "docs/process/examples/sample-task/implementation_notes.md",
+    "docs/process/examples/sample-task/validation_report.md",
+    "docs/process/examples/sample-task/coding_conventions_project_example.md",
+    "docs/process/examples/sample-lightweight-task/requirements.md",
+    "docs/process/examples/sample-lightweight-task/phase_status.md",
+    "docs/process/examples/sample-lightweight-task/implementation_notes.md",
+)
 
 
 class BootstrapInitCliTest(unittest.TestCase):
@@ -46,7 +66,10 @@ class BootstrapInitCliTest(unittest.TestCase):
             self.assertTrue((target / "docs/process/common/coding_guidelines_policy.md").exists())
             self.assertFalse((target / "docs/process/standard").exists())
             self.assertTrue((target / "docs/process/templates/task/issue.md").exists())
-            self.assertTrue((target / "docs/process/examples/sample-task/issue.md").exists())
+            for relative_path in FINAL_RUNTIME_EXAMPLES:
+                self.assertTrue((target / relative_path).exists(), relative_path)
+            for relative_path in EXCLUDED_FINAL_RUNTIME_EXAMPLES:
+                self.assertFalse((target / relative_path).exists(), relative_path)
 
             content = (target / "docs/project/standards/coding_conventions_project.md").read_text(
                 encoding="utf-8"
