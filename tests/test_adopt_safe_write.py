@@ -10,6 +10,20 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 BOOTSTRAP_SCRIPT = ROOT / "bootstrap" / "scripts" / "bootstrap_init.py"
 ADOPT_SAFE_WRITE_SCRIPT = ROOT / "bootstrap" / "scripts" / "adopt_safe_write.py"
+FINAL_RUNTIME_EXAMPLES = (
+    "docs/process/examples/project-decisions/DEC-001-authorization-validation-location.md",
+    "docs/process/examples/sample-lightweight-task/issue.md",
+    "docs/process/examples/sample-lightweight-task/plan.md",
+    "docs/process/examples/sample-lightweight-task/validation_report.md",
+)
+EXCLUDED_FINAL_RUNTIME_EXAMPLES = (
+    "docs/process/examples/bootstrap-first-success/validation_report.md",
+    "docs/process/examples/bootstrap-first-success/overlay_completion_validation_report.md",
+    "docs/process/examples/sample-task/issue.md",
+    "docs/process/examples/sample-lightweight-task/requirements.md",
+    "docs/process/examples/sample-lightweight-task/phase_status.md",
+    "docs/process/examples/sample-lightweight-task/implementation_notes.md",
+)
 
 
 class AdoptSafeWriteTest(unittest.TestCase):
@@ -130,8 +144,12 @@ class AdoptSafeWriteTest(unittest.TestCase):
             result = self.run_adopt_safe_write(target, "--update-unchanged")
 
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertIn("- refreshed unchanged targets: 56", result.stdout)
-            self.assertIn("- remaining unchanged targets: 56", result.stdout)
+            self.assertIn("- refreshed unchanged targets: 44", result.stdout)
+            self.assertIn("- remaining unchanged targets: 44", result.stdout)
+            for relative_path in FINAL_RUNTIME_EXAMPLES:
+                self.assertTrue((target / relative_path).exists(), relative_path)
+            for relative_path in EXCLUDED_FINAL_RUNTIME_EXAMPLES:
+                self.assertFalse((target / relative_path).exists(), relative_path)
 
     def test_safe_write_can_migrate_legacy_project_entrypoint(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:

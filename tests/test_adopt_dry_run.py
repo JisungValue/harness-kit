@@ -10,6 +10,20 @@ from pathlib import Path
 ROOT = Path(__file__).resolve().parents[1]
 BOOTSTRAP_SCRIPT = ROOT / "bootstrap" / "scripts" / "bootstrap_init.py"
 ADOPT_SCRIPT = ROOT / "bootstrap" / "scripts" / "adopt_dry_run.py"
+FINAL_RUNTIME_EXAMPLES = (
+    "docs/process/examples/project-decisions/DEC-001-authorization-validation-location.md",
+    "docs/process/examples/sample-lightweight-task/issue.md",
+    "docs/process/examples/sample-lightweight-task/plan.md",
+    "docs/process/examples/sample-lightweight-task/validation_report.md",
+)
+EXCLUDED_FINAL_RUNTIME_EXAMPLES = (
+    "docs/process/examples/bootstrap-first-success/validation_report.md",
+    "docs/process/examples/bootstrap-first-success/overlay_completion_validation_report.md",
+    "docs/process/examples/sample-task/issue.md",
+    "docs/process/examples/sample-lightweight-task/requirements.md",
+    "docs/process/examples/sample-lightweight-task/phase_status.md",
+    "docs/process/examples/sample-lightweight-task/implementation_notes.md",
+)
 
 
 class AdoptDryRunTest(unittest.TestCase):
@@ -41,9 +55,13 @@ class AdoptDryRunTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("- missing files: 0", result.stdout)
-            self.assertIn("- existing but unchanged targets: 56", result.stdout)
+            self.assertIn("- existing but unchanged targets: 44", result.stdout)
             self.assertIn("- differing files: 0", result.stdout)
             self.assertIn("- conflict candidates: 0", result.stdout)
+            for relative_path in FINAL_RUNTIME_EXAMPLES:
+                self.assertTrue((target / relative_path).exists(), relative_path)
+            for relative_path in EXCLUDED_FINAL_RUNTIME_EXAMPLES:
+                self.assertFalse((target / relative_path).exists(), relative_path)
 
     def test_missing_files_are_reported_safe_to_create(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
@@ -116,7 +134,7 @@ class AdoptDryRunTest(unittest.TestCase):
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn("- missing files: 3", result.stdout)
-            self.assertIn("- conflict candidates: 53", result.stdout)
+            self.assertIn("- conflict candidates: 41", result.stdout)
             self.assertIn("parent path is not a directory", result.stdout)
 
     def test_legacy_project_entrypoint_is_reported_as_migration_candidate(self) -> None:

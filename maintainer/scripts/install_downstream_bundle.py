@@ -41,6 +41,17 @@ INSTALL_TIME_RESIDUE_PATHS = (
     "scripts/adopt_safe_write.py",
     "scripts/check_first_success_docs.py",
 )
+FINAL_RUNTIME_EXAMPLE_PATHS = tuple(sorted(bootstrap_init.FINAL_RUNTIME_EXAMPLE_TARGETS))
+FINAL_RUNTIME_EXAMPLE_DIRS = tuple(
+    sorted(
+        {
+            parent.as_posix()
+            for path in FINAL_RUNTIME_EXAMPLE_PATHS
+            for parent in Path(path).parents
+            if parent.as_posix() != "."
+        }
+    )
+)
 
 
 @dataclass(frozen=True)
@@ -254,11 +265,40 @@ def collect_install_time_residue(target_root: Path, vendor_path: str) -> list[st
     return sorted(path for path in residue_paths if (target_root / path).exists())
 
 
+def collect_unexpected_final_runtime_examples(target_root: Path) -> list[str]:
+    examples_root = target_root / "docs/process/examples"
+    if not examples_root.exists():
+        return []
+
+    allowed = set(FINAL_RUNTIME_EXAMPLE_PATHS) | set(FINAL_RUNTIME_EXAMPLE_DIRS)
+    return sorted(
+        path.relative_to(target_root).as_posix()
+        for path in examples_root.rglob("*")
+        if path.relative_to(target_root).as_posix() not in allowed
+    )
+
+
 def ensure_no_install_time_residue(target_root: Path, vendor_path: str) -> None:
     residue = collect_install_time_residue(target_root, vendor_path)
     if residue:
         lines = ["post-install cleanup failed: install-time only assets remain in final runtime surface."]
         lines.extend(f"- {path}" for path in residue)
+        raise ValueError("\n".join(lines))
+
+
+def ensure_no_unexpected_final_runtime_examples(target_root: Path) -> None:
+    residue = collect_unexpected_final_runtime_examples(target_root)
+    if residue:
+        lines = ["post-install cleanup failed: non-runtime examples remain in final runtime surface."]
+        lines.extend(f"- {path}" for path in residue)
+        raise ValueError("\n".join(lines))
+
+
+def ensure_required_final_runtime_examples(target_root: Path) -> None:
+    missing = [path for path in FINAL_RUNTIME_EXAMPLE_PATHS if not (target_root / path).is_file()]
+    if missing:
+        lines = ["post-install validation failed: required final runtime examples are missing."]
+        lines.extend(f"- {path}" for path in missing)
         raise ValueError("\n".join(lines))
 
 
@@ -270,6 +310,7 @@ def main(argv: list[str] | None = None) -> int:
         vendor_path = bootstrap_init.normalize_vendor_path(args.vendor_path)
         validate_vendor_path(vendor_path)
         ensure_bootstrap_preflight(target_root, args.language, vendor_path, args.force_bootstrap)
+        ensure_no_unexpected_final_runtime_examples(target_root)
 
         bundle_files = generate_canonical_bundle()
         vendor_root = target_root / vendor_path
@@ -299,6 +340,13 @@ def main(argv: list[str] | None = None) -> int:
         )
         if bootstrap_returncode != 0:
             return bootstrap_returncode
+
+        try:
+            ensure_no_unexpected_final_runtime_examples(target_root)
+            ensure_required_final_runtime_examples(target_root)
+        except ValueError as error:
+            print(error, file=sys.stderr)
+            return 1
 
         completion_returncode = run_install_completion_check(target_root, install_bundle_root)
         if completion_returncode != 0:

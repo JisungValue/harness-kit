@@ -3,7 +3,6 @@
 ## 변경 대상 파일 또는 모듈
 
 - `bootstrap/docs/project_overlay/README.md`
-- `docs/process/examples/sample-lightweight-task/implementation_notes.md`
 - `docs/process/examples/sample-lightweight-task/validation_report.md`
 
 ## 레이어별 작업 계획
@@ -19,8 +18,7 @@
 
 ## 문서 반영 계획
 
-- `implementation_notes.md`에 경량 검토 기록과 진행 로그를 남긴다.
-- `validation_report.md`에 수행한 검증과 잔여 리스크를 남긴다.
+- `validation_report.md`에 경량 검토 기록, 수행한 검증, 잔여 리스크를 남긴다.
 - 관련 `docs/project/decisions/README.md` 또는 `DEC-###-slug.md` 읽기/수정/생성 필요 여부: 해당 없음. 이번 작업은 decision 수준의 구조 변경이 아니다.
 - 새 decision이 필요하면 index 갱신 계획: 해당 없음.
 

@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import subprocess
 import sys
 import tempfile
@@ -9,6 +10,27 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 SCRIPT = ROOT / "maintainer" / "scripts" / "install_downstream_bundle.py"
+BUNDLE_MANIFEST = ROOT / "dist" / "harness-kit-project-bundle" / "bundle_manifest.json"
+FINAL_RUNTIME_EXAMPLES = (
+    "docs/process/examples/project-decisions/DEC-001-authorization-validation-location.md",
+    "docs/process/examples/sample-lightweight-task/issue.md",
+    "docs/process/examples/sample-lightweight-task/plan.md",
+    "docs/process/examples/sample-lightweight-task/validation_report.md",
+)
+EXCLUDED_FINAL_RUNTIME_EXAMPLES = (
+    "docs/process/examples/bootstrap-first-success/validation_report.md",
+    "docs/process/examples/bootstrap-first-success/overlay_completion_validation_report.md",
+    "docs/process/examples/sample-task/issue.md",
+    "docs/process/examples/sample-task/requirements.md",
+    "docs/process/examples/sample-task/plan.md",
+    "docs/process/examples/sample-task/phase_status.md",
+    "docs/process/examples/sample-task/implementation_notes.md",
+    "docs/process/examples/sample-task/validation_report.md",
+    "docs/process/examples/sample-task/coding_conventions_project_example.md",
+    "docs/process/examples/sample-lightweight-task/requirements.md",
+    "docs/process/examples/sample-lightweight-task/phase_status.md",
+    "docs/process/examples/sample-lightweight-task/implementation_notes.md",
+)
 
 
 class InstallDownstreamBundleTest(unittest.TestCase):
@@ -110,7 +132,19 @@ class InstallDownstreamBundleTest(unittest.TestCase):
             self.assertTrue((project_root / "docs/process/common/coding_guidelines_policy.md").exists())
             self.assertFalse((project_root / "docs/process/standard").exists())
             self.assertTrue((project_root / "docs/process/templates/task/issue.md").exists())
-            self.assertTrue((project_root / "docs/process/examples/sample-task/issue.md").exists())
+            for relative_path in FINAL_RUNTIME_EXAMPLES:
+                self.assertTrue((project_root / relative_path).exists(), relative_path)
+            for relative_path in EXCLUDED_FINAL_RUNTIME_EXAMPLES:
+                self.assertFalse((project_root / relative_path).exists(), relative_path)
+
+            manifest = json.loads(BUNDLE_MANIFEST.read_text(encoding="utf-8"))
+            copied_paths = {entry["path"] for entry in manifest["copied_files"]}
+            for relative_path in FINAL_RUNTIME_EXAMPLES:
+                self.assertIn(relative_path, copied_paths, relative_path)
+            for relative_path in EXCLUDED_FINAL_RUNTIME_EXAMPLES:
+                self.assertIn(relative_path, copied_paths, relative_path)
+                self.assertFalse((project_root / relative_path).exists(), relative_path)
+
             self.assertTrue((project_root / "scripts/validate_overlay_decisions.py").exists())
             self.assertTrue((project_root / "scripts/validate_overlay_consistency.py").exists())
             self.assertTrue((project_root / "scripts/validate_phase_gate.py").exists())
@@ -301,6 +335,33 @@ class InstallDownstreamBundleTest(unittest.TestCase):
             self.assertEqual(result.returncode, 1)
             self.assertIn("install-time only assets remain", result.stderr)
             self.assertIn("docs/project_overlay", result.stderr)
+            self.assertFalse((project_root / "AGENTS.md").exists())
+
+    def test_existing_excluded_example_residue_fails_before_final_install(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_root = Path(tmp_dir) / "recipeForBaby"
+            residue = project_root / "docs/process/examples/sample-task/issue.md"
+            residue.parent.mkdir(parents=True, exist_ok=True)
+            residue.write_text("stale heavy example\n", encoding="utf-8")
+
+            result = self.run_cli(project_root, "--language", "python")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("non-runtime examples remain in final runtime surface", result.stderr)
+            self.assertIn("docs/process/examples/sample-task/issue.md", result.stderr)
+            self.assertFalse((project_root / "AGENTS.md").exists())
+
+    def test_existing_excluded_example_directory_fails_before_final_install(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_root = Path(tmp_dir) / "recipeForBaby"
+            residue = project_root / "docs/process/examples/bootstrap-first-success"
+            residue.mkdir(parents=True)
+
+            result = self.run_cli(project_root, "--language", "python")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("non-runtime examples remain in final runtime surface", result.stderr)
+            self.assertIn("docs/process/examples/bootstrap-first-success", result.stderr)
             self.assertFalse((project_root / "AGENTS.md").exists())
 
 

@@ -33,6 +33,18 @@ TEMPLATE_TARGETS = {
 
 MATERIALIZED_PROJECT_OVERLAY_ROOT = "docs/project_overlay"
 MATERIALIZED_PROCESS_DOC_ROOT = "docs/process"
+FINAL_RUNTIME_EXAMPLE_SOURCES = {
+    "downstream/docs/examples/project-decisions/DEC-001-authorization-validation-location.md",
+    "downstream/docs/examples/sample-lightweight-task/issue.md",
+    "downstream/docs/examples/sample-lightweight-task/plan.md",
+    "downstream/docs/examples/sample-lightweight-task/validation_report.md",
+}
+FINAL_RUNTIME_EXAMPLE_TARGETS = {
+    "docs/process/examples/project-decisions/DEC-001-authorization-validation-location.md",
+    "docs/process/examples/sample-lightweight-task/issue.md",
+    "docs/process/examples/sample-lightweight-task/plan.md",
+    "docs/process/examples/sample-lightweight-task/validation_report.md",
+}
 
 LANGUAGE_BOOTSTRAP_PATHS = {
     "python": "vendor/harness-kit/bootstrap/language_conventions/python_coding_conventions_template.md",
@@ -158,12 +170,23 @@ def process_doc_target_for_source(relative_path: Path) -> Path:
     raise ValueError(f"Unsupported process doc source path: {relative_posix}")
 
 
+def is_final_runtime_process_doc(relative_path: Path) -> bool:
+    relative_posix = relative_path.as_posix()
+    if relative_posix.startswith("downstream/docs/examples/"):
+        return relative_posix in FINAL_RUNTIME_EXAMPLE_SOURCES
+    if relative_posix.startswith("docs/process/examples/"):
+        return relative_posix in FINAL_RUNTIME_EXAMPLE_TARGETS
+    return True
+
+
 def iter_process_doc_targets() -> list[tuple[str, str]]:
     downstream_docs_root = ROOT / "downstream/docs"
     if downstream_docs_root.exists():
         targets: list[tuple[str, str]] = []
         for path in sorted(downstream_docs_root.rglob("*.md")):
             source_rel = path.relative_to(ROOT)
+            if not is_final_runtime_process_doc(source_rel):
+                continue
             targets.append((source_rel.as_posix(), process_doc_target_for_source(source_rel).as_posix()))
         return targets
 
@@ -172,6 +195,7 @@ def iter_process_doc_targets() -> list[tuple[str, str]]:
         return [
             (path.relative_to(ROOT).as_posix(), path.relative_to(ROOT).as_posix())
             for path in sorted(materialized_root.rglob("*.md"))
+            if is_final_runtime_process_doc(path.relative_to(ROOT))
         ]
 
     raise FileNotFoundError("Bootstrap process docs not found: downstream/docs or docs/process")

@@ -206,7 +206,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             )
             self.assertEqual(adopt_result.returncode, 0, adopt_result.stderr)
             self.assertIn("write mode: disabled (read-only)", adopt_result.stdout)
-            self.assertIn("- missing files: 55", adopt_result.stdout)
+            self.assertIn("- missing files: 43", adopt_result.stdout)
             self.assertIn("- differing files: 1", adopt_result.stdout)
             self.assertIn("- conflict candidates: 0", adopt_result.stdout)
             self.assertIn("Differing files (manual review):", adopt_result.stdout)
@@ -274,7 +274,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
                 "python",
             )
             self.assertEqual(safe_write_result.returncode, 0, safe_write_result.stderr)
-            self.assertIn("- created files: 55", safe_write_result.stdout)
+            self.assertIn("- created files: 43", safe_write_result.stdout)
             self.assertIn("- remaining missing files: 0", safe_write_result.stdout)
             self.assertIn("- remaining differing files: 1", safe_write_result.stdout)
 
