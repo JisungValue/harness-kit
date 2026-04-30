@@ -27,7 +27,7 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
         downstream_flow_path.parent.mkdir(parents=True, exist_ok=True)
         downstream_flow_path.write_text("# Downstream Harness Flow\n", encoding="utf-8")
 
-        if not bootstrap_reference.startswith("install-time-only:"):
+        if "(install-time input; no runtime path)" not in bootstrap_reference:
             bootstrap_path = target / bootstrap_reference
             bootstrap_path.parent.mkdir(parents=True, exist_ok=True)
             bootstrap_path.write_text("# Python Coding Conventions\n", encoding="utf-8")
@@ -515,7 +515,7 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project_with_vendor_path(
                 target,
-                bootstrap_reference="install-time-only:python_coding_conventions_template.md",
+                bootstrap_reference="python_coding_conventions_template.md (install-time input; no runtime path)",
             )
 
             result = self.run_checker(target)

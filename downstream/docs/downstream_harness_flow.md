@@ -6,7 +6,7 @@
 
 - 이 문서는 downstream 사용 흐름 상세판이다.
 - `README.md`가 시작 경로를 고르는 입구라면, 이 문서는 실제 downstream 구조와 Phase 흐름을 이어서 설명한다.
-- source repo 자산과 downstream 생성 문서의 대응 관계가 먼저 필요하면 `README.md`의 `Source Repo 와 Downstream 관계` 표를 함께 본다.
+- source repo 자산과 downstream 생성 문서의 대응 관계는 install-time source repo의 `README.md`가 설명한다. final runtime tree 안에서는 `docs/entrypoint.md`에서 시작한다.
 
 ## 언제 읽는가
 
@@ -48,7 +48,7 @@ flowchart TD
 
 - 이 저장소는 bootstrap 전 source repo이고, 실제로 동작하는 하네스는 downstream 프로젝트 안에서 맞물린다.
 - bootstrap 또는 vendoring이 끝나면 downstream 프로젝트 안에서 `AGENTS.md`, `docs/entrypoint.md`, `docs/project/standards/*`, `docs/project/decisions/README.md`, `docs/process/harness_guide.md`, `docs/process/downstream_harness_flow.md`를 함께 읽는 구조가 된다.
-- 자세한 bootstrap/adoption 절차는 `bootstrap/docs/quickstart.md`, `bootstrap/docs/project_overlay/first_success_guide.md`, `bootstrap/docs/project_overlay/adopt_dry_run.md`를 기준으로 본다.
+- 자세한 bootstrap/adoption 절차는 install-time bundle 또는 source repo 문서를 기준으로 본다. final runtime tree에는 install/adoption guide를 남기지 않고, 설치 완료 뒤에는 이 문서와 root `scripts/*` validator를 기준으로 운영한다.
 
 ## 프로젝트 진입점은 무엇을 하나
 

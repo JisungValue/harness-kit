@@ -5,7 +5,7 @@
 ## 문서 역할
 
 - `docs/project/standards/architecture.md`는 현재 구조, 경계, 큰 그림을 설명한다.
-- `docs/decisions/*.md`는 중요한 Architecture/Policy/Operational 결정을 기록한다.
+- `docs/project/decisions/*.md`는 중요한 Architecture/Policy/Operational 결정을 기록한다.
 - 다음 작업이 관련 결정을 건드리면 이 index에서 관련 decision 문서를 찾아 함께 읽고 갱신한다.
 
 ## 여기에 남기는 것

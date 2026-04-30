@@ -2,7 +2,7 @@
 
 ## 변경 대상 파일 또는 모듈
 
-- `bootstrap/docs/project_overlay/README.md`
+- `docs/project/standards/implementation_order.md`
 - `docs/process/examples/sample-lightweight-task/validation_report.md`
 
 ## 레이어별 작업 계획

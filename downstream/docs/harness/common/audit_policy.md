@@ -20,16 +20,17 @@
 - 해당 task의 현재 Phase 산출물
 - 이전 Phase에서 현재 Phase 판단에 영향을 주는 산출물
 - 관련 공통 정책 문서
-- 관련 프로젝트 overlay 문서
+- 관련 프로젝트 전용 문서
 
 입력물 중 일부를 읽지 못했거나 존재하지 않으면 그 사실을 감사 결과에 명시한다.
 
 - 경량 운영 예외가 적용됐거나 후보였으면 `docs/process/common/lightweight_task_policy.md`도 함께 확인한다.
 - 현재 작업이 runtime contract, phase gate, entrypoint chain, downstream 사용 흐름을 바꿨다면 아래 인접 문서도 함께 교차 검토한다.
-  - `docs/harness_guide.md`
-  - `docs/downstream_harness_flow.md`
-  - `bootstrap/docs/quickstart.md`
-  - `bootstrap/docs/project_overlay/project_entrypoint_template.md`
+  - `docs/entrypoint.md`
+  - `docs/process/harness_guide.md`
+  - `docs/process/downstream_harness_flow.md`
+  - `docs/project/standards/architecture.md`
+  - `docs/project/standards/implementation_order.md`
 
 ## 공통 감사 운영 규칙
 

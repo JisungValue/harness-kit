@@ -45,7 +45,9 @@ DECISION_RECORD_REQUIRED_HEADINGS = (
     "When To Update",
 )
 
-INSTALL_TIME_BOOTSTRAP_REFERENCE_RE = re.compile(r"^install-time-only:[A-Za-z0-9_.-]+\.md$")
+INSTALL_TIME_BOOTSTRAP_REFERENCE_RE = re.compile(
+    r"^[A-Za-z0-9_.-]+\.md \(install-time input; no runtime path\)$"
+)
 
 
 def parse_args(argv: list[str] | None = None) -> argparse.Namespace:
@@ -400,11 +402,13 @@ def validate_coding_conventions(project_root: Path, errors: list[str], mode: str
     )
     if bootstrap_match:
         bootstrap_reference = bootstrap_match.group(1)
-        if not bootstrap_reference.endswith(".md"):
+        if INSTALL_TIME_BOOTSTRAP_REFERENCE_RE.match(bootstrap_reference):
+            pass
+        elif not bootstrap_reference.endswith(".md"):
             errors.append(
                 "docs/project/standards/coding_conventions_project.md: bootstrap 기준 문서가 .md 경로가 아닙니다."
             )
-        if bootstrap_reference.startswith("install-time-only:"):
+        elif "install-time" in bootstrap_reference:
             if not INSTALL_TIME_BOOTSTRAP_REFERENCE_RE.match(bootstrap_reference):
                 errors.append(
                     "docs/project/standards/coding_conventions_project.md: install-time bootstrap 기준 문서 표기가 올바르지 않습니다."

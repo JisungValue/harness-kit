@@ -233,13 +233,13 @@ def bootstrap_reference_for_language(language: str, vendor_path: str, language_r
     if language_reference_mode == "vendor-path":
         return f"{vendor_path}/bootstrap/language_conventions/{template_name}"
     if language_reference_mode == "install-time-note":
-        return f"install-time-only:{template_name}"
+        return f"{template_name} (install-time input; no runtime path)"
     raise ValueError(f"Unsupported language reference mode: {language_reference_mode}")
 
 
 def bootstrap_reference_directory(bootstrap_ref: str) -> str:
-    if bootstrap_ref.startswith("install-time-only:"):
-        return f"{bootstrap_ref} (install-completion input)"
+    if "(install-time input; no runtime path)" in bootstrap_ref:
+        return "language template consumed during install; no runtime directory"
     return f"{bootstrap_ref.rsplit('/', 1)[0]}/"
 
 

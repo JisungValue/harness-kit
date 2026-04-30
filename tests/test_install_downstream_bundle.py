@@ -165,9 +165,24 @@ class InstallDownstreamBundleTest(unittest.TestCase):
                 (project_root / "docs/entrypoint.md").read_text(encoding="utf-8"),
             )
             self.assertIn(
-                "install-time-only:java_coding_conventions_template.md",
+                "java_coding_conventions_template.md (install-time input; no runtime path)",
                 (project_root / "docs/project/standards/coding_conventions_project.md").read_text(encoding="utf-8"),
             )
+            runtime_markdown = "\n".join(
+                path.read_text(encoding="utf-8")
+                for path in sorted((project_root / "docs").rglob("*.md"))
+            )
+            for forbidden_runtime_reference in (
+                "`docs/quickstart.md`",
+                "`docs/how_harness_kit_works.md`",
+                "`docs/project_overlay/",
+                "`docs/harness_guide.md`",
+                "`docs/downstream_harness_flow.md`",
+                "`docs/decisions/",
+                "`bootstrap/docs/project_overlay/README.md`",
+                "install-time-only:",
+            ):
+                self.assertNotIn(forbidden_runtime_reference, runtime_markdown)
 
             decisions = self.run_runtime_script(
                 project_root,
@@ -220,7 +235,7 @@ class InstallDownstreamBundleTest(unittest.TestCase):
                 (project_root / "docs/entrypoint.md").read_text(encoding="utf-8"),
             )
             self.assertIn(
-                "install-time-only:python_coding_conventions_template.md",
+                "python_coding_conventions_template.md (install-time input; no runtime path)",
                 (project_root / "docs/project/standards/coding_conventions_project.md").read_text(encoding="utf-8"),
             )
 

@@ -191,7 +191,7 @@ class BootstrapInitCliTest(unittest.TestCase):
             )
 
             self.assertIn(
-                "install-time-only:python_coding_conventions_template.md",
+                "python_coding_conventions_template.md (install-time input; no runtime path)",
                 coding_conventions,
             )
             self.assertNotIn(
