@@ -179,7 +179,6 @@
 | 현재 경로 | 목표 canonical path |
 | --- | --- |
 | `downstream/docs/harness_guide.md` | `downstream/docs/harness_guide.md` |
-| `downstream/docs/downstream_harness_flow.md` | `downstream/docs/downstream_harness_flow.md` |
 | `downstream/docs/harness/common/coding_guidelines_policy.md` | `downstream/docs/harness/common/coding_guidelines_policy.md` |
 
 Epic #166 final runtime docs surface simplification removes the separate final `standard` axis. Generated bundle and final install use `docs/process/common/coding_guidelines_policy.md`.
@@ -306,7 +305,6 @@ source repo의 물리 위치는 `downstream/scripts/validate_phase_gate.py`로 �
 - `docs/how_harness_kit_works.md`
 - `docs/version_support.md`
 - `docs/harness_guide.md`
-- `docs/downstream_harness_flow.md`
 - `docs/harness/common/`
 - `docs/standard/coding_guidelines_core.md`
 - `docs/phase_1_requirement_and_planning/`

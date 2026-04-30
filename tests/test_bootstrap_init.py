@@ -60,7 +60,7 @@ class BootstrapInitCliTest(unittest.TestCase):
             self.assertTrue((target / "docs/project/standards/testing_profile.md").exists())
             self.assertTrue((target / "docs/project/standards/commit_rule.md").exists())
             self.assertTrue((target / "docs/process/harness_guide.md").exists())
-            self.assertTrue((target / "docs/process/downstream_harness_flow.md").exists())
+            self.assertFalse((target / "docs/process/downstream_harness_flow.md").exists())
             self.assertTrue((target / "docs/process/common/process_policy.md").exists())
             self.assertTrue((target / "docs/process/phases/phase_1_requirement_and_planning/implementation.md").exists())
             self.assertTrue((target / "docs/process/common/coding_guidelines_policy.md").exists())
@@ -91,7 +91,7 @@ class BootstrapInitCliTest(unittest.TestCase):
             self.assertIn("프로젝트 전용 규칙", project_entrypoint)
             self.assertIn("프로젝트 결정 문서", project_entrypoint)
             self.assertIn("docs/process/harness_guide.md", project_entrypoint)
-            self.assertIn("docs/process/downstream_harness_flow.md", project_entrypoint)
+            self.assertNotIn("docs/process/downstream_harness_flow.md", project_entrypoint)
             self.assertIn("docs/project/decisions/README.md", project_entrypoint)
             self.assertIn("둘 중 하나만 읽고 멈추지 않는다", project_entrypoint)
 
@@ -171,7 +171,7 @@ class BootstrapInitCliTest(unittest.TestCase):
             )
 
             self.assertIn("docs/process/harness_guide.md", project_entrypoint)
-            self.assertIn("docs/process/downstream_harness_flow.md", project_entrypoint)
+            self.assertNotIn("docs/process/downstream_harness_flow.md", project_entrypoint)
             self.assertNotIn("third_party/harness-kit/docs/harness_guide.md", project_entrypoint)
             self.assertNotIn("vendor/harness-kit/docs/harness_guide.md", project_entrypoint)
             self.assertIn(

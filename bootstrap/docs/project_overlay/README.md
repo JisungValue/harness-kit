@@ -48,7 +48,6 @@
 - project-local 문서 entrypoint: `docs/entrypoint.md`
 - project decision index: `docs/project/decisions/README.md`
 - reusable core guide: `docs/process/harness_guide.md`
-- downstream process flow: `docs/process/downstream_harness_flow.md`
 - project-specific supporting docs: `docs/project/standards/*`
 - `AGENTS.md`를 열었으면 `docs/entrypoint.md`에서 멈추지 말고, 그 문서가 가리키는 core guide와 supporting docs까지 순서대로 모두 읽고 적용한다.
 - 현재 작업이 중요한 정책/예외/책임 위치를 다루면 `docs/project/decisions/README.md`에서 관련 decision 문서를 추가로 읽고 적용한다.
@@ -64,12 +63,9 @@
 - `docs/process/harness_guide.md`
   - vendored reusable core guide다.
   - 프로젝트 로컬 entrypoint가 먼저 이 core guide를 참조하고, 실제 프로젝트 차이는 `docs/project/standards/*`에서 덧붙인다.
-- `docs/process/downstream_harness_flow.md`
-  - downstream 도입 후 task runtime 흐름과 Phase 운영 규칙을 설명하는 process flow다.
-  - 프로젝트 로컬 entrypoint의 공통 규칙에서 core guide와 함께 읽는다.
 - `docs/entrypoint.md`
   - 프로젝트 로컬 문서 entrypoint다.
-  - process guide, process flow, 프로젝트 전용 `docs/project/standards/*`를 함께 연결하는 index 역할만 한다.
+  - process guide와 프로젝트 전용 `docs/project/standards/*`를 함께 연결하는 index 역할만 한다.
   - runtime이나 작업자는 이 문서에 적힌 공통 규칙과 프로젝트 전용 규칙 문서를 함께 읽고 적용해야 한다.
 - `docs/project/decisions/README.md`
   - 중요한 프로젝트 결정 문서의 index다.
@@ -120,7 +116,6 @@
 ## 공통 규칙
 
 - `docs/process/harness_guide.md`
-- `docs/process/downstream_harness_flow.md`
 
 ## 프로젝트 전용 규칙
 

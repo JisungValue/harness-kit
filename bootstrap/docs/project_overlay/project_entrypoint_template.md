@@ -15,7 +15,6 @@
 ## 공통 규칙
 
 - `docs/process/harness_guide.md`
-- `docs/process/downstream_harness_flow.md`
 
 ## 프로젝트 전용 규칙
 

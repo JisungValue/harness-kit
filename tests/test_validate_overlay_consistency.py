@@ -23,10 +23,6 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
         harness_guide_path.parent.mkdir(parents=True, exist_ok=True)
         harness_guide_path.write_text("# Harness Core Guide\n", encoding="utf-8")
 
-        downstream_flow_path = target / "docs/process/downstream_harness_flow.md"
-        downstream_flow_path.parent.mkdir(parents=True, exist_ok=True)
-        downstream_flow_path.write_text("# Downstream Harness Flow\n", encoding="utf-8")
-
         if "(install-time input; no runtime path)" not in bootstrap_reference:
             bootstrap_path = target / bootstrap_reference
             bootstrap_path.parent.mkdir(parents=True, exist_ok=True)
@@ -308,31 +304,24 @@ class ValidateOverlayConsistencyTest(unittest.TestCase):
             self.assertEqual(result.returncode, 1)
             self.assertIn("docs/entrypoint.md: Missing section: ## 프로젝트 결정 문서", result.stderr)
 
-    def test_project_entrypoint_without_downstream_flow_link_fails(self) -> None:
+    def test_project_entrypoint_with_stale_downstream_flow_link_fails(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"
             self.bootstrap_project(target)
 
             guide_path = target / "docs/entrypoint.md"
             guide_text = guide_path.read_text(encoding="utf-8")
-            guide_text = guide_text.replace("- `docs/process/downstream_harness_flow.md`\n", "", 1)
+            guide_text = guide_text.replace(
+                "- `docs/process/harness_guide.md`\n",
+                "- `docs/process/harness_guide.md`\n- `docs/process/downstream_harness_flow.md`\n",
+                1,
+            )
             guide_path.write_text(guide_text, encoding="utf-8")
 
             result = self.run_checker(target)
 
             self.assertEqual(result.returncode, 1)
-            self.assertIn("docs/process/downstream_harness_flow.md", result.stderr)
-
-    def test_project_entrypoint_with_missing_downstream_flow_file_fails(self) -> None:
-        with tempfile.TemporaryDirectory() as tmp_dir:
-            target = Path(tmp_dir) / "sample-project"
-            self.bootstrap_project(target)
-
-            (target / "docs/process/downstream_harness_flow.md").unlink()
-
-            result = self.run_checker(target)
-
-            self.assertEqual(result.returncode, 1)
+            self.assertIn("제거된 process doc 경로", result.stderr)
             self.assertIn("docs/process/downstream_harness_flow.md", result.stderr)
 
     def test_decisions_index_missing_listed_decision_file_fails(self) -> None:

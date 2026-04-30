@@ -6,7 +6,7 @@
 
 - 이 문서는 canonical happy path를 고르는 빠른 시작 문서다.
 - greenfield 상세 설명이 더 필요할 때만 `bootstrap/docs/project_overlay/first_success_guide.md`를, 실패 원인과 출력 해석이 필요할 때만 `bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md`를 본다.
-- downstream 구조와 Phase 흐름 전체 설명은 `downstream/docs/downstream_harness_flow.md`를 본다.
+- downstream Phase 흐름 전체 설명은 `downstream/docs/harness_guide.md`와 common policy 문서를 본다.
 - 현재 지원 범위와 최신 릴리스는 `bootstrap/docs/version_support.md`를 기준으로 본다.
 - 새 서브에이전트와 새 사용자는 이 문서를 첫 문서로 본다. 다른 onboarding 문서는 이 문서에서 경로를 고른 뒤 필요할 때만 이어서 읽는다.
 
@@ -66,7 +66,7 @@ python3 scripts/validate_overlay_consistency.py .
 
 6. local validator가 통과하면 source repo 또는 delivery bundle의 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사하고 workflow 안의 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꾼다. 이 template는 install-time 자산이고, final runtime docs tree의 일부로 남기지 않는다.
 
-7. 첫 task를 시작하기 전에 `docs/process/downstream_harness_flow.md`를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
+7. 첫 task를 시작하기 전에 `docs/entrypoint.md`와 `docs/process/harness_guide.md`를 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
 8. `docs/process/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
 9. task를 시작하면 `phase_status.md`에 현재 gate와 허용 write-set을 먼저 적고, 필요할 때 아래 validator로 hard-stop 위반을 점검한다.
 10. 이때 `docs/project/standards/implementation_order.md`는 프로젝트 기본 레이어 순서 문서로 유지하고, 이번 task에서 어떤 API/기능부터 구현할지는 `plan.md`에 적는다.
@@ -122,7 +122,7 @@ python3 vendor/harness-kit/scripts/adopt_safe_write.py . --language python --for
 7. `differing files`와 `conflict candidates`는 기본적으로 수동 비교 대상으로 남긴다.
 8. partial adoption 상태가 structurally safe한지 먼저 보려면 아래 incremental validator를 실행한다.
 9. 최소 문서 세트가 어느 정도 맞춰진 뒤에만 full validator로 넘어간다.
-10. 첫 task를 시작하기 전에 `docs/process/downstream_harness_flow.md`를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
+10. 첫 task를 시작하기 전에 `docs/entrypoint.md`와 `docs/process/harness_guide.md`를 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
 
 ```bash
 python3 scripts/validate_overlay_consistency.py . --mode incremental

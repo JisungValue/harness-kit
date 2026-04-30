@@ -36,6 +36,10 @@ EXPECTED_STANDARD_DOCS = {
     "docs/project/standards/commit_rule.md",
 }
 
+STALE_RUNTIME_PROCESS_DOC_PATHS = {
+    "docs/process/downstream_harness_flow.md",
+}
+
 DECISION_RECORD_REQUIRED_HEADINGS = (
     "Context",
     "Decision",
@@ -153,10 +157,14 @@ def validate_project_entrypoint(project_root: Path, errors: list[str], mode: str
     )
 
     common_paths = extract_bullet_paths(common_lines)
-    required_common_paths = {
-        "docs/process/harness_guide.md",
-        "docs/process/downstream_harness_flow.md",
-    }
+    stale_common_paths = sorted(STALE_RUNTIME_PROCESS_DOC_PATHS & set(common_paths))
+    if stale_common_paths:
+        joined = ", ".join(stale_common_paths)
+        errors.append(
+            "docs/entrypoint.md: 공통 규칙에 제거된 process doc 경로가 남아 있습니다. "
+            f"삭제하거나 `docs/process/harness_guide.md`로 수렴하세요: {joined}"
+        )
+    required_common_paths = {"docs/process/harness_guide.md"}
     missing_required_common_paths = sorted(required_common_paths - set(common_paths))
     if missing_required_common_paths:
         joined = ", ".join(missing_required_common_paths)
@@ -175,10 +183,7 @@ def validate_project_entrypoint(project_root: Path, errors: list[str], mode: str
         )
     else:
         existing_paths, missing_paths = partition_existing_file_paths(project_root, candidate_common_paths)
-        planned_process_paths = {
-            "docs/process/harness_guide.md",
-            "docs/process/downstream_harness_flow.md",
-        }
+        planned_process_paths = {"docs/process/harness_guide.md"}
         missing_planned_paths = [path for path in missing_paths if path in planned_process_paths]
         if missing_planned_paths:
             joined = ", ".join(missing_planned_paths)

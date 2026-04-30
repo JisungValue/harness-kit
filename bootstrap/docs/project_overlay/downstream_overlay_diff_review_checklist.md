@@ -46,7 +46,7 @@ review를 시작하기 전에 아래를 먼저 고정한다.
 
 ### 2. Runtime / Entrypoint 체인 변화
 
-- `AGENTS.md -> docs/entrypoint.md -> docs/process/harness_guide.md` / `docs/process/downstream_harness_flow.md` -> `docs/project/standards/*` 체인이 바뀌었는가?
+- `AGENTS.md -> docs/entrypoint.md -> docs/process/harness_guide.md -> docs/project/standards/*` 체인이 바뀌었는가?
 - 새 필수 재참조 문서가 추가됐는가?
 - 현재 프로젝트의 runtime entrypoint가 새 traversal contract를 그대로 만족하는가?
 - legacy local entrypoint를 계속 둘 수 있는가, 아니면 migration이 필요한가?

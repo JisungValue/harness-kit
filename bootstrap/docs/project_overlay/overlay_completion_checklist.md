@@ -29,7 +29,7 @@
 
 ### 2. local harness guide 연결
 
-- [ ] `docs/entrypoint.md`의 `공통 규칙`에 `docs/process/harness_guide.md`와 `docs/process/downstream_harness_flow.md`가 있다.
+- [ ] `docs/entrypoint.md`의 `공통 규칙`에 `docs/process/harness_guide.md`가 있다.
 - [ ] `docs/entrypoint.md`의 `프로젝트 전용 규칙`이 필수 `docs/project/standards/*` 문서를 모두 연결한다.
 - [ ] `docs/entrypoint.md`의 `프로젝트 결정 문서`가 `docs/project/decisions/README.md`를 연결한다.
 

@@ -41,6 +41,9 @@ INSTALL_TIME_RESIDUE_PATHS = (
     "scripts/adopt_safe_write.py",
     "scripts/check_first_success_docs.py",
 )
+STALE_FINAL_RUNTIME_RESIDUE_PATHS = (
+    "docs/process/downstream_harness_flow.md",
+)
 FINAL_RUNTIME_EXAMPLE_PATHS = tuple(sorted(bootstrap_init.FINAL_RUNTIME_EXAMPLE_TARGETS))
 FINAL_RUNTIME_EXAMPLE_DIRS = tuple(
     sorted(
@@ -286,6 +289,16 @@ def ensure_no_install_time_residue(target_root: Path, vendor_path: str) -> None:
         raise ValueError("\n".join(lines))
 
 
+def cleanup_stale_final_runtime_residue(target_root: Path) -> None:
+    for relative_path in STALE_FINAL_RUNTIME_RESIDUE_PATHS:
+        path = target_root / relative_path
+        if not path.exists():
+            continue
+        if not path.is_file():
+            raise ValueError(f"post-install cleanup failed: stale final runtime path is not a file: {relative_path}")
+        path.unlink()
+
+
 def ensure_no_unexpected_final_runtime_examples(target_root: Path) -> None:
     residue = collect_unexpected_final_runtime_examples(target_root)
     if residue:
@@ -342,6 +355,7 @@ def main(argv: list[str] | None = None) -> int:
             return bootstrap_returncode
 
         try:
+            cleanup_stale_final_runtime_residue(target_root)
             ensure_no_unexpected_final_runtime_examples(target_root)
             ensure_required_final_runtime_examples(target_root)
         except ValueError as error:

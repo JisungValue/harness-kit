@@ -82,7 +82,6 @@ LANGUAGE_TEMPLATE_REQUIRED_HEADINGS = {
 
 PROJECT_FACING_MD_GLOBS = [
     "bootstrap/**/*.md",
-    "downstream/docs/downstream_harness_flow.md",
     "downstream/docs/examples/**/*.md",
     "downstream/docs/harness/common/**/*.md",
     "downstream/docs/harness_guide.md",
@@ -103,6 +102,10 @@ MAINTAINER_ONLY_REFERENCES = [
     "maintainer/scripts/",
     ".github/workflows/harness-doc-guard.yml",
 ]
+REMOVED_DOWNSTREAM_FLOW_REFERENCES = (
+    "downstream/docs/downstream_harness_flow.md",
+    "docs/process/downstream_harness_flow.md",
+)
 
 AUDIT_SUMMARY_PLACEHOLDERS = {"pending", "todo", "tbd"}
 EXPECTED_FINAL_RUNTIME_EXAMPLES = {
@@ -241,10 +244,7 @@ def check_project_doc_path_consistency(errors: list[str]) -> None:
     common_rule_docs = set(
         extract_bullet_paths(extract_h2_section(project_guide_template, "공통 규칙"))
     )
-    if common_rule_docs != {
-        "docs/process/harness_guide.md",
-        "docs/process/downstream_harness_flow.md",
-    }:
+    if common_rule_docs != {"docs/process/harness_guide.md"}:
         errors.append("project_entrypoint_template의 공통 규칙 문서 목록이 final layout contract와 다릅니다.")
 
     overlay_local_guide_docs = set(
@@ -375,7 +375,7 @@ def check_entrypoint_role_labels(errors: list[str]) -> None:
         "bootstrap/docs/project_overlay/project_entrypoint_template.md": (
             "공통 규칙",
             "프로젝트 전용 규칙",
-            "docs/process/downstream_harness_flow.md",
+            "docs/process/harness_guide.md",
             "순서대로 모두 읽고 적용",
             "둘 중 하나만 읽고 멈추지 않는다",
         ),
@@ -761,6 +761,18 @@ def check_project_facing_coding_policy_paths(errors: list[str]) -> None:
             errors.append(f"{rel_path}에 canonical coding guideline policy path `{required_path}`가 없습니다.")
 
 
+def check_removed_downstream_flow_references(errors: list[str]) -> None:
+    if (ROOT / "downstream/docs/downstream_harness_flow.md").exists():
+        errors.append("downstream/docs/downstream_harness_flow.md source file이 제거되지 않았습니다.")
+
+    for path in iter_globbed_files(PROJECT_FACING_MD_GLOBS):
+        rel_path = path.relative_to(ROOT).as_posix()
+        text = path.read_text(encoding="utf-8")
+        for forbidden in REMOVED_DOWNSTREAM_FLOW_REFERENCES:
+            if forbidden in text:
+                errors.append(f"{rel_path}에 제거된 downstream flow 경로 `{forbidden}` 참조가 남아 있습니다.")
+
+
 def main() -> int:
     errors: list[str] = []
 
@@ -775,6 +787,7 @@ def main() -> int:
     check_language_template_structure(errors)
     check_project_facing_maintainer_leakage(errors)
     check_project_facing_coding_policy_paths(errors)
+    check_removed_downstream_flow_references(errors)
 
     if errors:
         print("Harness doc guard failed:")
