@@ -11,7 +11,7 @@
 - `GEMINI.md`
 - `docs/entrypoint.md`
 - `docs/project/decisions/README.md`
-- `docs/process/standard/*`
+- `docs/process/common/coding_guidelines_policy.md`
 - `validate_overlay_decisions.py`
 - `validate_overlay_consistency.py`
 
@@ -42,7 +42,7 @@
 - 판정: 통과
 - 근거:
   - `docs/entrypoint.md`가 vendored common guide 경로를 가진다.
-  - `docs/process/standard/*` 문서 세트를 모두 연결한다.
+  - `docs/process/common/coding_guidelines_policy.md` 문서를 연결한다.
 
 ### 3. 프로젝트 결정 문서 구조
 

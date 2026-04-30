@@ -180,9 +180,9 @@
 | --- | --- |
 | `downstream/docs/harness_guide.md` | `downstream/docs/harness_guide.md` |
 | `downstream/docs/downstream_harness_flow.md` | `downstream/docs/downstream_harness_flow.md` |
-| `downstream/docs/standard/coding_guidelines_core.md` | current source path; Epic #166/#168 target is `downstream/docs/harness/common/coding_guidelines_policy.md` |
+| `downstream/docs/harness/common/coding_guidelines_policy.md` | `downstream/docs/harness/common/coding_guidelines_policy.md` |
 
-Epic #166 final runtime docs surface simplification removes the separate final `standard` axis. After #168, generated bundle and final install must use `docs/process/common/coding_guidelines_policy.md` and must not produce `docs/process/standard/coding_guidelines_core.md`.
+Epic #166 final runtime docs surface simplification removes the separate final `standard` axis. Generated bundle and final install use `docs/process/common/coding_guidelines_policy.md`.
 
 #### downstream/docs common policy docs
 

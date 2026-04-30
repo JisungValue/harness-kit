@@ -110,10 +110,9 @@ python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-proj
   - process, artifact, audit, testing, validation, code hygiene, design quality, performance, lightweight 정책을 둔다.
 - `downstream/docs/phase_*`
   - 각 Phase의 구현 기준과 감사 기준을 둔다.
-- coding guideline policy
-  - 현재 source repo의 공통 코드 품질 규칙은 `downstream/docs/standard/coding_guidelines_core.md`에 있다.
-  - Epic #166 계약 기준으로는 #168에서 `downstream/docs/harness/common/coding_guidelines_policy.md`로 옮기고, final install에서는 `docs/process/common/coding_guidelines_policy.md`만 canonical path로 남긴다.
-  - final installed runtime surface에는 `docs/process/standard/` 축을 남기지 않는다.
+- [`downstream/docs/harness/common/coding_guidelines_policy.md`](downstream/docs/harness/common/coding_guidelines_policy.md)
+  - 여러 프로젝트에서 공통으로 재사용할 수 있는 코드 품질 정책을 둔다.
+  - final install에서는 `docs/process/common/coding_guidelines_policy.md`만 canonical path로 남긴다.
 - `downstream/docs/templates/task/`
   - 새 task를 시작할 때 복사해서 쓸 기본 산출물 템플릿을 둔다.
 - `downstream/docs/examples/`

@@ -138,7 +138,7 @@ docs/
 
 - 검증 항목: first success 가이드의 검증 명령과 expected success 상태 일치 여부 확인
 - 대조한 입력물: `bootstrap/docs/project_overlay/first_success_guide.md`, `bootstrap/scripts/check_first_success_docs.py`
-  - 실행 방법 또는 확인 방식: 가이드의 검증 명령을 실제 bootstrap 결과에 그대로 실행하고, 같은 smoke 시나리오에서 vendored guide 경로, `AGENTS.md -> docs/entrypoint.md`, `CLAUDE.md`/`GEMINI.md` -> `AGENTS.md`, `docs/process/standard/*` project 문서 링크, 선택 언어, bootstrap 기준 문서, 핵심 규칙 범주, profile 문서 비어 있지 않음, quality gate/commit rule의 미해결 decision marker 존재를 함께 확인
+  - 실행 방법 또는 확인 방식: 가이드의 검증 명령을 실제 bootstrap 결과에 그대로 실행하고, 같은 smoke 시나리오에서 vendored guide 경로, `AGENTS.md -> docs/entrypoint.md`, `CLAUDE.md`/`GEMINI.md` -> `AGENTS.md`, `docs/process/common/coding_guidelines_policy.md` project 문서 링크, 선택 언어, bootstrap 기준 문서, 핵심 규칙 범주, profile 문서 비어 있지 않음, quality gate/commit rule의 미해결 decision marker 존재를 함께 확인
   - 결과: 가이드의 첫 검증 명령과 실제 smoke 시나리오가 같은 성공 신호를 사용하고, 가이드가 말하는 핵심 first-success content signal과 runtime entrypoint 연결도 smoke 범위 안에 포함됐다
   - 실패 또는 미실행 사유: 없음
   - 판정: 정합

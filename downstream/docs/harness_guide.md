@@ -41,7 +41,7 @@
 - 설계 품질 규칙: `docs/process/common/design_quality_policy.md`
 - 성능 검토 규칙: `docs/process/common/performance_policy.md`
 - 경량 태스크 예외 규칙: `docs/process/common/lightweight_task_policy.md`
-- 공통 코드 규칙: `docs/process/standard/coding_guidelines_core.md`
+- 공통 코드 정책: `docs/process/common/coding_guidelines_policy.md`
 
 모든 Phase의 구현과 감사는 위 문서들을 함께 참조한다.
 
@@ -83,8 +83,8 @@
 
 ### Phase 2. TDD Implementation
 
-- 구현 중 필수 재참조: `docs/process/common/testing_policy.md`, `docs/process/common/test_double_policy.md`, `docs/process/common/code_hygiene_policy.md`, `docs/process/common/design_quality_policy.md`, `docs/process/common/performance_policy.md`, `docs/process/standard/coding_guidelines_core.md`, 프로젝트 `docs/project/standards/architecture.md`, 프로젝트 `docs/project/standards/implementation_order.md`, 프로젝트 `docs/project/standards/coding_conventions_project.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`
-- 감사 직전 필수 재참조: `docs/process/common/audit_policy.md`, `docs/process/common/testing_policy.md`, `docs/process/common/test_double_policy.md`, `docs/process/common/code_hygiene_policy.md`, `docs/process/common/design_quality_policy.md`, `docs/process/common/performance_policy.md`, `docs/process/standard/coding_guidelines_core.md`, 프로젝트 `docs/project/standards/architecture.md`, 프로젝트 `docs/project/standards/implementation_order.md`, 프로젝트 `docs/project/standards/coding_conventions_project.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`
+- 구현 중 필수 재참조: `docs/process/common/testing_policy.md`, `docs/process/common/test_double_policy.md`, `docs/process/common/code_hygiene_policy.md`, `docs/process/common/design_quality_policy.md`, `docs/process/common/performance_policy.md`, `docs/process/common/coding_guidelines_policy.md`, 프로젝트 `docs/project/standards/architecture.md`, 프로젝트 `docs/project/standards/implementation_order.md`, 프로젝트 `docs/project/standards/coding_conventions_project.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`
+- 감사 직전 필수 재참조: `docs/process/common/audit_policy.md`, `docs/process/common/testing_policy.md`, `docs/process/common/test_double_policy.md`, `docs/process/common/code_hygiene_policy.md`, `docs/process/common/design_quality_policy.md`, `docs/process/common/performance_policy.md`, `docs/process/common/coding_guidelines_policy.md`, 프로젝트 `docs/project/standards/architecture.md`, 프로젝트 `docs/project/standards/implementation_order.md`, 프로젝트 `docs/project/standards/coding_conventions_project.md`, 프로젝트 `docs/project/standards/quality_gate_profile.md`
 - 조건부 참조: `docs/process/common/artifact_policy.md`, `docs/process/common/audit_policy.md`
 
 ### Phase 3. Integration

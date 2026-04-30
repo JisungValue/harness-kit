@@ -28,6 +28,7 @@ OBSOLETE_BUNDLE_PATHS = {
     "docs/phase_4_validation",
     "docs/phase_5_documentation",
     "docs/standard",
+    "docs/process/standard",
     "docs/templates",
     "docs/examples",
     "downstream",
@@ -58,7 +59,6 @@ BUNDLE_TEXT_REPLACEMENTS = (
     ("downstream/docs/downstream_harness_flow.md", "docs/process/downstream_harness_flow.md"),
     ("downstream/docs/harness/common/", "docs/process/common/"),
     ("downstream/docs/phase_", "docs/process/phases/phase_"),
-    ("downstream/docs/standard/", "docs/process/standard/"),
     ("downstream/docs/templates/task/", "docs/process/templates/task/"),
     ("downstream/docs/examples/", "docs/process/examples/"),
     ("downstream/docs/", "docs/"),
@@ -67,7 +67,6 @@ BUNDLE_TEXT_REPLACEMENTS = (
     ("vendor/harness-kit/docs/templates/task/", "docs/process/templates/task/"),
     ("docs/harness/common/", "docs/process/common/"),
     ("docs/phase_", "docs/process/phases/phase_"),
-    ("docs/standard/coding_guidelines_core.md", "docs/process/standard/coding_guidelines_core.md"),
     ("docs/standard/architecture.md", "docs/project/standards/architecture.md"),
     ("docs/standard/implementation_order.md", "docs/project/standards/implementation_order.md"),
     ("docs/standard/coding_conventions_project.md", "docs/project/standards/coding_conventions_project.md"),
@@ -258,8 +257,6 @@ def bundle_relative_path_for_source(relative_path: Path) -> Path:
         return Path("docs/process/common") / relative_path.relative_to("downstream/docs/harness/common")
     if relative_posix.startswith("downstream/docs/phase_"):
         return Path("docs/process/phases") / relative_path.relative_to("downstream/docs")
-    if relative_posix.startswith("downstream/docs/standard/"):
-        return Path("docs/process/standard") / relative_path.relative_to("downstream/docs/standard")
     if relative_posix.startswith("downstream/docs/templates/task/"):
         return Path("docs/process/templates/task") / relative_path.relative_to("downstream/docs/templates/task")
     if relative_posix.startswith("downstream/docs/examples/"):

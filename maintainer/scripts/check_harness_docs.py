@@ -88,7 +88,7 @@ PROJECT_FACING_MD_GLOBS = [
     "downstream/docs/harness_guide.md",
     "downstream/docs/phase_*/*.md",
     "bootstrap/docs/project_overlay/**/*.md",
-    "downstream/docs/standard/coding_guidelines_core.md",
+    "downstream/docs/harness/common/coding_guidelines_policy.md",
     "downstream/docs/templates/task/**/*.md",
     "bootstrap/docs/how_harness_kit_works.md",
     "bootstrap/docs/quickstart.md",
@@ -667,6 +667,36 @@ def check_project_facing_maintainer_leakage(errors: list[str]) -> None:
                 )
 
 
+def check_project_facing_coding_policy_paths(errors: list[str]) -> None:
+    forbidden_legacy_paths = (
+        "docs/process/standard",
+        "downstream/docs/standard",
+        "coding_guidelines_core.md",
+    )
+    required_path = "docs/process/common/coding_guidelines_policy.md"
+
+    for path in iter_globbed_files(PROJECT_FACING_MD_GLOBS):
+        rel_path = path.relative_to(ROOT).as_posix()
+        text = path.read_text(encoding="utf-8")
+        for forbidden in forbidden_legacy_paths:
+            if forbidden in text:
+                errors.append(f"{rel_path}에 legacy coding guideline path `{forbidden}` 참조가 남아 있습니다.")
+
+    if not (ROOT / "downstream/docs/harness/common/coding_guidelines_policy.md").exists():
+        errors.append("coding guideline policy source path가 없습니다.")
+    if (ROOT / "downstream/docs/standard/coding_guidelines_core.md").exists():
+        errors.append("legacy coding guideline source path가 남아 있습니다.")
+
+    for rel_path in (
+        "downstream/docs/harness_guide.md",
+        "downstream/docs/phase_2_tdd_implementation/implementation.md",
+        "downstream/docs/phase_2_tdd_implementation/audit.md",
+        "downstream/docs/harness/common/process_policy.md",
+    ):
+        if required_path not in read_text(rel_path):
+            errors.append(f"{rel_path}에 canonical coding guideline policy path `{required_path}`가 없습니다.")
+
+
 def main() -> int:
     errors: list[str] = []
 
@@ -679,6 +709,7 @@ def main() -> int:
     check_harness_log(errors)
     check_language_template_structure(errors)
     check_project_facing_maintainer_leakage(errors)
+    check_project_facing_coding_policy_paths(errors)
 
     if errors:
         print("Harness doc guard failed:")

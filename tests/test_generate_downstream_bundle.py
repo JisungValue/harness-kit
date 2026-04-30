@@ -56,7 +56,8 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             self.assertTrue((output / "docs/process/examples/sample-task/issue.md").exists())
             self.assertTrue((output / "docs/process/common/process_policy.md").exists())
             self.assertTrue((output / "docs/process/phases/phase_1_requirement_and_planning/implementation.md").exists())
-            self.assertTrue((output / "docs/process/standard/coding_guidelines_core.md").exists())
+            self.assertTrue((output / "docs/process/common/coding_guidelines_policy.md").exists())
+            self.assertFalse((output / "docs/process/standard").exists())
             self.assertTrue((output / "docs/process/templates/task/issue.md").exists())
             self.assertTrue((output / "bootstrap/README.md").exists())
             self.assertTrue((output / "docs/project_overlay/first_success_guide.md").exists())
@@ -106,7 +107,8 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             self.assertIn("docs/version_support.md", copied_paths)
             self.assertIn("docs/process/common/process_policy.md", copied_paths)
             self.assertIn("docs/process/phases/phase_1_requirement_and_planning/implementation.md", copied_paths)
-            self.assertIn("docs/process/standard/coding_guidelines_core.md", copied_paths)
+            self.assertIn("docs/process/common/coding_guidelines_policy.md", copied_paths)
+            self.assertNotIn("docs/process/standard/coding_guidelines_core.md", copied_paths)
             self.assertIn("docs/process/templates/task/issue.md", copied_paths)
             self.assertIn("docs/process/examples/sample-task/issue.md", copied_paths)
             self.assertIn("docs/project_overlay/first_success_guide.md", copied_paths)
@@ -124,7 +126,8 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
             self.assertIn("docs/process/harness_guide.md", manifest["bundle_patterns"])
             self.assertIn("docs/process/common/**/*.md", manifest["bundle_patterns"])
             self.assertIn("docs/process/phases/phase_*/*.md", manifest["bundle_patterns"])
-            self.assertIn("docs/process/standard/coding_guidelines_core.md", manifest["bundle_patterns"])
+            self.assertIn("docs/process/common/coding_guidelines_policy.md", manifest["bundle_patterns"])
+            self.assertNotIn("docs/process/standard/coding_guidelines_core.md", manifest["bundle_patterns"])
             self.assertIn("docs/process/templates/task/**/*.md", manifest["bundle_patterns"])
             self.assertIn("docs/process/examples/**/*.md", manifest["bundle_patterns"])
             self.assertIn("scripts/validate_phase_gate.py", manifest["bundle_patterns"])
@@ -232,11 +235,16 @@ class GenerateDownstreamBundleTest(unittest.TestCase):
 
             first_result = self.run_cli("--output", str(output))
             self.assertEqual(first_result.returncode, 0, first_result.stderr)
+            stale_standard_path = output / "docs/process/standard/coding_guidelines_core.md"
+            stale_standard_path.parent.mkdir(parents=True, exist_ok=True)
+            stale_standard_path.write_text("stale legacy standard doc\n", encoding="utf-8")
 
             result = self.run_cli("--output", str(output), "--force")
 
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertTrue((output / "bundle_manifest.json").exists())
+            self.assertFalse(stale_standard_path.exists())
+            self.assertTrue((output / "docs/process/common/coding_guidelines_policy.md").exists())
 
     def test_force_allows_stale_previous_bundle_paths_listed_in_manifest(self) -> None:
         with self.make_dist_temp_dir() as tmp_dir:

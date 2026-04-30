@@ -1,8 +1,8 @@
-# Coding Guidelines Core
+# Coding Guidelines Policy
 
 ## 목적
 
-여러 프로젝트에서 공통으로 재사용할 수 있는 코드 작성 기준을 정의한다.
+여러 프로젝트에서 공통으로 재사용할 수 있는 코드 작성 기준을 common process policy로 정의한다.
 
 ## 기본 원칙
 

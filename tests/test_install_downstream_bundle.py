@@ -107,7 +107,8 @@ class InstallDownstreamBundleTest(unittest.TestCase):
             self.assertTrue(
                 (project_root / "docs/process/phases/phase_1_requirement_and_planning/implementation.md").exists()
             )
-            self.assertTrue((project_root / "docs/process/standard/coding_guidelines_core.md").exists())
+            self.assertTrue((project_root / "docs/process/common/coding_guidelines_policy.md").exists())
+            self.assertFalse((project_root / "docs/process/standard").exists())
             self.assertTrue((project_root / "docs/process/templates/task/issue.md").exists())
             self.assertTrue((project_root / "docs/process/examples/sample-task/issue.md").exists())
             self.assertTrue((project_root / "scripts/validate_overlay_decisions.py").exists())

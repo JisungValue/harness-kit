@@ -2,7 +2,7 @@
 
 ## 목적
 
-이 문서는 공통 `coding_guidelines_core.md` 위에 프로젝트 전용 coding convention만 추가한다.
+이 문서는 공통 `coding_guidelines_policy.md` 위에 프로젝트 전용 coding convention만 추가한다.
 
 ## 시작 방법
 
