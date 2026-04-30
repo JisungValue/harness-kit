@@ -28,7 +28,6 @@
 - 현재 작업이 runtime contract, phase gate, entrypoint chain, downstream 사용 흐름을 바꿨다면 아래 인접 문서도 함께 교차 검토한다.
   - `docs/entrypoint.md`
   - `docs/process/harness_guide.md`
-  - `docs/process/downstream_harness_flow.md`
   - `docs/project/standards/architecture.md`
   - `docs/project/standards/implementation_order.md`
 

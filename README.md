@@ -12,7 +12,7 @@
 ## 이 README가 설명하는 대상
 
 - 이 README는 먼저 `harness-kit`가 어떤 패키지인지, 어떤 자산을 담고 있는지, 어디서 시작해야 하는지 설명한다.
-- downstream 프로젝트에서 bootstrap 또는 brownfield adoption으로 하네스를 도입하는 흐름과, 도입 후 task가 어떤 Phase로 진행되는지는 [`downstream/docs/downstream_harness_flow.md`](downstream/docs/downstream_harness_flow.md)에서 따로 정리한다.
+- downstream 프로젝트에서 bootstrap 또는 brownfield adoption으로 하네스를 도입하는 흐름은 bootstrap 문서에서, 도입 후 task Phase 운영 규칙은 [`downstream/docs/harness_guide.md`](downstream/docs/harness_guide.md)와 common policy 문서에서 정리한다.
 - 즉, 상단은 kit 자체 설명, 뒤쪽은 downstream 사용 흐름 설명으로 읽으면 된다.
 
 ## 핵심 용어
@@ -41,7 +41,7 @@ greenfield final install 이후의 runtime 예시는 downstream 프로젝트 루
 | [`bootstrap/docs/project_overlay/architecture_template.md`](bootstrap/docs/project_overlay/architecture_template.md) | `docs/project/standards/architecture.md` | project-local supporting doc |
 
 - source repo의 template/guide는 downstream에서 그대로 쓰이거나, bootstrap 결과물로 생성되거나, install-time bundle 입력으로 들어간다.
-- downstream 사용자는 source repo의 template를 직접 실행하는 것이 아니라, downstream 프로젝트 안에 생긴 `AGENTS.md`, `docs/entrypoint.md`, `docs/project/standards/*`, `docs/project/decisions/README.md`, `docs/process/harness_guide.md`, `docs/process/downstream_harness_flow.md`를 따라간다.
+- downstream 사용자는 source repo의 template를 직접 실행하는 것이 아니라, downstream 프로젝트 안에 생긴 `AGENTS.md`, `docs/entrypoint.md`, `docs/project/standards/*`, `docs/project/decisions/README.md`, `docs/process/harness_guide.md`를 따라간다.
 
 ## 시작 문서
 
@@ -100,7 +100,7 @@ python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-proj
 
 - 현재 버전/지원 범위: [`bootstrap/docs/version_support.md`](bootstrap/docs/version_support.md)
 - 전체 개념 설명: [`bootstrap/docs/how_harness_kit_works.md`](bootstrap/docs/how_harness_kit_works.md)
-- downstream 도입/운영 흐름: [`downstream/docs/downstream_harness_flow.md`](downstream/docs/downstream_harness_flow.md)
+- downstream Phase 운영 흐름: [`downstream/docs/harness_guide.md`](downstream/docs/harness_guide.md)
 
 ## 디렉터리 구조
 
@@ -231,7 +231,7 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 9. `python3 scripts/validate_overlay_decisions.py . --readiness first-success`로 unresolved decision readiness를 확인한다.
 10. `python3 scripts/validate_overlay_consistency.py .`로 문서 간 교차 정합성과 runtime instruction entrypoint 연결을 확인한다.
 11. local validator가 통과하면 [`bootstrap/docs/project_overlay/harness_doc_guard_workflow_template.yml`](bootstrap/docs/project_overlay/harness_doc_guard_workflow_template.yml)을 source repo canonical template로 보고, delivery bundle에서는 `docs/project_overlay/harness_doc_guard_workflow_template.yml`을 프로젝트 `.github/workflows/` 아래 workflow 파일로 복사한 뒤 `@<pin-tag-or-sha>`를 실제 릴리스 태그 또는 고정 SHA로 바꿔 future-session guardrail을 고정한다.
-12. 첫 task를 시작하기 전에 설치된 프로젝트의 `docs/process/downstream_harness_flow.md`를 한 번 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
+12. 첫 task를 시작하기 전에 설치된 프로젝트의 `docs/entrypoint.md`와 `docs/process/harness_guide.md`를 읽고 Phase 1~5, approval gate, 재수행 규칙을 먼저 이해한다.
 13. `docs/process/templates/task/`를 프로젝트 작업 경로로 복사해 첫 task를 시작한다.
 14. task 진행 중 gate/write-set 위반을 확인해야 하면 `python3 scripts/validate_phase_gate.py docs/task/<task_id> --paths ...`를 사용한다. 인자 없이 실행하는 기본 모드는 현재 task workspace와 `phase_status.md`의 허용/잠금 패턴에 걸리는 dirty path만 검사하고, repo 전체 dirty path까지 함께 보려면 `--git-scope repo`를 명시한다.
 15. 실제 task 몇 개를 돌린 뒤 project overlay와 decisions index를 함께 보강한다.
@@ -259,7 +259,7 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 
 - 이 저장소 source repo를 읽는 중이라면 먼저 [`bootstrap/docs/quickstart.md`](bootstrap/docs/quickstart.md)를 본다.
 - 그다음 greenfield면 [`bootstrap/docs/project_overlay/first_success_guide.md`](bootstrap/docs/project_overlay/first_success_guide.md), brownfield first adoption이면 [`bootstrap/docs/project_overlay/adopt_dry_run.md`](bootstrap/docs/project_overlay/adopt_dry_run.md), 이미 도입된 downstream upgrade면 [`bootstrap/docs/project_overlay/downstream_harness_upgrade_guide.md`](bootstrap/docs/project_overlay/downstream_harness_upgrade_guide.md)를 본다.
-- 적용이 끝나면 첫 task 전에 설치된 프로젝트의 `docs/process/downstream_harness_flow.md`를 읽어 Phase 운영 규칙으로 넘어간다.
+- 적용이 끝나면 첫 task 전에 설치된 프로젝트의 `docs/entrypoint.md`와 `docs/process/harness_guide.md`를 읽어 Phase 운영 규칙으로 넘어간다.
 - source repo에는 root `AGENTS.md`, `CLAUDE.md`, `GEMINI.md`가 아직 없고, 이 파일들은 downstream 프로젝트를 bootstrap한 뒤에 생긴다.
 - 아래 순서는 downstream 프로젝트를 bootstrap한 뒤 생성되는 문서 기준이다.
 
@@ -267,7 +267,6 @@ maintainer 문서는 `harness-kit` core 의미 변경이 있을 때만 적용한
 - documentation/policy entrypoint: `docs/entrypoint.md`
 - project decision index: `docs/project/decisions/README.md`
 - reusable core guide: `docs/process/harness_guide.md`
-- downstream process flow: `docs/process/downstream_harness_flow.md`
 - project-specific supporting docs: `docs/project/standards/*`
 
 ## Kit 유지보수 기록 규칙

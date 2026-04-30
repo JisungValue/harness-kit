@@ -124,7 +124,7 @@ class InstallDownstreamBundleTest(unittest.TestCase):
             self.assertTrue((project_root / "AGENTS.md").exists())
             self.assertTrue((project_root / "docs/entrypoint.md").exists())
             self.assertTrue((project_root / "docs/process/harness_guide.md").exists())
-            self.assertTrue((project_root / "docs/process/downstream_harness_flow.md").exists())
+            self.assertFalse((project_root / "docs/process/downstream_harness_flow.md").exists())
             self.assertTrue((project_root / "docs/process/common/process_policy.md").exists())
             self.assertTrue(
                 (project_root / "docs/process/phases/phase_1_requirement_and_planning/implementation.md").exists()
@@ -178,6 +178,7 @@ class InstallDownstreamBundleTest(unittest.TestCase):
                 "`docs/project_overlay/",
                 "`docs/harness_guide.md`",
                 "`docs/downstream_harness_flow.md`",
+                "`docs/process/downstream_harness_flow.md`",
                 "`docs/decisions/",
                 "`bootstrap/docs/project_overlay/README.md`",
                 "install-time-only:",
@@ -238,6 +239,18 @@ class InstallDownstreamBundleTest(unittest.TestCase):
                 "python_coding_conventions_template.md (install-time input; no runtime path)",
                 (project_root / "docs/project/standards/coding_conventions_project.md").read_text(encoding="utf-8"),
             )
+
+    def test_install_removes_stale_downstream_harness_flow_residue(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            project_root = Path(tmp_dir) / "recipeForBaby"
+            stale_path = project_root / "docs/process/downstream_harness_flow.md"
+            stale_path.parent.mkdir(parents=True)
+            stale_path.write_text("# Downstream Harness Flow\n", encoding="utf-8")
+
+            result = self.run_cli(project_root, "--language", "python")
+
+            self.assertEqual(result.returncode, 0, result.stderr)
+            self.assertFalse(stale_path.exists())
 
             consistency = self.run_runtime_script(
                 project_root,

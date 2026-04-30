@@ -157,8 +157,6 @@ def process_doc_target_for_source(relative_path: Path) -> Path:
     relative_posix = relative_path.as_posix()
     if relative_posix == "downstream/docs/harness_guide.md":
         return Path("docs/process/harness_guide.md")
-    if relative_posix == "downstream/docs/downstream_harness_flow.md":
-        return Path("docs/process/downstream_harness_flow.md")
     if relative_posix.startswith("downstream/docs/harness/common/"):
         return Path("docs/process/common") / relative_path.relative_to("downstream/docs/harness/common")
     if relative_posix.startswith("downstream/docs/phase_"):
@@ -203,7 +201,6 @@ def iter_process_doc_targets() -> list[tuple[str, str]]:
 
 PROCESS_DOC_TEXT_REPLACEMENTS = (
     ("downstream/docs/harness_guide.md", "docs/process/harness_guide.md"),
-    ("downstream/docs/downstream_harness_flow.md", "docs/process/downstream_harness_flow.md"),
     ("downstream/docs/harness/common/", "docs/process/common/"),
     ("downstream/docs/phase_", "docs/process/phases/phase_"),
     ("downstream/docs/templates/task/", "docs/process/templates/task/"),

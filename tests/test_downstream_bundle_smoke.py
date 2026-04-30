@@ -206,7 +206,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             )
             self.assertEqual(adopt_result.returncode, 0, adopt_result.stderr)
             self.assertIn("write mode: disabled (read-only)", adopt_result.stdout)
-            self.assertIn("- missing files: 43", adopt_result.stdout)
+            self.assertIn("- missing files: 42", adopt_result.stdout)
             self.assertIn("- differing files: 1", adopt_result.stdout)
             self.assertIn("- conflict candidates: 0", adopt_result.stdout)
             self.assertIn("Differing files (manual review):", adopt_result.stdout)
@@ -231,9 +231,6 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
             third_party_guide = project_root / DEFAULT_HARNESS_GUIDE_REFERENCE
             third_party_guide.parent.mkdir(parents=True, exist_ok=True)
             third_party_guide.write_text("# Harness Core Guide\n", encoding="utf-8")
-            downstream_flow = project_root / "docs/process/downstream_harness_flow.md"
-            downstream_flow.write_text("# Downstream Harness Flow\n", encoding="utf-8")
-
             incremental_result = self.run_bundle_script(
                 project_root,
                 "validate_overlay_consistency.py",
@@ -274,7 +271,7 @@ class DownstreamBundleSmokeTest(unittest.TestCase):
                 "python",
             )
             self.assertEqual(safe_write_result.returncode, 0, safe_write_result.stderr)
-            self.assertIn("- created files: 43", safe_write_result.stdout)
+            self.assertIn("- created files: 42", safe_write_result.stdout)
             self.assertIn("- remaining missing files: 0", safe_write_result.stdout)
             self.assertIn("- remaining differing files: 1", safe_write_result.stdout)
 

@@ -21,6 +21,7 @@ MANIFEST_NAME = "bundle_manifest.json"
 OBSOLETE_BUNDLE_PATHS = {
     "docs/harness_guide.md",
     "docs/downstream_harness_flow.md",
+    "docs/process/downstream_harness_flow.md",
     "docs/harness",
     "docs/phase_1_requirement_and_planning",
     "docs/phase_2_tdd_implementation",
@@ -56,7 +57,6 @@ class BundleFile:
 BUNDLE_TEXT_REPLACEMENTS = (
     ("bootstrap/docs/", "docs/"),
     ("downstream/docs/harness_guide.md", "docs/process/harness_guide.md"),
-    ("downstream/docs/downstream_harness_flow.md", "docs/process/downstream_harness_flow.md"),
     ("downstream/docs/harness/common/", "docs/process/common/"),
     ("downstream/docs/phase_", "docs/process/phases/phase_"),
     ("downstream/docs/templates/task/", "docs/process/templates/task/"),
@@ -91,16 +91,6 @@ BUNDLE_TEXT_REPLACEMENTS_BY_PATH: dict[str, tuple[tuple[str, str], ...]] = {
         (
             "- `scripts/check_first_success_docs.py`는 source repo canonical helper command다. generated bundle에서는 `scripts/check_first_success_docs.py`로 materialize 된다.",
             "- `scripts/check_first_success_docs.py`는 install-time bundle helper command다. final runtime surface에는 남기지 않는다.",
-        ),
-    ),
-    "docs/process/downstream_harness_flow.md": (
-        (
-            "- source repo 자산과 downstream 생성 문서의 대응 관계가 먼저 필요하면 `README.md`의 `Source Repo 와 Downstream 관계` 표를 함께 본다.",
-            "- bootstrap 전후 구조 설명이 더 필요하면 `docs/quickstart.md`와 `docs/how_harness_kit_works.md`를 함께 본다.",
-        ),
-        (
-            "- 이 저장소는 bootstrap 전 source repo이고, 실제로 동작하는 하네스는 downstream 프로젝트 안에서 맞물린다.",
-            "- 이 bundle은 downstream 프로젝트에 vendoring하기 전의 delivery unit이고, 실제로 동작하는 하네스는 downstream 프로젝트 안에서 맞물린다.",
         ),
     ),
     "docs/how_harness_kit_works.md": (
@@ -251,8 +241,6 @@ def bundle_relative_path_for_source(relative_path: Path) -> Path:
         return Path("scripts") / relative_path.name
     if relative_posix == "downstream/docs/harness_guide.md":
         return Path("docs/process/harness_guide.md")
-    if relative_posix == "downstream/docs/downstream_harness_flow.md":
-        return Path("docs/process/downstream_harness_flow.md")
     if relative_posix.startswith("downstream/docs/harness/common/"):
         return Path("docs/process/common") / relative_path.relative_to("downstream/docs/harness/common")
     if relative_posix.startswith("downstream/docs/phase_"):

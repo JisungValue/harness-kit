@@ -6,7 +6,7 @@
 
 - 이 문서는 개념 설명 문서다.
 - 처음 쓰는 사용자가 실제로 어디서 시작할지는 `README.md`와 `bootstrap/docs/quickstart.md`를 먼저 본다.
-- downstream 프로젝트 구조와 Phase 흐름 상세는 `downstream/docs/downstream_harness_flow.md`가 더 직접적으로 설명한다.
+- downstream 프로젝트 구조는 bootstrap 문서가, Phase 흐름 상세는 `downstream/docs/harness_guide.md`와 common policy 문서가 설명한다.
 - 현재 지원 범위와 최신 릴리스는 `bootstrap/docs/version_support.md`를 기준으로 본다.
 
 ## 한 줄 요약

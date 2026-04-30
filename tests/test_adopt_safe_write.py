@@ -144,8 +144,8 @@ class AdoptSafeWriteTest(unittest.TestCase):
             result = self.run_adopt_safe_write(target, "--update-unchanged")
 
             self.assertEqual(result.returncode, 0, result.stderr)
-            self.assertIn("- refreshed unchanged targets: 44", result.stdout)
-            self.assertIn("- remaining unchanged targets: 44", result.stdout)
+            self.assertIn("- refreshed unchanged targets: 43", result.stdout)
+            self.assertIn("- remaining unchanged targets: 43", result.stdout)
             for relative_path in FINAL_RUNTIME_EXAMPLES:
                 self.assertTrue((target / relative_path).exists(), relative_path)
             for relative_path in EXCLUDED_FINAL_RUNTIME_EXAMPLES:
