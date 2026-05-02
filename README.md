@@ -82,6 +82,7 @@ python3 maintainer/scripts/install_downstream_bundle.py /path/to/downstream-proj
 - canonical 시작 문서: [`bootstrap/docs/quickstart.md`](bootstrap/docs/quickstart.md)
 - greenfield 상세 reference: [`bootstrap/docs/project_overlay/first_success_guide.md`](bootstrap/docs/project_overlay/first_success_guide.md)
 - diagnostics reference: [`bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md`](bootstrap/docs/project_overlay/local_diagnostics_and_dry_run.md)
+- bootstrap은 project standard skeleton을 생성할 뿐이며, 기획서만 보고 architecture나 class/file/package 구조를 invent하라는 뜻이 아니다. 에이전트는 repo-local evidence를 먼저 확인하고, 미확정 구조는 `[프로젝트 결정 필요]` placeholder로 남기며, 구체 구조가 필요하면 사용자 승인 또는 decision candidate로 올린다.
 
 ### 기존 프로젝트에 도입
 

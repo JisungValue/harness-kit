@@ -39,6 +39,13 @@ ALLOWED_MARKERS_BY_READINESS = {
 }
 
 IGNORED_MARKER_PATTERNS = {
+    "docs/project/standards/architecture.md": (
+        re.compile(r"^\s*-\s+`레이어/책임: \[프로젝트 결정 필요\]`\s*$"),
+        re.compile(r"^\s*-\s+`패키지/경로: \[프로젝트 결정 필요; 기획서만 보고 추론하지 않음\]`\s*$"),
+    ),
+    "docs/project/standards/implementation_order.md": (
+        re.compile(r"^\s*-\s+허용 예: `경계 번역 책임: \[프로젝트 결정 필요\]`\s*$"),
+    ),
     "docs/project/standards/coding_conventions_project.md": (
         re.compile(r"^\s*-\s+`\[프로젝트 결정 필요\]` 표시는 남길 수 있지만"),
         re.compile(r"^\s*-\s+현재 변경에 영향을 주는 항목이 아직 `\[프로젝트 결정 필요\]` 상태면"),

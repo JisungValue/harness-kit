@@ -22,6 +22,23 @@
 - endpoint, screen, user story 같은 기능 backlog 순서를 그대로 옮기지 않는다.
 - 기능 구현 순서는 이번 TASK의 `plan.md`가 이 문서를 참고해 별도로 정한다.
 
+## 구현 단위 추측 금지
+
+이 문서는 class/file 단위 구현 순서가 아니라 layer/boundary 단위 기본 구현 순서를 정의한다. endpoint, screen, user story, 기능 backlog 순서를 canonical 구현 순서로 옮기지 않는다.
+
+- 아직 존재하지 않거나 승인되지 않은 클래스/파일을 구현 단위로 나열하지 않는다.
+- 기획서만 보고 `UserController`, `AuthService`, `UserRepository`, `OrderUseCase` 같은 class-level 구현 단위를 만들지 않는다.
+- repo에 없는 파일 경로나 패키지 경로를 project standard의 canonical 구현 단위처럼 쓰지 않는다.
+- 특정 task의 feature/API 구현 순서는 task `plan.md`에 남긴다.
+- 구현 중 실제로 확인된 구체 이름이나 구조는 근거와 함께 `implementation_notes.md`, task `plan.md`, 또는 필요한 경우 `docs/project/decisions/*`에 남긴다.
+
+구조가 미확정이면 abstract layer/responsibility level로만 순서를 남기고, 미확정 항목은 명시적으로 표시한다.
+
+- 허용 예: `domain responsibility -> application boundary -> adapter boundary`
+- 허용 예: `경계 번역 책임: [프로젝트 결정 필요]`
+- 금지 예: `UserController -> AuthService -> UserRepository`
+- 금지 예: `POST /signup -> POST /login`를 프로젝트 표준 구현 순서로 기록
+
 ## 레이어 세분화 기준
 
 - 필요하면 레이어를 하위 단위로 나눠 진행한다.
