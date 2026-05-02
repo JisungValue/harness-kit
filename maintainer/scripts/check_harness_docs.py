@@ -465,6 +465,34 @@ def check_validator_explainer_docs(errors: list[str]) -> None:
             errors.append(f"cross_document_consistency_checker에 `{phrase}` 설명이 없습니다.")
 
 
+def check_project_standard_template_guardrails(errors: list[str]) -> None:
+    required_phrases_by_path = {
+        "bootstrap/docs/project_overlay/architecture_template.md": (
+            "## 추측 금지와 근거 수준",
+            "확정된 프로젝트 구조",
+            "의도한 레이어/책임",
+            "미확정 구조 결정",
+            "기획서만 보고 구체 클래스명/파일명/패키지명/모듈명을 추측하지 않는다",
+            "[프로젝트 결정 필요; 기획서만 보고 추론하지 않음]",
+            "project architecture를 소유하는 기술 설계 문서",
+        ),
+        "bootstrap/docs/project_overlay/implementation_order_template.md": (
+            "## 구현 단위 추측 금지",
+            "class/file 단위 구현 순서가 아니라 layer/boundary 단위 기본 구현 순서",
+            "endpoint, screen, user story, 기능 backlog 순서를 canonical 구현 순서로 옮기지 않는다",
+            "아직 존재하지 않거나 승인되지 않은 클래스/파일을 구현 단위로 나열하지 않는다",
+            "특정 task의 feature/API 구현 순서는 task `plan.md`에 남긴다",
+            "구조가 미확정이면 abstract layer/responsibility level로만 순서를 남기고",
+        ),
+    }
+
+    for rel_path, phrases in required_phrases_by_path.items():
+        text = read_text(rel_path)
+        for phrase in phrases:
+            if phrase not in text:
+                errors.append(f"{rel_path}에 추측 금지 guardrail 문구 `{phrase}`가 없습니다.")
+
+
 def check_repo_local_source_of_truth_docs(errors: list[str]) -> None:
     required_phrases = (
         "repo-local",
@@ -780,6 +808,7 @@ def main() -> int:
     check_entrypoint_role_labels(errors)
     check_decisions_templates(errors)
     check_validator_explainer_docs(errors)
+    check_project_standard_template_guardrails(errors)
     check_repo_local_source_of_truth_docs(errors)
     check_downstream_final_layout_contract(errors)
     check_final_runtime_examples_surface(errors)

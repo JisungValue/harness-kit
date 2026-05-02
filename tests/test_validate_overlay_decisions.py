@@ -76,6 +76,25 @@ class ValidateOverlayDecisionsTest(unittest.TestCase):
             self.assertIn("TODO", result.stderr)
             self.assertIn("docs/project/standards/architecture.md", result.stderr)
 
+    def test_todo_marker_on_ignored_placeholder_example_line_is_still_blocking(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp_dir:
+            target = Path(tmp_dir) / "sample-project"
+            self.bootstrap_project(target)
+            architecture_path = target / "docs/project/standards/architecture.md"
+            architecture_text = architecture_path.read_text(encoding="utf-8")
+            architecture_text = architecture_text.replace(
+                "- `레이어/책임: [프로젝트 결정 필요]`",
+                "- `레이어/책임: [프로젝트 결정 필요]` TODO",
+                1,
+            )
+            architecture_path.write_text(architecture_text, encoding="utf-8")
+
+            result = self.run_validator(target, "first-success")
+
+            self.assertEqual(result.returncode, 1)
+            self.assertIn("TODO", result.stderr)
+            self.assertIn("docs/project/standards/architecture.md", result.stderr)
+
     def test_missing_required_doc_fails_validation(self) -> None:
         with tempfile.TemporaryDirectory() as tmp_dir:
             target = Path(tmp_dir) / "sample-project"

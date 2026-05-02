@@ -53,6 +53,8 @@ python3 vendor/harness-kit/scripts/bootstrap_init.py . --language python
 
 3. 설치 직후 `docs/entrypoint.md`와 `docs/project/decisions/README.md`를 먼저 읽고, 현재 프로젝트에서 구조/정책/예외/책임 위치 중 바로 확정해야 할 결정이 있는지 확인한다.
 
+   bootstrap은 project standard skeleton을 생성할 뿐이며, 기획서 기반으로 architecture, class/file/package 구조, 구현 단위를 invent해도 된다는 뜻이 아니다. project standard를 보강할 때는 repo-local evidence를 먼저 확인하고, 미확정 구조는 `[프로젝트 결정 필요]` placeholder로 남기며, 구체 구조가 필요하면 사용자 승인 또는 decision candidate로 올린다.
+
 4. install-time 입력을 `vendor/harness-kit/` 이외의 경로에 두었다면, install/bootstrap 때 `--vendor-path`를 이미 준 경우 language convention bootstrap reference는 바로 맞는다. 그 옵션 없이 생성했다면 validator를 돌리기 전에 아래 파일의 bootstrap reference를 실제 입력 경로 또는 install-time-only note에 맞게 먼저 현지화한다.
 
 - `docs/project/standards/coding_conventions_project.md`
